@@ -1,0 +1,53 @@
+server:
+  port: 8089
+
+spring:
+  datasource:
+    url:
+    username: root
+    password: qwerty
+    driver-class-name:
+  liquibase:
+    change-log: classpath:/db/changelog/master.yml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        generate_statistics: false
+        format_sql: true
+    show-sql: false
+  mvc:
+    log-request-details: false
+  freemarker:
+    expose-session-attributes: true
+  mail:
+    host: smtp.gmail.com
+    username: example@gmail.com
+    password:
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        security: debug
+      hibernate:
+        stat: debug
+        type: trace
+    sql: trace
+    web: debug
+  file:
+    name: logs/demo.log
+  logback:
+    rollingpolicy:
+      max-file-size: 5MB
+      max-history: 5
