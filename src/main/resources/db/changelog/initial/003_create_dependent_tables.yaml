@@ -74,9 +74,6 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: date
-                  type: timestamp
-              - column:
                   name: manager_id
                   type: bigint
                   constraints:
@@ -90,6 +87,15 @@ databaseChangeLog:
                     foreignKeyName: fk_work_schedules_pizzeria_id
                     references: pizzerias(id)
                     nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+              - column:
+                  name: start_time
+                  type: time
+              - column:
+                  name: end_time
+                  type: time
 
   - changeSet:
       id: create check_lists table
