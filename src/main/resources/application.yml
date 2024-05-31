@@ -1,11 +1,11 @@
 server:
-  port: 8089
+  port: 2344
 
 spring:
   datasource:
-    url:
-    username: root
-    password: qwerty
+    url: jdbc:postgresql://localhost:5050/xfood_db
+    username: admin
+    password: admin
     driver-class-name:
   liquibase:
     change-log: classpath:/db/changelog/master.yml
@@ -32,7 +32,6 @@ spring:
           auth: true
           starttls:
             enable: true
-
 
 logging:
   level:

@@ -1,0 +1,121 @@
+databaseChangeLog:
+  - changeSet:
+      id: create pizzerias table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: pizzerias
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_location_id
+                    references: locations(id)
+
+  - changeSet:
+      id: create opportunities table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: opportunities
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_opportunities
+                    references: users(id)
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: time
+              - column:
+                  name: end_time
+                  type: time
+
+  - changeSet:
+      id: create work_schedules table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: work_schedules
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date
+                  type: timestamp
+              - column:
+                  name: manager_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_work_schedules_manager_id
+                    references: managers(id)
+                    nullable: false
+              - column:
+                  name: pizzeria_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_work_schedules_pizzeria_id
+                    references: pizzerias(id)
+                    nullable: false
+
+  - changeSet:
+      id: create check_lists table
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: check_lists
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: work_schedule_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_check_list_work_schedule_id
+                    references: work_schedules(id)
+                    nullable: false
+              - column:
+                  name: opportunity_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_check_list_opportunity_id
+                    references: opportunities(id)
+                    nullable: false
