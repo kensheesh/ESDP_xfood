@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: indexing tables
+      author: Dastan
+      changes:
+        - createIndex:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+
+        - createIndex:
+            tableName: pizzerias
+            columns:
+              - column:
+                  name: location_id
+
+        - createIndex:
+            tableName: opportunities
+            columns:
+              - column:
+                  name: user_id
+
+        - createIndex:
+            tableName: work_schedules
+            columns:
+              - column:
+                  name: manager_id
+
+        - createIndex:
+            tableName: work_schedules
+            columns:
+              - column:
+                  name: pizzeria_id
+
+        - createIndex:
+            tableName: check_lists
+            columns:
+              - column:
+                  name: work_schedule_id
+
+        - createIndex:
+            tableName: check_lists
+            columns:
+              - column:
+                  name: opportunity_id
+
+        - createIndex:
+            tableName: criteria
+            columns:
+              - column:
+                  name: check_list_id
+
+        - createIndex:
+            tableName: criteria_types
+            columns:
+              - column:
+                  name: criteria_id
+
+        - createIndex:
+            tableName: criteria_types
+            columns:
+              - column:
+                  name: type_id
+
+        - createIndex:
+            tableName: criteria_pizzeria
+            columns:
+              - column:
+                  name: criteria_id
+
+        - createIndex:
+            tableName: criteria_pizzeria
+            columns:
+              - column:
+                  name: pizzeria_id
+
+# Причины для индексации:
+# 1. users.email: Часто используется для поиска при аутентификации.
+# 2. pizzerias.location_id: Внешний ключ, часто используется для соединений.
+# 3. opportunities.user_id: Внешний ключ, часто используется для получения данных пользователя.
+# 4. work_schedules.manager_id: Внешний ключ, используется для получения данных менеджера.
+# 5. work_schedules.pizzeria_id: Внешний ключ, используется для получения данных пиццерии.
+# 6. check_lists.work_schedule_id: Внешний ключ, используется для получения данных расписания.
+# 7. check_lists.opportunity_id: Внешний ключ, используется для получения данных возможности.
+# 8. criteria.check_list_id: Внешний ключ, используется для получения данных контрольного списка.
+# 9. criteria_types.criteria_id: Внешний ключ, используется для соединения с критериями.
+# 10. criteria_types.type_id: Внешний ключ, используется для соединения с типами проверок.
+# 11. criteria_pizzeria.criteria_id: Внешний ключ, используется для соединения с пиццериями.
+# 12. criteria_pizzeria.pizzeria_id: Внешний ключ, используется для соединения с пиццериями.
