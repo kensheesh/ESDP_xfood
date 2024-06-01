@@ -23,7 +23,7 @@ public class Opportunity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserModel user;
 
     @NotNull
     @Column(name = "date", nullable = false)

@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "users")
-public class User {
+public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -49,8 +49,7 @@ public class User {
     private String avatar;
 
     @NotNull
-    @Column(name = "enabled", nullable = false)
-    private Boolean enabled = false;
+    private boolean enabled;
 
     @OneToMany(mappedBy = "user")
     private List<Opportunity> opportunities;
