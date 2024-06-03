@@ -14,6 +14,7 @@ import static kg.attractor.xfood.enums.Permission.*;
 @Getter
 @RequiredArgsConstructor
 public enum Role implements GrantedAuthority {
+	
 	ADMIN(
 			Set.of(
 					ADMIN_READ, ADMIN_UPDATE, ADMIN_DELETE, ADMIN_CREATE,
