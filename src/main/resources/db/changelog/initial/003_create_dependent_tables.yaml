@@ -112,6 +112,12 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: status
+                  type: status
+                  defaultValue: 'new'
+                  constraints:
+                    nullable: false
+              - column:
                   name: work_schedule_id
                   type: bigint
                   constraints:
@@ -125,3 +131,4 @@ databaseChangeLog:
                     foreignKeyName: fk_check_list_opportunity_id
                     references: opportunities(id)
                     nullable: false
+

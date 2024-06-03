@@ -1,5 +1,23 @@
 databaseChangeLog:
   - changeSet:
+      id: create enums Role and Status (user_role & check_list_status)
+      author: Dastan
+      changes:
+        - createType:
+            typeName: role
+            values:
+              - admin
+              - supervisor
+              - expert
+
+        - createType:
+            typeName: status
+            values:
+              - new
+              - in_progress
+              - done
+
+  - changeSet:
       id: create table users
       author: Dastan
       changes:
@@ -40,11 +58,17 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: avatar
-                  type: varchar(255)
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: role
                   constraints:
                     nullable: false
               - column:
                   name: enabled
                   type: boolean
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
