@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 
-public interface CheckListRepository extends JpaRepository<CheckList, Integer> {
+public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 }

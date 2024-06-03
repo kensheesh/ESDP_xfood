@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CriteriaPizzeriaRepository extends JpaRepository<CriteriaPizzeria, Integer> {
+public interface CriteriaPizzeriaRepository extends JpaRepository<CriteriaPizzeria, Long> {
 }
