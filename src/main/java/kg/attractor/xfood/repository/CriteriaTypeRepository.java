@@ -1,7 +1,7 @@
 package kg.attractor.xfood.repository;
 
-import org.springframework.boot.autoconfigure.cache.CacheType;
+import kg.attractor.xfood.model.CriteriaType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CriteriaTypeRepository extends JpaRepository<CacheType, Integer> {
+public interface CriteriaTypeRepository extends JpaRepository<CriteriaType, Long> {
 }
