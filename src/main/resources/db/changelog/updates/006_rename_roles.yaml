@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename roles values
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              ALTER TYPE role rename value 'admin' to 'ROLE_ADMIN';
+              ALTER TYPE role rename value 'supervisor' to 'ROLE_SUPERVISOR';
+              ALTER TYPE role rename value 'expert' to 'ROLE_EXPERT';
