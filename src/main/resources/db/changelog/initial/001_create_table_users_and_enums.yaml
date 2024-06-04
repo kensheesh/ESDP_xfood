@@ -3,19 +3,10 @@ databaseChangeLog:
       id: create enums Role and Status (user_role & check_list_status)
       author: Dastan
       changes:
-        - createType:
-            typeName: role
-            values:
-              - admin
-              - supervisor
-              - expert
-
-        - createType:
-            typeName: status
-            values:
-              - new
-              - in_progress
-              - done
+        - sql:
+            sql:
+              CREATE TYPE role AS ENUM ('admin', 'supervisor', 'expert');
+              CREATE TYPE status AS ENUM ('new', 'in_progress', 'done');
 
   - changeSet:
       id: create table users
@@ -64,8 +55,7 @@ databaseChangeLog:
               - column:
                   name: role
                   type: role
-                  constraints:
-                    nullable: false
+
               - column:
                   name: enabled
                   type: boolean

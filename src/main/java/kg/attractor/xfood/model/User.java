@@ -3,6 +3,7 @@ package kg.attractor.xfood.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import kg.attractor.xfood.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.List;
@@ -51,6 +52,9 @@ public class User {
     @NotNull
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private List<Opportunity> opportunities;
