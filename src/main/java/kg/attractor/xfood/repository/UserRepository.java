@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	Optional<User> getByEmail(String username);
+	Optional<User> getByEmail(String email);
 	
 	Boolean existsByEmail(String email);
 }
