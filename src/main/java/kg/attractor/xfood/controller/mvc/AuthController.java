@@ -20,11 +20,7 @@ public class AuthController {
 	private final UserService userService;
 	
 	@GetMapping("login")
-	String login(@RequestParam(defaultValue = "false", required = false) Boolean error, Model model) {
-		if (error.equals(Boolean.TRUE)) {
-			model.addAttribute("error", "Invalid Username or Password");
-		}
+	String login() {
 		return "/auth/login";
-		//TODO LOGIN TEMPLATE/PAGE
 	}
 }
