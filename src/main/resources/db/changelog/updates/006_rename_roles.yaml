@@ -5,6 +5,6 @@ databaseChangeLog:
       changes:
         - sql:
             sql:
-              ALTER TYPE role rename value 'admin' to 'ROLE_ADMIN';
-              ALTER TYPE role rename value 'supervisor' to 'ROLE_SUPERVISOR';
-              ALTER TYPE role rename value 'expert' to 'ROLE_EXPERT';
+              ALTER TYPE role rename value 'admin' to 'ADMIN';
+              ALTER TYPE role rename value 'supervisor' to 'SUPERVISOR';
+              ALTER TYPE role rename value 'expert' to 'EXPERT';

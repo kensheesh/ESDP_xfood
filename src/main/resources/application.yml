@@ -6,7 +6,7 @@ spring:
     url: ${db_url}
     username: ${db_username}
     password: ${db_password}
-    driver-class-name: ${db_driver-class-name}
+    driver-class-name: ${db_driver_class_name}
 
   liquibase:
     change-log: classpath:/db/changelog/master.yml

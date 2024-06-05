@@ -16,6 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static kg.attractor.xfood.enums.Role.ADMIN;
+import static kg.attractor.xfood.enums.Role.EXPERT;
+import static kg.attractor.xfood.enums.Role.SUPERVISOR;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -52,8 +56,8 @@ public class SecurityConfig {
 	@Bean
 	static RoleHierarchy roleHierarchy() {
 		return RoleHierarchyImpl.withDefaultRolePrefix()
-				.role("ADMIN").implies("SUPERVISOR")
-				.role("SUPERVISOR").implies("EXPERT")
+				.role(ADMIN.getAuthority()).implies(SUPERVISOR.getAuthority())
+				.role(SUPERVISOR.getAuthority()).implies(EXPERT.getAuthority())
 				.build();
 	}
 	
