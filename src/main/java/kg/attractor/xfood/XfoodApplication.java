@@ -9,5 +9,4 @@ public class XfoodApplication {
     public static void main(String[] args) {
         SpringApplication.run(XfoodApplication.class, args);
     }
-
 }
