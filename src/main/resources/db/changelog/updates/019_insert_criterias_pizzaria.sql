@@ -1,3 +1,8 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_pizzeria
+
+
 insert into criteria_pizzeria(criteria_id, pizzeria_id)
 values
 

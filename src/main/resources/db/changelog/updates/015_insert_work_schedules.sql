@@ -1,3 +1,8 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_work_schedules
+
+
 insert into work_schedules(manager_id, pizzeria_id, date, start_time, end_time)
 values ((select id from managers where phone_number = '74957556983'), (select id from pizzerias where name='Борисов-1'), '2024-06-05', '10:00:00', '16:00:00'),
        ((select id from managers where phone_number = '74957556983'), (select id from pizzerias where name='Полоцк-1'), '2024-06-06', '09:00:00', '18:00:00'),

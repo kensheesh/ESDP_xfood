@@ -1,3 +1,7 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_opportunities
+
 insert into opportunities(user_id, date, start_time, end_time)
 values ((select id from users where email='expert1@ex.com'),'2024-06-05', '09:00:00','17:00:00' ),
        ((select id from users where email='expert1@ex.com'),'2024-06-06', '11:00:00','15:00:00' ),

@@ -1,3 +1,6 @@
+--liquibase formatted sql
+--changeset Dastan:insert_users
+
 INSERT INTO users(NAME, SURNAME, PHONE_NUMBER, EMAIL, PASSWORD, AVATAR, ROLE)
 VALUES ('admin', '', '', 'admin@ex.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '', 'ADMIN');
 

@@ -1,3 +1,7 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_criterias
+
 insert into criteria(zone_id, section_id, description, max_value, check_list_id, value, coefficient)
 values
     ((select id from zones where name = ''), (select id from sections where name = ''), 'Форма всех сотрудников соответствует стандарту. Сотрудники кухни (кассир при работе на упаковке) с бородой на всех станциях носят набородник', 2,  (select id from check_lists where status = 'done' and opportunity_id = (select id from opportunities where date='2024-06-05' and user_id = (select id from users where email = 'expert1@ex.com'))), 2, default),

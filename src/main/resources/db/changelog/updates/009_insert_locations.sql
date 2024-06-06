@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_locations
 insert into locations(name, timezone)
 values ('Беларусь', 3),
        ('Деревни', 3),

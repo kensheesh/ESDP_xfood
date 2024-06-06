@@ -1,3 +1,7 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_pizzerias
+
 insert into pizzerias(name, location_id)
 values ('Борисов-1', (select id from locations where locations.name = 'Беларусь')),
        ('Полоцк-1', (select id from locations where locations.name = 'Беларусь')),

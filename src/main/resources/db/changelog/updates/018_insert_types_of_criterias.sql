@@ -1,3 +1,8 @@
+--liquibase formatted sql
+
+--changeset Bubunur:insert_types_of_criterias
+
+
 insert into criteria_types(criteria_id, type_id)
 values
     ((select id from criteria where description = 'Форма всех сотрудников соответствует стандарту. Сотрудники кухни (кассир при работе на упаковке) с бородой на всех станциях носят набородник' and check_list_id = (select id from check_lists where status = 'done' and opportunity_id = (select id from opportunities where date='2024-06-05' and user_id = (select id from users where email = 'expert1@ex.com')))), (select id from check_types where name = 'Онлайн-клн' )),
