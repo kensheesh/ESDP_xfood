@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+
 import java.util.List;
 
 
@@ -42,12 +43,7 @@ public class Criteria {
     @ColumnDefault("1")
     @Column(name = "coefficient", nullable = false)
     private Integer coefficient;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "check_list_id", nullable = false)
-    private CheckList checkList;
-
+    
     @OneToMany(mappedBy = "criteria")
     private List<CriteriaPizzeria> criteriaPizzerias;
 

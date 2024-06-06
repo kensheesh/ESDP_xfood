@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import kg.attractor.xfood.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List;
 
 @Getter
 @Setter
@@ -26,10 +25,7 @@ public class CheckList {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "opportunity_id", nullable = false)
     private Opportunity opportunity;
-
-    @OneToMany(mappedBy = "checkList")
-    private List<Criteria> criteria ;
-
+    
     @Enumerated(EnumType.STRING)
     private Status status;
 
