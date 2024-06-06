@@ -14,14 +14,19 @@ import java.util.List;
 @RequestMapping("/api/managers-work-schedule")
 public class WorkScheduleController {
 
-    /* TODO
-        Получение расписания всех менеджеров
-        конкретной пиццерии для отображения
-        календаря (списка) при назначении проверки */
+
+//    ROLE: SUPERVISOR
     @GetMapping("pizzeria/{id}")
     public ResponseEntity<List<?>> getManagersSchedules (
             @PathVariable (name = "id") Long pizzeriaId
     ) {
+
+        /* TODO
+            Получение расписания всех менеджеров
+            конкретной пиццерии для отображения
+            календаря (списка) при назначении проверки
+         */
+
         return null;
     }
 
