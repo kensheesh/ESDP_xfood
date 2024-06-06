@@ -14,7 +14,10 @@ public class PizzeriaController {
 
     // ROLE: SUPERVISOR
     @GetMapping("/location/{id}")
-    public ResponseEntity<?> getPizzeriasByLocation (@PathVariable (name = "id") Long locationId) {
+    public ResponseEntity<?> getPizzeriasByLocation (
+            @PathVariable (name = "id") Long locationId
+    ) {
+
         /*
             TODO:
                 Получение списка пиццерий по локации

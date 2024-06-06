@@ -11,16 +11,19 @@ import java.util.List;
 @RequestMapping("/api/criteria")
 public class CriterionController {
 
-    /* TODO
-         Получение списка критериев
-         проверки после выбора типа проверки и пиццерии
-         при назначении новой проверки
-     */
+
+    //    ROLE: SUPERVISOR
     @GetMapping("/checkType/{id}")
     public ResponseEntity<List<?>> getAllByPizzeriaAndCheckType (
             @PathVariable (name = "id") Long checkTypeId,
             @RequestParam (name = "pizzeria")Long pizzeriaId
     ) {
+
+    /* TODO
+         Получение списка критериев
+         проверки после выбора типа проверки и пиццерии
+         при назначении новой проверки
+    */
         return null;
     }
 }
