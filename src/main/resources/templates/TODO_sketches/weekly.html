@@ -50,46 +50,11 @@
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
                         <div class="col">
-                            <div class="row row-cols-4 row-cols-md-1 row-gap-2">
-                                <div class="col">
-                                    <a href="/abilities.html" class="btn btn-light rounded-4 w-100 h-100 active">
-                                        График
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a href="/checks.html" class="btn btn-light rounded-4 w-100 h-100">
-                                        Проверки
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <a href="/analytics.html" class="btn btn-light rounded-4 w-100 h-100">
-                                        Аналитика
-                                    </a>
-                                </div>
-                                <div class="col">
-                                    <div class="dropdown d-md-none h-100">
-                                        <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-clock"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li class="dropdown-item">МСК 14:45</li>
-                                            <li class="dropdown-item">ЕКБ 16:45</li>
-                                            <li class="dropdown-item">БИШ 17:45</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col align-self-end d-none d-md-block">
-                            <div class="card rounded-4 border-1">
-                                <div class="card-body">
-                                    <div class="d-flex flex-column row-gap-2 text-center">
-                                        <span>МСК 14:45</span>
-                                        <span>ЕКБ 16:45</span>
-                                        <span>БИШ 17:45</span>
-                                    </div>
-                                </div>
+                            <div class="py-3 px-3 text-center">
+                                <h6>Фильтры</h6>
+                                <select class="form-select mb-2">
+                                    <option selected disabled>Location</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -103,86 +68,9 @@
                         <table class="table table-borderless">
                             <tbody>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024</в>
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-sm btn-danger rounded-4 calendar-button"
-                                                        data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                    Выходной
-                                                </button>
-                                            </div>
-                                        </div>
+                                <td class="align-middle">
+                                    <span>Менеджер<br>Менеджеровский</span>
                                 </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                    style="font-size: 11px;"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td>
                                     <div class="row row-cols-1">
                                         <div class="col">
@@ -291,200 +179,389 @@
                                     </div>
                                 </td>
                             </tr>
+<!--                            <tr>-->
+<!--                                <td></td>-->
+<!--                                <td></td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024</в>-->
+<!--                                            </div>-->
+<!--                                            <div class="col">-->
+<!--                                                <button class="btn btn-sm btn-danger rounded-4 calendar-button"-->
+<!--                                                        data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                    Выходной-->
+<!--                                                </button>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"-->
+<!--                                                    style="font-size: 11px;"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                Выходной-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"-->
+<!--                                                    style="font-size: 11px;" data-bs-toggle="modal"-->
+<!--                                                    data-bs-target="#workShiftModal">-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
 
-                            <tr>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                Выходной
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                    style="font-size: 11px;" data-bs-toggle="modal"
-                                                    data-bs-target="#workShiftModal">
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024
-                                            </div>
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                Выходной-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"-->
+<!--                                                    style="font-size: 11px;" data-bs-toggle="modal"-->
+<!--                                                    data-bs-target="#workShiftModal">-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024-->
+<!--                                            </div>-->
 
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                Выходной
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                    style="font-size: 11px;" data-bs-toggle="modal"
-                                                    data-bs-target="#workShiftModal">
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                Выходной-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"-->
+<!--                                                    style="font-size: 11px;" data-bs-toggle="modal"-->
+<!--                                                    data-bs-target="#workShiftModal">-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                                <div>12:00 - 19:00</div>-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div class="row row-cols-1">-->
+<!--                                        <div class="col">-->
+<!--                                            <div class="text-body-secondary fw-medium calendar-date">-->
+<!--                                                31.01.2024-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col">-->
+<!--                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"-->
+<!--                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">-->
+<!--                                                +-->
+<!--                                            </button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                </td>-->
+<!--                            </tr>-->
                             </tbody>
                         </table>
                     </div>
