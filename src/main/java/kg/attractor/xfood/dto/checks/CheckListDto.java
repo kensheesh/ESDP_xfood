@@ -1,5 +1,6 @@
 package kg.attractor.xfood.dto.checks;
 
+import kg.attractor.xfood.dto.work_schedule.WorkScheduleDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.WorkSchedule;
 import lombok.Builder;
@@ -11,6 +12,6 @@ import java.util.List;
 @Builder
 public class CheckListDto {
 
-    private WorkSchedule workSchedule;
-    private List<CheckListsCriteria> checkListsCriteriaList;
+    private WorkScheduleDto workSchedule;
+    private List<CheckListCriteriaDto> checkListsCriteriaList;
 }
