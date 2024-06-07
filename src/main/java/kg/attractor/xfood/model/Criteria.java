@@ -35,11 +35,6 @@ public class Criteria {
     private Integer maxValue;
 
     @NotNull
-    @ColumnDefault("0")
-    @Column(name = "value", nullable = false)
-    private Integer value;
-
-    @NotNull
     @ColumnDefault("1")
     @Column(name = "coefficient", nullable = false)
     private Integer coefficient;
