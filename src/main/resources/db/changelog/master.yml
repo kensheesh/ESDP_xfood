@@ -1,6 +1,0 @@
-databaseChangeLog:
-    - includeAll:
-        path: db/changelog/initial
-    - includeAll:
-          path: db/changelog/updates
-#  - logicalFilePath: db/changelog/initial/001_create_table_users_and_enums.yaml
