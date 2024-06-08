@@ -1,7 +1,5 @@
 package kg.attractor.xfood.dto.criteria;
 
-import kg.attractor.xfood.model.Section;
-import kg.attractor.xfood.model.Zone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CriteriaDto {
+public class CriteriaExpertShowDto {
 	private Long id;
-	private Zone zone;
-	private Section section;
+	private String zone;
+	private String section;
 	private String description;
 	private Integer maxValue;
 	private Integer coefficient;
+	private Integer value;
 }
