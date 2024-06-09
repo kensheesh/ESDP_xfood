@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,8 @@ public class CheckListServiceImpl implements CheckListService {
     private final CheckListRepository checkListRepository;
     private final CheckListCriteriaRepository checkListCriteriaRepository;
 
+    private static final String PATTERN_FORMAT = "dd.MM.yyyy";
+
     @Override
     public CheckListDto getCheckListById(Long id) {
         CheckList checkList = checkListRepository.findById(id).orElseThrow();
@@ -37,6 +41,7 @@ public class CheckListServiceImpl implements CheckListService {
         checkListsCriteria.forEach(c -> {
             checkListCriteriaDtos.add(CheckListCriteriaDto.builder()
                     .criteria(CriteriaDto.builder()
+                            .id(c.getCriteria().getId())
                             .coefficient(c.getCriteria().getCoefficient())
                             .description(c.getCriteria().getDescription())
                             .zone(ZoneDto.builder()
@@ -52,7 +57,11 @@ public class CheckListServiceImpl implements CheckListService {
         Manager manager = checkList.getWorkSchedule().getManager();
         Pizzeria pizzeria = checkList.getWorkSchedule().getPizzeria();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN_FORMAT)
+                .withZone(ZoneId.systemDefault());
+
         return CheckListDto.builder()
+                .id(id)
                 .workSchedule(WorkScheduleDto.builder()
                         .manager(ManagerDto.builder()
                                 .name(manager.getName())
@@ -64,6 +73,7 @@ public class CheckListServiceImpl implements CheckListService {
                                 .location(pizzeria.getLocation())
                                 .name(pizzeria.getName())
                                 .build())
+                        .date(formatter.format(checkList.getWorkSchedule().getDate()))
                         .build())
                 .checkListsCriteriaList(checkListCriteriaDtos)
                 .build();

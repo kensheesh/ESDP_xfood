@@ -21,8 +21,9 @@ public class CheckListController {
     @GetMapping("{id}")
     public String fillCheckList(@PathVariable Long id, Model model) {
         CheckListDto checkList = checkListService.getCheckListById(id);
-        System.out.println(checkList);
         model.addAttribute("checkList", checkList);
         return "/check_list/check_list";
     }
+
+
 }

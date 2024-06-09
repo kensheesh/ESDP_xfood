@@ -5,7 +5,6 @@ import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.Instant;
 import java.time.LocalTime;
 
 @Data
@@ -15,7 +14,7 @@ public class WorkScheduleDto {
     private Long id;
     private ManagerDto manager;
     private PizzeriaDto pizzeria;
-    private Instant date;
+    private String date;
     private LocalTime startTime;
     private LocalTime endTime;
 }
