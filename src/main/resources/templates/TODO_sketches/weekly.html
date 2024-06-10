@@ -52,7 +52,8 @@
                         <div class="col">
                             <div class="py-3 px-3 text-center">
                                 <h6>Фильтры</h6>
-                                <select class="form-select mb-2">
+                                <select class="form-select mb-2" onchange="handleSelectChange(this.value)">
+<!--                                    list со списком локаций(пока что всех)-->
                                     <option selected disabled>Location</option>
                                 </select>
                             </div>
