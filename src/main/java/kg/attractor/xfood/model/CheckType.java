@@ -22,6 +22,10 @@ public class CheckType {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+    
+    @NotNull
+    @Column(name = "total_max_value", nullable = false)
+    private Integer totalMaxValue;
 
     @OneToMany(mappedBy = "type")
     private List<CriteriaType> criteriaTypes;

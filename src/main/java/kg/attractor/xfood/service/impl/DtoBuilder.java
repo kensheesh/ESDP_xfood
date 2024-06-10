@@ -20,7 +20,7 @@ public class DtoBuilder {
 	
 	protected ChecklistExpertShowDto buildChecklistDto(CheckList model) {
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
-				.map(this :: bluidCriteriaShowDto)
+				.map(this :: buildCriteriaShowDto)
 				.collect(toList());
 		
 		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
@@ -36,13 +36,13 @@ public class DtoBuilder {
 				.build();
 	}
 	
-	protected CriteriaExpertShowDto bluidCriteriaShowDto(CheckListsCriteria model) {
+	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
 		return CriteriaExpertShowDto.builder()
 				.id(model.getCriteria().getId())
 				.zone(model.getCriteria().getZone().getName())
 				.section(model.getCriteria().getSection().getName())
 				.description(model.getCriteria().getDescription())
-				.maxValue(model.getCriteria().getMaxValue())
+				.maxValue(model.getMaxValue())
 				.coefficient(model.getCriteria().getCoefficient())
 				.value(model.getValue())
 				.build();
