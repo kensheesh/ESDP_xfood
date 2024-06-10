@@ -1,5 +1,9 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.model.CheckList;
+import kg.attractor.xfood.service.CheckListService;
+import kg.attractor.xfood.service.CheckTypeService;
+import kg.attractor.xfood.service.CriteriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/checks")
 public class CheckListController {
+    private final CriteriaService criteriaService;
+    private final CheckTypeService checkTypeService;
 
 //    // ROLE: SUPERVISOR
-//    @GetMapping("/create")
-//    public String create () {
-//        return null;
-//    }
+    @GetMapping("/create")
+    public String create (Model model) {
+        model.addAttribute("criterias", criteriaService.getCriterias());
+        model.addAttribute("types",checkTypeService.getTypes());
+       return "checklist/create";
+    }
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")

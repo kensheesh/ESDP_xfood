@@ -1,11 +1,11 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.checklist.ChecklistExpertShowDto;
+import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
-import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.model.CheckListsCriteria;
-import kg.attractor.xfood.model.Manager;
+import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +47,24 @@ public class DtoBuilder {
 				.value(model.getValue())
 				.build();
 	}
-	
+
+	protected CriteriaSupervisorShowDto buildCriteriaShowDto(Criteria model) {
+		return CriteriaSupervisorShowDto.builder()
+				.id(model.getId())
+				.description(model.getDescription())
+				.maxValue(model.getMaxValue())
+				.coefficient(model.getCoefficient())
+				.build();
+	}
+
+	protected CheckTypeSupervisorViewDto buildCheckTypeShowDto(CheckType model) {
+		return CheckTypeSupervisorViewDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.build();
+	}
+
+
 	protected ManagerExpertShowDto buildManagerShowDto(Manager manager) {
 		return ManagerExpertShowDto.builder()
 				.name(manager.getName())
