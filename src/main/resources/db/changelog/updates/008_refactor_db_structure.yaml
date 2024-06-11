@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: add junction table check_lists_criteria
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: check_lists_criteria
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: criteria_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_check_lists_criteria_criteria_id
+                    references: criteria(id)
+                    nullable: false
+              - column:
+                  name: checklist_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_check_lists_criteria_checklist_id
+                    references: check_lists(id)
+                    nullable: false
+
+  - changeSet:
+      id: delete from table criteria check_list_id column
+      author: Dastan
+      changes:
+        - sql:
+            sql: alter table criteria drop column check_list_id cascade;
