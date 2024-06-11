@@ -1,5 +1,7 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/checks")
 public class CheckListController {
+
+    private final CheckListService checkListService;
 
 //    // ROLE: SUPERVISOR
 //    @GetMapping("/create")
@@ -42,20 +46,15 @@ public class CheckListController {
     // ROLE: EXPERT
     @GetMapping ("/{id}/check")
     public String check (@PathVariable (name="id") Long checkListId, Model model) {
-         /* TODO:
-             Проверка
-        */
+        ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
+        model.addAttribute("checkList", checkListDto);
 
-        return null;
+        return "check_list/check_list";
     }
 
     // ROLE: EXPERT
     @PostMapping ("/{id}/check")
     public String check (@PathVariable (name="id") Long checkListId, BindingResult result, Model model) {
-        /* TODO:
-            Подтверждение проверки экспертом
-        */
-
         return null;
     }
 

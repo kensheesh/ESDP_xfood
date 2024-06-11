@@ -1,8 +1,8 @@
 package kg.attractor.xfood.service;
 
-import kg.attractor.xfood.dto.checks.CheckListDto;
+import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 
 public interface CheckListService {
 
-    CheckListDto getCheckListById(Long id);
+    ChecklistShowDto getCheckListById(Long id);
 }

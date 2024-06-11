@@ -4,33 +4,33 @@
         <table class="table table-bordered border border-3 rounded-3">
             <thead>
             <tr>
-                <th colspan="3" class="bg-warning section-header text-center">${checkList.workSchedule.pizzeria.name}</th>
-                <th colspan="1" class="text-center bg-warning" class="section-header">${checkList.workSchedule.manager.name} ${checkList.workSchedule.manager.surname}</th>
+                <th colspan="3" class="bg-warning section-header text-center">${checkList.pizzeria.name}</th>
+                <th colspan="1" class="text-center bg-warning" class="section-header">${checkList.manager.name} ${checkList.manager.surname}</th>
             </tr>
             <#assign maxSum = 0>
             <tr>
                 <th class="text-center">Раздел</th>
                 <th class="text-center">Что проверить</th>
                 <th class="text-center">Оценка</th>
-                <th class="text-center">${checkList.workSchedule.date}</th>
+                <th class="text-center">${checkList.managerWorkDate}</th>
             </tr>
             </thead>
             <tbody>
-            <#list checkList.checkListsCriteriaList as list>
+            <#list checkList.criteria as criteria>
                 <tr>
-                    <#if list.criteria.zone.name??>
-                        <td class="text-center">${list.criteria.zone.name}</td>
+                    <#if criteria.zone??>
+                        <td class="text-center">${criteria.zone}</td>
                     <#else>
                         <td></td>
                     </#if>
-                    <td>${list.criteria.description}</td>
-                    <#if list.criteria.maxValue??>
-                        <td class="text-center">${list.criteria.maxValue}</td>
+                    <td>${criteria.description}</td>
+                    <#if criteria.maxValue??>
+                        <td class="text-center">${criteria.maxValue}</td>
                         <td class="text-center rounded-3">
-                            <input type="number" class="score-input" min="0" max="${list.criteria.maxValue}"
-                                   value="${list.criteria.maxValue}" id="${list.criteria.id}">
+                            <input type="number" class="score-input" min="0" max="${criteria.maxValue}"
+                                   value="${criteria.maxValue}" id="${criteria.id}">
                         </td>
-                        <#assign maxSum = maxSum + list.criteria.maxValue>
+                        <#assign maxSum = maxSum + criteria.maxValue>
                     <#else>
                         <td></td>
                     </#if>
@@ -70,7 +70,7 @@
             }
 
             function saveScores() {
-                arr = arr.splice(0, arr.length)
+                arr = []
                 inputs.forEach(input => {
                     let scores = {
                         criteriaId: input.id,
