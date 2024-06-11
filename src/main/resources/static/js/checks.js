@@ -17,19 +17,23 @@ async function getChecks(status) {
             throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const json = await response.json();
-        displayChecks(json);
+        displayChecks(json, status);
     } catch (error) {
         console.error('Failed to fetch checks:', error);
     }
 }
 
-function displayChecks(checks) {
+function displayChecks(checks, status) {
     const container = document.getElementById('checks-container');
     let htmlContent = '';
 
     checks.forEach(c => {
+        let url = (status === statuses.NEW || status === statuses.IN_PROGRESS)
+            ? `/checks/${c.uuid}/check`
+            : `/checks/${c.uuid}/result`;
+
         htmlContent += `
-           <a href="/${c.uuid}/check" class="text-decoration-none">
+           <a href=${url} class="text-decoration-none">
             <div class="col" >
                 <div class="card border-0 rounded-4 bg-primary-subtle">
                     <div class="card-body">
