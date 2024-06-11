@@ -1,5 +1,7 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
+import kg.attractor.xfood.service.impl.WorkScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,21 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/managers-work-schedule")
 public class WorkScheduleController {
-
+    private final WorkScheduleServiceImpl workScheduleService;
 
 //    ROLE: SUPERVISOR
     @GetMapping("pizzeria/{id}")
-    public ResponseEntity<List<?>> getManagersSchedules (
+    public ResponseEntity<List<WeeklyScheduleShowDto>> getManagersSchedules (
             @PathVariable (name = "id") Long pizzeriaId
     ) {
+        List<WeeklyScheduleShowDto> dtos = workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId);
 
-        /* TODO
-            Получение расписания всех менеджеров
-            конкретной пиццерии для отображения
-            календаря (списка) при назначении проверки
-         */
-
-        return null;
+        return ResponseEntity.ok(dtos);
     }
 
 }

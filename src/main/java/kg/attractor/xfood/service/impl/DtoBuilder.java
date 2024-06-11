@@ -55,6 +55,7 @@ public class DtoBuilder {
 	
 	protected ManagerExpertShowDto buildManagerShowDto(Manager manager) {
 		return ManagerExpertShowDto.builder()
+				.id(manager.getId())
 				.name(manager.getName())
 				.surname(manager.getSurname())
 				.build();

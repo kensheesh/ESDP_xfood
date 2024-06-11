@@ -22,7 +22,7 @@ public class PizzeriaController {
     public ResponseEntity<List<PizzeriaShowDto>> getPizzeriasByLocation (
             @PathVariable (name = "id") Long locationId
     ) {
-        List<PizzeriaShowDto> dtos = pizzeriaService.getPizzeriaByLocationId(locationId);
+        List<PizzeriaShowDto> dtos = pizzeriaService.getPizzeriasByLocationId(locationId);
 
         return ResponseEntity.ok(dtos);
     }

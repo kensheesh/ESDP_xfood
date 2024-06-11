@@ -21,10 +21,7 @@
                                 </select>
                             </div>
                             <div class="px-3" id="pizzeria-list">
-                                <p><a href="#">Борисов-1</a></p>
-                                <p><a href="#">Полоцк-1</a></p>
-                                <p><a href="#">Нововолоцк-1</a></p>
-                                <p><a href="#">Орша-1</a></p>
+                                <span class="text-secondary">Список пуст</span>
                             </div>
                         </div>
                     </div>
@@ -36,7 +33,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-borderless">
-                            <tbody>
+                            <tbody id="schedule-list">
                             <tr>
                                 <td class="align-middle">
                                     <span>Менеджер<br>Менеджеровский</span>
@@ -187,6 +184,7 @@
     </script>
 
     <script>
+
         async function handleSelectChange(selectedValue) {
             let pizzeriaList = document.getElementById('pizzeria-list');
             pizzeriaList.innerHTML = '';
@@ -195,15 +193,84 @@
                 .then(data => {
                     data.forEach(item => {
                         const pizzeria = document.createElement('p');
-                        pizzeria.innerHTML =
-                            `
-                                <a href="` + "#" + `">` + item.name + `</a>
-                            `;
+                        const pizzeriaLink = document.createElement('a');
+                        pizzeriaLink.href = "/api/managers-work-schedule/pizzeria/" + item.id;
+                        pizzeriaLink.textContent = item.name;
+                        pizzeriaLink.addEventListener('click', function() {
+                            handlePizzeriaClick(this.href);
+                        });
+                        pizzeria.appendChild(pizzeriaLink);
 
                         pizzeriaList.insertAdjacentElement('beforeend', pizzeria);
                     });
                 })
-                .catch(error => console.error('Error fetching new messages:', error));
+                .catch(error => console.error('Error fetching pizzerias:', error));
+        }
+
+        async function handlePizzeriaClick(href) {
+            event.preventDefault();
+            let scheduleList = document.getElementById('schedule-list');
+            scheduleList.innerHTML = '';
+
+            fetch(href)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    data.forEach(item => {
+                        let row = document.createElement('tr');
+                        let manager = document.createElement('td');
+                        manager.className = 'align-middle';
+                        manager.innerHTML =
+                            `
+                                <span>` + item.manager.name + `<br>` + item.manager.surname + `</span>
+                            `;
+
+                        row.insertAdjacentElement('beforeend', manager);
+
+                        item.weeklySchedule.forEach(schedule => {
+                            let day = document.createElement('td');
+                            console.log(schedule.workDay);
+                            if(schedule.workDay) {
+                                day.innerHTML =
+                                    `
+                                    <div class="row row-cols-1">
+                                        <div class="col">
+                                            <div class="text-body-secondary fw-medium calendar-date">
+                                                ` + schedule.date + `
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
+                                                    style="font-size: 11px;" data-bs-toggle="modal"
+                                                    data-bs-target="#workShiftModal">
+                                                <div>` + schedule.startTime + ` - ` + schedule.endTime + `</div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    `;
+                            } else {
+                                day.innerHTML =
+                                    `
+                                    <div class="row row-cols-1">
+                                        <div class="col">
+                                            <div class="text-body-secondary fw-medium calendar-date">
+                                                ` + schedule.date + `
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-sm btn-light rounded-4 calendar-button" disabled>
+                                                <i class="bi bi-ban"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    `;
+                            }
+                            row.insertAdjacentElement('beforeend', day);
+                        })
+                        scheduleList.insertAdjacentElement('beforeend', row);
+                    });
+                })
+                .catch(error => console.error('Error fetching work schedules:', error));
         }
 
     </script>
