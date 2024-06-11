@@ -62,7 +62,7 @@ public class DtoBuilder {
 				.id(model.getId())
 				.criteria(
 						model.getCheckListsCriteria().stream()
-								.map(this::bluidCriteriaShowDto)
+								.map(this::buildCriteriaShowDto)
 								.toList()
 				)
 				.workSchedule(this.buildWorkScheduleDto(model.getWorkSchedule()))

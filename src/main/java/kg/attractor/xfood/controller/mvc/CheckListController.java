@@ -83,7 +83,8 @@ public class CheckListController {
         return null;
     }
 
-    @GetMapping ("/{id}")
+
+    @GetMapping ("/{id}/result")
     public String getResult (@PathVariable (name = "id") Long checkListId, Model model) {
         model.addAttribute("checkList", checkListService.getResult(checkListId));
 
