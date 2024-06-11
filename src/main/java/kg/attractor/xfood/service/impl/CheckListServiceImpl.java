@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.enums.Status;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
