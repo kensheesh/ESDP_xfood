@@ -34,118 +34,7 @@
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <tbody id="schedule-list">
-                            <tr>
-                                <td class="align-middle">
-                                    <span>Менеджер<br>Менеджеровский</span>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                Выходной
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                    style="font-size: 11px;" data-bs-toggle="modal"
-                                                    data-bs-target="#workShiftModal">
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -216,23 +105,28 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    data.forEach(item => {
-                        let row = document.createElement('tr');
-                        let manager = document.createElement('td');
-                        manager.className = 'align-middle';
-                        manager.innerHTML =
-                            `
+                    if (data.length === 0) {
+                        let loss = document.createElement('span');
+                        loss.className = 'text-center';
+                        loss.innerHTML = 'Нет результатов';
+                        scheduleList.insertAdjacentElement('beforeend', loss);
+                    } else {
+                        data.forEach(item => {
+                            let row = document.createElement('tr');
+                            let manager = document.createElement('td');
+                            manager.className = 'align-middle';
+                            manager.innerHTML =
+                                `
                                 <span>` + item.manager.name + `<br>` + item.manager.surname + `</span>
                             `;
 
-                        row.insertAdjacentElement('beforeend', manager);
+                            row.insertAdjacentElement('beforeend', manager);
 
-                        item.weeklySchedule.forEach(schedule => {
-                            let day = document.createElement('td');
-                            console.log(schedule.workDay);
-                            if(schedule.workDay) {
-                                day.innerHTML =
-                                    `
+                            item.weeklySchedule.forEach(schedule => {
+                                let day = document.createElement('td');
+                                if(schedule.workDay) {
+                                    day.innerHTML =
+                                        `
                                     <div class="row row-cols-1">
                                         <div class="col">
                                             <div class="text-body-secondary fw-medium calendar-date">
@@ -248,9 +142,9 @@
                                         </div>
                                     </div>
                                     `;
-                            } else {
-                                day.innerHTML =
-                                    `
+                                } else {
+                                    day.innerHTML =
+                                        `
                                     <div class="row row-cols-1">
                                         <div class="col">
                                             <div class="text-body-secondary fw-medium calendar-date">
@@ -264,11 +158,12 @@
                                         </div>
                                     </div>
                                     `;
-                            }
-                            row.insertAdjacentElement('beforeend', day);
-                        })
-                        scheduleList.insertAdjacentElement('beforeend', row);
-                    });
+                                }
+                                row.insertAdjacentElement('beforeend', day);
+                            })
+                            scheduleList.insertAdjacentElement('beforeend', row);
+                        });
+                    }
                 })
                 .catch(error => console.error('Error fetching work schedules:', error));
         }
