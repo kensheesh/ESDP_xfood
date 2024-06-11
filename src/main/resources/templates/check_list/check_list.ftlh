@@ -19,27 +19,34 @@
             <tbody>
             <#list checkList.criteria as criteria>
                 <tr>
-
-                        <#if criteria.section == 'Критический фактор'>
-                            <td class="text-center bg-danger">${criteria.section}</td>
-                            <td class="bg-danger">${criteria.description}</td>
-                        <#elseif criteria.section == 'WOW фактор'>
-                            <td class="text-center bg-success">${criteria.section}</td>
-                            <td class="bg-success">${criteria.description}</td>
-                        <#else>
-                            <td>${criteria.zone}</td>
-                            <td>${criteria.description}</td>
-                        </#if>
-
                     <#if criteria.maxValue??>
+
+                        <td>${criteria.zone}</td>
+                        <td>${criteria.description}</td>
                         <td class="text-center">${criteria.maxValue}</td>
                         <td class="text-center rounded-3">
                             <input type="number" class="score-input" min="0" max="${criteria.maxValue}"
                                    value="${criteria.maxValue}" id="${criteria.id}">
                         </td>
+
                         <#assign maxSum = maxSum + criteria.maxValue>
                     <#else>
-                        <td></td>
+                        <#if criteria.section == 'Критический фактор'>
+                            <td class="text-center bg-danger">${criteria.section}</td>
+                            <td class="bg-danger">${criteria.description}</td>
+                            <td class="bg-danger"></td>
+                            <td class="text-center bg-danger rounded-3">
+                                <input type="number" class="score-input"  id="${criteria.id}">
+                            </td>
+                        <#elseif criteria.section == 'WOW фактор'>
+                            <td class="text-center bg-success">${criteria.section}</td>
+                            <td class="bg-success">${criteria.description}</td>
+                            <td class="bg-success"></td>
+                            <td class="text-center bg-success rounded-3">
+                                <input type="number" class="score-input"
+                                        id="${criteria.id}">
+                            </td>
+                        </#if>
                     </#if>
                 </tr>
             </#list>
@@ -80,7 +87,7 @@
             }
 
             function saveScores() {
-                arr = []
+                criteria = []
                 inputs.forEach(input => {
                     let scores = {
                         criteriaId: input.id,
