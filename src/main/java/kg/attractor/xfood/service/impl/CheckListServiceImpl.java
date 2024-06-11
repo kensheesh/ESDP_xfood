@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.repository.CheckListRepository;
@@ -24,6 +25,14 @@ public class CheckListServiceImpl implements CheckListService {
 				.stream()
 				.map(dtoBuilder :: buildChecklistDto)
 				.toList();
+	}
+	
+	@Override
+	public CheckListResultDto getResult(Long checkListId) {
+		return dtoBuilder.buildCheckListResultDto(
+				checkListRepository.findByIdAndStatus(checkListId, Status.DONE)
+						.orElseThrow(() -> new NotFoundException("Check list not found"))
+		);
 	}
 	
 }
