@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: add column total_max_value to checkTypes
+      author: Dastan
+      changes:
+        - sql:
+            sql: alter table check_types add column total_max_value int;
+
+  - changeSet:
+      id: drop column max_value from criteria
+      author: Dastan
+      changes:
+        - sql:
+            sql: alter table criteria drop column max_value;
+
+  - changeSet:
+      id: add column max_value to check_lists_criteria
+      author: Dastan
+      changes:
+        - sql:
+            sql: alter table check_lists_criteria add column max_value int;
+
+  - changeSet:
+      id: add column uuid_link to check_lists
+      author: Dastan
+      changes:
+        - sql:
+            sql: alter table check_lists add column uuid_link text;
