@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename status values
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              ALTER TYPE status rename value 'new' to 'NEW';
+              ALTER TYPE status rename value 'in_progress' to 'IN_PROGRESS';
+              ALTER TYPE status rename value 'done' to 'DONE';
