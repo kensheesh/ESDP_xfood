@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerExpertShowDto {
+public class ManagerShowDto {
 	private String name;
 	private String surname;
 }
