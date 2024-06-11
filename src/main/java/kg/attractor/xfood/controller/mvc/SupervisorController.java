@@ -31,6 +31,8 @@ public class SupervisorController {
 
     @GetMapping("/weekly")
     public String getWeeklySchedule (Model model) {
-        model.addAttribute("locations", locationService);
+        model.addAttribute("locations", locationService.getLocations());
+        //TODO Дособирать модель + доделать шаблон + дописать скрипты
+        return "weekly";
     }
 }
