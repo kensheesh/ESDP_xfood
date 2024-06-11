@@ -1,38 +1,33 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.checklist.ChecklistExpertShowDto;
+import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
-import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
+import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Manager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
 public class DtoBuilder {
 	
-	protected ChecklistExpertShowDto buildChecklistDto(CheckList model) {
-		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
-				.map(this :: buildCriteriaShowDto)
-				.collect(toList());
+	protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
+		String uuid = model.getUuidLink();
+		LocalDate managerWorkDate = model.getWorkSchedule().getDate().toLocalDate();
+		String pizzeria = model.getWorkSchedule().getPizzeria().getName();
+		ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 		
-		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
-		
-		ManagerExpertShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
-		
-		return ChecklistExpertShowDto.builder()
+		return ChecklistMiniExpertShowDto.builder()
 				.id(model.getId())
 				.status(model.getStatus())
-				.criteria(criteriaDtos)
 				.managerWorkDate(managerWorkDate)
 				.manager(managerDto)
+				.pizzeria(pizzeria)
+				.uuid(uuid)
 				.build();
 	}
 	
@@ -48,8 +43,8 @@ public class DtoBuilder {
 				.build();
 	}
 	
-	protected ManagerExpertShowDto buildManagerShowDto(Manager manager) {
-		return ManagerExpertShowDto.builder()
+	protected ManagerShowDto buildManagerShowDto(Manager manager) {
+		return ManagerShowDto.builder()
 				.name(manager.getName())
 				.surname(manager.getSurname())
 				.build();
