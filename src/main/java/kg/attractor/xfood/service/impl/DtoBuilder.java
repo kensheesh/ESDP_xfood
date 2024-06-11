@@ -1,5 +1,9 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.dto.LocationDto;
+import kg.attractor.xfood.dto.PizzeriaDto;
+import kg.attractor.xfood.dto.WorkScheduleDto;
+import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistExpertShowDto;
 import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
@@ -20,7 +24,7 @@ public class DtoBuilder {
 	
 	protected ChecklistExpertShowDto buildChecklistDto(CheckList model) {
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
-				.map(this :: bluidCriteriaShowDto)
+				.map(this :: buildCriteriaShowDto)
 				.collect(toList());
 		
 		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
@@ -36,13 +40,13 @@ public class DtoBuilder {
 				.build();
 	}
 	
-	protected CriteriaExpertShowDto bluidCriteriaShowDto(CheckListsCriteria model) {
+	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
 		return CriteriaExpertShowDto.builder()
 				.id(model.getCriteria().getId())
 				.zone(model.getCriteria().getZone().getName())
 				.section(model.getCriteria().getSection().getName())
 				.description(model.getCriteria().getDescription())
-				.maxValue(model.getCriteria().getMaxValue())
+				.maxValue(model.getMaxValue())
 				.coefficient(model.getCriteria().getCoefficient())
 				.value(model.getValue())
 				.build();
@@ -69,6 +73,45 @@ public class DtoBuilder {
 		return ManagerExpertShowDto.builder()
 				.name(manager.getName())
 				.surname(manager.getSurname())
+				.build();
+	}
+
+	protected CheckListResultDto buildCheckListResultDto(CheckList model) {
+		return CheckListResultDto.builder()
+				.id(model.getId())
+				.criteria(
+						model.getCheckListsCriteria().stream()
+								.map(this::buildCriteriaShowDto)
+								.toList()
+				)
+				.workSchedule(this.buildWorkScheduleDto(model.getWorkSchedule()))
+				.build();
+	}
+
+	protected PizzeriaDto buildPizzeriaDto (Pizzeria model) {
+		return PizzeriaDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.location(this.buildLocationDto(model.getLocation()))
+				.build();
+	}
+
+	protected LocationDto buildLocationDto (Location model) {
+		return LocationDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.timezone(model.getTimezone())
+				.build();
+	}
+
+	protected WorkScheduleDto buildWorkScheduleDto (WorkSchedule model) {
+		return WorkScheduleDto.builder()
+				.id(model.getId())
+				.manager(this.buildManagerShowDto(model.getManager()))
+				.pizzeria(this.buildPizzeriaDto(model.getPizzeria()))
+				.date(model.getDate())
+				.startTime(model.getStartTime())
+				.endTime(model.getEndTime())
 				.build();
 	}
 }

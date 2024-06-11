@@ -31,9 +31,6 @@ public class Criteria {
     @Column(name = "description", nullable = false, length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "max_value")
-    private Integer maxValue;
-
     @NotNull
     @ColumnDefault("1")
     @Column(name = "coefficient", nullable = false)

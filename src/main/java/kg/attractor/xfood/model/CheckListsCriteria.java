@@ -30,5 +30,10 @@ public class CheckListsCriteria {
     @ColumnDefault("0")
     @Column(name = "value", nullable = false)
     private Integer value;
+    
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name = "max_value", nullable = false)
+    private Integer maxValue;
 
 }
