@@ -14,5 +14,6 @@ public class SaveCriteriaDto {
     private Long criteriaId;
     private Integer value;
     private Long checkListId;
+    private Integer maxValue;
 
 }

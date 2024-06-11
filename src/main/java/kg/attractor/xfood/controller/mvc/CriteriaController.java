@@ -13,12 +13,11 @@ import java.util.List;
 @RequestMapping("criteria")
 @RequiredArgsConstructor
 public class CriteriaController {
+    private final CheckListsCriteriaService checkListsCriteriaService;
 
     @PostMapping("save")
     public String saveCriteriaForCheckList(@RequestBody List<SaveCriteriaDto> saveCriteriaDto) {
-        saveCriteriaDto.forEach(s -> {
-            System.out.println(s);
-        });
+
 
         return "redirect:";
     }

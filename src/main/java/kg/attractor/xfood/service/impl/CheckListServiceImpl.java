@@ -20,9 +20,19 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public ChecklistShowDto getCheckListById(Long id) {
-        CheckList checkList = checkListRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Чек-лист с ID:" + id + " не найден"));
+        CheckList checkList = getModelCheckListById(id);
         return dtoBuilder.buildChecklistDto(checkList);
+    }
+
+    @Override
+    public CheckList getModelCheckListById(Long id) {
+        return checkListRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Чек-лист с ID:" + id + " не найден"));
+    }
+
+    @Override
+    public void save(CheckList checkList) {
+        checkListRepository.save(checkList);
     }
 
 }
