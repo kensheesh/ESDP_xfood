@@ -27,7 +27,7 @@ public class CheckListServiceImpl implements CheckListService {
 				.map(dtoBuilder :: buildChecklistDto)
 				.toList();
 	}
-	
+
 	@Override
 	public CheckListResultDto getResult(Long checkListId) {
 		return dtoBuilder.buildCheckListResultDto(
@@ -35,5 +35,5 @@ public class CheckListServiceImpl implements CheckListService {
 						.orElseThrow(() -> new NotFoundException("Check list not found"))
 		);
 	}
-	
+
 }

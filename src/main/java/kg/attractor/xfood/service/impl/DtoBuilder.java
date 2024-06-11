@@ -7,6 +7,7 @@ import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
+
 import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -51,36 +52,40 @@ public class DtoBuilder {
 				.surname(manager.getSurname())
 				.build();
 	}
-	
+
 	protected CheckListResultDto buildCheckListResultDto(CheckList model) {
 		return CheckListResultDto.builder()
 				.id(model.getId())
 				.criteria(
 						model.getCheckListsCriteria().stream()
 								.map(this :: buildCriteriaShowDto)
+
 								.toList()
 				)
 				.workSchedule(this.buildWorkScheduleDto(model.getWorkSchedule()))
 				.build();
 	}
-	
-	protected PizzeriaDto buildPizzeriaDto(Pizzeria model) {
+
+
+	protected PizzeriaDto buildPizzeriaDto (Pizzeria model) {
 		return PizzeriaDto.builder()
 				.id(model.getId())
 				.name(model.getName())
 				.location(this.buildLocationDto(model.getLocation()))
 				.build();
 	}
-	
-	protected LocationDto buildLocationDto(Location model) {
+
+
+	protected LocationDto buildLocationDto (Location model) {
 		return LocationDto.builder()
 				.id(model.getId())
 				.name(model.getName())
 				.timezone(model.getTimezone())
 				.build();
 	}
-	
-	protected WorkScheduleDto buildWorkScheduleDto(WorkSchedule model) {
+
+
+	protected WorkScheduleDto buildWorkScheduleDto (WorkSchedule model) {
 		return WorkScheduleDto.builder()
 				.id(model.getId())
 				.manager(this.buildManagerShowDto(model.getManager()))
