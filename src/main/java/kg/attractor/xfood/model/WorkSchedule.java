@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class WorkSchedule {
     private Pizzeria pizzeria;
 
     @Column(name = "date")
-    private Instant date;
+    private LocalDateTime date;
 
     @Column(name = "start_time")
     private LocalTime startTime;
@@ -40,5 +41,4 @@ public class WorkSchedule {
 
     @OneToMany(mappedBy = "workSchedule")
     private List<CheckList> checkLists;
-
 }
