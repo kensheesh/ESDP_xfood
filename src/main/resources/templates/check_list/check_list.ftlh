@@ -5,7 +5,8 @@
             <thead>
             <tr>
                 <th colspan="3" class="bg-warning section-header text-center">${checkList.pizzeria.name}</th>
-                <th colspan="1" class="text-center bg-warning" class="section-header">${checkList.manager.name} ${checkList.manager.surname}</th>
+                <th colspan="1" class="text-center bg-warning"
+                    class="section-header">${checkList.manager.name} ${checkList.manager.surname}</th>
             </tr>
             <#assign maxSum = 0>
             <tr>
@@ -18,12 +19,18 @@
             <tbody>
             <#list checkList.criteria as criteria>
                 <tr>
-                    <#if criteria.zone??>
-                        <td class="text-center">${criteria.zone}</td>
-                    <#else>
-                        <td></td>
-                    </#if>
-                    <td>${criteria.description}</td>
+
+                        <#if criteria.section == 'Критический фактор'>
+                            <td class="text-center bg-danger">${criteria.section}</td>
+                            <td class="bg-danger">${criteria.description}</td>
+                        <#elseif criteria.section == 'WOW фактор'>
+                            <td class="text-center bg-success">${criteria.section}</td>
+                            <td class="bg-success">${criteria.description}</td>
+                        <#else>
+                            <td>${criteria.zone}</td>
+                            <td>${criteria.description}</td>
+                        </#if>
+
                     <#if criteria.maxValue??>
                         <td class="text-center">${criteria.maxValue}</td>
                         <td class="text-center rounded-3">
@@ -41,13 +48,16 @@
                 <td colspan="2" class="text-center"><p><strong>${maxSum}</strong></p></td>
             </tr>
             <tr>
-                <td colspan="2" class="text-center"><p><strong>(количество набранных баллов / макс. количество баллов) x 100%</strong></p>
+                <td colspan="2" class="text-center"><p><strong>(количество набранных баллов / макс. количество баллов) x
+                            100%</strong></p>
                 </td>
                 <td colspan="2" class="text-center" id="percentageResult"></td>
             </tr>
             </tbody>
             <tr>
-                <td colspan="4" class="text-end"><button id="calculateButton" class="btn btn-warning">Сохранить</button></td>
+                <td colspan="4" class="text-end">
+                    <button id="calculateButton" class="btn btn-warning">Сохранить</button>
+                </td>
             </tr>
         </table>
     </main>

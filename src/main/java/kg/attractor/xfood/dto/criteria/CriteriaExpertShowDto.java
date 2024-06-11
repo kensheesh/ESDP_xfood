@@ -17,4 +17,5 @@ public class CriteriaExpertShowDto {
 	private Integer maxValue;
 	private Integer coefficient;
 	private Integer value;
+
 }
