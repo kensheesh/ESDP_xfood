@@ -27,7 +27,9 @@ function displayChecks(checks, status) {
     const container = document.getElementById('checks-container');
     let htmlContent = '';
 
+
     checks.forEach(c => {
+
         let url = (status === statuses.NEW || status === statuses.IN_PROGRESS)
             ? `/checks/${c.uuid}/check`
             : `/checks/${c.uuid}/result`;

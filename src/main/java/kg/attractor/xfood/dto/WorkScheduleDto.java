@@ -14,10 +14,10 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkScheduleDto {
-	private Long id;
-	private ManagerShowDto manager;
-	private PizzeriaDto pizzeria;
-	private LocalDateTime date;
-	private LocalTime startTime;
-	private LocalTime endTime;
+    private Long id;
+    private ManagerShowDto manager;
+    private PizzeriaDto pizzeria;
+    private LocalDateTime date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 }
