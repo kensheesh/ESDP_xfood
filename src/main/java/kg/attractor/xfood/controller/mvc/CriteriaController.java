@@ -1,6 +1,7 @@
 package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
+import kg.attractor.xfood.service.CheckListCriteriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +14,11 @@ import java.util.List;
 @RequestMapping("criteria")
 @RequiredArgsConstructor
 public class CriteriaController {
-    private final CheckListsCriteriaService checkListsCriteriaService;
+    private final CheckListCriteriaService checkListCriteriaService;
 
     @PostMapping("save")
     public String saveCriteriaForCheckList(@RequestBody List<SaveCriteriaDto> saveCriteriaDto) {
-
-
+        checkListCriteriaService.save(saveCriteriaDto);
         return "redirect:";
     }
 }

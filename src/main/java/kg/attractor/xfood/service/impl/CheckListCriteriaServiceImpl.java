@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,20 +24,37 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final CheckListService checkListService;
 
     @Override
-    public void save(SaveCriteriaDto saveCriteriaDto) {
-        CheckList checkList = checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId());
-        if(!checkList.getStatus().equals(Status.DONE)) {
-            CheckListsCriteria checkListsCriteria = new CheckListsCriteria();
+    public void save(List<SaveCriteriaDto> saveCriteriaDto) {
 
-            checkListsCriteria.setCriteria(criteriaService.getCriteriaById(saveCriteriaDto.getCriteriaId()));
-            checkListsCriteria.setChecklist(checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId()));
-            checkListsCriteria.setValue(saveCriteriaDto.getValue());
-            checkListsCriteria.setMaxValue(saveCriteriaDto.getMaxValue());
+        saveCriteriaDto.forEach(c -> {
+            int maxValue = 0;
+            if(c.getMaxValue() != null)
+                maxValue = c.getMaxValue();
 
-            checkListCriteriaRepository.save(checkListsCriteria);
-            checkList.setStatus(Status.IN_PROGRESS);
-            checkListService.save(checkList);
-        }
+            Long checkListId = checkListService.getModelCheckListById(c.getCheckListId()).getId();
+            Long criteriaId = criteriaService.getCriteriaById(c.getCriteriaId()).getId();
+
+            Optional<CheckListsCriteria> optional = checkListCriteriaRepository
+                    .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
+
+            if(optional.isPresent()) {
+                CheckListsCriteria criteria = optional.get();
+                criteria.setMaxValue(c.getMaxValue());
+                criteria.setValue(c.getValue());
+
+                checkListCriteriaRepository.save(criteria);
+            } else {
+                CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                        .value(c.getValue())
+                        .criteria(criteriaService.getCriteriaById(c.getCriteriaId()))
+                        .checklist(checkListService.getModelCheckListById(c.getCheckListId()))
+                        .maxValue(maxValue)
+                        .build();
+
+                checkListCriteriaRepository.save(checkListsCriteria);
+            }
+
+        });
 
     }
 }

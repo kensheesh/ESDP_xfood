@@ -2,7 +2,9 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 
+import java.util.List;
+
 public interface CheckListCriteriaService {
 
-    void save(SaveCriteriaDto saveCriteriaDto);
+    void save(List<SaveCriteriaDto> saveCriteriaDto);
 }

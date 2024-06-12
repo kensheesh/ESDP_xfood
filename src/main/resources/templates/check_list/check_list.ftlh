@@ -26,7 +26,7 @@
                         <td class="text-center">${criteria.maxValue}</td>
                         <td class="text-center rounded-3">
                             <input type="number" class="score-input" min="0" max="${criteria.maxValue}"
-                                   value="${criteria.value}" id="${criteria.id}">
+                                   value="${criteria.value}" id="${criteria.id}" aria-valuemax="${criteria.maxValue}">
                         </td>
 
                         <#assign maxSum = maxSum + criteria.maxValue>
@@ -91,8 +91,8 @@
                     let scores = {
                         criteriaId: input.id,
                         value: input.value,
-                        checkListId: ${checkList.id}
-                        maxValue: input.ariaValueMax
+                        checkListId: ${checkList.id},
+                        maxValue: input.getAttribute('aria-valuemax')
                     }
                     criteria.push(scores)
                 });
@@ -104,18 +104,6 @@
                     },
                     body: JSON.stringify(criteria)
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Сохранено успешно!');
-                        } else {
-                            alert('Ошибка при сохранении.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Ошибка при сохранении.');
-                    });
             }
 
             inputs.forEach(input => {

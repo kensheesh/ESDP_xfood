@@ -2,15 +2,16 @@ package kg.attractor.xfood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "check_lists_criteria")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CheckListsCriteria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
