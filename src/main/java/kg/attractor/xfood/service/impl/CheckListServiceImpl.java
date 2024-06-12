@@ -77,8 +77,6 @@ public class CheckListServiceImpl implements CheckListService {
             return dto;
         }).collect(Collectors.toList());
     }
-
-
 }
 
 

@@ -88,55 +88,67 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <div class="py-3 px-3 text-center">
-                                        <h6>Фильтры</h6>
-                                        <select class="form-select mb-2 pizzeria-select" name="pizzerias">
-                                            <option value="default">Пиццерия</option>
-                                        </select>
-                                        <#--                                        <select class="form-select mb-2">-->
-                                        <#--                                            <option selected disabled>Менеджер</option>-->
-                                        <#--                                        </select>-->
-                                        <#--                                        <div class="input-group mb-2">-->
-                                        <#--                                            <label for="date-from" class="input-group-text">От</label>-->
-                                        <#--                                            <input type="date" name="dateFrom" id="date-from" class="form-control">-->
-                                        <#--                                            <label for="date-to" class="input-group-text">До</label>-->
-                                        <#--                                            <input type="date" name="dateFrom" id="date-from" class="form-control">-->
-                                        <#--                                        </div>-->
-                                        <a href="/analytics" class="btn btn-outline-success rounded-4">Применить</a>
+                                        <form action="/analytics" method="GET">
+                                            <h6>Фильтры</h6>
+                                            <select class="form-select mb-2 pizzeria-select" name="pizzeria">
+                                                <option value="default">Пиццерия</option>
+                                            </select>
+                                            <select class="form-select mb-2 manager-select" name="manager">
+                                                <option value="default">Менеджер</option>
+                                            </select>
+                                            <#if user.role != "EXPERT">
+                                                <select class="form-select mb-2 expert-select" name="expert">
+                                                    <option value="default">Эксперт</option>
+                                                </select>
+                                            </#if>
+                                            <div class="input-group mb-2">
+                                                <label for="date-from" class="input-group-text">От</label>
+                                                <input type="date" name="dateFrom" id="date-from" class="form-control">
+                                                <label for="date-to" class="input-group-text">До</label>
+                                                <input type="date" name="dateFrom" id="date-from" class="form-control">
+                                            </div>
+                                            <button class="btn btn-outline-success rounded-4" type="submit">Применить</button>
+                                        </form>
                                     </div>
                                 </ul>
                             </div>
-                            <a href="#" class="btn btn-success rounded-4">Скачать <i
-                                        class="bi bi-file-arrow-down"></i></a>
+                            <a href="#" class="btn btn-success rounded-4">Скачать <i class="bi bi-file-arrow-down"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-4 d-none d-lg-inline text-center">
-                        <div class="card rounded-4 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h6 class="card-title">Фильтры</h6>
-                                <select class="form-select mb-2 pizzeria-select" name="pizzerias">
-                                    <option>Пиццерия</option>
-                                </select>
-                                <select class="form-select mb-2">
-                                    <option selected disabled>Менеджер</option>
-                                </select>
-                                <div class="input-group">
-                                    <label for="date-from" class="input-group-text">От</label>
-                                    <input type="date" name="dateFrom" id="date-from" class="form-control">
-                                    <label for="date-to" class="input-group-text">До</label>
-                                    <input type="date" name="dateFrom" id="date-from" class="form-control">
+                        <form action="/analytics" method="GET">
+                            <div class="card rounded-4 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-title">Фильтры</h6>
+                                    <select class="form-select mb-2 pizzeria-select" name="pizzeria">
+                                        <option>Пиццерия</option>
+                                    </select>
+                                    <select class="form-select mb-2 manager-select" name="manager">
+                                        <option value="default">Менеджер</option>
+                                    </select>
+                                    <#if user.role != "EXPERT">
+                                        <select class="form-select mb-2 expert-select" name="expert">
+                                            <option value="default">Эксперт</option>
+                                        </select>
+                                    </#if>
+                                    <div class="input-group">
+                                        <label for="date-from" class="input-group-text">От</label>
+                                        <input type="date" name="dateFrom" id="date-from" class="form-control">
+                                        <label for="date-to" class="input-group-text">До</label>
+                                        <input type="date" name="dateFrom" id="date-from" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-body border-0 rounded-4 pb-3">
+                                    <button class="btn btn-outline-success rounded-4" type="submit">Применить</button>
                                 </div>
                             </div>
-                            <div class="card-footer bg-body border-0 rounded-4 pb-3">
-                                <a href="#" class="btn btn-outline-success rounded-4">Применить</a>
-                            </div>
-                        </div>
+                        </form>
                         <a href="#" class="btn btn-outline-success mt-3 rounded-4">Скачать Excel</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
 
     <style>
         body {
@@ -154,9 +166,9 @@
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var selectElements = document.querySelectorAll('.pizzeria-select');
+            let pizzeriaSelects = document.querySelectorAll('.pizzeria-select');
 
-            selectElements.forEach(function (selectElement) {
+            pizzeriaSelects.forEach(function (selectElement) {
                 fetch('/api/pizzerias')
                     .then(function (response) {
                         return response.json();
@@ -173,7 +185,29 @@
                         console.error('Ошибка при загрузке данных:', error);
                     });
             });
+
+
+            let expertSelects = document.querySelectorAll('.pizzeria-select');
+
+            expertSelects.forEach(function (selectElement) {
+                fetch('/api/experts')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        data.forEach(function (expert) {
+                            let option = document.createElement('option');
+                            option.value = expert.id;
+                            option.textContent = expert.name + " " + expert.surname;
+                            selectElement.appendChild(option);
+                        });
+                    })
+                    .catch(function (error) {
+                        console.error('Ошибка при загрузке данных:', error);
+                    });
+            });
         });
+
     </script>
 
 </@main.layout>
