@@ -53,35 +53,23 @@ public class CheckListServiceImpl implements CheckListService {
         } else {
             checkLists = checkListRepository.findByStatus(Status.DONE);
         }
-        System.out.println(pizzeriaId);
-        System.out.println(managerId);
-        System.out.println(expertId);
-        System.out.println(startDate);
-        System.out.println(endDate);
 
-        // Фильтрация по пиццерии
         if (!"default".equals(pizzeriaId)) {
             checkLists = checkLists.stream()
                     .filter(checkList -> checkList.getWorkSchedule().getPizzeria().getId().equals(Long.parseLong(pizzeriaId)))
                     .collect(Collectors.toList());
 
         }
-
-        // Фильтрация по менеджеру
         if (!"default".equals(managerId)) {
             checkLists = checkLists.stream()
                     .filter(checkList -> checkList.getWorkSchedule().getManager().getId().equals(Long.parseLong(managerId)))
                     .collect(Collectors.toList());
         }
-
-        // Фильтрация по эксперту
         if (!"default".equals(expertId)) {
             checkLists = checkLists.stream()
                     .filter(checkList -> checkList.getOpportunity().getUser().getId().equals(Long.parseLong(expertId)))
                     .collect(Collectors.toList());
         }
-
-        // Фильтрация по датам
         if (startDate != null && endDate != null) {
             checkLists = checkLists.stream()
                     .filter(checkList -> {

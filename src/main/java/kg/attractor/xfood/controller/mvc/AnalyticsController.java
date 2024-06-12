@@ -29,7 +29,6 @@ public class AnalyticsController {
         ));
         model.addAttribute("user", userService.getUserDto());
 
-        // Добавляем текущие значения параметров в модель
         model.addAttribute("currentPizzeria", pizzeria);
         model.addAttribute("currentManager", manager);
         model.addAttribute("currentExpert", expert);
