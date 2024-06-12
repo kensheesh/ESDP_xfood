@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.LocationDto;
 import kg.attractor.xfood.dto.WorkScheduleDto;
+import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
@@ -10,14 +11,18 @@ import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.model.*;
+import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class DtoBuilder {
+    private final ChecklistCriteriaRepository checkListsCriteriaRepository;
+
 
     protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
         String uuid = model.getUuidLink();
@@ -108,6 +113,32 @@ public class DtoBuilder {
                 .workSchedule(this.buildWorkScheduleDto(model.getWorkSchedule()))
                 .build();
     }
+
+    protected CheckListAnalyticsDto buildCheckListAnalyticsDto(CheckList model) {
+        CheckListAnalyticsDto checkListAnalyticsDto = new CheckListAnalyticsDto();
+        checkListAnalyticsDto.setId(model.getId());
+        checkListAnalyticsDto.setPizzeria(model.getWorkSchedule().getPizzeria());
+        checkListAnalyticsDto.setManager(model.getWorkSchedule().getManager());
+        checkListAnalyticsDto.setExpert(model.getOpportunity().getUser());
+        checkListAnalyticsDto.setDate(model.getWorkSchedule().getDate().toLocalDate());
+
+        List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(model.getId());
+        int maxvalue = 0;
+        int value = 0;
+        for (CheckListsCriteria criteria : criterias) {
+            if (criteria.getMaxValue() != null) {
+                maxvalue += criteria.getMaxValue();
+            }
+            value += criteria.getValue();
+        }
+        double result = Math.round(((double) value / maxvalue) * 100);
+        checkListAnalyticsDto.setResult((int) result);
+
+        return checkListAnalyticsDto;
+    }
+
+
+
 
     protected PizzeriaDto buildPizzeriaDto(Pizzeria model) {
         return PizzeriaDto.builder()

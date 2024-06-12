@@ -33,8 +33,11 @@ public class AnalyticsController {
         model.addAttribute("currentPizzeria", pizzeria);
         model.addAttribute("currentManager", manager);
         model.addAttribute("currentExpert", expert);
+        model.addAttribute("currentStartDate", LocalDate.now());
+        model.addAttribute("currentEndDate", LocalDate.now());
         model.addAttribute("currentStartDate", startDate);
         model.addAttribute("currentEndDate", endDate);
+
         return "analytics/analytics";
     }
 }
