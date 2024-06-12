@@ -1,21 +1,22 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
+import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.model.CheckListsCriteria;
+import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.CheckListRepository;
-import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
+import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,10 +24,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CheckListServiceImpl implements CheckListService {
-
     private final CheckListRepository checkListRepository;
     private final DtoBuilder dtoBuilder;
-    private final ChecklistCriteriaRepository checkListsCriteriaRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
@@ -46,10 +46,19 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<CheckListAnalyticsDto> getAnalytics(String pizzeriaId, String managerId, String expertId, LocalDate startDate, LocalDate endDate) {
-        List<CheckList> checkLists = checkListRepository.findByStatus(Status.DONE);
+        User user = userRepository.findByEmail(AuthParams.getPrincipal().getUsername()).orElseThrow(() -> new NotFoundException("User not found"));
+        List<CheckList> checkLists;
+        if (user.getRole().equals(Role.EXPERT)) {
+            checkLists = checkListRepository.findCheckListByExpertEmailAndStatus(user.getEmail(), Status.DONE);
+        } else {
+            checkLists = checkListRepository.findByStatus(Status.DONE);
+        }
         System.out.println(pizzeriaId);
         System.out.println(managerId);
         System.out.println(expertId);
+        System.out.println(startDate);
+        System.out.println(endDate);
+
         // Фильтрация по пиццерии
         if (!"default".equals(pizzeriaId)) {
             checkLists = checkLists.stream()
@@ -83,43 +92,8 @@ public class CheckListServiceImpl implements CheckListService {
                     .collect(Collectors.toList());
         }
 
-        List<CheckListAnalyticsDto> checkListAnalyticsDtoList = new ArrayList<>();
-
-        for (CheckList checkList : checkLists) {
-            CheckListAnalyticsDto checkListAnalyticsDto = new CheckListAnalyticsDto();
-            checkListAnalyticsDto.setId(checkList.getId());
-            checkListAnalyticsDto.setPizzeria(checkList.getWorkSchedule().getPizzeria());
-            checkListAnalyticsDto.setManager(checkList.getWorkSchedule().getManager());
-            checkListAnalyticsDto.setExpert(checkList.getOpportunity().getUser());
-            checkListAnalyticsDto.setDate(checkList.getWorkSchedule().getDate().toLocalDate());
-
-            List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(checkList.getId());
-            int maxvalue = 0;
-            int value = 0;
-            for (CheckListsCriteria criteria : criterias) {
-                if (criteria.getMaxValue() != null) {
-                    maxvalue += criteria.getMaxValue();
-                }
-                value += criteria.getValue();
-            }
-            double result = Math.round(((double) value / maxvalue) * 100);
-            checkListAnalyticsDto.setResult((int) result);
-
-            checkListAnalyticsDtoList.add(checkListAnalyticsDto);
-        }
-
-        return checkListAnalyticsDtoList;
+        return checkLists.stream()
+                .map(dtoBuilder::buildCheckListAnalyticsDto)
+                .collect(Collectors.toList());
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
