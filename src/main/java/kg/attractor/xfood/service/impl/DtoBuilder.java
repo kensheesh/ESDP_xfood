@@ -7,6 +7,7 @@ import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
+import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,22 @@ public class DtoBuilder {
 				.uuid(uuid)
 				.build();
 	}
-	
+
+	protected UserDto buildUserDto(User model) {
+		return UserDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.surname(model.getSurname())
+				.phoneNumber(model.getPhoneNumber())
+				.email(model.getEmail())
+				.password(model.getPassword())
+				.avatar(model.getAvatar())
+				.enabled(model.getEnabled())
+				.role(model.getRole())
+				.build();
+	}
+
+
 	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
 		return CriteriaExpertShowDto.builder()
 				.id(model.getCriteria().getId())
