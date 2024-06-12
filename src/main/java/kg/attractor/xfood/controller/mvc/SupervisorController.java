@@ -32,8 +32,6 @@ public class SupervisorController {
     @GetMapping("/weekly")
     public String getWeeklySchedule (Model model) {
         model.addAttribute("locations", locationService.getLocations());
-
-        //TODO в модальном окне показать экспертов, которые имеют смены на данный день
         return "weekly";
     }
 }

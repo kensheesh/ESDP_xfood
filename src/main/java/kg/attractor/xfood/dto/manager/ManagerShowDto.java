@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ManagerShowDto {
+	private Long id;
 	private String name;
 	private String surname;
 }
