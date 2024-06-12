@@ -3,7 +3,6 @@ package kg.attractor.xfood.controller.mvc;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,18 +27,14 @@ public class AnalyticsController {
         model.addAttribute("checklists", checkListService.getAnalytics(
                 pizzeria, manager, expert, startDate, endDate
         ));
-
-        System.out.println("----------------------------------------------------------------------------------------------------");
-
-        System.out.println(pizzeria);
-        System.out.println(manager);
-        System.out.println(expert);
-        System.out.println(startDate);
-        System.out.println(endDate);
-
-        System.out.println("----------------------------------------------------------------------------------------------------");
-
         model.addAttribute("user", userService.getUserDto());
+
+        // Добавляем текущие значения параметров в модель
+        model.addAttribute("currentPizzeria", pizzeria);
+        model.addAttribute("currentManager", manager);
+        model.addAttribute("currentExpert", expert);
+        model.addAttribute("currentStartDate", startDate);
+        model.addAttribute("currentEndDate", endDate);
         return "analytics/analytics";
     }
 }

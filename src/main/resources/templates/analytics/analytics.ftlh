@@ -126,6 +126,7 @@
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
                                     <h6 class="card-title">Фильтры</h6>
+                                    <div class="filter-width">
                                     <label>
                                         <select class="form-select mb-2 pizzeria-select" name="pizzeria">
                                             <option value="default">Пиццерия</option>
@@ -143,6 +144,7 @@
                                             </select>
                                         </label>
                                     </#if>
+                                    </div>
                                     <div class="input-group">
                                         <label for="date-from" class="input-group-text">От</label>
                                         <input type="date" name="startDate" id="date-from" class="form-control">
@@ -175,6 +177,10 @@
                 z-index: 2;
             }
         }
+
+        .filter-width label {
+            width: 80%;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -192,6 +198,9 @@
                             option.textContent = pizzeria.name;
                             selectElement.appendChild(option);
                         });
+
+                        // Устанавливаем текущее значение
+                        selectElement.value = "${currentPizzeria}";
                     })
                     .catch(function (error) {
                         console.error('Ошибка при загрузке данных:', error);
@@ -213,6 +222,9 @@
                             option.textContent = expert.name + " " + expert.surname;
                             selectElement.appendChild(option);
                         });
+
+                        // Устанавливаем текущее значение
+                        selectElement.value = "${currentExpert}";
                     })
                     .catch(function (error) {
                         console.error('Ошибка при загрузке данных:', error);
@@ -234,13 +246,15 @@
                             option.textContent = manager.name + " " + manager.surname;
                             selectElement.appendChild(option);
                         });
+
+                        // Устанавливаем текущее значение
+                        selectElement.value = "${currentManager}";
                     })
                     .catch(function (error) {
                         console.error('Ошибка при загрузке данных:', error);
                     });
             });
         });
-
     </script>
 
 </@main.layout>

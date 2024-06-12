@@ -9,7 +9,6 @@ import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
-import kg.attractor.xfood.repository.PizzeriaRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,36 +45,72 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public List<CheckListAnalyticsDto> getAnalytics(String pizzeria, String manager, String expert, LocalDate startDate, LocalDate endDate) {
-
+    public List<CheckListAnalyticsDto> getAnalytics(String pizzeriaId, String managerId, String expertId, LocalDate startDate, LocalDate endDate) {
         List<CheckList> checkLists = checkListRepository.findByStatus(Status.DONE);
+        System.out.println(pizzeriaId);
+        System.out.println(managerId);
+        System.out.println(expertId);
+        // Фильтрация по пиццерии
+        if (!"default".equals(pizzeriaId)) {
+            checkLists = checkLists.stream()
+                    .filter(checkList -> checkList.getWorkSchedule().getPizzeria().getId().equals(Long.parseLong(pizzeriaId)))
+                    .collect(Collectors.toList());
 
-        return checkLists.stream().map(checkList -> {
-            CheckListAnalyticsDto dto = new CheckListAnalyticsDto();
+        }
 
-            dto.setId(checkList.getId());
-            dto.setPizzeria(checkList.getWorkSchedule().getPizzeria());
-            dto.setManager(checkList.getWorkSchedule().getManager());
-            dto.setExpert(checkList.getOpportunity().getUser());
-            dto.setDate(checkList.getWorkSchedule().getDate().toLocalDate());
+        // Фильтрация по менеджеру
+        if (!"default".equals(managerId)) {
+            checkLists = checkLists.stream()
+                    .filter(checkList -> checkList.getWorkSchedule().getManager().getId().equals(Long.parseLong(managerId)))
+                    .collect(Collectors.toList());
+        }
+
+        // Фильтрация по эксперту
+        if (!"default".equals(expertId)) {
+            checkLists = checkLists.stream()
+                    .filter(checkList -> checkList.getOpportunity().getUser().getId().equals(Long.parseLong(expertId)))
+                    .collect(Collectors.toList());
+        }
+
+        // Фильтрация по датам
+        if (startDate != null && endDate != null) {
+            checkLists = checkLists.stream()
+                    .filter(checkList -> {
+                        LocalDate date = checkList.getWorkSchedule().getDate().toLocalDate();
+                        return (date.isEqual(startDate) || date.isAfter(startDate)) &&
+                                (date.isEqual(endDate) || date.isBefore(endDate));
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        List<CheckListAnalyticsDto> checkListAnalyticsDtoList = new ArrayList<>();
+
+        for (CheckList checkList : checkLists) {
+            CheckListAnalyticsDto checkListAnalyticsDto = new CheckListAnalyticsDto();
+            checkListAnalyticsDto.setId(checkList.getId());
+            checkListAnalyticsDto.setPizzeria(checkList.getWorkSchedule().getPizzeria());
+            checkListAnalyticsDto.setManager(checkList.getWorkSchedule().getManager());
+            checkListAnalyticsDto.setExpert(checkList.getOpportunity().getUser());
+            checkListAnalyticsDto.setDate(checkList.getWorkSchedule().getDate().toLocalDate());
 
             List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(checkList.getId());
+            int maxvalue = 0;
+            int value = 0;
+            for (CheckListsCriteria criteria : criterias) {
+                if (criteria.getMaxValue() != null) {
+                    maxvalue += criteria.getMaxValue();
+                }
+                value += criteria.getValue();
+            }
+            double result = Math.round(((double) value / maxvalue) * 100);
+            checkListAnalyticsDto.setResult((int) result);
 
-            int maxValue = criterias.stream()
-                    .filter(criteria -> criteria.getMaxValue() != null)
-                    .mapToInt(CheckListsCriteria::getMaxValue)
-                    .sum();
+            checkListAnalyticsDtoList.add(checkListAnalyticsDto);
+        }
 
-            int value = criterias.stream()
-                    .mapToInt(CheckListsCriteria::getValue)
-                    .sum();
-
-            double result = maxValue == 0 ? 0 : Math.round(((double) value / maxValue) * 100);
-
-            dto.setResult((int) result);
-            return dto;
-        }).collect(Collectors.toList());
+        return checkListAnalyticsDtoList;
     }
+
 }
 
 
