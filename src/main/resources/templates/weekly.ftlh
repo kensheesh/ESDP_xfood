@@ -129,7 +129,6 @@
             fetch(href)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if (data.length === 0) {
                         let loss = document.createElement('span');
                         loss.className = 'text-center fs-4 p-4';
@@ -202,7 +201,6 @@
             fetch('/api/opportunities/bydate/' + date)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     data.forEach(item => {
                         let opportunity = document.createElement('div');
                         opportunity.className = 'row';
@@ -216,7 +214,9 @@
                                              `;
                         item.shifts.forEach(shift => {
                             let row = document.createElement('span');
-                            row.innerHTML = shift;
+                            row.innerHTML = `
+                                ` + shift.startTime + `-` + shift.endTime + `
+                            `;
                             cardBody.insertAdjacentElement('beforeend', row)
                         })
 

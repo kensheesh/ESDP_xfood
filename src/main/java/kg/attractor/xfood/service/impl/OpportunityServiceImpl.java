@@ -22,9 +22,10 @@ import java.util.Set;
 public class OpportunityServiceImpl implements OpportunityService {
     private final OpportunityRepository opportunityRepository;
     private final DtoBuilder dtoBuilder;
-
+    @Override
     public List<OpportunityShowDto> getOppotunitiesByDate(LocalDateTime date) {
-        List<Opportunity> opportunities = opportunityRepository.findByDate(date);
+        List<Opportunity> opportunities = opportunityRepository.findByDateOrderByUser_SurnameAsc(date.toLocalDate());
+
         Set<User> expertsOfDay = new HashSet<>();
 
         opportunities.forEach(e -> {
@@ -44,7 +45,7 @@ public class OpportunityServiceImpl implements OpportunityService {
         OpportunityShowDto dto = new OpportunityShowDto();
         List<DailyOpportunityShowDto> shifts = new ArrayList<>();
 
-        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date);
+        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date.toLocalDate());
 
         dto.setUser(dtoBuilder.buildExpertShowDto(user));
         expertsOpportunities.forEach(e -> {

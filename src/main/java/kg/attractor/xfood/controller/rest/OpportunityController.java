@@ -20,7 +20,7 @@ public class OpportunityController {
     private final OpportunityServiceImpl opportunityService;
 
     @GetMapping("/bydate/{date}")
-    public ResponseEntity<List<OpportunityShowDto>> getPizzeriasByLocation (
+    public ResponseEntity<List<OpportunityShowDto>> getOpportunitiesByDate (
             @PathVariable(name = "date") LocalDateTime date
     ) {
         List<OpportunityShowDto> dtos = opportunityService.getOppotunitiesByDate(date);
