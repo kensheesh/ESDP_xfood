@@ -215,7 +215,6 @@
             fetch(href)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     data.forEach(item => {
                         let row = document.createElement('tr');
                         let manager = document.createElement('td');
@@ -229,7 +228,6 @@
 
                         item.weeklySchedule.forEach(schedule => {
                             let day = document.createElement('td');
-                            console.log(schedule.workDay);
                             if(schedule.workDay) {
                                 day.innerHTML =
                                     `
