@@ -5,11 +5,7 @@ import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.location.LocationShowDto;
 import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
-import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.model.CheckListsCriteria;
-import kg.attractor.xfood.model.Location;
-import kg.attractor.xfood.model.Manager;
-import kg.attractor.xfood.model.Pizzeria;
+import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +54,14 @@ public class DtoBuilder {
 				.id(manager.getId())
 				.name(manager.getName())
 				.surname(manager.getSurname())
+				.build();
+	}
+
+	protected ManagerExpertShowDto buildExpertShowDto(User user) {
+		return ManagerExpertShowDto.builder()
+				.id(user.getId())
+				.name(user.getName())
+				.surname(user.getSurname())
 				.build();
 	}
 

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/checks")
 public class CheckListController {
 
-//    // ROLE: SUPERVISOR
-//    @GetMapping("/create")
-//    public String create () {
-//        return null;
-//    }
+    // ROLE: SUPERVISOR
+    @GetMapping("/create")
+    public String create () {
+        return null;
+    }
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")

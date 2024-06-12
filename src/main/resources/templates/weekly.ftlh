@@ -34,118 +34,7 @@
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <tbody id="schedule-list">
-                            <tr>
-                                <td class="align-middle">
-                                    <span>Менеджер<br>Менеджеровский</span>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-danger rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                Выходной
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                    style="font-size: 11px;" data-bs-toggle="modal"
-                                                    data-bs-target="#workShiftModal">
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                                <div>12:00 - 19:00</div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                31.01.2024
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button"
-                                                    data-bs-toggle="modal" data-bs-target="#workShiftModal">
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -153,6 +42,28 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="workShiftModal" tabindex="-1" aria-labelledby="workShiftModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-6" id="workShiftModalLabel">Выберите эксперта для назначения на проверку</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="work-shifts" class="row row-cols-1 row-gap-3">
+                        <div class="row">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
+                    <button type="button" class="btn btn-primary rounded-4">Создать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <style>
         body {
@@ -184,6 +95,9 @@
     </script>
 
     <script>
+        let currentDate;
+        let managerId;
+        let expertId;
 
         async function handleSelectChange(selectedValue) {
             let pizzeriaList = document.getElementById('pizzeria-list');
@@ -215,40 +129,47 @@
             fetch(href)
                 .then(response => response.json())
                 .then(data => {
-                    data.forEach(item => {
-                        let row = document.createElement('tr');
-                        let manager = document.createElement('td');
-                        manager.className = 'align-middle';
-                        manager.innerHTML =
-                            `
-                                <span>` + item.manager.name + `<br>` + item.manager.surname + `</span>
+                    console.log(data);
+                    if (data.length === 0) {
+                        let loss = document.createElement('span');
+                        loss.className = 'text-center fs-4 p-4';
+                        loss.innerHTML = 'Нет результатов';
+                        scheduleList.insertAdjacentElement('beforeend', loss);
+                    } else {
+                        data.forEach(item => {
+                            let row = document.createElement('tr');
+                            let manager = document.createElement('td');
+                            manager.className = 'align-middle';
+                            manager.innerHTML =
+                                `
+                                <span>` + item.manager.surname + `<br>` + item.manager.name + `</span>
                             `;
 
-                        row.insertAdjacentElement('beforeend', manager);
+                            row.insertAdjacentElement('beforeend', manager);
 
-                        item.weeklySchedule.forEach(schedule => {
-                            let day = document.createElement('td');
-                            if(schedule.workDay) {
-                                day.innerHTML =
-                                    `
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                ` + schedule.date + `
+                            item.weeklySchedule.forEach(schedule => {
+                                let day = document.createElement('td');
+                                if(schedule.workDay) {
+                                    day.innerHTML =
+                                        `
+                                        <div class="row row-cols-1">
+                                            <div class="col">
+                                                <div class="text-body-secondary fw-medium calendar-date">
+                                                    ` + schedule.date + `
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <button class="btn btn-sm btn-success rounded-4 calendar-button"
+                                                        style="font-size: 11px;" id="" value="` + schedule.date + `" data-bs-toggle="modal"
+                                                        data-bs-target="#workShiftModal" onclick="handleWorkDayClick(` + item.manager.id + `, this.value)">
+                                                    <div>` + schedule.startTime + ` - ` + schedule.endTime + `</div>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                    style="font-size: 11px;" data-bs-toggle="modal"
-                                                    data-bs-target="#workShiftModal">
-                                                <div>` + schedule.startTime + ` - ` + schedule.endTime + `</div>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    `;
-                            } else {
-                                day.innerHTML =
-                                    `
+                                        `;
+                                } else {
+                                    day.innerHTML =
+                                        `
                                     <div class="row row-cols-1">
                                         <div class="col">
                                             <div class="text-body-secondary fw-medium calendar-date">
@@ -262,13 +183,50 @@
                                         </div>
                                     </div>
                                     `;
-                            }
-                            row.insertAdjacentElement('beforeend', day);
-                        })
+                                }
+                                row.insertAdjacentElement('beforeend', day);
+                            })
                         scheduleList.insertAdjacentElement('beforeend', row);
-                    });
+                        });
+                    }
                 })
                 .catch(error => console.error('Error fetching work schedules:', error));
+        }
+
+        function handleWorkDayClick(id, date) {
+            currentDate = date;
+            managerId = id;
+
+            let shiftsList = document.getElementById('work-shifts');
+
+            fetch('/api/opportunities/bydate/' + date)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    data.forEach(item => {
+                        let opportunity = document.createElement('div');
+                        opportunity.className = 'row';
+                        let card = document.createElement('a');
+                        card.className = 'card';
+                        card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + item.user.id;
+                        let cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+                        cardBody.innerHTML = `
+                                <h5 class="card-title">` + item.user.surname + ` ` + item.user.name + `</h5>
+                                             `;
+                        item.shifts.forEach(shift => {
+                            let row = document.createElement('span');
+                            row.innerHTML = shift;
+                            cardBody.insertAdjacentElement('beforeend', row)
+                        })
+
+                        opportunity.insertAdjacentElement('beforeend', card);
+                        card.insertAdjacentElement('beforeend', cardBody);
+                        shiftsList.insertAdjacentElement('beforeend', opportunity);
+                    });
+                })
+                .catch(error => console.error('Error fetching pizzerias:', error));
+
         }
 
     </script>
