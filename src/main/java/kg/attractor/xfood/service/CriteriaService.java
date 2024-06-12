@@ -6,5 +6,9 @@ import java.util.List;
 
 public interface CriteriaService {
 
-    List<CriteriaSupervisorShowDto> getCriterias();
+    List<CriteriaSupervisorShowDto> getCriterion(String type);
+
+    List<CriteriaSupervisorShowDto> getByDescription(String description);
+
+    CriteriaSupervisorShowDto getById(Long id);
 }

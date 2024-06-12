@@ -56,7 +56,8 @@ public class DtoBuilder {
 		return CriteriaSupervisorShowDto.builder()
 				.id(model.getId())
 				.description(model.getDescription())
-				.maxValue(model.getMaxValue())
+				.zone(model.getZone().getName())
+				.section(model.getSection().getName())
 				.coefficient(model.getCoefficient())
 				.build();
 	}

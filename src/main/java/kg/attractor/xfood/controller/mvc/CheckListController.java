@@ -1,26 +1,31 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.service.CheckListService;
+import kg.attractor.xfood.service.CheckTypeService;
+import kg.attractor.xfood.service.CriteriaService;
+import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/checks")
 public class CheckListController {
     private final CheckListService checkListService;
+    private final CheckTypeService checkTypeService;
+    private final CriteriaService criteriaService;
 
-//    // ROLE: SUPERVISOR
-//    @GetMapping("/create")
-//    public String create () {
-//        return null;
-//    }
+    // ROLE: SUPERVISOR
+    @GetMapping("/create")
+    public String create (@RequestParam(name = "type", required = false)String type, Model model) {
+        model.addAttribute("criterion", criteriaService.getCriterion(type));
+        model.addAttribute("types",checkTypeService.getTypes());
+        return "checklist/create";
+    }
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")

@@ -1,105 +1,204 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Expert checks</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-<body>
-<header>
-    <nav class="navbar navbar-expand fw-medium bg-white border-bottom ">
-        <div class="container">
-            <a class="navbar-brand" href="#">XFOOD</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown" href="#">
-                        <a a class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
-                           href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle fs-5 m-0 p-0 "></i>
-                            <span>Иван Иванов</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Мой профиль</a></li>
-                            <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Выход</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-<main class="container mt-4">
-    <div class="row row-cols-md-2 row-cols-1 bg-white rounded shadow-sm">
+<#import "../layout.ftlh" as main>
+<@main.layout>
+    <style>
+        .input-group:hover,
+        .input-group:focus {
+            border-radius: 10px;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+    </style>
+    <div class="row row-cols-md-3 row-cols-1 bg-white rounded shadow-sm">
         <div class="col">
             <div class="my-4">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                    <option disabled selected>Выберите тип чек листа</option>
-                    <#list types as type>
-                        <option value="${type.id}">${type.name}</option>
-                    </#list>
-                </select>
+                <div class="dropdown">
+                    <button class="btn btn-white shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        тип чек листа
+                    </button>
+                    <ul class="dropdown-menu" style="z-index: 2;">
+                        <#list types as type>
+                            <li><a class="dropdown-item" href="/checks/create?type=${type.name}">${type.name}</a></li>
+                        </#list>
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="col d-flex">
-            <button type="button" class="btn btn-success my-4 ms-auto w-50 h-50 rounded-4">Создать</button>
+        <div class="col">
+            <div class="input-group my-4">
+                <button type="button" class="search_btn btn btn-white shadow-sm border w-100"  data-bs-toggle="modal" data-bs-target="#searchModal">
+                        <span class="d-flex justify-content-start align-items-center">
+                            <span class="me-auto">Найти критерию...</span>
+                                <i class="bi bi-search"></i>
+                        </span>
+                </button>
+            </div>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-success rounded-2 my-4">создать новый критерий</button>
         </div>
     </div>
-    <div class="mt-4 shadow-sm p-3 bg-white overflow-y-auto" style="height: 58vh;">
-        <div class="row g-3 mb-3">
-            <div class="col-12">
-                <#list criterias as c>
-                    <div id="criteria-wrap-${c?index}" class=" <#if c?index%2==0> bg-warning <#else> bg-primary-subtle</#if> bg-opacity-25 p-3 rounded-4 shadow-sm d-flex align-items-center mb-2">
-                        <div class="row w-100 row-cols-1 row-cols-sm-2">
-                            <div class="col-sm-9 col-md-10 d-flex align-items-center">
-                                <p class="mb-0">${c.description}</p>
-                            </div>
-                            <div class="col-sm-3 col-md-2 d-flex align-items-center  justify-content-md-end">
-                                <div class="row row-cols-2">
-                                    <div class="col">
-                                        <div class="shadow-sm bg-white rounded-4 text-center p-3 me-2">
-                                            <#if c.maxValue??>${c.maxValue}<#else >${c.coefficient}</#if>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c?index}">
-                                            <i class="bi bi-trash text-secondary fs-4"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+<div class="mt-4 shadow-sm p-3 bg-white">
+    <div>
+        <#if criterion?size == 0>
+            <p>Выберите тип чек-листа для отображения критериев</p>
+        <#else>
+            <div class="table-responsive" style="max-height: 400px;">
+                <table class="table table-striped-columns">
+                    <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th scope="col">Раздел</th>
+                            <th scope="col">Зона</th>
+                            <th scope="col">Что проверить</th>
+                            <th scope="col">Оценка</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="criterion-list">
+                        <#list criterion as c>
+                            <tr id="criteria-wrap-${c.id}" class="<#if c.section == "WOW фактор">table-success<#elseif c.section == 'Критический фактор'>table-danger</#if>">
+                                <th scope="row">${c.section}</th>
+                                <td>${c.zone}</td>
+                                <td>${c.description}</td>
+                                <td>${c.coefficient}</td>
+                                <td>
+                                    <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
+                                        <i class="bi bi-trash text-secondary fs-4"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </div>
+        </#if>
+    </div>
+</div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="search-bar">
+                        <div class="input-group my-4">
+                            <input type="text" class="form-control" placeholder="Описание критерии..." aria-describedby="button-addon2" id="searchbar">
+                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                         </div>
                     </div>
-                </#list>
+                    <div class="found-criterion h-100">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
             </div>
         </div>
     </div>
-</main>
-
 <script>
     let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
     let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
-    console.log(criterias);
-    console.log(criteriaWraps)
-    for (let i = 0 ; i<criterias.length; i++){
+    for (let i = 0 ; i < criterias.length; i++){
         criterias[i].addEventListener('click', ()=>{
             criteriaWraps[i].remove();
-        })
+        });
     }
+
+    let search = document.getElementById('searchbar');
+    search.addEventListener('input', onInput);
+
+    function onInput(event) {
+        event.preventDefault();
+        let input = document.getElementById('searchbar');
+        let description = input.value;
+        let result = "/api/criteria/search?description=" + description;
+        getResults(result);
+    }
+
+    async function getResults(result) {
+        let response = await fetch(result);
+        if (response.ok){
+            let json = await response.json();
+            printResults(json);
+        } else {
+            console.log(response);
+            alert("Ошибка HTTP: " + response.status);
+        }
+    }
+
+    function printResults(json) {
+        let objectSize = Object.keys(json).length;
+        let searchResultsWrapper = document.querySelector('.found-criterion');
+        searchResultsWrapper.innerHTML = "";
+        if (objectSize > 0){
+            for (let i = 0; i < objectSize; i++) {
+                let element = document.createElement('div');
+                element.classList.add('card');
+                element.id = 'del-'+json[i].id;
+                element.innerHTML =
+                    '<div class="card-body">'+
+                    '<h5 class="card-title">'+json[i].section+'</h5>'+
+                    '<h6 class="card-subtitle mb-2 text-muted">'+json[i].zone+'</h6>'+
+                    '<p class="card-text">'+json[i].description+'</p>'+
+                    '<button class="btn btn-link" type="button" id="add-criteria-'+json[i].id+'" data-id="'+json[i].id+'">'+
+                    '<i class="bi bi-plus-circle-fill text-success fs-3"></i>'+
+                    '</button>'+
+                    '</div>';
+                searchResultsWrapper.appendChild(element);
+            }
+
+            let addCriteriaButtons = document.querySelectorAll('[id^="add-criteria-"]');
+            for (let btn of addCriteriaButtons) {
+                btn.addEventListener('click', function() {
+                    let id = this.getAttribute('data-id');
+                    addCriteriaToList(id);
+                });
+            }
+        } else {
+            let noResultsSection = document.createElement('div');
+            noResultsSection.innerText = 'No criteria found';
+            searchResultsWrapper.appendChild(noResultsSection);
+        }
+    }
+
+    async function addCriteriaToList(id) {
+        let del = document.getElementById('del-'+id);
+        del.remove();
+        let criteriaList = document.querySelector('.criterion-list');
+        let criteriaWrap = document.getElementById('criteria-wrap-' + id);
+        if (!criteriaWrap) {
+            let criteria = await getCriteriaById(id);
+            let newCriteria = document.createElement('tr');
+            newCriteria.setAttribute('id', 'criteria-wrap-' + id);
+            newCriteria.innerHTML =
+                '<th scope="row">' + criteria.section + '</th>' +
+                '<td>' + criteria.zone + '</td>' +
+                '<td>' + criteria.description + '</td>' +
+                '<td>' + criteria.coefficient + '</td>' +
+                '<td>' +
+                '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criteria.id + '">' +
+                '<i class="bi bi-trash text-secondary fs-4"></i>' +
+                '</button>' +
+                '</td>';
+            criteriaList.appendChild(newCriteria);
+
+            let deleteButton = document.getElementById('deleteCriteria-' + criteria.id);
+            deleteButton.addEventListener('click', function() {
+                document.getElementById('criteria-wrap-' + criteria.id).remove();
+            });
+        }
+    }
+
+    async function getCriteriaById(id){
+        let response = await fetch("/api/criteria/" + id);
+        if (response.ok){
+            return await response.json();
+        } else {
+            console.log(response);
+            alert("Ошибка HTTP: " + response.status);
+        }
+    }
+
+
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-</script>
-</body>
+</@main.layout>

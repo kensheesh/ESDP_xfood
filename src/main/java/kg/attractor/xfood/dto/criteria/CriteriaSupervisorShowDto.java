@@ -14,4 +14,6 @@ public class CriteriaSupervisorShowDto {
     private String description;
     private Integer maxValue;
     private Integer coefficient;
+    private String zone;
+    private String section;
 }
