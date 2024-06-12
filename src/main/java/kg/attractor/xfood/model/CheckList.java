@@ -6,6 +6,7 @@ import kg.attractor.xfood.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.util.List;
 
 @Getter
@@ -33,6 +34,12 @@ public class CheckList {
     
     @Column(name = "uuid_link")
     public String uuidLink;
+    
+    @Column(name = "feedback")
+    public String feedback;
+    
+    @Column(name = "duration")
+    public Time duration;
 
     @Enumerated(EnumType.STRING)
     private Status status;
