@@ -18,7 +18,7 @@ public class PizzeriaController {
     private final PizzeriaService pizzeriaService;
 
     @GetMapping
-    public ResponseEntity<List<PizzeriaDto>> getAllPizzerias() {
+    public ResponseEntity<?> getAllPizzerias() {
         List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
         return ResponseEntity.ok(pizzerias);
     }
