@@ -30,7 +30,7 @@ public class CriteriaServiceImpl implements CriteriaService {
     @Override
     public List<CriteriaSupervisorShowDto> getCriterion(String type) {
        if (type!=null && !type.isEmpty()) {
-           return criteriaRepository.findCriteriaByCriteriaTypes(type).stream().map(dtoBuilder::buildCriteriaShowDto).toList();
+           return criteriaRepository.findCriteriaByCriteriaTypes(type).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
        }
        else return new ArrayList<>();
     }
@@ -38,14 +38,14 @@ public class CriteriaServiceImpl implements CriteriaService {
     @Override
     public List<CriteriaSupervisorShowDto> getByDescription(String description) {
         if (description!=null && !description.isEmpty()) {
-            return criteriaRepository.findCriterionByDescriptionContainingIgnoreCase(description).stream().map(dtoBuilder::buildCriteriaShowDto).toList();
+            return criteriaRepository.findCriterionByDescriptionContainingIgnoreCase(description).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
         }
         return new ArrayList<>();
     }
 
     @Override
     public CriteriaSupervisorShowDto getById(Long id) {
-        return dtoBuilder.buildCriteriaShowDto(Objects.requireNonNull(criteriaRepository.findById(id).orElse(null)));
+        return dtoBuilder.buildCriteriaSupervisorShowDto(Objects.requireNonNull(criteriaRepository.findById(id).orElse(null)));
     }
 
     @Override
