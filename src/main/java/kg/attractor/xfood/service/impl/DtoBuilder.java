@@ -1,7 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.LocationDto;
-import kg.attractor.xfood.dto.PizzeriaDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.WorkScheduleDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;

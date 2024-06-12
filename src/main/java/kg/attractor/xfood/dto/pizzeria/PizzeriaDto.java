@@ -1,5 +1,6 @@
-package kg.attractor.xfood.dto;
+package kg.attractor.xfood.dto.pizzeria;
 
+import kg.attractor.xfood.dto.LocationDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
