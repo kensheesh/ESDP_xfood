@@ -37,14 +37,7 @@ public class ExportController {
                 pizzeria, manager, expert, startDate, endDate
         );
 
-        if(!checklists.isEmpty()) {
-            System.out.println("excel");
-            System.out.println(pizzeria);
-            System.out.println(manager);
-            System.out.println(expert);
-            System.out.println(startDate);
-            System.out.println(endDate);
-
+        if (!checklists.isEmpty()) {
             Workbook workbook = new XSSFWorkbook();
             Sheet sheet = workbook.createSheet("Analytics");
 
@@ -73,7 +66,5 @@ public class ExportController {
         } else {
             throw new IllegalArgumentException("No checklists found");
         }
-
-
     }
 }

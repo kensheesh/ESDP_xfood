@@ -118,7 +118,7 @@
                                             <div class="input-group">
                                                 <label for="date-from" class="input-group-text">От</label>
                                                 <input type="date" name="startDate" id="date-from" class="form-control"
-                                                       value="<#if currentStartDate??>${currentStartDate}</#if>">
+                                                       value="<#if currentStartDate??>${currentStartDate}</#if>" style="width: 5.06rem">
                                                 <label for="date-to" class="input-group-text">До</label>
                                                 <input type="date" name="endDate" id="date-to" class="form-control"
                                                        value="<#if currentEndDate??>${currentEndDate}</#if>">
@@ -214,7 +214,6 @@
                             selectElement.appendChild(option);
                         });
 
-                        // Устанавливаем текущее значение
                         selectElement.value = "${currentPizzeria}";
                     })
                     .catch(function (error) {
@@ -238,7 +237,6 @@
                             selectElement.appendChild(option);
                         });
 
-                        // Устанавливаем текущее значение
                         selectElement.value = "${currentExpert}";
                     })
                     .catch(function (error) {
@@ -262,7 +260,6 @@
                             selectElement.appendChild(option);
                         });
 
-                        // Устанавливаем текущее значение
                         selectElement.value = "${currentManager}";
                     })
                     .catch(function (error) {

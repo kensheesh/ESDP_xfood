@@ -11,7 +11,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Setter
 @Entity
 @Table(name = "check_lists_criteria")
-@ToString
 public class CheckListsCriteria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
