@@ -1,9 +1,8 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.service.CheckListService;
-import kg.attractor.xfood.service.CheckTypeService;
-import kg.attractor.xfood.service.CriteriaService;
+import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,12 +17,17 @@ public class CheckListController {
     private final CheckListService checkListService;
     private final CheckTypeService checkTypeService;
     private final CriteriaService criteriaService;
+    private final ZoneService zoneService;
+    private final SectionService sectionService;
 
     // ROLE: SUPERVISOR
     @GetMapping("/create")
     public String create (@RequestParam(name = "type", required = false)String type, Model model) {
+        model.addAttribute("zones",zoneService.getZones() );
+        model.addAttribute("sections", sectionService.getSections());
         model.addAttribute("criterion", criteriaService.getCriterion(type));
         model.addAttribute("types",checkTypeService.getTypes());
+        model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
         return "checklist/create";
     }
 

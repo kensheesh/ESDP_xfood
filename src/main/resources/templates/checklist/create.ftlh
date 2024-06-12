@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout ; spring>
     <style>
         .input-group:hover,
         .input-group:focus {
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-success rounded-2 my-4">создать новый критерий</button>
+            <button type="button" class="btn btn-success rounded-2 my-4" data-bs-toggle="modal" data-bs-target="#create">создать новый критерий</button>
         </div>
     </div>
 <div class="mt-4 shadow-sm p-3 bg-white">
@@ -94,6 +94,55 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="create" tabindex="-1" aria-labelledby="create" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/criterion/create" method="post"  id="form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Создание критерия</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label for="category">Раздел:</label>
+                            <div id="section-err" class="text-danger"></div>
+                            <select class="form-select" aria-label="Default select example" name="section" id="sectionSelect">
+                            <#list sections as s>
+                                <option value="${s.name}">${s.name}</option>
+                            </#list>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div id="zone-err" class="text-danger"></div>
+                            <label for="category">Зона:</label>
+                            <select class="form-select" aria-label="Default select example" name="zone" id="zoneSelect">
+                                <#list zones as z>
+                                    <option value="${z.name}">${z.name}</option>
+                                </#list>
+                            </select>
+                        </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label" >Описание: </label>
+                        <input type="text" class="form-control" id="descriptionInput" name="description">
+                        <div id="descr-err" class="text-danger"></div>
+                    </div>
+                        <div class="form-group">
+                            <label for="coefficient">Коэффициент: </label>
+                            <input type="number" class="form-control" id="coefficientInput" name="coefficient">
+                            <div id="coef-err" class="text-danger"></div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+            </form>
+        </div>
+
     </div>
 <script>
     let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
@@ -156,7 +205,7 @@
             }
         } else {
             let noResultsSection = document.createElement('div');
-            noResultsSection.innerText = 'No criteria found';
+            noResultsSection.innerText = 'не найдено';
             searchResultsWrapper.appendChild(noResultsSection);
         }
     }
@@ -196,6 +245,99 @@
         } else {
             console.log(response);
             alert("Ошибка HTTP: " + response.status);
+        }
+    }
+
+
+    let saveButton = document.getElementById('form');
+    saveButton.addEventListener('submit', (e)=>{
+        validate(e);
+    })
+
+
+    async function validate(event){
+        event.preventDefault();
+        let zone = document.getElementById('zoneSelect').value;
+        let section = document.getElementById('sectionSelect').value;
+        let description =document.getElementById('descriptionInput').value;
+        let coefficient = document.getElementById('coefficientInput').value;
+
+        const data ={
+            description: description,
+            coefficient: coefficient,
+            zone: zone,
+            section: section
+        }
+        console.log(data)
+        try {
+            const resp =await fetch("/api/criteria/create", {
+                method:"POST",
+                mode: "cors",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const respData = await resp.json();
+
+            if (!resp.ok) {
+                console.log(respData)
+                handleErrors(respData);
+            } else {
+                const createdId = respData;
+                let criteriaList = document.querySelector('.criterion-list');
+                let newCriteria = document.createElement('tr');
+                newCriteria.setAttribute('id', 'criteria-wrap-' + createdId);
+                newCriteria.innerHTML =
+                    '<th scope="row">' + data.section + '</th>' +
+                    '<td>' + data.zone + '</td>' +
+                    '<td>' + data.description + '</td>' +
+                    '<td>' + data.coefficient + '</td>' +
+                    '<td>' +
+                    '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
+                    '<i class="bi bi-trash text-secondary fs-4"></i>' +
+                    '</button>' +
+                    '</td>';
+                criteriaList.appendChild(newCriteria);
+
+
+                let modal = document.getElementById('create');
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                let modalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
+                if (modalBackdrop) {
+                    modalBackdrop.parentNode.removeChild(modalBackdrop);
+                }
+            }
+        } catch (error) {
+            console.log("Error: ", error)
+        }
+    }
+
+    function handleErrors(errorData){
+        let desc = document.getElementById('descr-err');
+        let coeff = document.getElementById('coef-err');
+        let zoneER = document.getElementById('zone-err');
+        let sectionER = document.getElementById('section-err');
+        desc.innerHTML = "";
+        coeff.innerHTML = "";
+        zoneER.innerHTML = "";
+        sectionER.innerHTML = "";
+
+        for (const [field, message] of Object.entries(errorData)) {
+            const errorElement = document.createElement("p");
+            if (field === 'description'){
+                errorElement.textContent = message+'';
+                desc.appendChild(errorElement)
+            }
+            else {
+                errorElement.textContent = message+'';
+                coeff.appendChild(errorElement);
+            }
         }
     }
 

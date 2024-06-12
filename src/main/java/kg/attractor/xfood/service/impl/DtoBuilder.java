@@ -1,8 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.LocationDto;
-import kg.attractor.xfood.dto.PizzeriaDto;
-import kg.attractor.xfood.dto.WorkScheduleDto;
+import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistExpertShowDto;
 import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
@@ -113,6 +111,20 @@ public class DtoBuilder {
 				.date(model.getDate())
 				.startTime(model.getStartTime())
 				.endTime(model.getEndTime())
+				.build();
+	}
+
+	protected ZoneSupervisorShowDto buildZoneDto(Zone model){
+		return ZoneSupervisorShowDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.build();
+	}
+
+	protected SectionSupervisorShowDto buildSectionDto(Section model){
+		return SectionSupervisorShowDto.builder()
+				.id(model.getId())
+				.name(model.getName())
 				.build();
 	}
 }
