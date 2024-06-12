@@ -1,47 +1,5 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Expert checks</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-
-<body>
-    <header>
-        <nav class="navbar navbar-expand fw-medium bg-white border-bottom ">
-            <div class="container">
-                <a class="navbar-brand" href="#">XFOOD</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown" href="#">
-                            <a a class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
-                                href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle fs-5 m-0 p-0 "></i>
-                                <span>Иван Иванов</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Мой профиль</a></li>
-                                <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Выход</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+<#import "../layout.ftlh" as main>
+<@main.layout>
 
     <main class="container mt-4">
         <div class="row row-cols-md-2 row-gap-3">
@@ -69,7 +27,7 @@
                                     <div class="col">
                                         <div class="dropdown d-md-none h-100">
                                             <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="bi bi-clock"></i>
                                             </button>
                                             <ul class="dropdown-menu">
@@ -102,27 +60,27 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
-                                    <tr>
-                                        <th scope="col">Пиццерия</th>
-                                        <th scope="col">Менеджер</th>
-                                        <th scope="col">Дата</th>
-                                        <th scope="col">Крит. фактор</th>
-                                    </tr>
+                                <tr>
+                                    <th scope="col">Пиццерия</th>
+                                    <th scope="col">Менеджер</th>
+                                    <th scope="col">Дата</th>
+                                    <th scope="col">Крит. фактор</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Орша-1</td>
-                                        <td>Иванова Анна</td>
-                                        <td>27/01/2024</td>
-                                        <td>7</td>
-                                    </tr>
+                                <tr>
+                                    <td>Орша-1</td>
+                                    <td>Иванова Анна</td>
+                                    <td>27/01/2024</td>
+                                    <td>7</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="d-flex flex-row gap-2 justify-content-center d-lg-none">
                             <div class="dropdown">
                                 <button class="btn btn btn-light rounded-4 dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-funnel"></i> Фильтр
                                 </button>
                                 <ul class="dropdown-menu">
@@ -145,7 +103,7 @@
                                 </ul>
                             </div>
                             <a href="#" class="btn btn-success rounded-4">Скачать <i
-                                    class="bi bi-file-arrow-down"></i></a>
+                                        class="bi bi-file-arrow-down"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-4 d-none d-lg-inline text-center">
@@ -193,8 +151,6 @@
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
-</body>
-
-</html>
+</@main.layout>
