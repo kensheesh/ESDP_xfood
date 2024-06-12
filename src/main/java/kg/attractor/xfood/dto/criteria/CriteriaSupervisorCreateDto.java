@@ -27,6 +27,6 @@ public class CriteriaSupervisorCreateDto {
     @NotNull(message = "Введите описание")
     @NotBlank(message = "Описание не должно быть пустым")
     private String description;
-    @NotNull(message = "введите коэфициент")
+
     private Integer coefficient;
 }
