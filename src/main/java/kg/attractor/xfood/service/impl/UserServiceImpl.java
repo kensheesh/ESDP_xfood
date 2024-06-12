@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.auth.RegisterUserDto;
 import kg.attractor.xfood.dto.user.UserDto;
+import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.UserRepository;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -40,5 +43,13 @@ public class UserServiceImpl implements UserService {
                 userRepository.findByEmail(AuthParams.getPrincipal().getUsername())
                         .orElseThrow(() -> new NotFoundException("Check list not found"))
         );
+    }
+
+    @Override
+    public List<UserDto> getAllExperts() {
+        return userRepository.findByRole(Role.EXPERT.toString())
+                .stream()
+                .map(dtoBuilder::buildUserDto)
+                .toList();
     }
 }

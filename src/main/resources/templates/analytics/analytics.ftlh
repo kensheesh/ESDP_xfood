@@ -90,16 +90,22 @@
                                     <div class="py-3 px-3 text-center">
                                         <form action="/analytics" method="GET">
                                             <h6>Фильтры</h6>
-                                            <select class="form-select mb-2 pizzeria-select" name="pizzeria">
-                                                <option value="default">Пиццерия</option>
-                                            </select>
-                                            <select class="form-select mb-2 manager-select" name="manager">
-                                                <option value="default">Менеджер</option>
-                                            </select>
-                                            <#if user.role != "EXPERT">
-                                                <select class="form-select mb-2 expert-select" name="expert">
-                                                    <option value="default">Эксперт</option>
+                                            <label>
+                                                <select class="form-select mb-2 pizzeria-select" name="pizzeria">
+                                                    <option value="default">Пиццерия</option>
                                                 </select>
+                                            </label>
+                                            <label>
+                                                <select class="form-select mb-2 manager-select" name="manager">
+                                                    <option value="default">Менеджер</option>
+                                                </select>
+                                            </label>
+                                            <#if user.role != "EXPERT">
+                                                <label>
+                                                    <select class="form-select mb-2 expert-select" name="expert">
+                                                        <option value="default">Эксперт</option>
+                                                    </select>
+                                                </label>
                                             </#if>
                                             <div class="input-group mb-2">
                                                 <label for="date-from" class="input-group-text">От</label>
@@ -120,22 +126,28 @@
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
                                     <h6 class="card-title">Фильтры</h6>
-                                    <select class="form-select mb-2 pizzeria-select" name="pizzeria">
-                                        <option>Пиццерия</option>
-                                    </select>
-                                    <select class="form-select mb-2 manager-select" name="manager">
-                                        <option value="default">Менеджер</option>
-                                    </select>
-                                    <#if user.role != "EXPERT">
-                                        <select class="form-select mb-2 expert-select" name="expert">
-                                            <option value="default">Эксперт</option>
+                                    <label>
+                                        <select class="form-select mb-2 pizzeria-select" name="pizzeria">
+                                            <option value="default">Пиццерия</option>
                                         </select>
+                                    </label>
+                                    <label>
+                                        <select class="form-select mb-2 manager-select" name="manager">
+                                            <option value="default">Менеджер</option>
+                                        </select>
+                                    </label>
+                                    <#if user.role != "EXPERT">
+                                        <label>
+                                            <select class="form-select mb-2 expert-select" name="expert">
+                                                <option value="default">Эксперт</option>
+                                            </select>
+                                        </label>
                                     </#if>
                                     <div class="input-group">
                                         <label for="date-from" class="input-group-text">От</label>
-                                        <input type="date" name="dateFrom" id="date-from" class="form-control">
+                                        <input type="date" name="startDate" id="date-from" class="form-control">
                                         <label for="date-to" class="input-group-text">До</label>
-                                        <input type="date" name="dateFrom" id="date-from" class="form-control">
+                                        <input type="date" name="endDate" id="date-from" class="form-control">
                                     </div>
                                 </div>
                                 <div class="card-footer bg-body border-0 rounded-4 pb-3">
@@ -158,7 +170,7 @@
         @media screen and (max-width: 575px) {
             .sidebar {
                 position: fixed;
-                bottom: 0px;
+                bottom: 0;
                 left: 0;
                 z-index: 2;
             }
@@ -187,7 +199,7 @@
             });
 
 
-            let expertSelects = document.querySelectorAll('.pizzeria-select');
+            let expertSelects = document.querySelectorAll('.expert-select');
 
             expertSelects.forEach(function (selectElement) {
                 fetch('/api/experts')
@@ -199,6 +211,27 @@
                             let option = document.createElement('option');
                             option.value = expert.id;
                             option.textContent = expert.name + " " + expert.surname;
+                            selectElement.appendChild(option);
+                        });
+                    })
+                    .catch(function (error) {
+                        console.error('Ошибка при загрузке данных:', error);
+                    });
+            });
+
+
+            let managerSelects = document.querySelectorAll('.manager-select');
+
+            managerSelects.forEach(function (selectElement) {
+                fetch('/api/managers')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        data.forEach(function (manager) {
+                            let option = document.createElement('option');
+                            option.value = manager.id;
+                            option.textContent = manager.name + " " + manager.surname;
                             selectElement.appendChild(option);
                         });
                     })

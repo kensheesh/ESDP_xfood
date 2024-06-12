@@ -3,7 +3,6 @@ package kg.attractor.xfood.controller.rest;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.service.PizzeriaService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ public class PizzeriaController {
     private final PizzeriaService pizzeriaService;
 
     @GetMapping
-    public ResponseEntity<List<PizzeriaDto>> getAllPizzerias() {
+    public ResponseEntity<?> getAllPizzerias() {
         List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
         return ResponseEntity.ok(pizzerias);
     }
