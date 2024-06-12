@@ -64,16 +64,19 @@
                                     <th scope="col">Пиццерия</th>
                                     <th scope="col">Менеджер</th>
                                     <th scope="col">Дата</th>
-                                    <th scope="col">Крит. фактор</th>
+                                    <th scope="col">Результат в %</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Орша-1</td>
-                                    <td>Иванова Анна</td>
-                                    <td>27/01/2024</td>
-                                    <td>7</td>
+                                    <#list checklists as checklist>
+                                <tr>
+                                    <td>${checklist.pizzeria.name}</td>
+                                    <td>${checklist.manager.name}</td>
+                                    <td>${checklist.date}</td>
+                                    <td>${checklist.result} %</td>
                                 </tr>
+                                </#list>
                                 </tbody>
                             </table>
                         </div>
@@ -86,19 +89,19 @@
                                 <ul class="dropdown-menu">
                                     <div class="py-3 px-3 text-center">
                                         <h6>Фильтры</h6>
-                                        <select class="form-select mb-2">
-                                            <option selected disabled>Пиццерия</option>
+                                        <select class="form-select mb-2 pizzeria-select" name="pizzerias">
+                                            <option value="default">Пиццерия</option>
                                         </select>
-                                        <select class="form-select mb-2">
-                                            <option selected disabled>Менеджер</option>
-                                        </select>
-                                        <div class="input-group mb-2">
-                                            <label for="date-from" class="input-group-text">От</label>
-                                            <input type="date" name="dateFrom" id="date-from" class="form-control">
-                                            <label for="date-to" class="input-group-text">До</label>
-                                            <input type="date" name="dateFrom" id="date-from" class="form-control">
-                                        </div>
-                                        <a href="#" class="btn btn-outline-success rounded-4">Применить</a>
+                                        <#--                                        <select class="form-select mb-2">-->
+                                        <#--                                            <option selected disabled>Менеджер</option>-->
+                                        <#--                                        </select>-->
+                                        <#--                                        <div class="input-group mb-2">-->
+                                        <#--                                            <label for="date-from" class="input-group-text">От</label>-->
+                                        <#--                                            <input type="date" name="dateFrom" id="date-from" class="form-control">-->
+                                        <#--                                            <label for="date-to" class="input-group-text">До</label>-->
+                                        <#--                                            <input type="date" name="dateFrom" id="date-from" class="form-control">-->
+                                        <#--                                        </div>-->
+                                        <a href="/analytics" class="btn btn-outline-success rounded-4">Применить</a>
                                     </div>
                                 </ul>
                             </div>
@@ -110,8 +113,8 @@
                         <div class="card rounded-4 border-0 shadow-sm">
                             <div class="card-body">
                                 <h6 class="card-title">Фильтры</h6>
-                                <select class="form-select mb-2">
-                                    <option selected disabled>Пиццерия</option>
+                                <select class="form-select mb-2 pizzeria-select" name="pizzerias">
+                                    <option>Пиццерия</option>
                                 </select>
                                 <select class="form-select mb-2">
                                     <option selected disabled>Менеджер</option>
@@ -149,8 +152,28 @@
             }
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var selectElements = document.querySelectorAll('.pizzeria-select');
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+            selectElements.forEach(function (selectElement) {
+                fetch('/api/pizzerias')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        data.forEach(function (pizzeria) {
+                            var option = document.createElement('option');
+                            option.value = pizzeria.id;
+                            option.textContent = pizzeria.name;
+                            selectElement.appendChild(option);
+                        });
+                    })
+                    .catch(function (error) {
+                        console.error('Ошибка при загрузке данных:', error);
+                    });
+            });
+        });
     </script>
+
 </@main.layout>

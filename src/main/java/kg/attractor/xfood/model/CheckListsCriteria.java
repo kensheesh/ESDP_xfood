@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "check_lists_criteria")
+@ToString
 public class CheckListsCriteria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

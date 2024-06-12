@@ -13,21 +13,28 @@ import java.util.Optional;
 @Repository
 public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 
-	@Query(value = """
-			SELECT c
-			FROM CheckList c
-			        JOIN Opportunity o ON c.opportunity.id = o.id
-			         JOIN User u ON o.user.id = u.id
-			WHERE u.email = :#{#username} AND CAST(c.status as text) = :#{#status.getStatus()}
-			""")
-	List<CheckList> findCheckListByExpertEmailAndStatus(String username, Status status);
+    @Query(value = """
+            SELECT c
+            FROM CheckList c
+                    JOIN Opportunity o ON c.opportunity.id = o.id
+                     JOIN User u ON o.user.id = u.id
+            WHERE u.email = :#{#username} AND CAST(c.status as text) = :#{#status.getStatus()}
+            """)
+    List<CheckList> findCheckListByExpertEmailAndStatus(String username, Status status);
 
-	@Query(value = """
-			SELECT c
-			FROM CheckList c
-			where c.id = ?1
-			and CAST(c.status as text) = :#{#status.getStatus()}
-			""")
-	Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+    @Query(value = """
+            SELECT c
+            FROM CheckList c
+            where c.id = ?1
+            and CAST(c.status as text) = :#{#status.getStatus()}
+            """)
+    Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+
+    @Query(value = """
+            SELECT c
+            FROM CheckList c
+            WHERE CAST(c.status as text) = :#{#status.getStatus()}
+            """)
+    List<CheckList> findByStatus(Status status);
 }
 
