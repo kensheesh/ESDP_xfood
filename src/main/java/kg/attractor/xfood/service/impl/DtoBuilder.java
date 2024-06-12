@@ -1,17 +1,22 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.*;
+import kg.attractor.xfood.dto.LocationDto;
+import kg.attractor.xfood.dto.PizzeriaDto;
+import kg.attractor.xfood.dto.WorkScheduleDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
-import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
-import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
+import kg.attractor.xfood.dto.location.LocationShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Component
 @RequiredArgsConstructor
@@ -47,6 +52,7 @@ public class DtoBuilder {
 	
 	protected ManagerShowDto buildManagerShowDto(Manager manager) {
 		return ManagerShowDto.builder()
+				.id(manager.getId())
 				.name(manager.getName())
 				.surname(manager.getSurname())
 				.build();
@@ -91,34 +97,45 @@ public class DtoBuilder {
 				.build();
 	}
 
-	protected ZoneSupervisorShowDto buildZoneDto(Zone model){
-		return ZoneSupervisorShowDto.builder()
-				.id(model.getId())
-				.name(model.getName())
+	protected ExpertShowDto buildExpertShowDto(User user) {
+		return ExpertShowDto.builder()
+				.id(user.getId())
+				.name(user.getName())
+				.surname(user.getSurname())
 				.build();
 	}
 
-	protected SectionSupervisorShowDto buildSectionDto(Section model){
-		return SectionSupervisorShowDto.builder()
-				.id(model.getId())
-				.name(model.getName())
+	protected List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
+		List<LocationShowDto> dtos = new ArrayList<>();
+		locations.forEach(e -> {
+			dtos.add(buildLocationShowDto(e));
+		});
+		return dtos;
+	}
+
+	protected LocationShowDto buildLocationShowDto(Location location) {
+		return LocationShowDto.builder()
+				.id(location.getId())
+				.name(location.getName())
+				.timezone(location.getTimezone())
+				.pizzerias(location.getPizzerias())
 				.build();
 	}
 
-	protected CriteriaSupervisorShowDto buildCriteriaSupervisorShowDto(Criteria model) {
-		return CriteriaSupervisorShowDto.builder()
-				.id(model.getId())
-				.description(model.getDescription())
-				.zone(model.getZone().getName())
-				.section(model.getSection().getName())
-				.coefficient(model.getCoefficient())
-				.build();
+	protected List<PizzeriaShowDto> buildPizzeriaShowDtos(List<Pizzeria> pizzerias) {
+		List<PizzeriaShowDto> dtos = new ArrayList<>();
+		pizzerias.forEach(e -> {
+			dtos.add(buildPizzeriaShowDto(e));
+		});
+		return dtos;
 	}
 
-	protected CheckTypeSupervisorViewDto buildCheckTypeShowDto(CheckType model) {
-		return CheckTypeSupervisorViewDto.builder()
-				.id(model.getId())
-				.name(model.getName())
-				.build();
+	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
+		return PizzeriaShowDto.builder()
+				.id(pizzeria.getId())
+				.name(pizzeria.getName())
+				.location(pizzeria.getLocation())
+				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
+				.workSchedules(pizzeria.getWorkSchedules()).build();
 	}
 }
