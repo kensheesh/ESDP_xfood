@@ -30,6 +30,9 @@ public class CheckList {
 
     @OneToMany(mappedBy = "checklist")
     private List<CheckListsCriteria> checkListsCriteria;
+    
+    @Column(name = "uuid_link")
+    public String uuidLink;
 
     @Enumerated(EnumType.STRING)
     private Status status;

@@ -1,5 +1,9 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.dto.checklist.CheckListResultDto;
+import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
+import kg.attractor.xfood.enums.Status;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.repository.CheckListRepository;
@@ -34,5 +38,21 @@ public class CheckListServiceImpl implements CheckListService {
     public void save(CheckList checkList) {
         checkListRepository.save(checkList);
     }
+
+	@Override
+	public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
+		return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
+				.stream()
+				.map(dtoBuilder :: buildChecklistDto)
+				.toList();
+	}
+
+	@Override
+	public CheckListResultDto getResult(Long checkListId) {
+		return dtoBuilder.buildCheckListResultDto(
+				checkListRepository.findByIdAndStatus(checkListId, Status.DONE)
+						.orElseThrow(() -> new NotFoundException("Check list not found"))
+		);
+	}
 
 }
