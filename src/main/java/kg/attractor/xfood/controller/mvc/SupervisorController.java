@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.service.impl.LocationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/supervisor")
 public class SupervisorController {
+    private final LocationServiceImpl locationService;
 
     @GetMapping("/opportunity-map")
     public String getOpportunityMap (Model model) {
@@ -25,5 +27,13 @@ public class SupervisorController {
             Профиль
         */
         return null;
+    }
+
+    @GetMapping("/weekly")
+    public String getWeeklySchedule (Model model) {
+        model.addAttribute("locations", locationService.getLocations());
+
+        //TODO в модальном окне показать экспертов, которые имеют смены на данный день
+        return "weekly";
     }
 }
