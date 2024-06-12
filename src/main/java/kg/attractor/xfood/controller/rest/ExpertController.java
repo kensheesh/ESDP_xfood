@@ -1,5 +1,9 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.AuthParams;
+import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
+import kg.attractor.xfood.enums.Status;
+import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +20,8 @@ import java.util.Map;
 @RequestMapping("/api/experts")
 public class ExpertController {
 
+    private final CheckListService checkListService;
+    
     // ROLE: SUPERVISOR
     @GetMapping("/availability")
     public ResponseEntity<Map<String, List<?>>> getAllByAvailability(
@@ -54,5 +60,12 @@ public class ExpertController {
                  }
         */
         return null;
+    }
+    
+    //ROlE EXPERT
+    @GetMapping("checks")
+    public ResponseEntity<?> getCheckLists(@RequestParam(name = "status", defaultValue = "in_progress") String status) {
+        List<ChecklistMiniExpertShowDto> checkLists = checkListService.getUsersChecklists(AuthParams.getPrincipal().getUsername(), Status.getStatusEnum(status));
+        return ResponseEntity.ok(checkLists);
     }
 }

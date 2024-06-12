@@ -1,10 +1,9 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
-import kg.attractor.xfood.dto.checklist.ChecklistExpertShowDto;
+import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.NotFoundException;
-import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +21,13 @@ public class CheckListServiceImpl implements CheckListService {
 	private final DtoBuilder dtoBuilder;
 	
 	@Override
-	public List<ChecklistExpertShowDto> getUsersChecklists(String username, String status) {
-		return checkListRepository.findCheckListByExpertEmailAndStatus(username, Status.getStatusEnum(status))
+	public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
+		return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
 				.stream()
 				.map(dtoBuilder :: buildChecklistDto)
 				.toList();
 	}
-
+	
 	@Override
 	public CheckListResultDto getResult(Long checkListId) {
 		return dtoBuilder.buildCheckListResultDto(
@@ -36,5 +35,5 @@ public class CheckListServiceImpl implements CheckListService {
 						.orElseThrow(() -> new NotFoundException("Check list not found"))
 		);
 	}
-
+	
 }
