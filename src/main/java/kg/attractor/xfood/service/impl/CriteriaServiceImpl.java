@@ -50,7 +50,7 @@ public class CriteriaServiceImpl implements CriteriaService {
 
     @Override
     public Long create(CriteriaSupervisorCreateDto createDto) {
-        log.info("COEFFICIENT {}", createDto.getCoefficient());
+        log.info("coefficient {}", createDto.getCoefficient());
         if (createDto.getCoefficient()==null) {
             createDto.setCoefficient(1);
         }
