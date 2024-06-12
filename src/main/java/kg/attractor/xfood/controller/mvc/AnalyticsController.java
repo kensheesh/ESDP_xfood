@@ -11,11 +11,7 @@ public class AnalyticsController {
 //    AUTHORIZED
     @GetMapping("/analytics")
     public String get (/* TODO @RequestParams*/) {
-        /*
-            TODO
-                Страница статистики, доступная и эксперту, и рук-телю.
-         */
 
-        return null;
+        return "analytics/analytics";
     }
 }
