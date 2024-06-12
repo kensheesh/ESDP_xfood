@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -20,6 +21,13 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 			WHERE u.email = :#{#username} AND CAST(c.status as text) = :#{#status.getStatus()}
 			""")
 	List<CheckList> findCheckListByExpertEmailAndStatus(String username, Status status);
-	
+
+	@Query(value = """
+			SELECT c
+			FROM CheckList c
+			where c.id = ?1
+			and CAST(c.status as text) = :#{#status.getStatus()}
+			""")
+	Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
 }
 

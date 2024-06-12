@@ -14,7 +14,7 @@ public class ExpertController {
     @GetMapping("/checks")
     public String getChecks () {
         // TODO список назначенных проверок (все на сегодня и просроченные)
-        return null;
+        return "TODO_sketches/checks";
     }
 
     @GetMapping ("/opportunity-map")
