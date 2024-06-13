@@ -1,17 +1,20 @@
 package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
-import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.service.*;
-import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/checks")
 public class CheckListController {
     private final CheckListService checkListService;
@@ -19,17 +22,21 @@ public class CheckListController {
     private final CriteriaService criteriaService;
     private final ZoneService zoneService;
     private final SectionService sectionService;
+    private final WorkScheduleService workScheduleService;
 
-    // ROLE: SUPERVISOR
-    @GetMapping("/create")
-    public String create (@RequestParam(name = "type", required = false)String type, Model model) {
-        model.addAttribute("zones",zoneService.getZones() );
-        model.addAttribute("sections", sectionService.getSections());
-        model.addAttribute("criterion", criteriaService.getCriterion(type));
-        model.addAttribute("types",checkTypeService.getTypes());
-        model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
-        return "checklist/create";
-    }
+
+//    // ROLE: SUPERVISOR
+@GetMapping("/create")
+public String create (@RequestParam(name = "date", required = true) LocalDateTime date, @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
+    model.addAttribute("zones",zoneService.getZones() );
+    model.addAttribute("sections", sectionService.getSections());
+    log.error( workScheduleService.getPizzeriaId(managerId, date).toString());
+    model.addAttribute("pizzeriaId", workScheduleService.getPizzeriaId(managerId, date));
+    model.addAttribute("types",checkTypeService.getTypes()); workScheduleService.getPizzeriaId(managerId, date);
+    model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
+    return "checklist/create";
+}
+
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")

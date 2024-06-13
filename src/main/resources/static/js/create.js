@@ -234,3 +234,40 @@ function clearFields() {
     coefficientInput.value = '';
     toggleFields(sectionSelect.value);
 }
+
+async function getCriterion(value, pizzeriaId) {
+    let criterion = await getCriterionByTypeAndPizzeriaId(value, pizzeriaId);
+    console.log(criterion)
+    let criteriaList = document.querySelector('.criterion-list');
+    if (criterion && criterion.length > 0) {
+        for (let i = 0; i < criterion.length; i++) {
+            let newCriteria = document.createElement('tr');
+            newCriteria.setAttribute('id', 'criteria-wrap-' + criterion[i].id);
+            newCriteria.innerHTML =
+                '<th scope="row">' + criterion[i].section + '</th>' +
+                '<td>' + criterion[i].zone + '</td>' +
+                '<td>' + criterion[i].description + '</td>' +
+                '<td>' + criterion[i].coefficient + '</td>' +
+                '<td>' +
+                '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '">' +
+                '<i class="bi bi-trash text-secondary fs-4"></i>' +
+                '</button>' +
+                '</td>';
+            criteriaList.appendChild(newCriteria);
+            let deleteButton = document.getElementById('deleteCriteria-' + criterion[i].id);
+            deleteButton.addEventListener('click', function () {
+                document.getElementById('criteria-wrap-' + criterion[i].id).remove();
+            });
+        }
+    }
+}
+
+async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId){
+    let response = await fetch("/api/criteria/"+value + "/"+pizzeriaId);
+    if (response.ok){
+        return await response.json();
+    } else {
+        console.log(response);
+        alert("Ошибка HTTP: " + response.status);
+    }
+}

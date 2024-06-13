@@ -24,10 +24,10 @@ public class CriterionController {
     private final CriteriaService criteriaService;
 
     //    ROLE: SUPERVISOR
-    @GetMapping("/checkType/{id}")
-    public ResponseEntity<List<?>> getAllByPizzeriaAndCheckType (
-            @PathVariable (name = "id") Long checkTypeId,
-            @RequestParam (name = "pizzeria")Long pizzeriaId
+    @GetMapping("/{checkTypeId}/{pizzeriaId}")
+    public ResponseEntity<List<CriteriaSupervisorShowDto>> getAllByPizzeriaAndCheckType (
+            @PathVariable (name = "checkTypeId") Long checkTypeId,
+            @PathVariable (name = "pizzeriaId")Long pizzeriaId
     ) {
 
     /* TODO
@@ -35,7 +35,8 @@ public class CriterionController {
          проверки после выбора типа проверки и пиццерии
          при назначении новой проверки
     */
-        return null;
+        log.error(criteriaService.getByCheckTypeAndPizzeria(checkTypeId, pizzeriaId).toString());
+        return ResponseEntity.ok(criteriaService.getByCheckTypeAndPizzeria(checkTypeId, pizzeriaId));
     }
 
     @GetMapping("/search")

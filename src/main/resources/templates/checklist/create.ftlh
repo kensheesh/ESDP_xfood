@@ -11,18 +11,51 @@
     <div class="row row-cols-md-3 row-cols-1 bg-white rounded shadow-sm">
         <div class="col">
             <div class="my-4">
-                <div class="dropdown">
-                    <button class="btn btn-white shadow-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        тип чек листа
-                    </button>
-                    <ul class="dropdown-menu" style="z-index: 2;">
-                        <#list types as type>
-                            <li><a class="dropdown-item" href="/checks/create?type=${type.name}">${type.name}</a></li>
+                    <select class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${pizzeriaId})">
+                        <option selected disabled>выберите тип чек листа</option>
+                        <#list types as t>
+                            <option value="${t.id}">${t.name}</option>
                         </#list>
-                    </ul>
-                </div>
+                    </select>
             </div>
         </div>
+        <div class="col">
+            <button type="submit" class="btn btn-success my-3 d-flex ms-auto">Создать чек-лист</button>
+        </div>
+    </div>
+<div class="mt-4 shadow-sm p-3 bg-white">
+    <div>
+            <div class="table-responsive" style="max-height: 400px;">
+                <table class="table table-striped-columns">
+                    <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th scope="col">Раздел</th>
+                            <th scope="col">Зона</th>
+                            <th scope="col">Что проверить</th>
+                            <th scope="col">Оценка</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="criterion-list">
+                      <#--  <#list criterion as c>
+                            <tr id="criteria-wrap-${c.id}">
+                                <th scope="row">${c.section}</th>
+                                <td>${c.zone}</td>
+                                <td>${c.description}</td>
+                                <td>${c.coefficient}</td>
+                                <td>
+                                    <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
+                                        <i class="bi bi-trash text-secondary fs-4"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </#list>-->
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</div>
+    <div class="row">
         <div class="col">
             <div class="input-group my-4">
                 <button type="button" class="search_btn btn btn-white shadow-sm border w-100"  data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -37,42 +70,6 @@
             <button type="button" class="btn btn-success rounded-2 my-4" data-bs-toggle="modal" data-bs-target="#create">создать новый критерий</button>
         </div>
     </div>
-<div class="mt-4 shadow-sm p-3 bg-white">
-    <div>
-        <#if criterion?size == 0>
-            <p>Выберите тип чек-листа для отображения критериев</p>
-        <#else>
-            <div class="table-responsive" style="max-height: 400px;">
-                <table class="table table-striped-columns">
-                    <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
-                        <tr>
-                            <th scope="col">Раздел</th>
-                            <th scope="col">Зона</th>
-                            <th scope="col">Что проверить</th>
-                            <th scope="col">Оценка</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="criterion-list">
-                        <#list criterion as c>
-                            <tr id="criteria-wrap-${c.id}">
-                                <th scope="row">${c.section}</th>
-                                <td>${c.zone}</td>
-                                <td>${c.description}</td>
-                                <td>${c.coefficient}</td>
-                                <td>
-                                    <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
-                                        <i class="bi bi-trash text-secondary fs-4"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </#list>
-                    </tbody>
-                </table>
-            </div>
-        </#if>
-    </div>
-</div>
 
     <!-- Modal -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">

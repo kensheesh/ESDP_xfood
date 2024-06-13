@@ -27,13 +27,6 @@ public class CriteriaServiceImpl implements CriteriaService {
     private final SectionRepository sectionRepository;
     private final ZoneRepository zoneRepository;
 
-    @Override
-    public List<CriteriaSupervisorShowDto> getCriterion(String type) {
-       if (type!=null && !type.isEmpty()) {
-           return criteriaRepository.findCriteriaByCriteriaTypes(type).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
-       }
-       else return new ArrayList<>();
-    }
 
     @Override
     public List<CriteriaSupervisorShowDto> getByDescription(String description) {
@@ -70,5 +63,15 @@ public class CriteriaServiceImpl implements CriteriaService {
         }
         log.info(errors.toString());
         return errors;
+    }
+
+    @Override
+    public List<CriteriaSupervisorShowDto> getByCheckTypeAndPizzeria(Long checkTypeId, Long pizzeriaId) {
+        List<CriteriaSupervisorShowDto> criterion =  criteriaRepository.findCriteriaByCriteriaTypeAndCriteriaPizzeria(checkTypeId, pizzeriaId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+        if (criterion.isEmpty()) {
+            criterion = criteriaRepository.findCriteriaByCriteriaType(checkTypeId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+            return criterion;
+        }
+        return criterion;
     }
 }

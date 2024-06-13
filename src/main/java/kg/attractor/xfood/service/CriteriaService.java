@@ -10,8 +10,6 @@ import java.util.Map;
 
 public interface CriteriaService {
 
-    List<CriteriaSupervisorShowDto> getCriterion(String type);
-
     List<CriteriaSupervisorShowDto> getByDescription(String description);
 
     CriteriaSupervisorShowDto getById(Long id);
@@ -19,4 +17,6 @@ public interface CriteriaService {
     Long create(CriteriaSupervisorCreateDto createDto);
 
     Map<String, String> handleValidationErrors(BindingResult bindingResult);
+
+    List<CriteriaSupervisorShowDto> getByCheckTypeAndPizzeria(Long checkTypeId, Long pizzeriaId);
 }
