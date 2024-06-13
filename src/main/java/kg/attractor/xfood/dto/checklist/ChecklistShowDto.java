@@ -1,8 +1,8 @@
 package kg.attractor.xfood.dto.checklist;
 
+import kg.attractor.xfood.dto.PizzeriaDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
-import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
-import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class ChecklistShowDto {
 	private Long id;
 	private Status status;
 	private PizzeriaDto pizzeria;
-	private ManagerExpertShowDto manager;
+	private ManagerShowDto manager;
 	private String managerWorkDate;
 	private List<CriteriaExpertShowDto> criteria;
 }

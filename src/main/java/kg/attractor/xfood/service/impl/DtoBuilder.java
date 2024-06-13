@@ -7,8 +7,6 @@ import kg.attractor.xfood.dto.WorkScheduleDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
-import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
-import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Manager;
@@ -19,35 +17,43 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 @RequiredArgsConstructor
 public class DtoBuilder {
 	
-	protected ChecklistShowDto buildChecklistDto(CheckList model) {
+	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
-				.map(this :: buildCriteriaShowDto)
+				.map(this::buildCriteriaShowDto)
 				.collect(toList());
-		
+
 		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
+		ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
+		PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
+
+		return ChecklistShowDto.builder()
+				.id(model.getId())
+				.pizzeria(pizzeriaDto)
+				.manager(managerDto)
+				.status(model.getStatus())
+				.managerWorkDate(managerWorkDate.toString())
+				.criteria(criteriaDtos)
+				.build();
+	}
+
 	protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
 		String uuid = model.getUuidLink();
 		LocalDate managerWorkDate = model.getWorkSchedule().getDate().toLocalDate();
 		String pizzeria = model.getWorkSchedule().getPizzeria().getName();
-		ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 
-		ManagerExpertShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
-		PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
-
-		return ChecklistShowDto.builder()
-				.pizzeria(pizzeriaDto)
 		return ChecklistMiniExpertShowDto.builder()
 				.id(model.getId())
 				.status(model.getStatus())
-				.criteria(criteriaDtos)
-				.managerWorkDate(managerWorkDate.toString())
 				.managerWorkDate(managerWorkDate)
-				.manager(managerDto)
 				.pizzeria(pizzeria)
 				.uuid(uuid)
 				.build();
@@ -65,16 +71,10 @@ public class DtoBuilder {
 				.build();
 	}
 	
-	protected ManagerExpertShowDto buildManagerShowDto(Manager manager) {
-		return ManagerExpertShowDto.builder()
+	protected ManagerShowDto buildManagerShowDto(Manager manager) {
+		return ManagerShowDto.builder()
 				.name(manager.getName())
 				.surname(manager.getSurname())
-				.build();
-	}
-
-	protected PizzeriaDto buildPizzeriaDto(Pizzeria pizzeria) {
-		return PizzeriaDto.builder()
-				.name(pizzeria.getName())
 				.build();
 	}
 

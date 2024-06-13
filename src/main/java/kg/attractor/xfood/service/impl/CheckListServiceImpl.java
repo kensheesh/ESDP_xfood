@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     public ChecklistShowDto getCheckListById(Long id) {
         CheckList checkList = getModelCheckListById(id);
-        return dtoBuilder.buildChecklistDto(checkList);
+        return dtoBuilder.buildChecklistShowDto(checkList);
     }
 
     @Override
