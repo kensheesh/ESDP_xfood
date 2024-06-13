@@ -1,4 +1,4 @@
-package kg.attractor.xfood.dto.manager;
+package kg.attractor.xfood.dto.expert;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ManagerShowDto {
-	private Long id;
-	private String name;
-	private String surname;
+public class ExpertShowDto {
+    private Long id;
+    private String name;
+    private String surname;
 }

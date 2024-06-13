@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -41,5 +40,4 @@ public class WorkSchedule {
 
     @OneToMany(mappedBy = "workSchedule")
     private List<CheckList> checkLists;
-
 }

@@ -27,7 +27,6 @@ function displayChecks(checks, status) {
     const container = document.getElementById('checks-container');
     let htmlContent = '';
 
-
     checks.forEach(c => {
 
         let url = (status === statuses.NEW || status === statuses.IN_PROGRESS)
@@ -42,7 +41,6 @@ function displayChecks(checks, status) {
                         <div class="row row-cols-4">
                             <div class="col-4 d-flex align-items-center">
                                 <span>${c.pizzeria}</span>
-                                
                             </div>
                             <div class="col-4 d-flex align-items-center">
                                 <span>Мндр: ${c.manager.name} ${c.manager.surname}</span>
