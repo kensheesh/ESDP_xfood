@@ -45,7 +45,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
     @PostMapping("/create")
     public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
         checkListService.create(createDto);
-        return "checklist/create";
+        return "redirect:/supervisor/weekly";
         // TODO назначение проверки
     }
 

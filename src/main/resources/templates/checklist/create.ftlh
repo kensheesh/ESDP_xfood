@@ -86,7 +86,7 @@
                     <div class="search-bar">
                         <div class="input-group my-4">
                             <input type="text" class="form-control" placeholder="Описание критерии..." aria-describedby="button-addon2" id="searchbar">
-                            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+                            <span class="input-group-text" id=basic-addon1"><i class="bi bi-search"></i></span>
                         </div>
                     </div>
                     <div class="found-criterion h-100">

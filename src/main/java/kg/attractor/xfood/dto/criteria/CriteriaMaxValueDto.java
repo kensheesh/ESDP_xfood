@@ -15,6 +15,5 @@ public class CriteriaMaxValueDto {
     @Positive(message = "оценка может быть только положительной")
     @Min(value = 1, message = "минимальная оценка 1 балл")
     private Integer maxValue;
-
     private Long criteriaId;
 }

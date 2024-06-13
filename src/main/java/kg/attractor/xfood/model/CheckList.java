@@ -44,6 +44,7 @@ public class CheckList {
     public Time duration;
 
     @Enumerated(EnumType.STRING)
+
     private Status status;
 
 }

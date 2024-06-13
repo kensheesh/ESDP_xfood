@@ -1,5 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
@@ -9,16 +11,12 @@ import kg.attractor.xfood.exception.IncorrectDateException;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.CheckListRepository;
-import kg.attractor.xfood.repository.UserRepository;
-import kg.attractor.xfood.repository.WorkScheduleRepository;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -53,6 +51,7 @@ public class CheckListServiceImpl implements CheckListService {
 	}
 
 	@Override
+	@Transactional
 	public void create(CheckListSupervisorCreateDto createDto) {
 		log.info(createDto.toString());
 		if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
@@ -64,7 +63,6 @@ public class CheckListServiceImpl implements CheckListService {
 		if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
 			throw new IncorrectDateException("Start time cannot be after end time of expert");
 		}
-
 		Opportunity opportunity = Opportunity.builder()
 				.user(userService.findById(createDto.getExpertId()))
 				.date(createDto.getDate())
@@ -73,13 +71,15 @@ public class CheckListServiceImpl implements CheckListService {
 				.build();
 		opportunityService.save(opportunity);
 
-		CheckList checkList = CheckList.builder()
-				.opportunity(opportunity)
-				.workSchedule(workSchedule)
-				.status(Status.NEW)
-				.build();
-		log.error(checkList.getStatus().getStatus());//выходит NEW
-		checkListRepository.save(checkList);
+		Long mnId = workSchedule.getManager().getId();
+		Long expertId=opportunity.getUser().getId();
+
+
+		int checkListId = checkListRepository.saveChecklist(expertId, mnId, Status.NEW.getStatus());
+		long parsedCheckListId = Long.parseLong(String.valueOf(checkListId));
+		CheckList checkList = checkListRepository.findById(parsedCheckListId).orElseThrow();
+
+		log.info("citerion and max values {}", createDto.getCriteriaMaxValueDtoList());
 
 		for (CriteriaMaxValueDto criteriaMaxValueDto : createDto.getCriteriaMaxValueDtoList()){
 			CriteriaType criteriaType = CriteriaType.builder()
@@ -87,7 +87,7 @@ public class CheckListServiceImpl implements CheckListService {
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
 					.build();
 			criteriaTypeService.save(criteriaType);
-
+			log.error("Max value : " + criteriaMaxValueDto.getMaxValue());
 			CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
 					.checklist(checkList)
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
@@ -95,6 +95,7 @@ public class CheckListServiceImpl implements CheckListService {
 					.value(1)
 					.build();
 			checkListsCriteriaService.save(checkListsCriteria);
+
 		}
 
 	}

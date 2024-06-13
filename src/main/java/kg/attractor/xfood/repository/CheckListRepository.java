@@ -1,8 +1,10 @@
 package kg.attractor.xfood.repository;
 
+import jakarta.transaction.Transactional;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +31,12 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 			and CAST(c.status as text) = :#{#status.getStatus()}
 			""")
 	Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+	@Modifying
+	@Transactional
+	@Query(value = """
+			insert into check_lists(status, work_schedule_id, opportunity_id)
+ 			values(CAST(CAST(:#{#status} as text) as Status),:#{#workSchedule},:#{#opportunity}) ;
+	""", nativeQuery = true)
+	int saveChecklist(Long opportunity, Long workSchedule, String status);
 }
 
