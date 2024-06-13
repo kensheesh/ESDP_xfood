@@ -1,7 +1,8 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
-import kg.attractor.xfood.service.impl.PizzeriaServiceImpl;
+import kg.attractor.xfood.service.PizzeriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +16,18 @@ import java.util.List;
 @RequestMapping("/api/pizzerias")
 @RequiredArgsConstructor
 public class PizzeriaController {
-    private final PizzeriaServiceImpl pizzeriaService;
+    private final PizzeriaService pizzeriaService;
+
+    @GetMapping
+    public ResponseEntity<?> getAllPizzerias() {
+        List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
+        return ResponseEntity.ok(pizzerias);
+    }
 
     // ROLE: SUPERVISOR
     @GetMapping("/location/{id}")
-    public ResponseEntity<List<PizzeriaShowDto>> getPizzeriasByLocation (
-            @PathVariable (name = "id") Long locationId
-    ) {
+    public ResponseEntity<List<PizzeriaShowDto>> getPizzeriasByLocation(
+            @PathVariable(name = "id") Long locationId) {
         List<PizzeriaShowDto> dtos = pizzeriaService.getPizzeriasByLocationId(locationId);
 
         return ResponseEntity.ok(dtos);

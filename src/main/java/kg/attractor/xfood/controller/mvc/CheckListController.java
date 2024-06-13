@@ -88,7 +88,6 @@ public class CheckListController {
     @GetMapping ("/{id}/result")
     public String getResult (@PathVariable (name = "id") Long checkListId, Model model) {
         model.addAttribute("checkList", checkListService.getResult(checkListId));
-
         return "checklist/result";
     }
 
