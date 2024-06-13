@@ -25,4 +25,5 @@ public interface CheckListService {
     List<CheckListAnalyticsDto> getAnalytics(
             String pizzeria, String manager, String expert, LocalDate startDate, LocalDate endDate);
 
+    CheckListResultDto getResultByUuidLink(String uuidLink);
 }

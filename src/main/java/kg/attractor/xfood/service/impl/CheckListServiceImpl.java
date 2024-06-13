@@ -104,4 +104,12 @@ public class CheckListServiceImpl implements CheckListService {
                 .map(dtoBuilder::buildCheckListAnalyticsDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public CheckListResultDto getResultByUuidLink(String uuidLink) {
+        return dtoBuilder.buildCheckListResultDto(
+                checkListRepository.findByUuidLinkAndStatus(uuidLink, Status.DONE)
+                        .orElseThrow(() -> new NotFoundException("Check list not found"))
+        );
+    }
 }

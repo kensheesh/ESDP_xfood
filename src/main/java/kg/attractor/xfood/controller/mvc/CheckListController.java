@@ -90,4 +90,11 @@ public class CheckListController {
         return "checklist/result";
     }
 
+    @GetMapping ("all/{uuid}/result")
+    public String getResultUuid (@PathVariable (name = "uuid") String checkListId, Model model) {
+        model.addAttribute("checkList", checkListService.getResultByUuidLink(checkListId));
+        model.addAttribute("all", "all");
+        return "checklist/result";
+    }
+
 }
