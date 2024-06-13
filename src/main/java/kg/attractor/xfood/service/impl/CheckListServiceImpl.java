@@ -76,7 +76,7 @@ public class CheckListServiceImpl implements CheckListService {
 		CheckList checkList = CheckList.builder()
 				.opportunity(opportunity)
 				.workSchedule(workSchedule)
-				.status(Status.getStatusEnum("new"))
+				.status(Status.NEW)
 				.build();
 		log.error(checkList.getStatus().getStatus());//выходит NEW
 		checkListRepository.save(checkList);
