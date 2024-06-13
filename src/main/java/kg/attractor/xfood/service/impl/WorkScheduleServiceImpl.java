@@ -55,6 +55,13 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         return workSchedule.getPizzeria().getId();
     }
 
+    @Override
+    public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime date) {
+        return workScheduleRepository.findByManagerIdAndDate(
+                        managerId, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
+                .orElseThrow(() -> new NotFoundException("No such work_schedule"));
+    }
+
     public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, LocalDateTime monday) {
         WeeklyScheduleShowDto dto = new WeeklyScheduleShowDto();
         List<DailyWorkScheduleShowDto> managerSchedules = new ArrayList<>();

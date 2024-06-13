@@ -2,6 +2,7 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
+import kg.attractor.xfood.model.Criteria;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
@@ -13,6 +14,8 @@ public interface CriteriaService {
     List<CriteriaSupervisorShowDto> getByDescription(String description);
 
     CriteriaSupervisorShowDto getById(Long id);
+
+    Criteria findById(Long id);
 
     Long create(CriteriaSupervisorCreateDto createDto);
 

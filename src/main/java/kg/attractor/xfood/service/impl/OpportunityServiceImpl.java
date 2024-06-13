@@ -41,6 +41,12 @@ public class OpportunityServiceImpl implements OpportunityService {
         return dailyOpportunityDtos;
     }
 
+    @Override
+    public void save(Opportunity opportunity) {
+        opportunityRepository.save(opportunity);
+        log.info("opportunity saved {}", opportunity);
+    }
+
     private OpportunityShowDto createDailyOpportunityDto(User user, LocalDateTime date) {
         OpportunityShowDto dto = new OpportunityShowDto();
         List<DailyOpportunityShowDto> shifts = new ArrayList<>();

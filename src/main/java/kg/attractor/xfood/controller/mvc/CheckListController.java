@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
@@ -30,18 +31,21 @@ public class CheckListController {
 public String create (@RequestParam(name = "date", required = true) LocalDateTime date, @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
     model.addAttribute("zones",zoneService.getZones() );
     model.addAttribute("sections", sectionService.getSections());
-    log.error( workScheduleService.getPizzeriaId(managerId, date).toString());
     model.addAttribute("pizzeriaId", workScheduleService.getPizzeriaId(managerId, date));
     model.addAttribute("types",checkTypeService.getTypes()); workScheduleService.getPizzeriaId(managerId, date);
     model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
+    model.addAttribute("date", date);
+    model.addAttribute("managerId", managerId);
+    model.addAttribute("expertId", expertId);
     return "checklist/create";
 }
 
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")
-    public String create (BindingResult result, Model model) {
-        return null;
+    public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
+        checkListService.create(createDto);
+        return "checklist/create";
         // TODO назначение проверки
     }
 

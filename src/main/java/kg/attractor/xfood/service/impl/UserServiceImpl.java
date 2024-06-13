@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.auth.RegisterUserDto;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.UserService;
@@ -31,4 +32,8 @@ public class UserServiceImpl implements UserService {
 		//NOT THE FINAL VERSION!!!
 	}
 
+	@Override
+	public User findById(Long expertId) {
+		return userRepository.findById(expertId).orElseThrow(()-> new NotFoundException("Expert not found"));
+	}
 }

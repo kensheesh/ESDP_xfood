@@ -42,6 +42,11 @@ public class CriteriaServiceImpl implements CriteriaService {
     }
 
     @Override
+    public Criteria findById(Long id) {
+        return criteriaRepository.findById(id).orElseThrow(()->new NoSuchElementException("No such  criteria  by id "+id));
+    }
+
+    @Override
     public Long create(CriteriaSupervisorCreateDto createDto) {
         log.info("coefficient {}", createDto.getCoefficient());
         if (createDto.getCoefficient()==null) {

@@ -8,19 +8,38 @@
             outline: none;
         }
     </style>
-    <div class="row row-cols-md-3 row-cols-1 bg-white rounded shadow-sm">
-        <div class="col">
-            <div class="my-4">
-                    <select class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${pizzeriaId})">
+    <form action="/checks/create" method="post">
+    <div class="container mt-3">
+        <input type="hidden" name="date" value="${date}">
+        <input type="hidden" name="managerId" value="${managerId}">
+        <input type="hidden" name="expertId" value="${expertId}">
+
+        <div class="row bg-white rounded shadow-sm align-items-end">
+            <div class="col-md-3">
+                <div class="my-2">
+                    <select class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${pizzeriaId})" name="checkTypeId">
                         <option selected disabled>выберите тип чек листа</option>
                         <#list types as t>
                             <option value="${t.id}">${t.name}</option>
                         </#list>
                     </select>
+                </div>
             </div>
-        </div>
-        <div class="col">
-            <button type="submit" class="btn btn-success my-3 d-flex ms-auto">Создать чек-лист</button>
+            <div class="col-md-3">
+                <div class="form-group my-2">
+                    <label for="startTime" class="form-label">Время начала смены:</label>
+                    <input type="time" id="startTime" class="form-control" name="startTime">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group my-2">
+                    <label for="endTime" class="form-label">Время окончания смены:</label>
+                    <input type="time" id="endTime" class="form-control" name="endTime">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-success my-2 w-100">Создать чек-лист</button>
+            </div>
         </div>
     </div>
 <div class="mt-4 shadow-sm p-3 bg-white">
@@ -37,24 +56,12 @@
                         </tr>
                     </thead>
                     <tbody class="criterion-list">
-                      <#--  <#list criterion as c>
-                            <tr id="criteria-wrap-${c.id}">
-                                <th scope="row">${c.section}</th>
-                                <td>${c.zone}</td>
-                                <td>${c.description}</td>
-                                <td>${c.coefficient}</td>
-                                <td>
-                                    <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
-                                        <i class="bi bi-trash text-secondary fs-4"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </#list>-->
                     </tbody>
                 </table>
             </div>
     </div>
 </div>
+    </form>
     <div class="row">
         <div class="col">
             <div class="input-group my-4">

@@ -76,7 +76,11 @@ async function addCriteriaToList(id) {
             '<th scope="row">' + criteria.section + '</th>' +
             '<td>' + criteria.zone + '</td>' +
             '<td>' + criteria.description + '</td>' +
-            '<td>' + criteria.coefficient + '</td>' +
+            '<td>' +
+            (criteria.section === ''
+                ? '<input type="number" name="criteriaMaxValueDtoList[' + criteria.id + '].maxValue" required min="1">'
+                : criteria.coefficient) +
+            '</td>' +
             '<td>' +
             '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criteria.id + '">' +
             '<i class="bi bi-trash text-secondary fs-4"></i>' +
@@ -148,7 +152,11 @@ async function validate(event){
                 '<th scope="row">' + data.section + '</th>' +
                 '<td>' + data.zone + '</td>' +
                 '<td>' + data.description + '</td>' +
-                '<td>' + data.coefficient + '</td>' +
+                '<td>' +
+                (data.section === ''
+                    ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue" required min="1">'
+                    : data.coefficient) +
+                '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
                 '<i class="bi bi-trash text-secondary fs-4"></i>' +
@@ -245,9 +253,14 @@ async function getCriterion(value, pizzeriaId) {
             newCriteria.setAttribute('id', 'criteria-wrap-' + criterion[i].id);
             newCriteria.innerHTML =
                 '<th scope="row">' + criterion[i].section + '</th>' +
+                '<input type="hidden" name="criteriaMaxValueDtoList[' + i + '].criteriaId" value="' + criterion[i].id + '">' +
                 '<td>' + criterion[i].zone + '</td>' +
                 '<td>' + criterion[i].description + '</td>' +
-                '<td>' + criterion[i].coefficient + '</td>' +
+                '<td>' +
+                (criterion[i].section === ''
+                    ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-50" required min="1">'
+                    : criterion[i].coefficient) +
+                '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '">' +
                 '<i class="bi bi-trash text-secondary fs-4"></i>' +
@@ -260,6 +273,7 @@ async function getCriterion(value, pizzeriaId) {
             });
         }
     }
+
 }
 
 async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId){
