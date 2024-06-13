@@ -15,6 +15,7 @@ import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,13 +54,17 @@ public class CheckListServiceImpl implements CheckListService {
 
 	@Override
 	public void create(CheckListSupervisorCreateDto createDto) {
+		log.info(createDto.toString());
 		if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
 			throw new IncorrectDateException("Start time cannot be after end time");
 		}
 		WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
-		/*if (createDto.getStartTime().isAfter(workSchedule.getEndTime())) {
-			throw new IncorrectDateException("Start time cannot be after end time of manager");
-		}* Нужно уточнить!*/
+		log.info(workSchedule.getStartTime().toString());
+		log.info(createDto.getEndTime().toString());
+		if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
+			throw new IncorrectDateException("Start time cannot be after end time of expert");
+		}
+
 		Opportunity opportunity = Opportunity.builder()
 				.user(userService.findById(createDto.getExpertId()))
 				.date(createDto.getDate())
@@ -71,8 +76,9 @@ public class CheckListServiceImpl implements CheckListService {
 		CheckList checkList = CheckList.builder()
 				.opportunity(opportunity)
 				.workSchedule(workSchedule)
-				.status(Status.NEW)
+				.status(Status.getStatusEnum("new"))
 				.build();
+		log.error(checkList.getStatus().getStatus());//выходит NEW
 		checkListRepository.save(checkList);
 
 		for (CriteriaMaxValueDto criteriaMaxValueDto : createDto.getCriteriaMaxValueDtoList()){

@@ -74,11 +74,12 @@ async function addCriteriaToList(id) {
         newCriteria.setAttribute('id', 'criteria-wrap-' + id);
         newCriteria.innerHTML =
             '<th scope="row">' + criteria.section + '</th>' +
+            '<input type="hidden" value="'+criteria.id+'" name="criteriaMaxValueDtoList[' + criteria.id + '].criteriaId">'+
             '<td>' + criteria.zone + '</td>' +
             '<td>' + criteria.description + '</td>' +
             '<td>' +
             (criteria.section === ''
-                ? '<input type="number" name="criteriaMaxValueDtoList[' + criteria.id + '].maxValue" required min="1">'
+                ? '<input type="number" name="criteriaMaxValueDtoList[' + criteria.id + '].maxValue"  class="form-control form-control-sm w-50" required min="1" value="1">'
                 : criteria.coefficient) +
             '</td>' +
             '<td>' +
@@ -150,11 +151,12 @@ async function validate(event){
             newCriteria.setAttribute('id', 'criteria-wrap-' + createdId);
             newCriteria.innerHTML =
                 '<th scope="row">' + data.section + '</th>' +
+                '<input type="hidden" value="'+createdId+'" name="criteriaMaxValueDtoList[' + createdId + '].criteriaId">'+
                 '<td>' + data.zone + '</td>' +
                 '<td>' + data.description + '</td>' +
                 '<td>' +
                 (data.section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue" required min="1">'
+                    ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-50" required min="1" value="1">'
                     : data.coefficient) +
                 '</td>' +
                 '<td>' +
@@ -258,7 +260,7 @@ async function getCriterion(value, pizzeriaId) {
                 '<td>' + criterion[i].description + '</td>' +
                 '<td>' +
                 (criterion[i].section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-50" required min="1">'
+                    ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-50" required min="1" value="1">'
                     : criterion[i].coefficient) +
                 '</td>' +
                 '<td>' +

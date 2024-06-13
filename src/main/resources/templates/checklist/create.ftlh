@@ -28,13 +28,13 @@
             <div class="col-md-3">
                 <div class="form-group my-2">
                     <label for="startTime" class="form-label">Время начала смены:</label>
-                    <input type="time" id="startTime" class="form-control" name="startTime">
+                    <input type="time" id="startTime" class="form-control" name="startTime" required>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group my-2">
                     <label for="endTime" class="form-label">Время окончания смены:</label>
-                    <input type="time" id="endTime" class="form-control" name="endTime">
+                    <input type="time" id="endTime" class="form-control" name="endTime" required>
                 </div>
             </div>
             <div class="col-md-3">
