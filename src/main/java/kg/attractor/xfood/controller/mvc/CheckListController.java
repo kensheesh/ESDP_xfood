@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CheckListController {
     private final CheckListService checkListService;
 
-//    // ROLE: SUPERVISOR
-//    @GetMapping("/create")
-//    public String create () {
-//        return null;
-//    }
+    // ROLE: SUPERVISOR
+    @GetMapping("/create")
+    public String create () {
+        return null;
+    }
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")

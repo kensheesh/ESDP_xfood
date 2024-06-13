@@ -29,7 +29,7 @@
                     <#if criterion.maxValue??>
                         <td class="text-center">${criterion.maxValue}</td>
                         <td class="text-center rounded-3"><input type="number" class="score-input" min="0" max="${criterion.maxValue}"
-                                                                 value="${criterion.maxValue}" disabled></td>
+                                                                 value="${criterion.value}" disabled></td>
                         <#assign maxSum = maxSum + criterion.maxValue>
                     <#else>
                         <td></td>

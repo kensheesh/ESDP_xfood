@@ -7,25 +7,25 @@ import kg.attractor.xfood.dto.WorkScheduleDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
+import kg.attractor.xfood.dto.location.LocationShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 @RequiredArgsConstructor
 public class DtoBuilder {
-	
+
 	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
 				.map(this::buildCriteriaShowDto)
@@ -53,12 +53,15 @@ public class DtoBuilder {
 		return ChecklistMiniExpertShowDto.builder()
 				.id(model.getId())
 				.status(model.getStatus())
+				.criteria(criteriaDtos)
+				.managerWorkDate(managerWorkDate.toString())
 				.managerWorkDate(managerWorkDate)
+				.manager(managerDto)
 				.pizzeria(pizzeria)
 				.uuid(uuid)
 				.build();
 	}
-	
+
 	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
 		return CriteriaExpertShowDto.builder()
 				.id(model.getCriteria().getId())
@@ -70,13 +73,14 @@ public class DtoBuilder {
 				.value(model.getValue())
 				.build();
 	}
-	
+
 	protected ManagerShowDto buildManagerShowDto(Manager manager) {
 		return ManagerShowDto.builder()
 				.name(manager.getName())
 				.surname(manager.getSurname())
 				.build();
 	}
+
 
 	protected CheckListResultDto buildCheckListResultDto(CheckList model) {
 		return CheckListResultDto.builder()
@@ -115,5 +119,47 @@ public class DtoBuilder {
 				.startTime(model.getStartTime())
 				.endTime(model.getEndTime())
 				.build();
+	}
+
+	protected ExpertShowDto buildExpertShowDto(User user) {
+		return ExpertShowDto.builder()
+				.id(user.getId())
+				.name(user.getName())
+				.surname(user.getSurname())
+				.build();
+	}
+
+	protected List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
+		List<LocationShowDto> dtos = new ArrayList<>();
+		locations.forEach(e -> {
+			dtos.add(buildLocationShowDto(e));
+		});
+		return dtos;
+	}
+
+	protected LocationShowDto buildLocationShowDto(Location location) {
+		return LocationShowDto.builder()
+				.id(location.getId())
+				.name(location.getName())
+				.timezone(location.getTimezone())
+				.pizzerias(location.getPizzerias())
+				.build();
+	}
+
+	protected List<PizzeriaShowDto> buildPizzeriaShowDtos(List<Pizzeria> pizzerias) {
+		List<PizzeriaShowDto> dtos = new ArrayList<>();
+		pizzerias.forEach(e -> {
+			dtos.add(buildPizzeriaShowDto(e));
+		});
+		return dtos;
+	}
+
+	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
+		return PizzeriaShowDto.builder()
+				.id(pizzeria.getId())
+				.name(pizzeria.getName())
+				.location(pizzeria.getLocation())
+				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
+				.workSchedules(pizzeria.getWorkSchedules()).build();
 	}
 }

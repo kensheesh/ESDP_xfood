@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserRepository userRepository;
 	private final PasswordEncoder encoder;
-	
+
 	public void register(RegisterUserDto dto) {
 		if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
 		User user = User.builder()
@@ -30,5 +30,5 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		//NOT THE FINAL VERSION!!!
 	}
-	
+
 }
