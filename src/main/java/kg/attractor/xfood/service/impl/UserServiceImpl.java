@@ -38,22 +38,6 @@ public class UserServiceImpl implements UserService {
 	}
 
     private final DtoBuilder dtoBuilder;
-    private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
-
-    public void register(RegisterUserDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
-        User user = User.builder()
-                .email(dto.getEmail())
-                .password(encoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .surname(dto.getSurname())
-                .role(dto.getRole())
-                .phoneNumber(dto.getPhoneNumber())
-                .build();
-        userRepository.save(user);
-        //NOT THE FINAL VERSION!!!
-    }
 
     @Override
     public UserDto getUserDto() {

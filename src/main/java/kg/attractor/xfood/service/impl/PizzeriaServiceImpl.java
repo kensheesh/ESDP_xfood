@@ -19,6 +19,7 @@ public class PizzeriaServiceImpl implements PizzeriaService {
     private final PizzeriaRepository pizzeriaRepository;
     private final DtoBuilder dtoBuilder;
 
+    @Override
     public List<PizzeriaShowDto> getPizzeriasByLocationId(long locationId) {
         List<Pizzeria> pizzerias = pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId);
         return dtoBuilder.buildPizzeriaShowDtos(pizzerias);

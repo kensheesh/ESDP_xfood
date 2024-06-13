@@ -6,9 +6,12 @@ import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
+import kg.attractor.xfood.dto.location.LocationShowDto;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
@@ -16,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -55,6 +59,15 @@ public class DtoBuilder {
     }
 
 
+    protected ManagerDto buildManagerDto(Manager manager) {
+        return ManagerDto.builder()
+                .id(manager.getId())
+                .name(manager.getName())
+                .surname(manager.getSurname())
+                .phoneNumber(manager.getPhoneNumber())
+                .build();
+    }
+
     protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
         return CriteriaExpertShowDto.builder()
                 .id(model.getCriteria().getId())
@@ -69,38 +82,11 @@ public class DtoBuilder {
 
     protected ManagerShowDto buildManagerShowDto(Manager manager) {
         return ManagerShowDto.builder()
-                .name(manager.getName())
-                .surname(manager.getSurname())
-                .build();
-    }
-
-    protected ManagerDto buildManagerDto(Manager manager) {
-        return ManagerDto.builder()
                 .id(manager.getId())
                 .name(manager.getName())
                 .surname(manager.getSurname())
-                .phoneNumber(manager.getPhoneNumber())
                 .build();
     }
-	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
-		return CriteriaExpertShowDto.builder()
-				.id(model.getCriteria().getId())
-				.zone(model.getCriteria().getZone().getName())
-				.section(model.getCriteria().getSection().getName())
-				.description(model.getCriteria().getDescription())
-				.maxValue(model.getMaxValue())
-				.coefficient(model.getCriteria().getCoefficient())
-				.value(model.getValue())
-				.build();
-	}
-
-	protected ManagerShowDto buildManagerShowDto(Manager manager) {
-		return ManagerShowDto.builder()
-				.id(manager.getId())
-				.name(manager.getName())
-				.surname(manager.getSurname())
-				.build();
-	}
 
     protected CheckListResultDto buildCheckListResultDto(CheckList model) {
         return CheckListResultDto.builder()
@@ -138,8 +124,6 @@ public class DtoBuilder {
     }
 
 
-
-
     protected PizzeriaDto buildPizzeriaDto(Pizzeria model) {
         return PizzeriaDto.builder()
                 .id(model.getId())
@@ -166,56 +150,42 @@ public class DtoBuilder {
                 .endTime(model.getEndTime())
                 .build();
     }
-	protected WorkScheduleDto buildWorkScheduleDto (WorkSchedule model) {
-		return WorkScheduleDto.builder()
-				.id(model.getId())
-				.manager(this.buildManagerShowDto(model.getManager()))
-				.pizzeria(this.buildPizzeriaDto(model.getPizzeria()))
-				.date(model.getDate())
-				.startTime(model.getStartTime())
-				.endTime(model.getEndTime())
-				.build();
-	}
 
-	protected ExpertShowDto buildExpertShowDto(User user) {
-		return ExpertShowDto.builder()
-				.id(user.getId())
-				.name(user.getName())
-				.surname(user.getSurname())
-				.build();
-	}
+    protected ExpertShowDto buildExpertShowDto(User user) {
+        return ExpertShowDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .build();
+    }
 
-	protected List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
-		List<LocationShowDto> dtos = new ArrayList<>();
-		locations.forEach(e -> {
-			dtos.add(buildLocationShowDto(e));
-		});
-		return dtos;
-	}
+    protected List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
+        List<LocationShowDto> dtos = new ArrayList<>();
+        locations.forEach(e -> dtos.add(buildLocationShowDto(e)));
+        return dtos;
+    }
 
-	protected LocationShowDto buildLocationShowDto(Location location) {
-		return LocationShowDto.builder()
-				.id(location.getId())
-				.name(location.getName())
-				.timezone(location.getTimezone())
-				.pizzerias(location.getPizzerias())
-				.build();
-	}
+    protected LocationShowDto buildLocationShowDto(Location location) {
+        return LocationShowDto.builder()
+                .id(location.getId())
+                .name(location.getName())
+                .timezone(location.getTimezone())
+                .pizzerias(location.getPizzerias())
+                .build();
+    }
 
-	protected List<PizzeriaShowDto> buildPizzeriaShowDtos(List<Pizzeria> pizzerias) {
-		List<PizzeriaShowDto> dtos = new ArrayList<>();
-		pizzerias.forEach(e -> {
-			dtos.add(buildPizzeriaShowDto(e));
-		});
-		return dtos;
-	}
+    protected List<PizzeriaShowDto> buildPizzeriaShowDtos(List<Pizzeria> pizzerias) {
+        List<PizzeriaShowDto> dtos = new ArrayList<>();
+        pizzerias.forEach(e -> dtos.add(buildPizzeriaShowDto(e)));
+        return dtos;
+    }
 
-	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
-		return PizzeriaShowDto.builder()
-				.id(pizzeria.getId())
-				.name(pizzeria.getName())
-				.location(pizzeria.getLocation())
-				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
-				.workSchedules(pizzeria.getWorkSchedules()).build();
-	}
+    protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
+        return PizzeriaShowDto.builder()
+                .id(pizzeria.getId())
+                .name(pizzeria.getName())
+                .location(pizzeria.getLocation())
+                .criteriaPizzerias(pizzeria.getCriteriaPizzerias())
+                .workSchedules(pizzeria.getWorkSchedules()).build();
+    }
 }
