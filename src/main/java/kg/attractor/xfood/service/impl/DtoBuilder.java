@@ -7,8 +7,7 @@ import kg.attractor.xfood.dto.WorkScheduleDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
-import kg.attractor.xfood.dto.manager.ManagerExpertShowDto;
-import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Manager;
@@ -21,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 @RequiredArgsConstructor
@@ -53,10 +57,7 @@ public class DtoBuilder {
 		return ChecklistMiniExpertShowDto.builder()
 				.id(model.getId())
 				.status(model.getStatus())
-				.criteria(criteriaDtos)
-				.managerWorkDate(managerWorkDate.toString())
 				.managerWorkDate(managerWorkDate)
-				.manager(managerDto)
 				.pizzeria(pizzeria)
 				.uuid(uuid)
 				.build();

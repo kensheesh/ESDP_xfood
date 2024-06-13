@@ -27,33 +27,35 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     public void save(List<SaveCriteriaDto> saveCriteriaDto) {
 
         saveCriteriaDto.forEach(c -> {
-            int maxValue = 0;
-            if(c.getMaxValue() != null)
-                maxValue = c.getMaxValue();
+            try {
+                int maxValue = (c.getMaxValue() != null) ? c.getMaxValue() : 0;
 
-            Long checkListId = checkListService.getModelCheckListById(c.getCheckListId()).getId();
-            Long criteriaId = criteriaService.getCriteriaById(c.getCriteriaId()).getId();
+                Long checkListId = checkListService.getModelCheckListById(c.getCheckListId()).getId();
+                Long criteriaId = criteriaService.getCriteriaById(c.getCriteriaId()).getId();
 
-            Optional<CheckListsCriteria> optional = checkListCriteriaRepository
-                    .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
+                Optional<CheckListsCriteria> optional = checkListCriteriaRepository
+                        .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
 
-            if(optional.isPresent()) {
-                CheckListsCriteria criteria = optional.get();
-                criteria.setMaxValue(c.getMaxValue());
-                criteria.setValue(c.getValue());
+                if(optional.isPresent()) {
+                    CheckListsCriteria criteria = optional.get();
+                    criteria.setMaxValue(maxValue);
+                    criteria.setValue(c.getValue());
 
-                checkListCriteriaRepository.save(criteria);
-            } else {
-                CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
-                        .value(c.getValue())
-                        .criteria(criteriaService.getCriteriaById(c.getCriteriaId()))
-                        .checklist(checkListService.getModelCheckListById(c.getCheckListId()))
-                        .maxValue(maxValue)
-                        .build();
+                    checkListCriteriaRepository.save(criteria);
+                } else {
+                    CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                            .value(c.getValue())
+                            .criteria(criteriaService.getCriteriaById(c.getCriteriaId()))
+                            .checklist(checkListService.getModelCheckListById(c.getCheckListId()))
+                            .maxValue(maxValue)
+                            .build();
 
-                checkListCriteriaRepository.save(checkListsCriteria);
+                    checkListCriteriaRepository.save(checkListsCriteria);
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing criteria: " + e.getMessage());
+                e.printStackTrace();
             }
-
         });
 
     }

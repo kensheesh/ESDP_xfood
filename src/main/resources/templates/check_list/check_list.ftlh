@@ -19,7 +19,7 @@
             <tbody>
             <#list checkList.criteria as criteria>
                 <tr>
-                    <#if criteria.maxValue??>
+                    <#if criteria.maxValue?? && criteria.maxValue gt 0>
 
                         <td>${criteria.zone}</td>
                         <td>${criteria.description}</td>

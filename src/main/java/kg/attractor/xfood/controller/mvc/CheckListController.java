@@ -1,6 +1,5 @@
 package kg.attractor.xfood.controller.mvc;
 
-import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
