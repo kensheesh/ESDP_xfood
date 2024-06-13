@@ -47,6 +47,7 @@ public class SecurityConfig {
 						.permitAll())
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(WHITE_LIST_URL).permitAll()
+						.requestMatchers("/analytics").authenticated()
 						.anyRequest().permitAll()
 				);
 		

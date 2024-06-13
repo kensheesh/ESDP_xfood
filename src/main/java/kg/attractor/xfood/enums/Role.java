@@ -14,43 +14,49 @@ import static kg.attractor.xfood.enums.Permission.*;
 @Getter
 @RequiredArgsConstructor
 public enum Role implements GrantedAuthority {
-	
-	ADMIN(
-			Set.of(
-					ADMIN_READ, ADMIN_UPDATE, ADMIN_DELETE, ADMIN_CREATE,
-					SUPERVISOR_READ, SUPERVISOR_UPDATE, SUPERVISOR_CREATE, SUPERVISOR_DELETE,
-					EXPERT_READ, EXPERT_UPDATE, EXPERT_CREATE, EXPERT_DELETE
-			)
-	),
-	
-	SUPERVISOR(
-			Set.of(
-					SUPERVISOR_READ, SUPERVISOR_UPDATE, SUPERVISOR_CREATE, SUPERVISOR_DELETE,
-					EXPERT_READ, EXPERT_UPDATE, EXPERT_CREATE, EXPERT_DELETE
-			)
-	),
-	
-	EXPERT(
-			Set.of(
-					EXPERT_READ, EXPERT_UPDATE, EXPERT_CREATE, EXPERT_DELETE
-			)
-	);
-	
-	private final Set<Permission> permissions;
-	
-	public List<SimpleGrantedAuthority> getAuthorities() {
-		
-		List<SimpleGrantedAuthority> authorities = getPermissions()
-				.stream()
-				.map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
-				.collect(Collectors.toList());
-		
-		authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
-		return authorities;
-	}
-	
-	@Override
-	public String getAuthority() {
-		return "ROLE_" + this.name();
-	}
+
+    ADMIN(
+            Set.of(
+                    ADMIN_READ, ADMIN_UPDATE, ADMIN_DELETE, ADMIN_CREATE,
+                    SUPERVISOR_READ, SUPERVISOR_UPDATE, SUPERVISOR_CREATE, SUPERVISOR_DELETE,
+                    EXPERT_READ, EXPERT_UPDATE, EXPERT_CREATE, EXPERT_DELETE
+            )
+    ),
+
+    SUPERVISOR(
+            Set.of(
+                    SUPERVISOR_READ, SUPERVISOR_UPDATE, SUPERVISOR_CREATE, SUPERVISOR_DELETE,
+                    EXPERT_READ, EXPERT_UPDATE, EXPERT_CREATE, EXPERT_DELETE
+            )
+    ),
+
+    EXPERT(
+            Set.of(
+                    EXPERT_READ, EXPERT_UPDATE, EXPERT_CREATE, EXPERT_DELETE
+            )
+    );
+
+    private final Set<Permission> permissions;
+
+    public List<SimpleGrantedAuthority> getAuthorities() {
+
+        List<SimpleGrantedAuthority> authorities = getPermissions()
+                .stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                .collect(Collectors.toList());
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        return authorities;
+    }
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + this.name();
+    }
+
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
 }
