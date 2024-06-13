@@ -4,9 +4,12 @@ import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
+import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.NotFoundException;
+import kg.attractor.xfood.model.CheckList;
+import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
@@ -14,8 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service

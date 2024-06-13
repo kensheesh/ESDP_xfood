@@ -1,10 +1,8 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
-import kg.attractor.xfood.enums.Status;
-import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
-import kg.attractor.xfood.repository.CheckListCriteriaRepository;
+import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
@@ -19,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
-    private final CheckListCriteriaRepository checkListCriteriaRepository;
+    private final ChecklistCriteriaRepository checkListCriteriaRepository;
     private final CriteriaService criteriaService;
     private final CheckListService checkListService;
 

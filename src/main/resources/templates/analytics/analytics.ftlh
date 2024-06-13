@@ -15,12 +15,12 @@
                                         </a>
                                     </div>
                                     <div class="col">
-                                        <a href="/checks.html" class="btn btn-light rounded-4 w-100 h-100">
+                                        <a href="/expert/checks" class="btn btn-light rounded-4 w-100 h-100">
                                             Проверки
                                         </a>
                                     </div>
                                     <div class="col">
-                                        <a href="/analytics.html" class="btn btn-light rounded-4 w-100 h-100 active">
+                                        <a href="/analytics" class="btn btn-light rounded-4 w-100 h-100 active">
                                             Аналитика
                                         </a>
                                     </div>

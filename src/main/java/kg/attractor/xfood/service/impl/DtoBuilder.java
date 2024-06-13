@@ -1,18 +1,13 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.LocationDto;
 import kg.attractor.xfood.dto.WorkScheduleDto;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
+import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
-import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.model.CheckListsCriteria;
-import kg.attractor.xfood.model.Manager;
-import kg.attractor.xfood.model.Pizzeria;
-import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.location.LocationShowDto;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
@@ -28,6 +23,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 @RequiredArgsConstructor
@@ -75,25 +72,6 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
-        return CriteriaExpertShowDto.builder()
-                .id(model.getCriteria().getId())
-                .zone(model.getCriteria().getZone().getName())
-                .section(model.getCriteria().getSection().getName())
-                .description(model.getCriteria().getDescription())
-                .maxValue(model.getMaxValue())
-                .coefficient(model.getCriteria().getCoefficient())
-                .value(model.getValue())
-                .build();
-    }
-
-    protected ManagerShowDto buildManagerShowDto(Manager manager) {
-        return ManagerShowDto.builder()
-                .id(manager.getId())
-                .name(manager.getName())
-                .surname(manager.getSurname())
-                .build();
-    }
 
 	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
@@ -111,20 +89,6 @@ public class DtoBuilder {
 				.status(model.getStatus())
 				.managerWorkDate(managerWorkDate.toString())
 				.criteria(criteriaDtos)
-				.build();
-	}
-
-	protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
-		String uuid = model.getUuidLink();
-		LocalDate managerWorkDate = model.getWorkSchedule().getDate().toLocalDate();
-		String pizzeria = model.getWorkSchedule().getPizzeria().getName();
-
-		return ChecklistMiniExpertShowDto.builder()
-				.id(model.getId())
-				.status(model.getStatus())
-				.managerWorkDate(managerWorkDate)
-				.pizzeria(pizzeria)
-				.uuid(uuid)
 				.build();
 	}
 
@@ -147,19 +111,8 @@ public class DtoBuilder {
 				.build();
 	}
 
-    protected CheckListResultDto buildCheckListResultDto(CheckList model) {
-        return CheckListResultDto.builder()
-                .id(model.getId())
-                .criteria(
-                        model.getCheckListsCriteria().stream()
-                                .map(this::buildCriteriaShowDto)
-                                .toList()
-                )
-                .workSchedule(this.buildWorkScheduleDto(model.getWorkSchedule()))
-                .build();
-    }
 
-	protected CheckListResultDto buildCheckListResultDto(CheckList model) {
+    protected CheckListResultDto buildCheckListResultDto(CheckList model) {
 		return CheckListResultDto.builder()
 				.id(model.getId())
 				.criteria(
