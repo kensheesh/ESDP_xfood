@@ -39,7 +39,7 @@ public class SecurityConfig {
 				.formLogin(form -> form
 						.loginPage("/auth/login")
 						.loginProcessingUrl("/auth/login")
-						.defaultSuccessUrl("/")
+						.defaultSuccessUrl("/analytics")
 						.failureUrl("/auth/login?error=true")
 						.permitAll())
 				.logout(logout -> logout
@@ -47,10 +47,8 @@ public class SecurityConfig {
 						.permitAll())
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(WHITE_LIST_URL).permitAll()
-						.requestMatchers("/analytics").authenticated()
-						.anyRequest().permitAll()
+						.anyRequest().authenticated()
 				);
-		
 		return http.build();
 	}
 	

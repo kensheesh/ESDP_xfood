@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,10 +32,19 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
 
     @Query(value = """
-            SELECT c
-            FROM CheckList c
-            WHERE CAST(c.status as text) = :#{#status.getStatus()}
-            """)
+		    SELECT c
+		    FROM CheckList c
+		    WHERE CAST(c.status as text) = :#{#status.getStatus()}
+		    """)
     List<CheckList> findByStatus(Status status);
+    
+    @Query(value = """
+		    SELECT c
+		    FROM CheckList c
+		            JOIN Opportunity o ON c.opportunity.id = o.id
+		             JOIN User u ON o.user.id = u.id
+		    WHERE CAST(c.status as text) = :#{#status.getStatus()}
+		    """)
+    List<CheckList> findCheckListByStatus(Status status);
 }
 

@@ -55,7 +55,15 @@ public class CheckListServiceImpl implements CheckListService {
                 .map(dtoBuilder::buildChecklistDto)
                 .toList();
     }
-
+    
+    @Override
+    public List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status) {
+        return checkListRepository.findCheckListByStatus( status)
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
+    }
+    
     @Override
     public CheckListResultDto getResult(Long checkListId) {
         return dtoBuilder.buildCheckListResultDto(

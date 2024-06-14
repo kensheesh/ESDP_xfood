@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +22,13 @@ import java.util.List;
 @Controller
 @RequestMapping("/export")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('SUPERVISOR','EXPERT','ADMIN')")
 public class ExportController {
 
     private final CheckListService checkListService;
-
+    
     @GetMapping("/excel")
+    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read','expert:read')")
     public void exportAnalyticsToExcel(HttpServletResponse response,
                                        @RequestParam(name = "pizzeria", defaultValue = "default", required = false) String pizzeria,
                                        @RequestParam(name = "manager", defaultValue = "default", required = false) String manager,

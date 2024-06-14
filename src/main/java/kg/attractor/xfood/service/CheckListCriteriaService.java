@@ -7,4 +7,5 @@ import java.util.List;
 public interface CheckListCriteriaService {
 
     void save(List<SaveCriteriaDto> saveCriteriaDto);
+
 }

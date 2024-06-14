@@ -13,6 +13,7 @@ import java.util.List;
 @Controller
 @RequestMapping("criteria")
 @RequiredArgsConstructor
+
 public class CriteriaController {
     private final CheckListCriteriaService checkListCriteriaService;
 
