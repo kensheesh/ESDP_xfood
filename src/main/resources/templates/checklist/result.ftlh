@@ -120,7 +120,7 @@
                 const percentage = document.getElementById('percentageResult').textContent;
                 const message = `Дата: ${checkList.workSchedule.date}\n` +
                     `Пиццерия: ${checkList.workSchedule.pizzeria.name}\n` +
-                    `Менеджер: ${checkList.workSchedule.manager.name}\n` +
+                    `Менеджер: ${checkList.workSchedule.manager.name} ${checkList.workSchedule.manager.surname}\n` +
                     `Результат проверки в %: ` + percentage +
                     `\nПоложительная обратная связь: ${checkList.feedback}\n` +
                     `Критический фактор: ${critFact}\n` +
