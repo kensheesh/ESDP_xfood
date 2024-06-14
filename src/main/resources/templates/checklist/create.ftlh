@@ -17,7 +17,7 @@
         <div class="row bg-white rounded shadow-sm align-items-end">
             <div class="col-md-3">
                 <div class="my-2">
-                    <select id="checklistType" class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${pizzeriaId})" name="checkTypeId">
+                    <select id="checklistType" class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${workSchedule.pizzeriaId})" name="checkTypeId">
                         <option selected disabled>выберите тип чек листа</option>
                         <#list types as t>
                             <option value="${t.id}">${t.name}</option>
@@ -28,13 +28,13 @@
             <div class="col-md-3">
                 <div class="form-group my-2">
                     <label for="startTime" class="form-label">Время начала смены:</label>
-                    <input type="time" id="startTime" class="form-control" name="startTime" value="" required>
+                    <input type="time" id="startTime" class="form-control" name="startTime" value="${workSchedule.startTime}" required>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group my-2">
                     <label for="endTime" class="form-label">Время окончания смены:</label>
-                    <input type="time" id="endTime" class="form-control" name="endTime" required>
+                    <input type="time" id="endTime" class="form-control" value="${workSchedule.endTime}" name="endTime" required>
                 </div>
             </div>
             <div class="col-md-3">

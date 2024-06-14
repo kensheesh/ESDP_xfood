@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.dto.WorkScheduleSupervisorShowDto;
 import kg.attractor.xfood.dto.workSchedule.DailyWorkScheduleShowDto;
 import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
 import kg.attractor.xfood.exception.NotFoundException;
@@ -47,19 +48,17 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         return weeklyDtos;
     }
 
-    @Override
-    public Long getPizzeriaId(Long managerId, LocalDateTime date) {
-        WorkSchedule workSchedule = workScheduleRepository.findByManagerIdAndDate(
-                        managerId, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
-                .orElseThrow(() -> new NotFoundException("No such work_schedule"));
-        return workSchedule.getPizzeria().getId();
-    }
 
     @Override
     public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime date) {
         return workScheduleRepository.findByManagerIdAndDate(
                         managerId, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
                 .orElseThrow(() -> new NotFoundException("No such work_schedule"));
+    }
+
+    @Override
+    public WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime date) {
+        return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, date));
     }
 
     public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, LocalDateTime monday) {

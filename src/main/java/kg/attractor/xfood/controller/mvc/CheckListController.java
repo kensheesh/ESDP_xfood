@@ -31,8 +31,8 @@ public class CheckListController {
 public String create (@RequestParam(name = "date", required = true) LocalDateTime date, @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
     model.addAttribute("zones",zoneService.getZones() );
     model.addAttribute("sections", sectionService.getSections());
-    model.addAttribute("pizzeriaId", workScheduleService.getPizzeriaId(managerId, date));
-    model.addAttribute("types",checkTypeService.getTypes()); workScheduleService.getPizzeriaId(managerId, date);
+    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId, date));
+    model.addAttribute("types",checkTypeService.getTypes());
     model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
     model.addAttribute("date", date);
     model.addAttribute("managerId", managerId);

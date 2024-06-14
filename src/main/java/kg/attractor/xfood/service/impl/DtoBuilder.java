@@ -169,4 +169,12 @@ public class DtoBuilder {
 				.name(model.getName())
 				.build();
 	}
+
+	protected WorkScheduleSupervisorShowDto buildWorkScheduleShowDto(WorkSchedule model) {
+		return WorkScheduleSupervisorShowDto.builder()
+				.pizzeriaId(model.getPizzeria().getId())
+				.endTime(model.getEndTime())
+				.startTime(model.getStartTime())
+				.build();
+	}
 }
