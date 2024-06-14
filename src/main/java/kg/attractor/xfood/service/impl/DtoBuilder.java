@@ -120,6 +120,7 @@ public class DtoBuilder {
 								.map(this::buildCriteriaShowDto)
 								.toList()
 				)
+                .feedback(model.getFeedback())
                 .uuidLink(model.getUuidLink())
 				.workSchedule(this.buildWorkScheduleDto(model.getWorkSchedule()))
 				.build();
