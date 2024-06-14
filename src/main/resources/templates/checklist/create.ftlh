@@ -8,7 +8,7 @@
             outline: none;
         }
     </style>
-    <form action="/checks/create" method="post">
+    <form action="/checks/create" method="post" id="create-form">
     <div class="container mt-3">
         <input type="hidden" name="date" value="${date}">
         <input type="hidden" name="managerId" value="${managerId}">
@@ -17,7 +17,7 @@
         <div class="row bg-white rounded shadow-sm align-items-end">
             <div class="col-md-3">
                 <div class="my-2">
-                    <select class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${pizzeriaId})" name="checkTypeId">
+                    <select id="checklistType" class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${pizzeriaId})" name="checkTypeId">
                         <option selected disabled>выберите тип чек листа</option>
                         <#list types as t>
                             <option value="${t.id}">${t.name}</option>
@@ -28,7 +28,7 @@
             <div class="col-md-3">
                 <div class="form-group my-2">
                     <label for="startTime" class="form-label">Время начала смены:</label>
-                    <input type="time" id="startTime" class="form-control" name="startTime" required>
+                    <input type="time" id="startTime" class="form-control" name="startTime" value="" required>
                 </div>
             </div>
             <div class="col-md-3">
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-success my-2 w-100">Создать чек-лист</button>
+                <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100 disabled" >Создать чек-лист</button>
             </div>
         </div>
     </div>
@@ -139,7 +139,7 @@
                     </div>
                         <div class="form-group">
                             <label for="coefficient" id="coef-label">Коэффициент: </label>
-                            <input type="number" class="form-control" id="coefficientInput" name="coefficient">
+                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" required>
                             <div id="coef-err" class="text-danger"></div>
                         </div>
                 </div>

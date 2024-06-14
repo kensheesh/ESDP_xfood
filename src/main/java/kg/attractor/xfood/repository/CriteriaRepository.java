@@ -15,6 +15,7 @@ public interface CriteriaRepository extends JpaRepository<Criteria, Long> {
     List<Criteria> findCriteriaByCriteriaTypeAndCriteriaPizzeria(Long checkTypeId, Long pizzeriaId);
 
     List<Criteria> findCriterionByDescriptionContainingIgnoreCase(String description);
+
     @Query(value = "select c from Criteria c JOIN CriteriaType ct on c.id = ct.criteria.id  where  ct.type.id = :checkTypeId")
     List<Criteria> findCriteriaByCriteriaType(Long checkTypeId);
 }

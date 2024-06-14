@@ -25,6 +25,6 @@ public class CheckListSupervisorCreateDto {
     @NotNull
     private Long checkTypeId;
 
-    List<@Valid CriteriaMaxValueDto> criteriaMaxValueDtoList = new ArrayList<>();
+    List<@Valid CriteriaMaxValueDto> criteriaMaxValueDtoList ;
 
 }

@@ -29,13 +29,6 @@ public class CriterionController {
             @PathVariable (name = "checkTypeId") Long checkTypeId,
             @PathVariable (name = "pizzeriaId")Long pizzeriaId
     ) {
-
-    /* TODO
-         Получение списка критериев
-         проверки после выбора типа проверки и пиццерии
-         при назначении новой проверки
-    */
-        log.error(criteriaService.getByCheckTypeAndPizzeria(checkTypeId, pizzeriaId).toString());
         return ResponseEntity.ok(criteriaService.getByCheckTypeAndPizzeria(checkTypeId, pizzeriaId));
     }
 

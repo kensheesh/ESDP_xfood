@@ -46,7 +46,6 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
     public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
         checkListService.create(createDto);
         return "redirect:/supervisor/weekly";
-        // TODO назначение проверки
     }
 
 //    // ROLE: ADMIN

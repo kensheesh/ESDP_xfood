@@ -33,6 +33,7 @@ public class CheckListServiceImpl implements CheckListService {
 	private final CriteriaService criteriaService;
 	private final CriteriaTypeService criteriaTypeService;
 	private final CheckListCriteriaService checkListsCriteriaService;
+	private final CriteriaPizzeriaService criteriaPizzeriaService;
 
 	@Override
 	public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
@@ -53,15 +54,18 @@ public class CheckListServiceImpl implements CheckListService {
 	@Override
 	@Transactional
 	public void create(CheckListSupervisorCreateDto createDto) {
+		if (createDto.getCriteriaMaxValueDtoList().isEmpty()){
+			throw new IncorrectDateException("Чек лист не содержит критериев");
+		}
 		log.info(createDto.toString());
 		if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
-			throw new IncorrectDateException("Start time cannot be after end time");
+			throw new IncorrectDateException("Время начала не может быть позже время конца смены");
 		}
 		WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
 		log.info(workSchedule.getStartTime().toString());
 		log.info(createDto.getEndTime().toString());
 		if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
-			throw new IncorrectDateException("Start time cannot be after end time of expert");
+			throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
 		}
 		Opportunity opportunity = Opportunity.builder()
 				.user(userService.findById(createDto.getExpertId()))
@@ -79,23 +83,32 @@ public class CheckListServiceImpl implements CheckListService {
 		long parsedCheckListId = Long.parseLong(String.valueOf(checkListId));
 		CheckList checkList = checkListRepository.findById(parsedCheckListId).orElseThrow();
 
-		log.info("citerion and max values {}", createDto.getCriteriaMaxValueDtoList());
-
 		for (CriteriaMaxValueDto criteriaMaxValueDto : createDto.getCriteriaMaxValueDtoList()){
 			CriteriaType criteriaType = CriteriaType.builder()
 					.type(checkTypeService.getById(createDto.getCheckTypeId()))
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
 					.build();
+			log.info("критерия {} связана с типом {}", createDto.getCheckTypeId(),criteriaMaxValueDto.getCriteriaId() );
 			criteriaTypeService.save(criteriaType);
-			log.error("Max value : " + criteriaMaxValueDto.getMaxValue());
+
+			//если будут созданы новые критерии то нужно их связать с данной пицерией, чеклистом и типом,so для этого :
 			CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
 					.checklist(checkList)
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
 					.maxValue(criteriaMaxValueDto.getMaxValue())
-					.value(1)
+					.value(0)
 					.build();
+			log.info("чеклист {} связан с критерием {}", checkList,criteriaMaxValueDto.getCriteriaId() );
 			checkListsCriteriaService.save(checkListsCriteria);
 
+
+			CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
+					.pizzeria(workSchedule.getPizzeria())
+					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
+					.build();
+			criteriaPizzeriaService.save(criteriaPizzeria);
+
+			log.info("Чек лист и все необходимые связи созданы");
 		}
 
 	}
