@@ -1,4 +1,5 @@
 let totalSum = 0;
+let type = 0;
 
 let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
 let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
@@ -290,6 +291,7 @@ async function getCriterion(value, pizzeriaId) {
 }
 
 async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId) {
+    type = await getMaxTotalValue(value);
     let response = await fetch("/api/criteria/" + value + "/" + pizzeriaId);
     if (response.ok) {
         return await response.json();
@@ -306,17 +308,13 @@ checklistType.addEventListener('change', () => {
 })
 
 function setupMaxValueInputs() {
-    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput"]');
-    if (maxValueInputs.length === 0) {
-        console.log("не найдено")
-    } else {
-        for (let i = 0; i < maxValueInputs.length; i++) {
-            maxValueInputs[i].addEventListener('input', () => {
-                countTotalSum(maxValueInputs);
-            });
-        }
-        countTotalSum(maxValueInputs);
+    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
+    for (let input of maxValueInputs) {
+        input.addEventListener('input', () => {
+            updateTotalSum();
+        });
     }
+    updateTotalSum();
 }
 
 function countTotalSum(maxValueInputs) {
@@ -325,12 +323,12 @@ function countTotalSum(maxValueInputs) {
         totalSum += parseInt(maxValueInputs[i].value) || 0;
     }
     let sum = document.getElementById('totalSum');
-    sum.innerHTML = totalSum;
+    sum.innerHTML = totalSum+'/'+type;
     console.log(totalSum);
 }
 
 function updateTotalSum() {
-    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput"]');
+    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
     countTotalSum(maxValueInputs);
 }
 
@@ -356,3 +354,21 @@ function putIndexesToListAndValidate() {
     }
     createForm.submit();
 }
+
+async function getMaxTotalValue(value){
+    let response = await fetch("/api/check-type/" + value);
+    if (response.ok) {
+        type = await response.json();
+        return type;
+    } else {
+        console.log(response);
+        alert("Ошибка HTTP: " + response.status);
+    }
+}
+
+document.getElementById('checklistType').addEventListener('change', async function() {
+    let value = this.value;
+    let pizzeriaId = document.getElementById('pizzeriaId').value;
+    await getMaxTotalValue(value);
+    await getCriterion(value, pizzeriaId);
+});

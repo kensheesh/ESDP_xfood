@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CheckTypeService {
     List<CheckTypeSupervisorViewDto> getTypes();
-
     CheckType getById(Long checkTypeId);
+    Integer getTypeById(Long checkTypeId);
+
 }

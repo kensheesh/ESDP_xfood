@@ -86,13 +86,6 @@ public class CheckListServiceImpl implements CheckListService {
 
 		for (CriteriaMaxValueDto criteriaMaxValueDto : createDto.getCriteriaMaxValueDtoList()){
 
-			CriteriaType criteriaType = CriteriaType.builder()
-					.type(checkTypeService.getById(createDto.getCheckTypeId()))
-					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
-					.build();
-			log.info("критерия {} связана с типом {}", createDto.getCheckTypeId(),criteriaMaxValueDto.getCriteriaId() );
-			criteriaTypeService.save(criteriaType);
-
 			CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
 					.checklist(checkList)
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
