@@ -15,6 +15,9 @@
         <input type="hidden" name="expertId" value="${expertId}">
 
         <div class="row bg-white rounded shadow-sm align-items-end">
+            <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
+                Не правильно! Сумма не соответствует требуемому значению.
+            </div>
             <div class="col-md-3">
                 <div class="my-2">
                     <select id="checklistType" class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${workSchedule.pizzeriaId})" name="checkTypeId">
@@ -65,7 +68,7 @@
     <div class="row">
         <div class="col">
             <div class="input-group my-4">
-                <button type="button" class="search_btn btn btn-white shadow-sm border w-100"  data-bs-toggle="modal" data-bs-target="#searchModal">
+                <button type="button" class="search_btn btn btn-white shadow-sm border w-100 disabled" id="findCriteria"  data-bs-toggle="modal" data-bs-target="#searchModal">
                         <span class="d-flex justify-content-start align-items-center">
                             <span class="me-auto">Найти критерию...</span>
                                 <i class="bi bi-search"></i>
@@ -74,7 +77,7 @@
             </div>
         </div>
         <div class="col">
-            <button type="button" class="btn btn-success rounded-2 my-4" data-bs-toggle="modal" data-bs-target="#create">создать новый критерий</button>
+            <button type="button" class="btn btn-success rounded-2 my-4 disabled" data-bs-toggle="modal" data-bs-target="#create" id="createCriteria">создать новый критерий</button>
         </div>
     </div>
 

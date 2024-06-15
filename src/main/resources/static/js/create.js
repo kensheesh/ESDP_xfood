@@ -67,33 +67,30 @@ function printResults(json) {
         searchResultsWrapper.appendChild(noResultsSection);
     }
 }
-
 async function addCriteriaToList(id) {
     let del = document.getElementById('del-' + id);
-    del.remove();
+    if (del) del.remove();
+
     let criteriaList = document.querySelector('.criterion-list');
     let criteriaWrap = document.getElementById('criteria-wrap-' + id);
     if (!criteriaWrap) {
         let criteria = await getCriteriaById(id);
-        console.log(criteria)
         let newCriteria = document.createElement('tr');
         newCriteria.setAttribute('id', 'criteria-wrap-' + id);
         newCriteria.innerHTML =
-            '<th scope="row">' + criteria.section + '</th>' +
-            '<input type="hidden" value="' + criteria.id + '" name="criteriaMaxValueDtoList[' + id + '].criteriaId">' +
-            '<td>' + criteria.zone + '</td>' +
-            '<td>' + criteria.description + '</td>' +
-            '<td>' +
-            (criteria.section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + id + '].maxValue"  class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-' + id + '">'
-                    : criteria.coefficient + '<input type="hidden" name="criteriaMaxValueDtoList[' + id + '].maxValue" value="'+criteria.coefficient+'" id="maxValueInput-' + id + '">'
-            ) +
-            '</td>' +
-            '<td>' +
-            '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + id + '">' +
-            '<i class="bi bi-trash text-secondary fs-4"></i>' +
-            '</button>' +
-            '</td>';
+            `<th scope="row">${criteria.section}</th>
+             <input type="hidden" value="${criteria.id}" name="criteriaMaxValueDtoList[${id}].criteriaId">
+             <td>${criteria.zone}</td>
+             <td>${criteria.description}</td>
+             <td>${criteria.section === '' ?
+                `<input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-${id}">` :
+                `${criteria.coefficient}<input type="hidden" name="criteriaMaxValueDtoList[${id}].maxValue" value="${criteria.coefficient}" id="maxValueInput-${id}">`}
+             </td>
+             <td>
+                <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${id}">
+                    <i class="bi bi-trash text-secondary fs-4"></i>
+                </button>
+             </td>`;
         criteriaList.appendChild(newCriteria);
 
         let deleteButton = document.getElementById('deleteCriteria-' + id);
@@ -101,6 +98,7 @@ async function addCriteriaToList(id) {
             document.getElementById('criteria-wrap-' + id).remove();
             updateTotalSum();
         });
+
         setupMaxValueInputs();
     }
 }
@@ -301,10 +299,14 @@ async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId) {
     }
 }
 const checklistSubmitButton = document.getElementById("checklistSubmitButton");
+const createCriteriaButton = document.getElementById('createCriteria');
+const findCriteriaButton = document.getElementById('findCriteria');
 const checklistType = document.getElementById("checklistType")
 
 checklistType.addEventListener('change', () => {
     checklistSubmitButton.classList.remove('disabled');
+    createCriteriaButton.classList.remove('disabled');
+    findCriteriaButton.classList.remove('disabled');
 })
 
 function setupMaxValueInputs() {
@@ -339,6 +341,13 @@ createForm.addEventListener('submit', (event) => {
 });
 
 function putIndexesToListAndValidate() {
+    updateTotalSum();
+    if (totalSum < type || totalSum>type){
+        console.error("не правильно !");
+        document.getElementById('error-message').style.display = 'block';
+        return;
+    }
+    document.getElementById('error-message').style.display = 'none';
     let criteriaList = document.querySelector('.criterion-list');
     let criteriaWraps = criteriaList.querySelectorAll('tr');
     for (let i = 0; i < criteriaWraps.length; i++) {
@@ -352,6 +361,7 @@ function putIndexesToListAndValidate() {
             maxValueInput.name = 'criteriaMaxValueDtoList[' + i + '].maxValue';
         }
     }
+
     createForm.submit();
 }
 

@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,7 +59,6 @@ public class CheckListServiceImpl implements CheckListService {
 		if (createDto.getCriteriaMaxValueDtoList().isEmpty()){
 			throw new IncorrectDateException("Чек лист не содержит критериев");
 		}
-		log.info(createDto.toString());
 		if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
 			throw new IncorrectDateException("Время начала не может быть позже время конца смены");
 		}
@@ -68,6 +68,8 @@ public class CheckListServiceImpl implements CheckListService {
 		if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
 			throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
 		}
+		createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
+		createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
 		Opportunity opportunity = Opportunity.builder()
 				.user(userService.findById(createDto.getExpertId()))
 				.date(createDto.getDate())
@@ -97,7 +99,6 @@ public class CheckListServiceImpl implements CheckListService {
 			}
 			log.info("чеклист {} связан с критерием {}", checkList,criteriaMaxValueDto.getCriteriaId() );
 			checkListsCriteriaService.save(checkListsCriteria);
-
 
 			CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
 					.pizzeria(workSchedule.getPizzeria())
