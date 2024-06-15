@@ -52,7 +52,7 @@
                             <th scope="col">Зона</th>
                             <th scope="col">Что проверить</th>
                             <th scope="col">Оценка</th>
-                            <th scope="col"></th>
+                            <th scope="col" id="totalSum"></th>
                         </tr>
                     </thead>
                     <tbody class="criterion-list">
@@ -139,7 +139,7 @@
                     </div>
                         <div class="form-group">
                             <label for="coefficient" id="coef-label">Коэффициент: </label>
-                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" required>
+                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" value="1">
                             <div id="coef-err" class="text-danger"></div>
                         </div>
                 </div>

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -84,6 +85,7 @@ public class CheckListServiceImpl implements CheckListService {
 		CheckList checkList = checkListRepository.findById(parsedCheckListId).orElseThrow();
 
 		for (CriteriaMaxValueDto criteriaMaxValueDto : createDto.getCriteriaMaxValueDtoList()){
+
 			CriteriaType criteriaType = CriteriaType.builder()
 					.type(checkTypeService.getById(createDto.getCheckTypeId()))
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
@@ -91,13 +93,15 @@ public class CheckListServiceImpl implements CheckListService {
 			log.info("критерия {} связана с типом {}", createDto.getCheckTypeId(),criteriaMaxValueDto.getCriteriaId() );
 			criteriaTypeService.save(criteriaType);
 
-			//если будут созданы новые критерии то нужно их связать с данной пицерией, чеклистом и типом,so для этого :
 			CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
 					.checklist(checkList)
 					.criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
 					.maxValue(criteriaMaxValueDto.getMaxValue())
 					.value(0)
 					.build();
+			if (!Objects.equals(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()).getSection().getName(), "")){
+					checkListsCriteria.setMaxValue(1);
+			}
 			log.info("чеклист {} связан с критерием {}", checkList,criteriaMaxValueDto.getCriteriaId() );
 			checkListsCriteriaService.save(checkListsCriteria);
 
