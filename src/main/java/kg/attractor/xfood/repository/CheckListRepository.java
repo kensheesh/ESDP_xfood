@@ -52,7 +52,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 		    WHERE CAST(c.status as text) = :#{#status.getStatus()}
 		    """)
     List<CheckList> findCheckListByStatus(Status status);
-}
+
 @Modifying
 @Transactional
 @Query(value = """
@@ -62,3 +62,4 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 int saveChecklist(Long opportunity, Long workSchedule, String status);
 
 CheckList findCheckListByWorkSchedule_IdAndAndOpportunity_Id(Long workScheduleId, Long opportunityId);
+}

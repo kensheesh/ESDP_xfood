@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "check_lists_criteria")
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class CheckListsCriteria {
     @Id

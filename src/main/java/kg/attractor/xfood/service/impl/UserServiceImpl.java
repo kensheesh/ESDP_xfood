@@ -54,4 +54,9 @@ public class UserServiceImpl implements UserService {
                 .map(dtoBuilder::buildUserDto)
                 .toList();
     }
+
+	@Override
+	public User findById(Long expertId) {
+		return userRepository.findById(expertId).orElseThrow(()-> new NotFoundException("Expert not found"));
+	}
 }

@@ -2,6 +2,7 @@ package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
+import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;

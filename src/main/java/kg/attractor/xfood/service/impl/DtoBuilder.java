@@ -1,11 +1,11 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.LocationDto;
-import kg.attractor.xfood.dto.WorkScheduleDto;
+import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
@@ -253,12 +253,5 @@ public class DtoBuilder {
 				.startTime(model.getStartTime())
 				.build();
 	}
-    protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
-        return PizzeriaShowDto.builder()
-                .id(pizzeria.getId())
-                .name(pizzeria.getName())
-                .location(pizzeria.getLocation())
-                .criteriaPizzerias(pizzeria.getCriteriaPizzerias())
-                .workSchedules(pizzeria.getWorkSchedules()).build();
-    }
+
 }
