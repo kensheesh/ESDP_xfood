@@ -73,6 +73,7 @@ public class CheckListServiceImpl implements CheckListService {
 		if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
 			throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
 		}
+		//TODO уточнить надо ли делать проверку по work_schedule, opportunity and type и если необходимо добавить
 		createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
 		createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
 		Opportunity opportunity = Opportunity.builder()
