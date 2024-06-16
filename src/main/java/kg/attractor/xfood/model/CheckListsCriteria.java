@@ -8,7 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @Entity
-@Builder
 @Table(name = "check_lists_criteria")
 @NoArgsConstructor
 @AllArgsConstructor

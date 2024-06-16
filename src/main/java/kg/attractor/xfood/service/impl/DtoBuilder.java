@@ -7,7 +7,9 @@ import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
+import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.location.LocationShowDto;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
@@ -91,7 +93,7 @@ public class DtoBuilder {
 				.criteria(criteriaDtos)
 				.build();
 	}
-
+	
 	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
 		return CriteriaExpertShowDto.builder()
 				.id(model.getCriteria().getId())
@@ -103,16 +105,16 @@ public class DtoBuilder {
 				.value(model.getValue())
 				.build();
 	}
-
+	
 	protected ManagerShowDto buildManagerShowDto(Manager manager) {
 		return ManagerShowDto.builder()
+				.id(manager.getId())
 				.name(manager.getName())
 				.surname(manager.getSurname())
 				.build();
 	}
 
-
-    protected CheckListResultDto buildCheckListResultDto(CheckList model) {
+	protected CheckListResultDto buildCheckListResultDto(CheckList model) {
 		return CheckListResultDto.builder()
 				.id(model.getId())
 				.criteria(
@@ -204,6 +206,53 @@ public class DtoBuilder {
         return dtos;
     }
 
+	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
+		return PizzeriaShowDto.builder()
+				.id(pizzeria.getId())
+				.name(pizzeria.getName())
+				.location(pizzeria.getLocation())
+				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
+				.workSchedules(pizzeria.getWorkSchedules()).build();
+	}
+
+	protected ZoneSupervisorShowDto buildZoneDto(Zone model){
+		return ZoneSupervisorShowDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.build();
+	}
+
+	protected SectionSupervisorShowDto buildSectionDto(Section model){
+		return SectionSupervisorShowDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.build();
+	}
+
+	protected CriteriaSupervisorShowDto buildCriteriaSupervisorShowDto(Criteria model) {
+		return CriteriaSupervisorShowDto.builder()
+				.id(model.getId())
+				.description(model.getDescription())
+				.zone(model.getZone().getName())
+				.section(model.getSection().getName())
+				.coefficient(model.getCoefficient())
+				.build();
+	}
+
+	protected CheckTypeSupervisorViewDto buildCheckTypeShowDto(CheckType model) {
+		return CheckTypeSupervisorViewDto.builder()
+				.id(model.getId())
+				.name(model.getName())
+				.build();
+	}
+
+	protected WorkScheduleSupervisorShowDto buildWorkScheduleShowDto(WorkSchedule model) {
+		return WorkScheduleSupervisorShowDto.builder()
+				.pizzeriaId(model.getPizzeria().getId())
+				.endTime(model.getEndTime())
+				.startTime(model.getStartTime())
+				.build();
+	}
     protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
         return PizzeriaShowDto.builder()
                 .id(pizzeria.getId())
