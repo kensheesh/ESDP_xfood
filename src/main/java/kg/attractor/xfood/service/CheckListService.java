@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service;
 
+import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.enums.Status;
@@ -14,5 +15,7 @@ public interface CheckListService {
 
     CheckListResultDto getResult(Long checkListId);
 
-    void create(CheckListSupervisorCreateDto createDto);
+    CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto);
+
+    void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto);
 }

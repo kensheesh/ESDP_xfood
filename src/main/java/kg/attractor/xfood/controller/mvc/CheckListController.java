@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.service.*;
@@ -44,7 +45,8 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
     // ROLE: SUPERVISOR
     @PostMapping("/create")
     public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
-        checkListService.create(createDto);
+       CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
+        checkListService.bindChecklistWithCriterion(checklistDto );
         return "redirect:/supervisor/weekly";
     }
 

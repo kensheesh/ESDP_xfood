@@ -10,5 +10,5 @@ public interface OpportunityService {
 
     List<OpportunityShowDto> getOppotunitiesByDate(LocalDateTime date);
 
-    void save(Opportunity opportunity);
+    Long save(Opportunity opportunity);
 }

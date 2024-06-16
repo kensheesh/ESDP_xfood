@@ -42,9 +42,10 @@ public class OpportunityServiceImpl implements OpportunityService {
     }
 
     @Override
-    public void save(Opportunity opportunity) {
-        opportunityRepository.save(opportunity);
+    public Long save(Opportunity opportunity) {
+       Long id =  opportunityRepository.save(opportunity).getId();
         log.info("opportunity saved {}", opportunity);
+        return id;
     }
 
     private OpportunityShowDto createDailyOpportunityDto(User user, LocalDateTime date) {
