@@ -29,9 +29,12 @@ public class CheckListController {
 
 
     @PostMapping("post/{id}")
-    public HttpStatus postCheck(@PathVariable(name = "id") Long id) {
-        checkListService.updateCheckStatusCheckList(id);
-        return HttpStatus.OK;
+    public ResponseEntity<?> postCheck(@PathVariable(name = "id") Long id) {
+        try{
+            return ResponseEntity.ok(checkListService.updateCheckStatusCheckList(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 

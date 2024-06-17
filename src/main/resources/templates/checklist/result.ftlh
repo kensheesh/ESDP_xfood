@@ -75,12 +75,11 @@
                         </button>
                     </#if>
 
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Вы уверены что хотите опубликовать?</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                                 </div>
                                 <div class="modal-body">
@@ -90,6 +89,8 @@
                             </div>
                         </div>
                     </div>
+
+
                 </td>
             </tr>
         </table>
@@ -146,13 +147,25 @@
             }
         }
 
+        document.getElementById('post').addEventListener('click', fetchToResult);
+
         async function fetchToResult() {
-            await fetch("/api/checks/post/${checkList.id}", {method: 'POST'})
-                .then(() => getUrl())
-                .then(() => navigator.clipboard.writeText(url + uuidLink + '/result')
+            try {
+                let response = await fetch(`/api/checks/post/${checkList.id}`, { method: 'POST' });
+                if (!response.ok) {
+                    let errorMessage = await response.text();
+                    throw new Error(errorMessage);
+                }
+                await getUrl();
+                navigator.clipboard.writeText(url + uuidLink + '/result')
                     .then(() => console.log("Скопировано в буфер обмена!"))
-                    .catch(err => console.error(err)))
+                    .catch(err => console.error(err));
+            } catch (error) {
+                alert(error.message)
+            }
         }
+
+
     </script>
 
 </@main.layout>
