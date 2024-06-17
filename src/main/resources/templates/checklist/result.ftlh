@@ -96,7 +96,8 @@
     </main>
 
     <script>
-        let url = 'http://localhost:3445/checks/all/'
+        let uuidLink;
+        let url = 'http://localhost:2345/checks/all/'
         document.addEventListener('DOMContentLoaded', async () => {
             const inputs = document.querySelectorAll('.score-input');
             const maxSum = ${maxSum};
@@ -111,10 +112,10 @@
                 percentageDisplay.textContent = Math.round(percentage) + '%';
             }
 
-
             updatePercentage();
             let a = document.createElement('a');
-            a.href = url + await getUrl() + '/result'
+            await getUrl()
+            a.href = url + uuidLink + '/result'
 
             document.getElementById('getTemplate').addEventListener('click', () => {
                 const percentage = document.getElementById('percentageResult').textContent;
@@ -122,12 +123,11 @@
                     `Пиццерия: ${checkList.workSchedule.pizzeria.name}\n` +
                     `Менеджер: ${checkList.workSchedule.manager.name} ${checkList.workSchedule.manager.surname}\n` +
                     `Результат проверки в %: ` + percentage +
-                    `\nПоложительная обратная связь: ${checkList.feedback}\n` +
+                    `\nПоложительная обратная связь: \n` +
                     `Критический фактор: ${critFact}\n` +
                     `WOW фактор: ${wowFact}\n` +
                     `Поделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
-                    a +
-                    `\nПодать апелляцию`;
+                    a;
 
                 navigator.clipboard.writeText(message)
                     .then(() => alert("Скопировано в буфер обмена!"))
@@ -139,19 +139,19 @@
 
         async function getUrl() {
             try {
-                let id = ${checkList.id};
-                let response = await fetch(`/api/checks/` + id);
-                let uuidLink = await response.text();
-                return uuidLink;
+                let response = await fetch(`/api/checks/${checkList.id}`);
+                uuidLink = await response.text();
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
             }
         }
 
         async function fetchToResult() {
-            navigator.clipboard.writeText(url + await getUrl() + '/result')
-                .then(() => console.log("Скопировано в буфер обмена!"))
-                .catch(err => console.error(err));
+            await fetch("/api/checks/post/${checkList.id}", {method: 'POST'})
+                .then(() => getUrl())
+                .then(() => navigator.clipboard.writeText(url + uuidLink + '/result')
+                    .then(() => console.log("Скопировано в буфер обмена!"))
+                    .catch(err => console.error(err)))
         }
     </script>
 
