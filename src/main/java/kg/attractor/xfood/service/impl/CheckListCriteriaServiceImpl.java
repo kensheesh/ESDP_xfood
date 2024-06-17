@@ -57,4 +57,11 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         });
 
     }
+    private final ChecklistCriteriaRepository criteriaRepository;
+
+    @Override
+    public void save(CheckListsCriteria checkListsCriteria) {
+        criteriaRepository.save(checkListsCriteria);
+        log.info("Saved checklist criteria: {}, {}, {}", checkListsCriteria.getCriteria(), checkListsCriteria.getMaxValue(), checkListsCriteria.getChecklist());
+    }
 }

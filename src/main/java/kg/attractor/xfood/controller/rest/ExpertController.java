@@ -3,12 +3,13 @@ package kg.attractor.xfood.controller.rest;
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
+import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
-import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +22,13 @@ import java.util.Map;
 @RestController("expertControllerRest")
 @RequiredArgsConstructor
 @RequestMapping("/api/experts")
+@PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
 public class ExpertController {
+    
     private final CheckListService checkListService;
     private final UserService userService;
-
+    
+    //?
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllExperts() {
         List<UserDto> users = userService.getAllExperts();
@@ -70,11 +74,19 @@ public class ExpertController {
         */
         return null;
     }
-
-    //ROlE EXPERT
+    
     @GetMapping("checks")
+    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read','expert:read')")
     public ResponseEntity<?> getCheckLists(@RequestParam(name = "status", defaultValue = "in_progress") String status) {
-        List<ChecklistMiniExpertShowDto> checkLists = checkListService.getUsersChecklists(AuthParams.getPrincipal().getUsername(), Status.getStatusEnum(status));
+        List<ChecklistMiniExpertShowDto> checkLists;
+        
+        if (AuthParams.getPrincipal().getAuthorities().contains(Role.SUPERVISOR) ||
+                AuthParams.getPrincipal().getAuthorities().contains(Role.ADMIN)) {
+            checkLists = checkListService.getUsersChecklists(Status.getStatusEnum(status));
+        } else {
+            checkLists = checkListService.getUsersChecklists(AuthParams.getPrincipal().getUsername(), Status.getStatusEnum(status));
+        }
+        
         return ResponseEntity.ok(checkLists);
     }
 }

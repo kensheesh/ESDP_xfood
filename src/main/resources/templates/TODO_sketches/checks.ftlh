@@ -52,17 +52,17 @@
                             <div class="col">
                                 <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                     <div class="col">
-                                        <a href="/abilities.html" class="btn btn-light rounded-4 w-100 h-100 ">
+                                        <a href="/abilities" class="btn btn-light rounded-4 w-100 h-100 ">
                                             График
                                         </a>
                                     </div>
                                     <div class="col">
-                                        <a href="/checks.html" class="btn btn-light rounded-4 w-100 h-100 active">
+                                        <a href="/expert/checks" class="btn btn-light rounded-4 w-100 h-100 active">
                                             Проверки
                                         </a>
                                     </div>
                                     <div class="col">
-                                        <a href="/analytics.html" class="btn btn-light rounded-4 w-100 h-100 ">
+                                        <a href="/analytics" class="btn btn-light rounded-4 w-100 h-100 ">
                                             Аналитика
                                         </a>
                                     </div>

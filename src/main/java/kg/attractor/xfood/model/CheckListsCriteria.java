@@ -8,9 +8,9 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @Entity
-@Builder
 @Table(name = "check_lists_criteria")
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class CheckListsCriteria {
     @Id

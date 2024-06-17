@@ -3,6 +3,7 @@ package kg.attractor.xfood.controller.mvc;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,14 @@ import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('SUPERVISOR','EXPERT','ADMIN')")
 public class AnalyticsController {
+    
     private final CheckListService checkListService;
     private final UserService userService;
-
+    
     @GetMapping("/analytics")
+    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read','expert:read')")
     public String getAnalytics(Model model,
                                @RequestParam(name = "pizzeria", defaultValue = "default", required = false) String pizzeria,
                                @RequestParam(name = "manager", defaultValue = "default", required = false) String manager,

@@ -2,12 +2,14 @@ package kg.attractor.xfood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "criteria_types")
 public class CriteriaType {
     @Id
@@ -16,7 +18,7 @@ public class CriteriaType {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "criteria_id", nullable = false)
     private Criteria criteria;
 

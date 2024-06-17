@@ -2,8 +2,7 @@ package kg.attractor.xfood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
@@ -12,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "criteria")
 public class Criteria {
     @Id
