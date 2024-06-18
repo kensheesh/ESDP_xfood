@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.auth.RegisterUserDto;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.UserService;
@@ -30,5 +31,9 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		//NOT THE FINAL VERSION!!!
 	}
-	
+
+	public User getByEmail(String name) {
+		return userRepository.getByEmail(name)
+				.orElseThrow(() -> new NotFoundException("User not found"));
+	}
 }
