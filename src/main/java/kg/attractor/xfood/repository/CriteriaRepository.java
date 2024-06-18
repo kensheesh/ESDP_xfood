@@ -18,4 +18,7 @@ public interface CriteriaRepository extends JpaRepository<Criteria, Long> {
 
     @Query(value = "select c from Criteria c JOIN CriteriaType ct on c.id = ct.criteria.id  where  ct.type.id = :checkTypeId")
     List<Criteria> findCriteriaByCriteriaType(Long checkTypeId);
+
+    @Query(value = "select c from Criteria c where c.section.id = 2")
+    List<Criteria> findCriteriaWhereSectionWow();
 }
