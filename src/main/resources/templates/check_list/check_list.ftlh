@@ -8,7 +8,7 @@
     </style>
 
     <main class="container mt-4">
-        <div class="table-responsive">
+        <div class="table-responsive rounded p-3">
             <table id="mainTable" class="table table-bordered border border-3 rounded-3">
                 <thead>
                 <tr>
@@ -27,11 +27,11 @@
                 <#list checkList.criteria as criteria>
                     <tr>
                         <#if criteria.maxValue?? && criteria.maxValue gt 0>
-                            <td>${criteria.zone}</td>
+                            <td class="text-center">${criteria.zone}</td>
                             <td>${criteria.description}</td>
                             <td class="text-center">${criteria.maxValue}</td>
-                            <td class="text-center rounded-3">
-                                <input type="number" class="form-control score-input" min="0" max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}" aria-valuemax="${criteria.maxValue}">
+                            <td class="text-center rounded-3 d-flex">
+                                <input type="number" class="text-center form-control score-input" min="0" max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}" aria-valuemax="${criteria.maxValue}">
                             </td>
                             <#assign maxSum = maxSum + criteria.maxValue>
                         <#else>
@@ -39,15 +39,17 @@
                                 <td class="text-center bg-danger">${criteria.section}</td>
                                 <td class="bg-danger">${criteria.description}</td>
                                 <td class="bg-danger"></td>
-                                <td class="text-center bg-danger rounded-3">
-                                    <input type="number" class="form-control score-input" value="${criteria.value}" id="${criteria.id}">
+                                <td class="text-center bg-danger rounded-3 d-flex">
+                                    <input type="number" class="text-center form-control score-input" value="${criteria.value}" id="${criteria.id}">
+                                    <button id="deleteCritFactor">delete</button>
                                 </td>
                             <#elseif criteria.section == 'WOW фактор'>
                                 <td class="text-center bg-success">${criteria.section}</td>
                                 <td class="bg-success">${criteria.description}</td>
                                 <td class="bg-success"></td>
-                                <td class="text-center bg-success rounded-3">
-                                    <input type="number" class="form-control score-input" value="${criteria.value}" id="${criteria.id}">
+                                <td class="text-center bg-success rounded-3 d-flex">
+                                    <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}">
+                                    <button class="btn btn-danger ms-2 delete-factor" data-id="${criteria.id}">Delete</button>
                                 </td>
                             </#if>
                         </#if>
@@ -103,7 +105,6 @@
             const maxSum = ${maxSum};
             const percentageDisplay = document.getElementById('percentageResult');
             const calculateButton = document.getElementById('calculateButton');
-            const mainTableBody = document.getElementById('mainTableBody');
             let criteria = [];
 
             function updatePercentage() {
@@ -158,25 +159,31 @@
                     },
                     body: JSON.stringify(object)
                 })
-                event.preventDefault();
-                const description = document.getElementById('wowFactorDescription').textContent;
 
-                const newRow = document.createElement('tr');
-                newRow.innerHTML = `
-                    <td class="text-center bg-success">WOW фактор</td>
-                    <td class="bg-success">`+ description + `</td>
-                    <td class="bg-success"></td>
-                    <td class="text-center bg-success rounded-3">
-                        <input type="number" class="form-control score-input" value="0" min="0" id="wow-">
-                    </td>
-                `;
-                mainTableBody.appendChild(newRow);
+            });
 
-                const wowFactorModal = new bootstrap.Modal(document.getElementById('wowFactorModal'));
-                wowFactorModal.hide();
+            function deleteFactor(event) {
+                const button = event.target;
+                const row = button.closest('tr');
+                const criteriaId = button.getAttribute('data-id');
 
-                const newInput = newRow.querySelector('.score-input');
-                newInput.addEventListener('input', updatePercentage);
+                fetch(`/api/checklist/criteria/delete/wow/` + criteriaId + `?checkListId=` + ${checkList.id}, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        row.remove();
+                        updatePercentage();
+                    } else {
+                        console.error('Error deleting factor');
+                    }
+                });
+            }
+
+            document.querySelectorAll('.delete-factor').forEach(button => {
+                button.addEventListener('click', deleteFactor);
             });
         });
     </script>

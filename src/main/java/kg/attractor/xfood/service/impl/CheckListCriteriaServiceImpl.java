@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
+import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.CheckListService;
@@ -19,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final ChecklistCriteriaRepository checkListCriteriaRepository;
-    private final ChecklistCriteriaRepository criteriaRepository;
     private final CriteriaService criteriaService;
     private final CheckListService checkListService;
 
@@ -62,7 +62,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
     @Override
     public void save(CheckListsCriteria checkListsCriteria) {
-        criteriaRepository.save(checkListsCriteria);
+        checkListCriteriaRepository.save(checkListsCriteria);
         log.info("Saved checklist criteria: {}, {}, {}", checkListsCriteria.getCriteria(), checkListsCriteria.getMaxValue(), checkListsCriteria.getChecklist());
     }
 
@@ -76,5 +76,12 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
                 .build();
 
         return checkListCriteriaRepository.save(checkListsCriteria).getId();
+    }
+
+    @Override
+    public void deleteWowFactor(Long id, Long checkListId) {
+        Optional<CheckListsCriteria> optional = checkListCriteriaRepository
+                .findByCheckListIdAndCriteriaId(checkListId, id);
+        if(optional.isPresent()) checkListCriteriaRepository.delete(optional.get());
     }
 }
