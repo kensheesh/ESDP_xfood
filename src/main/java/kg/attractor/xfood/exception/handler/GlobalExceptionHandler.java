@@ -1,21 +1,39 @@
 package kg.attractor.xfood.exception.handler;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.NoSuchElementException;
 
 @Slf4j
 @ControllerAdvice
+@Controller
 @RequiredArgsConstructor
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler implements ErrorController {
+
+	@RequestMapping("/error")
+	public String defaultErrorHandler(Model model, HttpServletRequest request) {
+		var status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+		int statusCode = Integer.parseInt(status.toString());
+		String reason = HttpStatus.valueOf(statusCode).getReasonPhrase();
+
+		model.addAttribute("status", statusCode);
+		model.addAttribute("reason", reason);
+		model.addAttribute("details", request);
+
+		return "/error/error";
+	}
 	
 	@ExceptionHandler(NoSuchElementException.class)
 	private String notFound(HttpServletRequest request, Model model, NoSuchElementException ex) {
