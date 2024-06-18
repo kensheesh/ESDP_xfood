@@ -11,4 +11,6 @@ public interface CheckListCriteriaService {
     void save(List<SaveCriteriaDto> saveCriteriaDto);
 
     void save(CheckListsCriteria checkListsCriteria);
+
+    Long createWowFactor(SaveCriteriaDto saveCriteriaDto);
 }

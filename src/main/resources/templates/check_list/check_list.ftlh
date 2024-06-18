@@ -86,7 +86,7 @@
                             <label for="wowFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="wowFactorDescription" aria-label=".form-select-sm example">
                                 <#list wowCriteria as wow>
-                                    <option value="${wow.description}">${wow.description}</option>
+                                    <option value="${wow.id}">${wow.description}</option>
                                 </#list>
                             </select>
                         </div>
@@ -144,9 +144,22 @@
 
             updatePercentage();
 
-            document.getElementById('wowFactorForm').addEventListener('submit', (event) => {
+            document.getElementById('wowFactorForm').addEventListener('submit', async (event) => {
+                let object = {
+                    criteriaId: document.getElementById('wowFactorDescription').value,
+                    value: 0,
+                    checkListId: ${checkList.id},
+                    maxValue: 0
+                }
+                await fetch('/api/checklist/criteria/create/wow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                })
                 event.preventDefault();
-                const description = document.getElementById('wowFactorDescription').value;
+                const description = document.getElementById('wowFactorDescription').textContent;
 
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
