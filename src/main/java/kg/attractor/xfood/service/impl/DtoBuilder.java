@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
+import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
@@ -16,6 +17,8 @@ import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
@@ -253,6 +256,15 @@ public class DtoBuilder {
 				.pizzeriaId(model.getPizzeria().getId())
 				.endTime(model.getEndTime())
 				.startTime(model.getStartTime())
+				.build();
+	}
+
+	protected OpportunityDto buildOpportunityDto (Opportunity model) {
+		return OpportunityDto.builder()
+				.id(model.getId())
+				.date(model.getDate())
+				.startTime(model.getStartTime())
+				.endTime((model.getEndTime()))
 				.build();
 	}
 
