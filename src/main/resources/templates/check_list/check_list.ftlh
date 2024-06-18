@@ -30,7 +30,7 @@
                             <td class="text-center">${criteria.zone}</td>
                             <td>${criteria.description}</td>
                             <td class="text-center">${criteria.maxValue}</td>
-                            <td class="text-center rounded-3 d-flex">
+                            <td class="text-center">
                                 <input type="number" class="text-center form-control score-input" min="0" max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}" aria-valuemax="${criteria.maxValue}">
                             </td>
                             <#assign maxSum = maxSum + criteria.maxValue>
@@ -39,7 +39,7 @@
                                 <td class="text-center bg-danger">${criteria.section}</td>
                                 <td class="bg-danger">${criteria.description}</td>
                                 <td class="bg-danger"></td>
-                                <td class="text-center bg-danger rounded-3 d-flex">
+                                <td class="text-center bg-danger d-flex">
                                     <input type="number" class="text-center form-control score-input" value="${criteria.value}" id="${criteria.id}">
                                     <button id="deleteCritFactor">delete</button>
                                 </td>
@@ -47,9 +47,11 @@
                                 <td class="text-center bg-success">${criteria.section}</td>
                                 <td class="bg-success">${criteria.description}</td>
                                 <td class="bg-success"></td>
-                                <td class="text-center bg-success rounded-3 d-flex">
-                                    <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}">
-                                    <button class="btn btn-danger ms-2 delete-factor" data-id="${criteria.id}">Delete</button>
+                                <td class="text-center bg-success">
+                                    <div class="d-flex">
+                                        <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}" />
+                                        <button class="btn btn-danger ms-2 delete-factor" data-id="${criteria.id}">Delete</button>
+                                    </div>
                                 </td>
                             </#if>
                         </#if>
@@ -145,7 +147,7 @@
 
             updatePercentage();
 
-            document.getElementById('wowFactorForm').addEventListener('submit', async (event) => {
+            document.getElementById('wowFactorForm').addEventListener('submit', async () => {
                 let object = {
                     criteriaId: document.getElementById('wowFactorDescription').value,
                     value: 0,
@@ -167,7 +169,7 @@
                 const row = button.closest('tr');
                 const criteriaId = button.getAttribute('data-id');
 
-                fetch(`/api/checklist/criteria/delete/wow/` + criteriaId + `?checkListId=` + ${checkList.id}, {
+                fetch(`/api/checklist/criteria/wow/delete/` + criteriaId + `?checkListId=` + ${checkList.id}, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
