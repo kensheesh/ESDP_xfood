@@ -2,10 +2,10 @@ package kg.attractor.xfood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -13,6 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "opportunities")
 public class Opportunity {
     @Id
@@ -27,7 +30,7 @@ public class Opportunity {
 
     @NotNull
     @Column(name = "date", nullable = false)
-    private Instant date;
+    private LocalDateTime date;
 
     @Column(name = "start_time")
     private LocalTime startTime;

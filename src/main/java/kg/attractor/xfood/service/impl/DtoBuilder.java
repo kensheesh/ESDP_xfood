@@ -1,12 +1,12 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.LocationDto;
-import kg.attractor.xfood.dto.PizzeriaDto;
-import kg.attractor.xfood.dto.WorkScheduleDto;
+import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -88,6 +88,15 @@ public class DtoBuilder {
 				.date(model.getDate())
 				.startTime(model.getStartTime())
 				.endTime(model.getEndTime())
+				.build();
+	}
+
+	protected OpportunityDto buildOpportunityDto (Opportunity model) {
+		return OpportunityDto.builder()
+				.id(model.getId())
+				.date(model.getDate())
+				.startTime(model.getStartTime())
+				.endTime((model.getEndTime()))
 				.build();
 	}
 }
