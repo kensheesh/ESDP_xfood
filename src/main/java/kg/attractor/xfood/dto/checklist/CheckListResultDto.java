@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class CheckListResultDto {
     private Long id;
+    private String uuidLink;
+    private String feedback;
     private List<CriteriaExpertShowDto> criteria;
     private WorkScheduleDto workSchedule;
 }
