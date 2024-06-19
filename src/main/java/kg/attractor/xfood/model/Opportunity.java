@@ -13,8 +13,8 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "opportunities")
 public class Opportunity {
     @Id

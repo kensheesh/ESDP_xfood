@@ -15,7 +15,7 @@
 
     <body>
     <header>
-        <nav class="navbar navbar-expand fw-medium bg-white border-bottom ">
+        <nav class="navbar navbar-expand fw-medium bg-white border-bottom " id="navbar">
             <div class="container">
                 <a class="navbar-brand" href="#">XFOOD</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
