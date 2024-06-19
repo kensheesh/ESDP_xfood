@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -73,9 +72,9 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
                 shift.setId(schedule.get().getId());
                 shift.setDate(dayOfWeek);
                 shift.setWorkDay(true);
-                shift.setStartTime(schedule.get().getStartTime());
-                shift.setEndTime(schedule.get().getEndTime());
-                log.info("Shift: " + shift);
+//                shift.setStartTime(schedule.get().getStartTime());
+//                shift.setEndTime(schedule.get().getEndTime());
+//                log.info("Shift: " + shift);
             } else {
                 shift.setDate(dayOfWeek);
                 shift.setWorkDay(false);
