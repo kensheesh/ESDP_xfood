@@ -28,17 +28,35 @@
 
         .bg-danger, .bg-success {
             color: white;
+            font-weight: bold;
+            padding: 0.75rem;
+        }
+
+        .bg-danger {
+            background-color: #dc3545;
+        }
+
+        .bg-success {
+            background-color: #28a745;
         }
 
         .delete-factor {
             background-color: transparent;
             border: none;
-            color: red;
+            color: #dc3545;
             cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
         }
 
         .delete-factor:hover {
             text-decoration: underline;
+        }
+
+        .form-control {
+            width: auto;
+            display: inline-block;
+            margin-right: 0.5rem;
         }
     </style>
 
@@ -64,7 +82,7 @@
                         <#if criteria.maxValue?? && criteria.maxValue gt 0>
                             <td class="text-center">${criteria.zone}</td>
                             <td>${criteria.description}</td>
-                            <td class="text-center">${criteria.maxValue}</td>
+                            <td class="text-center border">${criteria.maxValue}</td>
                             <td class="text-center">
                                 <input type="number" class="text-center form-control score-input" min="0" max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}" aria-valuemax="${criteria.maxValue}">
                             </td>
@@ -74,17 +92,17 @@
                                 <td class="text-center bg-danger">${criteria.section}</td>
                                 <td class="bg-danger">${criteria.description}</td>
                                 <td class="bg-danger"></td>
-                                <td class="text-center bg-danger d-flex">
+                                <td class="text-center bg-danger d-flex align-items-center">
                                     <input type="number" class="text-center form-control score-input" value="${criteria.value}" id="${criteria.id}">
-                                    <button class="delete-factor" data-id="${criteria.id}">Delete</button>
+                                    <button class="delete-factor" data-id="${criteria.id}">&times;</button>
                                 </td>
                             <#elseif criteria.section == 'WOW фактор'>
                                 <td class="text-center bg-success">${criteria.section}</td>
                                 <td class="bg-success">${criteria.description}</td>
                                 <td class="bg-success"></td>
-                                <td class="text-center bg-success d-flex">
+                                <td class="text-center bg-success d-flex align-items-center align-items-stretch">
                                     <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}">
-                                    <button class="delete-factor" data-id="${criteria.id}">Delete</button>
+                                    <button class="delete-factor" data-id="${criteria.id}">&times;</button>
                                 </td>
                             </#if>
                         </#if>
@@ -105,7 +123,7 @@
         </div>
         <div class="text-end mb-5 mt-2">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить wow-фактор</button>
-            <button class="btn btn-danger">Добавить критический фактор</button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический фактор</button>
             <button id="calculateButton" class="btn btn-warning">Сохранить</button>
         </div>
     </main>
@@ -133,9 +151,38 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="critFactorModal" tabindex="-1" aria-labelledby="critwowFactorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wowFactorModalLabel">Добавить критический фактор</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="wowFactorForm">
+                        <div class="mb-3">
+                            <label for="critFactorDescription" class="form-label">Описание</label>
+                            <select class="form-select form-select-sm" id="critFactorDescription" aria-label=".form-select-sm example">
+                                <#list wowCriteria as wow>
+                                    <option value="${wow.id}">${wow.description}</option>
+                                </#list>
+                                <option value="other">Другой</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="otherDescriptionDiv" style="display: none;">
+                            <label for="otherDescription" class="form-label">Введите описание</label>
+                            <input type="text" class="form-control" id="otherDescription" name="otherDescription" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('.score-input');
             const maxSum = ${maxSum};
             const percentageDisplay = document.getElementById('percentageResult');
             const calculateButton = document.getElementById('calculateButton');
@@ -143,7 +190,7 @@
 
             function updatePercentage() {
                 let totalScore = 0;
-                inputs.forEach(input => {
+                document.querySelectorAll('.score-input').forEach(input => {
                     totalScore += parseFloat(input.value) || 0;
                 });
                 const percentage = (totalScore / maxSum) * 100;
@@ -152,7 +199,7 @@
 
             async function saveScores() {
                 criteria = [];
-                inputs.forEach(input => {
+                document.querySelectorAll('.score-input').forEach(input => {
                     let scores = {
                         criteriaId: input.id,
                         value: input.value,
@@ -183,14 +230,15 @@
                     }
                 }).then(response => {
                     if (response.ok) {
-                        window.location.reload()
+                        row.remove();
+                        updatePercentage();
                     } else {
                         console.error('Ошибка при удалении фактора');
                     }
                 });
             }
 
-            inputs.forEach(input => {
+            document.querySelectorAll('.score-input').forEach(input => {
                 input.addEventListener('input', updatePercentage);
             });
 
@@ -219,10 +267,37 @@
 
                 const newCriteria = await response.json();
 
-                if(newCriteria.criteria !== undefined) {
-                    await saveScores()
-                    window.location.reload()
-                    window.location.reload()
+                if (newCriteria.criteria !== undefined) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                    <td class="text-center bg-success">WOW фактор</td>
+                    <td class="bg-success">` + newCriteria.criteria + `</td>
+                    <td class="bg-success"></td>
+                    <td class="text-center bg-success d-flex">
+                        <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
+                        <button class="delete-factor" data-id="` + newCriteria.id + `">Delete</button>
+                    </td>
+                `;
+
+                    document.getElementById('mainTableBody').appendChild(newRow);
+
+                    const newInput = newRow.querySelector('.score-input');
+                    newInput.addEventListener('input', updatePercentage);
+
+                    const newDeleteButton = newRow.querySelector('.delete-factor');
+                    newDeleteButton.addEventListener('click', deleteFactor);
+
+                    updatePercentage();
+                }
+            });
+
+            document.getElementById('critFactorDescription').addEventListener('change', function() {
+                let selectedValue = this.value;
+                let otherDescriptionDiv = document.getElementById('otherDescriptionDiv');
+                if (selectedValue === 'other') {
+                    otherDescriptionDiv.style.display = 'block'; // Показываем поле ввода
+                } else {
+                    otherDescriptionDiv.style.display = 'none'; // Скрываем поле ввода
                 }
             });
 
@@ -231,5 +306,6 @@
             });
         });
     </script>
+
 
 </@main.layout>
