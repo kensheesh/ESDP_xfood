@@ -19,13 +19,13 @@ import java.util.List;
 public class WorkScheduleController {
     private final WorkScheduleServiceImpl workScheduleService;
     
-    @GetMapping("pizzeria/{id}")
+   /* @GetMapping("pizzeria/{id}")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public ResponseEntity<List<WeeklyScheduleShowDto>> getManagersSchedules (
             @PathVariable (name = "id") Long pizzeriaId
     ) {
         List<WeeklyScheduleShowDto> dtos = workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId);
         return ResponseEntity.ok(dtos);
-    }
+    }*/
 
 }

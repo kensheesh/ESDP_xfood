@@ -46,7 +46,7 @@ public String create (@RequestParam(name = "startTime", required = true) LocalDa
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")
-    public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
+    public String create (CheckListSupervisorCreateDto createDto) {
        CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
         checkListService.bindChecklistWithCriterion(checklistDto );
         return "redirect:/supervisor/weekly";

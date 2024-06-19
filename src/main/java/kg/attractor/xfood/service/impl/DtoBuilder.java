@@ -251,17 +251,17 @@ public class DtoBuilder {
 	protected WorkScheduleSupervisorShowDto buildWorkScheduleShowDto(WorkSchedule model) {
 		return WorkScheduleSupervisorShowDto.builder()
 				.pizzeriaId(model.getPizzeria().getId())
-//				.endTime(model.getEndTime())
-//				.startTime(model.getStartTime())
+				.endTime(model.getEndTime().toLocalTime())
+				.startTime(model.getStartTime().toLocalTime())
 				.build();
 	}
 
 	protected OpportunityDto buildOpportunityDto (Opportunity model) {
 		return OpportunityDto.builder()
 				.id(model.getId())
-				.date(model.getDate())
-				.startTime(model.getStartTime())
-				.endTime((model.getEndTime()))
+				//.date(model.getDate())
+				//.startTime(model.getStartTime())
+				//.endTime((model.getEndTime()))
 				.build();
 	}
 

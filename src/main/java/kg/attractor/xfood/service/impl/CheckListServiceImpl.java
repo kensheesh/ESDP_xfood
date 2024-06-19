@@ -80,12 +80,15 @@ public class CheckListServiceImpl implements CheckListService {
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
 
-        Date date = new Date();
-        if (createDto.getManagerStartTime().getDayOfWeek()!=createDto.getManagerEndTime().getDayOfWeek()) {
-            date = Date.from(createDto.getManagerEndTime().atZone(ZoneId.systemDefault()).toInstant());
-        }
-        date = Date.from(createDto.getManagerStartTime().atZone(ZoneId.systemDefault()).toInstant());
+        LocalDate startDate = createDto.getManagerStartTime().toLocalDate();
+        LocalDate endDate = createDto.getManagerEndTime().toLocalDate();
 
+        Date date;
+        if (!startDate.equals(endDate)) {
+            date = Date.from(createDto.getManagerEndTime().atZone(ZoneId.systemDefault()).toInstant());
+        } else {
+            date = Date.from(createDto.getManagerStartTime().atZone(ZoneId.systemDefault()).toInstant());
+        }
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
                 .date(date)

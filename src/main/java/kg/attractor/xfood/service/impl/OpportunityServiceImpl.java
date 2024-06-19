@@ -60,7 +60,7 @@ public class OpportunityServiceImpl implements OpportunityService {
 
     @Override
     public Long save(Opportunity opportunity) {
-       Long id =  opportunityRepository.save(opportunity).getId();
+        Long id =  opportunityRepository.save(opportunity).getId();
         log.info("opportunity saved {}", opportunity);
         return id;
     }

@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface WorkScheduleRepository extends JpaRepository<WorkSchedule, Long> {
   
-    List<WorkSchedule> findByPizzeria_IdAndDateBetween(Long id, LocalDateTime dateStart, LocalDateTime dateEnd);
+  //  List<WorkSchedule> findByPizzeria_IdAndDateBetween(Long id, LocalDateTime dateStart, LocalDateTime dateEnd);
    
-    Optional<WorkSchedule> findByManagerAndDate(Manager manager, LocalDateTime date);
+   // Optional<WorkSchedule> findByManagerAndDate(Manager manager, LocalDateTime date);
 
     Optional<WorkSchedule> findByManager_IdAndStartTimeAndEndTime(Long managerId, LocalDateTime startTime, LocalDateTime endTime);
 }

@@ -10,8 +10,8 @@
     </style>
     <form action="/checks/create" method="post" id="create-form">
     <div class="container mt-3">
-        <input type="hidden" name="date" value="${managerStartTime}">
-        <input type="hidden" name="date" value="${managerEndTime}">
+        <input type="hidden" name="managerStartTime" value="${managerStartTime}">
+        <input type="hidden" name="managerEndTime" value="${managerEndTime}">
 
         <input type="hidden" name="managerId" value="${managerId}">
         <input type="hidden" name="expertId" value="${expertId}">

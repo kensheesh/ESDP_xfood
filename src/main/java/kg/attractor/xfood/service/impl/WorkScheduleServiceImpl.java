@@ -60,7 +60,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, startTime, endTime));
     }
 
-    public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, LocalDateTime monday) {
+   public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, LocalDateTime monday) {
         WeeklyScheduleShowDto dto = new WeeklyScheduleShowDto();
         List<DailyWorkScheduleShowDto> managerSchedules = new ArrayList<>();
 
