@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
@@ -20,6 +21,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final ChecklistCriteriaRepository checkListCriteriaRepository;
     private final CriteriaService criteriaService;
     private final CheckListService checkListService;
+    private final DtoBuilder dtoBuilder;
 
     @Override
     public void save(List<SaveCriteriaDto> saveCriteriaDto) {
@@ -31,15 +33,13 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
                 Long checkListId = checkListService.getModelCheckListById(c.getCheckListId()).getId();
                 Long criteriaId = criteriaService.getCriteriaById(c.getCriteriaId()).getId();
 
-                Optional<CheckListsCriteria> optional = checkListCriteriaRepository
-                        .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
+                CheckListsCriteria optional = isPresentOptional(criteriaId, checkListId);
 
-                if (optional.isPresent()) {
-                    CheckListsCriteria criteria = optional.get();
-                    criteria.setMaxValue(maxValue);
-                    criteria.setValue(c.getValue());
+                if (optional != null) {
+                    optional.setMaxValue(maxValue);
+                    optional.setValue(c.getValue());
 
-                    checkListCriteriaRepository.save(criteria);
+                    checkListCriteriaRepository.save(optional);
                 } else {
                     CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
                             .value(c.getValue())
@@ -65,18 +65,17 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     }
 
     @Override
-    public Long createWowFactor(SaveCriteriaDto saveCriteriaDto) {
-        Optional<CheckListsCriteria> optional = checkListCriteriaRepository
-                .findByCheckListIdAndCriteriaId(saveCriteriaDto.getCheckListId(), saveCriteriaDto.getCriteriaId());
-
-        if (optional.isEmpty()) {
-            CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+    public CheckListCriteriaDto createWowFactor(SaveCriteriaDto saveCriteriaDto) {
+        CheckListsCriteria checkListsCriteria = isPresentOptional(saveCriteriaDto.getCriteriaId(), saveCriteriaDto.getCheckListId());
+        if (checkListsCriteria == null) {
+            CheckListsCriteria criteria = CheckListsCriteria.builder()
                     .maxValue(0)
                     .checklist(checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId()))
                     .criteria(criteriaService.getCriteriaById(saveCriteriaDto.getCriteriaId()))
                     .value(saveCriteriaDto.getValue())
                     .build();
-            return checkListCriteriaRepository.save(checkListsCriteria).getId();
+            CheckListsCriteria model =  checkListCriteriaRepository.save(criteria);
+            return dtoBuilder.buildCheckListCriteriaDto(model);
         }
 
         throw new IllegalArgumentException("Такой wow-фактор уже существует! Вы можете добавить только один раз!");
@@ -84,8 +83,14 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
     @Override
     public void deleteWowFactor(Long id, Long checkListId) {
+        CheckListsCriteria checkListsCriteria = isPresentOptional(id, checkListId);
+        if(checkListsCriteria != null) checkListCriteriaRepository.delete(checkListsCriteria);
+    }
+
+    private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {
         Optional<CheckListsCriteria> optional = checkListCriteriaRepository
-                .findByCheckListIdAndCriteriaId(checkListId, id);
-        optional.ifPresent(checkListCriteriaRepository::delete);
+                .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
+
+        return optional.orElse(null);
     }
 }

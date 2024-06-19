@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
@@ -253,6 +254,15 @@ public class DtoBuilder {
 				.pizzeriaId(model.getPizzeria().getId())
 				.endTime(model.getEndTime())
 				.startTime(model.getStartTime())
+				.build();
+	}
+
+	protected CheckListCriteriaDto buildCheckListCriteriaDto(CheckListsCriteria model) {
+		return CheckListCriteriaDto.builder()
+				.criteria(model.getCriteria().getDescription())
+				.value(model.getValue())
+				.id(model.getId())
+				.maxValue(model.getMaxValue())
 				.build();
 	}
 

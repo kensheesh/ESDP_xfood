@@ -5,15 +5,50 @@
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
         }
+
+        .table-responsive {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #ffc107;
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+
+        .bg-danger, .bg-success {
+            color: white;
+        }
+
+        .delete-factor {
+            background-color: transparent;
+            border: none;
+            color: red;
+            cursor: pointer;
+        }
+
+        .delete-factor:hover {
+            text-decoration: underline;
+        }
     </style>
 
     <main class="container mt-4">
         <div class="table-responsive rounded p-3">
-            <table id="mainTable" class="table table-bordered border border-3 rounded-3">
+            <table id="mainTable" class="table rounded-3">
                 <thead>
                 <tr>
-                    <th colspan="3" class="bg-warning section-header text-center">${checkList.pizzeria.name}</th>
-                    <th colspan="1" class="text-center bg-warning section-header">${checkList.manager.name} ${checkList.manager.surname}</th>
+                    <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
+                    <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
                 </tr>
                 <tr>
                     <th class="text-center">Раздел</th>
@@ -41,17 +76,15 @@
                                 <td class="bg-danger"></td>
                                 <td class="text-center bg-danger d-flex">
                                     <input type="number" class="text-center form-control score-input" value="${criteria.value}" id="${criteria.id}">
-                                    <button id="deleteCritFactor">delete</button>
+                                    <button class="delete-factor" data-id="${criteria.id}">Delete</button>
                                 </td>
                             <#elseif criteria.section == 'WOW фактор'>
                                 <td class="text-center bg-success">${criteria.section}</td>
                                 <td class="bg-success">${criteria.description}</td>
                                 <td class="bg-success"></td>
-                                <td class="text-center bg-success">
-                                    <div class="d-flex">
-                                        <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}" />
-                                        <button class="btn btn-danger ms-2 delete-factor" data-id="${criteria.id}">Delete</button>
-                                    </div>
+                                <td class="text-center bg-success d-flex">
+                                    <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}">
+                                    <button class="delete-factor" data-id="${criteria.id}">Delete</button>
                                 </td>
                             </#if>
                         </#if>
@@ -70,7 +103,7 @@
                 </tfoot>
             </table>
         </div>
-        <div class="text-end mb-5">
+        <div class="text-end mb-5 mt-2">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить wow-фактор</button>
             <button class="btn btn-danger">Добавить критический фактор</button>
             <button id="calculateButton" class="btn btn-warning">Сохранить</button>
@@ -100,7 +133,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const inputs = document.querySelectorAll('.score-input');
@@ -118,7 +150,7 @@
                 percentageDisplay.textContent = Math.round(percentage) + '%';
             }
 
-            function saveScores() {
+            async function saveScores() {
                 criteria = [];
                 inputs.forEach(input => {
                     let scores = {
@@ -130,12 +162,31 @@
                     criteria.push(scores);
                 });
 
-                fetch('/criteria/save', {
+                await fetch('/criteria/save', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(criteria)
+                });
+            }
+
+            async function deleteFactor(event) {
+                const button = event.target;
+                const row = button.closest('tr');
+                const criteriaId = button.getAttribute('data-id');
+
+                await fetch(`/api/checklist/criteria/wow/delete/` + criteriaId + `?checkListId=` + ${checkList.id}, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload()
+                    } else {
+                        console.error('Ошибка при удалении фактора');
+                    }
                 });
             }
 
@@ -147,46 +198,38 @@
 
             updatePercentage();
 
-            document.getElementById('wowFactorForm').addEventListener('submit', async () => {
-                let object = {
-                    criteriaId: document.getElementById('wowFactorDescription').value,
+            document.getElementById('wowFactorForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const descriptionId = document.getElementById('wowFactorDescription').value;
+
+                const object = {
+                    criteriaId: descriptionId,
                     value: 0,
                     checkListId: ${checkList.id},
                     maxValue: 0
-                }
-                await fetch('/api/checklist/criteria/create/wow', {
+                };
+
+                const response = await fetch('/api/checklist/criteria/create/wow', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(object)
-                })
-
-            });
-
-            function deleteFactor(event) {
-                const button = event.target;
-                const row = button.closest('tr');
-                const criteriaId = button.getAttribute('data-id');
-
-                fetch(`/api/checklist/criteria/wow/delete/` + criteriaId + `?checkListId=` + ${checkList.id}, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        row.remove();
-                        updatePercentage();
-                    } else {
-                        console.error('Error deleting factor');
-                    }
                 });
-            }
+
+                const newCriteria = await response.json();
+
+                if(newCriteria.criteria !== undefined) {
+                    await saveScores()
+                    window.location.reload()
+                    window.location.reload()
+                }
+            });
 
             document.querySelectorAll('.delete-factor').forEach(button => {
                 button.addEventListener('click', deleteFactor);
             });
         });
     </script>
+
 </@main.layout>

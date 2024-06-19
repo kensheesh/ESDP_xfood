@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service;
 
+import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface CheckListCriteriaService {
 
     void save(CheckListsCriteria checkListsCriteria);
 
-    Long createWowFactor(SaveCriteriaDto saveCriteriaDto);
+    CheckListCriteriaDto createWowFactor(SaveCriteriaDto saveCriteriaDto);
 
     void deleteWowFactor(Long id, Long checkListId);
 }
