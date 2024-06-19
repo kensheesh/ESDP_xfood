@@ -18,6 +18,5 @@ public interface WorkScheduleRepository extends JpaRepository<WorkSchedule, Long
    
     Optional<WorkSchedule> findByManagerAndDate(Manager manager, LocalDateTime date);
 
-    @Query("SELECT ws FROM WorkSchedule ws WHERE ws.manager.id = :managerId AND EXTRACT(YEAR FROM ws.date) = :year AND EXTRACT(MONTH FROM ws.date) = :month AND EXTRACT(DAY FROM ws.date) = :day")
-    Optional<WorkSchedule> findByManagerIdAndDate(@Param("managerId") Long managerId, @Param("year") int year, @Param("month") int month, @Param("day") int day);
+    Optional<WorkSchedule> findByManager_IdAndStartTimeAndEndTime(Long managerId, LocalDateTime startTime, LocalDateTime endTime);
 }

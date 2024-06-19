@@ -49,15 +49,15 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
 
 
     @Override
-    public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime date) {
-        return workScheduleRepository.findByManagerIdAndDate(
-                        managerId, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
+    public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime startTime, LocalDateTime endTime) {
+        return workScheduleRepository.findByManager_IdAndStartTimeAndEndTime(
+                        managerId, startTime, endTime)
                 .orElseThrow(() -> new NotFoundException("No such work_schedule"));
     }
 
     @Override
-    public WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime date) {
-        return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, date));
+    public WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime startTime, LocalDateTime endTime) {
+        return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, startTime, endTime));
     }
 
     public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, LocalDateTime monday) {

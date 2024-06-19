@@ -15,7 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckListSupervisorCreateDto {
-    private LocalDateTime date;
+    private LocalDateTime managerStartTime;
+    private LocalDateTime managerEndTime;
+
     @NotNull
     private LocalTime startTime;
     @NotNull
