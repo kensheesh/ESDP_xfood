@@ -29,27 +29,27 @@ public class CheckListController {
 
 
 //    // ROLE: SUPERVISOR
-@GetMapping("/create")
-public String create (@RequestParam(name = "date", required = true) LocalDateTime date, @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
-    model.addAttribute("zones",zoneService.getZones() );
-    model.addAttribute("sections", sectionService.getSections());
-    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId, date));
-    model.addAttribute("types",checkTypeService.getTypes());
-    model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
-    model.addAttribute("date", date);
-    model.addAttribute("managerId", managerId);
-    model.addAttribute("expertId", expertId);
-    return "checklist/create";
-}
+//@GetMapping("/create")
+//public String create (@RequestParam(name = "date", required = true) LocalDateTime date, @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
+//    model.addAttribute("zones",zoneService.getZones() );
+//    model.addAttribute("sections", sectionService.getSections());
+//    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId, date));
+//    model.addAttribute("types",checkTypeService.getTypes());
+//    model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
+//    model.addAttribute("date", date);
+//    model.addAttribute("managerId", managerId);
+//    model.addAttribute("expertId", expertId);
+//    return "checklist/create";
+//}
 
 
     // ROLE: SUPERVISOR
-    @PostMapping("/create")
-    public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
-       CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
-        checkListService.bindChecklistWithCriterion(checklistDto );
-        return "redirect:/supervisor/weekly";
-    }
+//    @PostMapping("/create")
+//    public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
+//       CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
+//        checkListService.bindChecklistWithCriterion(checklistDto );
+//        return "redirect:/supervisor/weekly";
+//    }
 
 //    // ROLE: ADMIN
 //    @GetMapping ("/{id}/edit")

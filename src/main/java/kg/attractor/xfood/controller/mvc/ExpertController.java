@@ -24,18 +24,18 @@ public class ExpertController {
         return "TODO_sketches/checks";
     }
 
-    @GetMapping ("/opportunities")
-    public String getOpportunityMap (Model model) {
-        model.addAttribute("opportunities", opportunityService.getAllByExpert());
-        model.addAttribute("monday", LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()-1));
-        return "expert/opportunities";
-    }
-
-    @PostMapping("/opportunities/change")
-    public String changeOpportunities (OpportunityCreateWrapper opportunities, Authentication auth) {
-        opportunityService.changeExpertOpportunities(opportunities.getOpportunities(), auth);
-        return "redirect:/expert/opportunities";
-    }
+//    @GetMapping ("/opportunities")
+//    public String getOpportunityMap (Model model) {
+//        model.addAttribute("opportunities", opportunityService.getAllByExpert());
+//        model.addAttribute("monday", LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()-1));
+//        return "expert/opportunities";
+//    }
+//
+//    @PostMapping("/opportunities/change")
+//    public String changeOpportunities (OpportunityCreateWrapper opportunities, Authentication auth) {
+//        opportunityService.changeExpertOpportunities(opportunities.getOpportunities(), auth);
+//        return "redirect:/expert/opportunities";
+//    }
 
     @GetMapping("/profile")
     public String getProfile (Model model) {

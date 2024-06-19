@@ -10,13 +10,13 @@ import java.time.LocalTime;
 @Component
 public class ModelBuilder {
 
-    protected Opportunity buildNewOpportunity(OpportunityCreateDto dto, User user) {
-        return Opportunity.builder()
-                .id(dto.getId())
-                .user(user)
-                .date(dto.getDate())
-                .startTime(LocalTime.of(dto.getStartTimeHour(), dto.getStartTimeMinute()))
-                .endTime(LocalTime.of(dto.getEndTimeHour(), dto.getEndTimeMinute()))
-                .build();
-    }
+//    protected Opportunity buildNewOpportunity(OpportunityCreateDto dto, User user) {
+//        return Opportunity.builder()
+//                .id(dto.getId())
+//                .user(user)
+//                .date(dto.getDate())
+//                .startTime(LocalTime.of(dto.getStartTimeHour(), dto.getStartTimeMinute()))
+//                .endTime(LocalTime.of(dto.getEndTimeHour(), dto.getEndTimeMinute()))
+//                .build();
+//    }
 }

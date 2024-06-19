@@ -15,12 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/managers")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN', 'EXPERT')")
 public class ManagerController {
     private final ManagerService managerService;
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
+    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read', 'expert:read')")
     public ResponseEntity<List<ManagerDto>> getManagers() {
         List<ManagerDto> managers = managerService.getAllManagers();
         return ResponseEntity.ok(managers);

@@ -22,7 +22,7 @@ public interface CheckListService {
 
     CheckListResultDto getResult(Long checkListId);
 
-    CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto);
+//    CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto);
 
     void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto);
 

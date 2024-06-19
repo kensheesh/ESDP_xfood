@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface WorkScheduleService {
-    List<WeeklyScheduleShowDto> getWeeklySchedulesByPizzeriaId(long pizzeriaId);
-
-
-    WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime date);
-
-    WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime date);
+//    List<WeeklyScheduleShowDto> getWeeklySchedulesByPizzeriaId(long pizzeriaId);
+//
+//
+//    WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime date);
+//
+//    WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime date);
 }

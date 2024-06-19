@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public interface OpportunityService {
-    Map<String, List<OpportunityDto>> getAllByExpert();
+//    Map<String, List<OpportunityDto>> getAllByExpert();
 
     List<OpportunityShowDto> getOppotunitiesByDate(LocalDateTime date);
 
     Long save(Opportunity opportunity);
 
-    List<OpportunityDto> getAllByExpertAndDate(String expertEmail, LocalDate date);
+//    List<OpportunityDto> getAllByExpertAndDate(String expertEmail, LocalDate date);
 
-    void changeExpertOpportunities(List<OpportunityCreateDto> dtos, Authentication auth);
+//    void changeExpertOpportunities(List<OpportunityCreateDto> dtos, Authentication auth);
 }

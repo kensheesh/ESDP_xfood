@@ -134,7 +134,7 @@ public class DtoBuilder {
         checkListAnalyticsDto.setPizzeria(model.getWorkSchedule().getPizzeria());
         checkListAnalyticsDto.setManager(model.getWorkSchedule().getManager());
         checkListAnalyticsDto.setExpert(model.getOpportunity().getUser());
-//        checkListAnalyticsDto.setDate(model.getWorkSchedule().getDate().toLocalDate());
+        checkListAnalyticsDto.setDate(model.getWorkSchedule().getStartTime().toLocalDate());
 
         List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(model.getId());
         int maxvalue = 0;
@@ -256,13 +256,13 @@ public class DtoBuilder {
 				.build();
 	}
 
-	protected OpportunityDto buildOpportunityDto (Opportunity model) {
-		return OpportunityDto.builder()
-				.id(model.getId())
-				.date(model.getDate())
-				.startTime(model.getStartTime())
-				.endTime((model.getEndTime()))
-				.build();
-	}
+//	protected OpportunityDto buildOpportunityDto (Opportunity model) {
+//		return OpportunityDto.builder()
+//				.id(model.getId())
+//				.date(model.getDate())
+//				.startTime(model.getStartTime())
+//				.endTime((model.getEndTime()))
+//				.build();
+//	}
 
 }
