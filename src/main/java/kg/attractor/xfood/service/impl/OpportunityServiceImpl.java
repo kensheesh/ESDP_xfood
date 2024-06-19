@@ -74,7 +74,7 @@ public class OpportunityServiceImpl implements OpportunityService {
         dto.setUser(dtoBuilder.buildExpertShowDto(user));
         expertsOpportunities.forEach(e -> {
             DailyOpportunityShowDto shift = new DailyOpportunityShowDto();
-            shift.setDate(e.getDate());
+//            shift.setDate(e.getDate());
             shift.setStartTime(e.getStartTime());
             shift.setEndTime(e.getEndTime());
             shifts.add(shift);

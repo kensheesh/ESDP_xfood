@@ -10,7 +10,6 @@ import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
-import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.location.LocationShowDto;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
@@ -24,8 +23,6 @@ import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +36,14 @@ public class DtoBuilder {
 
     protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
         String uuid = model.getUuidLink();
-        LocalDate managerWorkDate = model.getWorkSchedule().getDate().toLocalDate();
+//        LocalDate managerWorkDate = model.getWorkSchedule().getDate().toLocalDate();
         String pizzeria = model.getWorkSchedule().getPizzeria().getName();
         ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 
         return ChecklistMiniExpertShowDto.builder()
                 .id(model.getId())
                 .status(model.getStatus())
-                .managerWorkDate(managerWorkDate)
+//                .managerWorkDate(managerWorkDate)
                 .manager(managerDto)
                 .pizzeria(pizzeria)
                 .uuid(uuid)
@@ -83,7 +80,7 @@ public class DtoBuilder {
 				.map(this::buildCriteriaShowDto)
 				.collect(toList());
 
-		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
+//		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
 		ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 		PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
 
@@ -92,7 +89,7 @@ public class DtoBuilder {
 				.pizzeria(pizzeriaDto)
 				.manager(managerDto)
 				.status(model.getStatus())
-				.managerWorkDate(managerWorkDate.toString())
+//				.managerWorkDate(managerWorkDate.toString())
 				.criteria(criteriaDtos)
 				.build();
 	}
@@ -137,7 +134,7 @@ public class DtoBuilder {
         checkListAnalyticsDto.setPizzeria(model.getWorkSchedule().getPizzeria());
         checkListAnalyticsDto.setManager(model.getWorkSchedule().getManager());
         checkListAnalyticsDto.setExpert(model.getOpportunity().getUser());
-        checkListAnalyticsDto.setDate(model.getWorkSchedule().getDate().toLocalDate());
+//        checkListAnalyticsDto.setDate(model.getWorkSchedule().getDate().toLocalDate());
 
         List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(model.getId());
         int maxvalue = 0;
@@ -176,9 +173,9 @@ public class DtoBuilder {
                 .id(model.getId())
                 .manager(this.buildManagerShowDto(model.getManager()))
                 .pizzeria(this.buildPizzeriaDto(model.getPizzeria()))
-                .date(model.getDate())
-                .startTime(model.getStartTime())
-                .endTime(model.getEndTime())
+//                .date(model.getDate())
+//                .startTime(model.getStartTime())
+//                .endTime(model.getEndTime())
                 .build();
     }
 
@@ -254,8 +251,8 @@ public class DtoBuilder {
 	protected WorkScheduleSupervisorShowDto buildWorkScheduleShowDto(WorkSchedule model) {
 		return WorkScheduleSupervisorShowDto.builder()
 				.pizzeriaId(model.getPizzeria().getId())
-				.endTime(model.getEndTime())
-				.startTime(model.getStartTime())
+//				.endTime(model.getEndTime())
+//				.startTime(model.getStartTime())
 				.build();
 	}
 

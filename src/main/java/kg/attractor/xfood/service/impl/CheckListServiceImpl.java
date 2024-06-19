@@ -72,15 +72,15 @@ public class CheckListServiceImpl implements CheckListService {
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
-        if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
-            throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
-        }
+//        if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
+//            throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
+//        }
         //TODO уточнить надо ли делать проверку по work_schedule, opportunity and type и если необходимо добавить
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
-                .date(createDto.getDate())
+//                .date(createDto.getDate())
                 .startTime(createDto.getStartTime())
                 .endTime(createDto.getEndTime())
                 .build();
@@ -156,15 +156,15 @@ public class CheckListServiceImpl implements CheckListService {
                     .filter(checkList -> checkList.getOpportunity().getUser().getId().equals(Long.parseLong(expertId)))
                     .collect(Collectors.toList());
         }
-        if (startDate != null && endDate != null) {
-            checkLists = checkLists.stream()
-                    .filter(checkList -> {
-                        LocalDate date = checkList.getWorkSchedule().getDate().toLocalDate();
-                        return (date.isEqual(startDate) || date.isAfter(startDate)) &&
-                                (date.isEqual(endDate) || date.isBefore(endDate));
-                    })
-                    .collect(Collectors.toList());
-        }
+//        if (startDate != null && endDate != null) {
+//            checkLists = checkLists.stream()
+////                    .filter(checkList -> {
+////                        LocalDate date = checkList.getWorkSchedule().getDate().toLocalDate();
+////                        return (date.isEqual(startDate) || date.isAfter(startDate)) &&
+////                                (date.isEqual(endDate) || date.isBefore(endDate));
+////                    })
+//                    .collect(Collectors.toList());
+//        }
         return checkLists.stream()
                 .map(dtoBuilder::buildCheckListAnalyticsDto)
                 .collect(Collectors.toList());
