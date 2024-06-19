@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface OpportunityService {
+    Map<String, List<OpportunityDto>> getAllByExpert();
 
     List<OpportunityShowDto> getOppotunitiesByDate(LocalDateTime date);
 

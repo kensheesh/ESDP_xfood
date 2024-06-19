@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.getByEmail(name)
 				.orElseThrow(() -> new NotFoundException("User not found"));
 	}
-}
+
 
     @Override
     public List<UserDto> getAllExperts() {
