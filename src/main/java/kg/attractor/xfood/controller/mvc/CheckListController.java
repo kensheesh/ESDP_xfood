@@ -64,7 +64,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
 
     // ROLE: EXPERT
     @GetMapping ("/{id}/check")
-    public String check (@PathVariable (name="id") Long checkListId, Model model) {
+    public String check (@PathVariable (name="id") String checkListId, Model model) {
         ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
         model.addAttribute("checkList", checkListDto);
 
@@ -105,7 +105,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
 
 
     @GetMapping ("/{id}/result")
-    public String getResult (@PathVariable (name = "id") Long checkListId, Model model) {
+    public String getResult (@PathVariable (name = "id") String checkListId, Model model) {
         model.addAttribute("checkList", checkListService.getResult(checkListId));
         return "checklist/result";
     }

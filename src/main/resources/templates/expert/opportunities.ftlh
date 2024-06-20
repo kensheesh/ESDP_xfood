@@ -496,7 +496,7 @@
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control" type="number" min="0" max="60" value="` + startTimeParts[1] + `"
+                                <input class="form-control" type="number" min="0" max="59" value="` + startTimeParts[1] + `"
                                     name="opportunities[` + i + `].startTimeMinute" required>
                                 <div class="col-auto input-group-text">
                                     —
@@ -506,7 +506,7 @@
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control rounded-end-4" type="number" min="0" max="60" value="` + endTimeParts[1] + `"
+                                <input class="form-control rounded-end-4" type="number" min="0" max="59" value="` + endTimeParts[1] + `"
                                     name="opportunities[` + i + `].endTimeMinute" required>
                             </div>
                         </div>

@@ -10,7 +10,7 @@
                             <div class="col">
                                 <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                     <div class="col">
-                                        <a href="/abilities" class="btn btn-light rounded-4 w-100 h-100 ">
+                                        <a href="/expert/opportunities" class="btn btn-light rounded-4 w-100 h-100 ">
                                             График
                                         </a>
                                     </div>

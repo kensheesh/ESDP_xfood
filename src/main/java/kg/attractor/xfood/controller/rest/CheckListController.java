@@ -13,7 +13,7 @@ public class CheckListController {
     private final CheckListService checkListService;
 
     @GetMapping("{id}")
-    public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") String id) {
         try {
             String uuidLink = checkListService.getResult(id).getUuidLink();
             return ResponseEntity.ok(uuidLink);
@@ -26,7 +26,7 @@ public class CheckListController {
 
 
     @PostMapping("post/{id}")
-    public ResponseEntity<?> postCheck(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<?> postCheck(@PathVariable(name = "id") String id) {
         try{
             return ResponseEntity.ok(checkListService.updateCheckStatusCheckList(id));
         } catch (IllegalArgumentException e) {

@@ -176,9 +176,10 @@ public class DtoBuilder {
                 .id(model.getId())
                 .manager(this.buildManagerShowDto(model.getManager()))
                 .pizzeria(this.buildPizzeriaDto(model.getPizzeria()))
-//                .date(model.getDate())
-//                .startTime(model.getStartTime())
-//                .endTime(model.getEndTime())
+				//TODO не уверена что правильно
+                .date(model.getStartTime())
+                .startTime(model.getStartTime().toLocalTime())
+                .endTime(model.getEndTime().toLocalTime())
                 .build();
     }
 

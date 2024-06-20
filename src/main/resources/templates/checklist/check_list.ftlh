@@ -66,7 +66,8 @@
             </table>
         </div>
         <div class="text-end">
-            <button id="calculateButton" class="btn btn-warning">Сохранить</button>
+        <#--    <button id="calculateButton" class="btn btn-warning">Сохранить</button>-->
+            <a href="/expert/checks" class="btn btn-primary"  id="calculateButton" tabindex="-1" role="button" >Сохранить </a>
         </div>
     </main>
 

@@ -95,15 +95,19 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public ChecklistShowDto getCheckListById(Long id) {
+    public ChecklistShowDto getCheckListById(String id) {
         CheckList checkList = getModelCheckListById(id);
         return dtoBuilder.buildChecklistShowDto(checkList);
     }
 
     @Override
+    public CheckList getModelCheckListById(String id) {
+        return checkListRepository.findByUuidLink(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by ID "+id));
+    }
+
+    @Override
     public CheckList getModelCheckListById(Long id) {
-        return checkListRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Чек-лист с ID:" + id + " не найден"));
+        return checkListRepository.findById(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by ID "+id));
     }
 
     @Override
@@ -121,7 +125,7 @@ public class CheckListServiceImpl implements CheckListService {
 
 
     @Override
-    public CheckListResultDto getResult(Long checkListId) {
+    public CheckListResultDto getResult(String checkListId) {
         CheckList checkList = getModelCheckListById(checkListId);
 
         if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
@@ -184,7 +188,7 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public ResponseEntity<?> updateCheckStatusCheckList(Long id) {
+    public ResponseEntity<?> updateCheckStatusCheckList(String id) {
         CheckList checkList = getModelCheckListById(id);
         if(checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");

@@ -10,8 +10,9 @@ import java.util.List;
 
 public interface CheckListService {
 
-    ChecklistShowDto getCheckListById(Long id);
+    ChecklistShowDto getCheckListById(String id);
 
+    CheckList getModelCheckListById(String id);
     CheckList getModelCheckListById(Long id);
 
     void save(CheckList checkList);
@@ -20,7 +21,7 @@ public interface CheckListService {
 
     List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status);
 
-    CheckListResultDto getResult(Long checkListId);
+    CheckListResultDto getResult(String checkListId);
 
     CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto);
 
@@ -30,5 +31,5 @@ public interface CheckListService {
 
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
-    ResponseEntity<?> updateCheckStatusCheckList(Long id);
+    ResponseEntity<?> updateCheckStatusCheckList(String id);
 }

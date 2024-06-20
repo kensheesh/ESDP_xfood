@@ -12,6 +12,8 @@ import java.util.Optional;
 
 public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 
+    Optional<CheckList> findByUuidLink(String uuid);
+
     @Query(value = """
             SELECT c
             FROM CheckList c
@@ -24,10 +26,10 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     @Query(value = """
             SELECT c
             FROM CheckList c
-            where c.id = ?1
+            where c.uuidLink = ?1
             and CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+    Optional<CheckList> findByIdAndStatus(String checkListId, Status status);
 
     @Query(value = """
 		    SELECT c
