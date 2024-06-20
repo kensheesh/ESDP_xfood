@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateWrapper;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,8 @@ public class ExpertController {
     }
 
     @PostMapping("/opportunities/change")
-    public String changeOpportunities (OpportunityCreateWrapper opportunities, Authentication auth) {
-        opportunityService.changeExpertOpportunities(opportunities.getOpportunities(), auth);
+    public String changeOpportunities (@Valid OpportunityCreateWrapper opportunities, Authentication auth) {
+        opportunityService.changeExpertOpportunities(opportunities, auth);
         return "redirect:/expert/opportunities";
     }
 

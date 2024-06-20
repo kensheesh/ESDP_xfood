@@ -29,7 +29,6 @@ public class Opportunity {
     
     @NotNull
     @Column(name = "date", nullable = false)
-    @Temporal(TemporalType.DATE)
     private LocalDate date;
     
     @Column(name = "start_time")

@@ -259,9 +259,9 @@ public class DtoBuilder {
 	protected OpportunityDto buildOpportunityDto (Opportunity model) {
 		return OpportunityDto.builder()
 				.id(model.getId())
-				//.date(model.getDate())
-				//.startTime(model.getStartTime())
-				//.endTime((model.getEndTime()))
+				.date(model.getDate())
+				.startTime(model.getStartTime())
+				.endTime((model.getEndTime()))
 				.build();
 	}
 

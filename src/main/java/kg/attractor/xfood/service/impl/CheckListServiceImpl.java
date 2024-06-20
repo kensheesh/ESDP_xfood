@@ -83,12 +83,14 @@ public class CheckListServiceImpl implements CheckListService {
         LocalDate startDate = createDto.getManagerStartTime().toLocalDate();
         LocalDate endDate = createDto.getManagerEndTime().toLocalDate();
 
-        Date date;
+        LocalDate date;
         if (!startDate.equals(endDate)) {
-            date = Date.from(createDto.getManagerEndTime().atZone(ZoneId.systemDefault()).toInstant());
+            date = createDto.getManagerEndTime().atZone(ZoneId.systemDefault()).toLocalDate();
         } else {
-            date = Date.from(createDto.getManagerStartTime().atZone(ZoneId.systemDefault()).toInstant());
+            date = createDto.getManagerStartTime().atZone(ZoneId.systemDefault()).toLocalDate();
         }
+
+
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
 //                .date(date)
