@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController("opportunityControllerRest")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
+@PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN', 'EXPERT')")
 @RequestMapping("/api")
 public class OpportunityController {
 
@@ -36,10 +36,10 @@ public class OpportunityController {
         return ResponseEntity.ok(dtos);
     }
 
-  /*  @GetMapping("/opportunities")
+    @GetMapping("/opportunities")
     public ResponseEntity<List<OpportunityDto>> getAllByExpertAndDate (@RequestParam (name = "d") LocalDate date) {
         var opportunities = opportunityService.getAllByExpertAndDate(AuthParams.getPrincipal().getUsername(), date);
         return ResponseEntity.ok(opportunities);
-    }*/
+    }
     
 }

@@ -27,7 +27,7 @@ public class CheckList {
     private WorkSchedule workSchedule;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "opportunity_id", nullable = false)
     private Opportunity opportunity;
 

@@ -1,14 +1,11 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.opportunity.DailyOpportunityShowDto;
-import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
+import kg.attractor.xfood.dto.opportunity.*;
 import kg.attractor.xfood.model.Opportunity;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import jakarta.transaction.Transactional;
 import kg.attractor.xfood.AuthParams;
-import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
-import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
@@ -84,21 +81,15 @@ public class OpportunityServiceImpl implements OpportunityService {
         String expertEmail = AuthParams.getPrincipal().getUsername();
 
         int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue();
-        LocalDateTime monday;
-        LocalDateTime sunday = LocalDate.now().plusDays(7 - dayOfWeek).atTime(23, 59);
-
-        if (dayOfWeek == 1) {
-            monday = LocalDate.now().atStartOfDay();
-        } else {
-            monday = LocalDate.now().minusDays(dayOfWeek - 1).atStartOfDay();
-        }
+        LocalDate monday = LocalDate.now().minusDays(dayOfWeek - 1);
+        LocalDate sunday = LocalDate.now().plusDays(7 - dayOfWeek);
 
         List<Opportunity> models = opportunityRepository.findAllByUserEmailAndDateBetween(expertEmail, monday, sunday);
 
         Map<String, List<OpportunityDto>> result = new TreeMap<>();
 
-        for (LocalDate date = monday.toLocalDate();
-             date.isBefore(sunday.toLocalDate()) || date.isEqual(sunday.toLocalDate());
+        for (LocalDate date = monday;
+             date.isBefore(sunday) || date.isEqual(sunday);
              date = date.plusDays(1)) {
             result.put(date.toString(), new ArrayList<>());
         }
@@ -108,14 +99,11 @@ public class OpportunityServiceImpl implements OpportunityService {
         );
 
         return result;
-        // TODO возможно не увидит графики понедельника 00:00 и воскресенья 23:59
     }
 
     @Override
     public List<OpportunityDto> getAllByExpertAndDate(String expertEmail, LocalDate date) {
-        return opportunityRepository.findAllByUserEmailAndDateBetween(
-                expertEmail, date.atStartOfDay(), date.atTime(23, 59)
-                )
+        return opportunityRepository.findAllByUserEmailAndDate(expertEmail, date)
                 .stream()
                 .map(dtoBuilder::buildOpportunityDto)
                 .toList();
@@ -123,28 +111,31 @@ public class OpportunityServiceImpl implements OpportunityService {
 
     @Override
     @Transactional
-    public void changeExpertOpportunities (List<OpportunityCreateDto> dtos, Authentication auth) {
+    public void changeExpertOpportunities (OpportunityCreateWrapper wrapper, Authentication auth) {
 
         User expert = userService.getByEmail(auth.getName());
 
-        List<Opportunity> opportunities = dtos.stream()
-                .map(dto -> modelBuilder.buildNewOpportunity(dto, expert))
-                .sorted(Comparator.comparing(Opportunity::getStartTime))
-                .toList();
+        opportunityRepository.deleteAllByUserEmailAndDate(expert.getEmail(), wrapper.getDate());
+        if (wrapper.getOpportunities() != null) {
+            List<Opportunity> opportunities = wrapper.getOpportunities().stream()
+                    .map(dto -> modelBuilder.buildNewOpportunity(dto, wrapper.getDate(), expert))
+                    .sorted(Comparator.comparing(Opportunity::getStartTime))
+                    .toList();
 
-        for (int i = 0; i < opportunities.size(); i++) {
-            if (opportunities.get(i).getStartTime().isAfter(opportunities.get(i).getEndTime())) {
-                throw new IllegalArgumentException("Некорректное время");
-            }
-
-            if (i > 0) {
-                if (opportunities.get(i-1).getEndTime().isAfter(opportunities.get(i).getStartTime())) {
-                    throw new ShiftIntersectionException("Смены не могут пересекаться");
+            for (int i = 0; i < opportunities.size(); i++) {
+                if (opportunities.get(i).getStartTime().isAfter(opportunities.get(i).getEndTime())) {
+                    throw new IllegalArgumentException("Некорректное время");
                 }
-            }
 
-            Opportunity opportunity = opportunities.get(i);
-            opportunityRepository.save(opportunity);
+                if (i > 0) {
+                    if (opportunities.get(i-1).getEndTime().isAfter(opportunities.get(i).getStartTime())) {
+                        throw new ShiftIntersectionException("Смены не могут пересекаться");
+                    }
+                }
+
+                Opportunity opportunity = opportunities.get(i);
+                opportunityRepository.save(opportunity);
+            }
         }
     }
 }

@@ -5,17 +5,17 @@ import kg.attractor.xfood.model.Opportunity;
 import kg.attractor.xfood.model.User;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Component
 public class ModelBuilder {
 
-    protected Opportunity buildNewOpportunity(OpportunityCreateDto dto, User user) {
+    protected Opportunity buildNewOpportunity(OpportunityCreateDto dto, LocalDate date, User user) {
         return Opportunity.builder()
                 .id(dto.getId())
                 .user(user)
-                .date(Date.valueOf(dto.getDate()))
+                .date(date)
                 .startTime(LocalTime.of(dto.getStartTimeHour(), dto.getStartTimeMinute()))
                 .endTime(LocalTime.of(dto.getEndTimeHour(), dto.getEndTimeMinute()))
                 .build();

@@ -467,6 +467,7 @@
                 <div class="col">
                     <button type="button" id="add-shift-btn" class="btn btn-light rounded-4" onclick="addInput('` + dateString + `')">Добавить период</button>
                 </div>
+                <input type="hidden" name="date" value="` + dateString + `">
             `;
 
             let workShiftsModalLabel = document.getElementById('workShiftModalLabel')
@@ -476,7 +477,7 @@
             addShiftBtn.addEventListener('click', addInput)
 
             try {
-                let request = await fetch('/api/opportunities?d=' + new Date(event.relatedTarget.id).toLocaleDateString())
+                let request = await fetch('/api/opportunities?d=' + event.relatedTarget.id)
                 if (request.ok) {
                     let opportunities = await request.json();
                     for (let i = 0; i < opportunities.length; i++) {
@@ -488,26 +489,25 @@
 
                         input.innerHTML=`<div class="col-auto">
                             <input type="hidden" name="opportunities[` + i + `].id" value="`+ opportunities[i].id +`">
-                            <input type="hidden" name="opportunities[` + i + `].date" value="` + opportunities[i].date + `">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
                                     type="number" min="0" max="23" value="` + startTimeParts[0] + `"
-                                    name="opportunities[` + i + `].startTimeHour">
+                                    name="opportunities[` + i + `].startTimeHour" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control" type="number" min="0" max="60" value="` + startTimeParts[1] + `"
-                                    name="opportunities[` + i + `].startTimeMinute">
+                                    name="opportunities[` + i + `].startTimeMinute" required>
                                 <div class="col-auto input-group-text">
                                     —
                                 </div>
                                 <input class="form-control" type="number" min="0" max="23" value="` + endTimeParts[0] + `"
-                                    name="opportunities[` + i + `].endTimeHour">
+                                    name="opportunities[` + i + `].endTimeHour" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control rounded-end-4" type="number" min="0" max="60" value="` + endTimeParts[1] + `"
-                                    name="opportunities[` + i + `].endTimeMinute">
+                                    name="opportunities[` + i + `].endTimeMinute" required>
                             </div>
                         </div>
                         <div class="col-auto px-0">
@@ -558,22 +558,25 @@
                 input.classList.add('row', 'row-cols-2' )
                 window.lastInput++;
                 input.innerHTML=`<div class="col-auto">
-                            <input type="hidden" name="opportunities[` + window.lastInput + `].date" value="` + date + `">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
-                                    type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].startTimeHour">
+                                    type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].startTimeHour"
+                                    required>
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].startTimeMinute">
+                                <input class="form-control" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].startTimeMinute"
+                                    required>
                                 <div class="col-auto input-group-text">
                                     —
                                 </div>
-                                <input class="form-control" type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].endTimeHour">
+                                <input class="form-control" type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].endTimeHour"
+                                    required>
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control rounded-end-4" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].endTimeMinute">
+                                <input class="form-control rounded-end-4" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].endTimeMinute"
+                                    required>
                             </div>
                         </div>
                         <div class="col-auto px-0">
