@@ -200,7 +200,9 @@ public class CheckListServiceImpl implements CheckListService {
     public void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto) {
         CheckList checkList = checkListRepository.findCheckListByWorkSchedule_IdAndAndOpportunity_Id(checklistDto.getWorkScheduleId(), checklistDto.getOpportunityId());
         log.info(checkList.toString());
-
+        String uuid = UUID.randomUUID().toString();
+        checkList.setUuidLink(uuid);
+        checkListRepository.save(checkList);
         for (CriteriaMaxValueDto criteriaMaxValueDto : checklistDto.getCriteriaMaxValueDtoList()) {
             CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
                     .checklist(checkList)

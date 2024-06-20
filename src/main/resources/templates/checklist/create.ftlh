@@ -16,7 +16,7 @@
 
         <div class="row bg-white rounded shadow-sm align-items-end">
             <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
-                Не правильно! Сумма не соответствует требуемому значению.
+                Сумма не соответствует требуемому значению.
             </div>
             <div class="col-md-3">
                 <div class="my-2">
@@ -70,7 +70,7 @@
             <div class="input-group my-4">
                 <button type="button" class="search_btn btn btn-white shadow-sm border w-100 disabled" id="findCriteria"  data-bs-toggle="modal" data-bs-target="#searchModal">
                         <span class="d-flex justify-content-start align-items-center">
-                            <span class="me-auto">Найти критерию...</span>
+                            <span class="me-auto">Найти критерий...</span>
                                 <i class="bi bi-search"></i>
                         </span>
                 </button>

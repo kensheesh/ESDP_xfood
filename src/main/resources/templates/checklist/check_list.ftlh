@@ -19,7 +19,8 @@
                     <th class="text-center">Раздел</th>
                     <th class="text-center">Что проверить</th>
                     <th class="text-center">Оценка</th>
-                    <th class="text-center">${checkList.managerWorkDate}</th>
+                    <th class="text-center">${checkList.managerWorkStartDate}</th>
+                    <th class="text-center">${checkList.managerWorkEndDate}</th>
                 </tr>
                 </thead>
                 <tbody>
