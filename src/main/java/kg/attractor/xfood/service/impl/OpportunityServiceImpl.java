@@ -10,9 +10,6 @@ import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
-import kg.attractor.xfood.model.Opportunity;
-import kg.attractor.xfood.model.User;
-import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
