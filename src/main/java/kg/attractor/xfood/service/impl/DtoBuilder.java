@@ -23,6 +23,8 @@ import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,15 +37,16 @@ public class DtoBuilder {
 
 
     protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String uuid = model.getUuidLink();
-//        LocalDate managerWorkDate = model.getWorkSchedule().getDate().toLocalDate();
         String pizzeria = model.getWorkSchedule().getPizzeria().getName();
         ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 
         return ChecklistMiniExpertShowDto.builder()
                 .id(model.getId())
                 .status(model.getStatus())
-//                .managerWorkDate(managerWorkDate)
+				.managerWorkStartDate(model.getWorkSchedule().getStartTime().format(formatter))
+				.managerWorkEndDate(model.getWorkSchedule().getEndTime().format(formatter))
                 .manager(managerDto)
                 .pizzeria(pizzeria)
                 .uuid(uuid)
@@ -76,11 +79,10 @@ public class DtoBuilder {
 
 
 	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
 				.map(this::buildCriteriaShowDto)
 				.collect(toList());
-
-//		LocalDateTime managerWorkDate = model.getWorkSchedule().getDate();
 		ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 		PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
 
@@ -89,7 +91,8 @@ public class DtoBuilder {
 				.pizzeria(pizzeriaDto)
 				.manager(managerDto)
 				.status(model.getStatus())
-//				.managerWorkDate(managerWorkDate.toString())
+				.managerWorkStartDate(model.getWorkSchedule().getStartTime().format(formatter))
+				.managerWorkEndDate(model.getWorkSchedule().getEndTime().format(formatter))
 				.criteria(criteriaDtos)
 				.build();
 	}
@@ -134,7 +137,7 @@ public class DtoBuilder {
         checkListAnalyticsDto.setPizzeria(model.getWorkSchedule().getPizzeria());
         checkListAnalyticsDto.setManager(model.getWorkSchedule().getManager());
         checkListAnalyticsDto.setExpert(model.getOpportunity().getUser());
-//        checkListAnalyticsDto.setDate(model.getWorkSchedule().getDate().toLocalDate());
+        checkListAnalyticsDto.setDate(model.getWorkSchedule().getStartTime().toLocalDate());
 
         List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(model.getId());
         int maxvalue = 0;

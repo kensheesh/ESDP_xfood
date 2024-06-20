@@ -41,13 +41,8 @@ public class CheckListServiceImpl implements CheckListService {
     private final WorkScheduleService workScheduleService;
     private final DtoBuilder dtoBuilder;
     private final UserService userService;
-    private final OpportunityService opportunityService;
-    private final CheckTypeService checkTypeService;
     private final CriteriaService criteriaService;
-    private final CriteriaTypeService criteriaTypeService;
-    //	private final CheckListCriteriaService checkListsCriteriaService;
     private final CriteriaPizzeriaService criteriaPizzeriaService;
-    private final EntityManager entityManager;
     private final OpportunityRepository opportunityRepository;
     private final CheckListRepository checkListRepository;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
@@ -165,15 +160,16 @@ public class CheckListServiceImpl implements CheckListService {
                     .filter(checkList -> checkList.getOpportunity().getUser().getId().equals(Long.parseLong(expertId)))
                     .collect(Collectors.toList());
         }
-//        if (startDate != null && endDate != null) {
-//            checkLists = checkLists.stream()
-////                    .filter(checkList -> {
-////                        LocalDate date = checkList.getWorkSchedule().getDate().toLocalDate();
-////                        return (date.isEqual(startDate) || date.isAfter(startDate)) &&
-////                                (date.isEqual(endDate) || date.isBefore(endDate));
-////                    })
-//                    .collect(Collectors.toList());
-//        }
+        if (startDate != null && endDate != null) {
+            checkLists = checkLists.stream()
+                    .filter(checkList -> {
+                        LocalDate startTime = checkList.getWorkSchedule().getStartTime().toLocalDate();
+                        LocalDate endTime = checkList.getWorkSchedule().getEndTime().toLocalDate();
+                        return (startTime.isEqual(startDate) || startTime.isAfter(startDate)) &&
+                                (endTime.isEqual(endDate) || endTime.isBefore(endDate));
+                    })
+                    .collect(Collectors.toList());
+        }
         return checkLists.stream()
                 .map(dtoBuilder::buildCheckListAnalyticsDto)
                 .collect(Collectors.toList());

@@ -20,6 +20,7 @@ public class ChecklistShowDto {
 	private Status status;
 	private PizzeriaDto pizzeria;
 	private ManagerShowDto manager;
-	private String managerWorkDate;
+	private String managerWorkStartDate;
+	private String managerWorkEndDate;
 	private List<CriteriaExpertShowDto> criteria;
 }

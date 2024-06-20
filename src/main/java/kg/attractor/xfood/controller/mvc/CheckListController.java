@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -69,7 +68,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
         ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
         model.addAttribute("checkList", checkListDto);
 
-        return "check_list/check_list";
+        return "checklist/check_list";
     }
 
     // ROLE: EXPERT

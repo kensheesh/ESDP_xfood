@@ -46,7 +46,7 @@ function displayChecks(checks, status) {
                                 <span>Мндр: ${c.manager.name} ${c.manager.surname}</span>
                             </div>
                             <div class="col-3 d-flex align-items-center">
-                                <span>${c.managerWorkDate}</span>
+                                <span>${c.managerWorkStartDate}</span> -  <span>${c.managerWorkEndDate}</span>
                             </div>
                         </div>
                     </div>
