@@ -29,7 +29,7 @@ public class OpportunityController {
     @GetMapping("/opportunities/bydate/{date}")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public ResponseEntity<List<OpportunityShowDto>> getOpportunitiesByDate (
-            @PathVariable(name = "date") LocalDateTime date
+            @PathVariable(name = "date") LocalDate date
     ) {
         List<OpportunityShowDto> dtos = opportunityService.getOppotunitiesByDate(date);
 

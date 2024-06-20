@@ -17,7 +17,7 @@ import java.util.Map;
 public interface OpportunityService {
     Map<String, List<OpportunityDto>> getAllByExpert();
 
-    List<OpportunityShowDto> getOppotunitiesByDate(LocalDateTime date);
+    List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date);
 
     Long save(Opportunity opportunity);
 

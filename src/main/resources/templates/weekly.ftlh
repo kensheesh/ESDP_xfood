@@ -58,7 +58,6 @@
                 </div>
                 <div class="modal-footer">
                     <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
-                    <button type="button" class="btn btn-primary rounded-4">Создать</button>
                 </div>
             </div>
         </div>

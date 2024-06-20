@@ -71,7 +71,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
             if (schedule.isPresent()){
                 shift.setId(schedule.get().getId());
                 shift.setWorkDay(true);
-                //ToDo добавить форматтеры дат
+                //ToDo добавить форматтеры дат, но тогда вопрос как передавать дату, для выборки возможностей экспертов, при нажатии на дату графика менеджера
                 shift.setDate(schedule.get().getStartTime().toLocalDate().toString());
                 shift.setStartTime(schedule.get().getStartTime().toLocalTime().toString());
                 shift.setEndTime(schedule.get().getEndTime().toLocalTime().toString());

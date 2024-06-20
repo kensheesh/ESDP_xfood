@@ -40,8 +40,8 @@ public class OpportunityServiceImpl implements OpportunityService {
     private final UserServiceImpl userService;
 
     @Override
-    public List<OpportunityShowDto> getOppotunitiesByDate(LocalDateTime date) {
-        List<Opportunity> opportunities = opportunityRepository.findByDateOrderByUser_SurnameAsc(date.toLocalDate());
+    public List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date) {
+        List<Opportunity> opportunities = opportunityRepository.findByDateOrderByUser_SurnameAsc(date);
 
         Set<User> expertsOfDay = new HashSet<>();
 
@@ -65,11 +65,11 @@ public class OpportunityServiceImpl implements OpportunityService {
         return id;
     }
 
-    private OpportunityShowDto createDailyOpportunityDto(User user, LocalDateTime date) {
+    private OpportunityShowDto createDailyOpportunityDto(User user, LocalDate date) {
         OpportunityShowDto dto = new OpportunityShowDto();
         List<DailyOpportunityShowDto> shifts = new ArrayList<>();
 
-        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date.toLocalDate());
+        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date);
 
         dto.setUser(dtoBuilder.buildExpertShowDto(user));
         expertsOpportunities.forEach(e -> {
