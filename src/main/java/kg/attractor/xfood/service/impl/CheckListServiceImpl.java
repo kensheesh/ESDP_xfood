@@ -70,7 +70,7 @@ public class CheckListServiceImpl implements CheckListService {
         if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
             throw new IncorrectDateException("Время начала не может быть позже время конца смены");
         }
-        WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getManagerStartTime(), createDto.getManagerEndTime());
+        WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
         if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())){
@@ -80,20 +80,15 @@ public class CheckListServiceImpl implements CheckListService {
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
 
-        LocalDate startDate = createDto.getManagerStartTime().toLocalDate();
-        LocalDate endDate = createDto.getManagerEndTime().toLocalDate();
-
         LocalDate date;
-        if (!startDate.equals(endDate)) {
-            date = createDto.getManagerEndTime().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (workSchedule.getStartTime().toLocalDate().isBefore(workSchedule.getEndTime().toLocalDate())) {
+            date = workSchedule.getEndTime().toLocalDate();
         } else {
-            date = createDto.getManagerStartTime().atZone(ZoneId.systemDefault()).toLocalDate();
+            date = workSchedule.getEndTime().toLocalDate();
         }
-
-
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
-//                .date(date)
+                .date(date)
                 .startTime(createDto.getStartTime())
                 .endTime(createDto.getEndTime())
                 .build();

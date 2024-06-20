@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -49,15 +50,15 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
 
 
     @Override
-    public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime startTime, LocalDateTime endTime) {
-        return workScheduleRepository.findByManager_IdAndStartTimeAndEndTime(
-                        managerId, startTime, endTime)
+    public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date) {
+        return workScheduleRepository.findByManager_IdAndStartTimeDate(
+                        managerId, date)
                 .orElseThrow(() -> new NotFoundException("No such work_schedule"));
     }
 
     @Override
-    public WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime startTime, LocalDateTime endTime) {
-        return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, startTime, endTime));
+    public WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDate date) {
+        return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, date));
     }
 
    public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, Long pizzeriaId, LocalDateTime monday) {

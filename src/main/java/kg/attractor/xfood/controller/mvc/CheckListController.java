@@ -30,14 +30,13 @@ public class CheckListController {
 
 //    // ROLE: SUPERVISOR
 @GetMapping("/create")
-public String create (@RequestParam(name = "startTime", required = true) LocalDateTime startTime, @RequestParam(name = "endTime", required = true)LocalDateTime endTime,  @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
+public String create (@RequestParam(name = "date", required = true) LocalDate date,  @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
     model.addAttribute("zones",zoneService.getZones() );
     model.addAttribute("sections", sectionService.getSections());
-    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId,startTime ,endTime));
+    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId,date));
     model.addAttribute("types",checkTypeService.getTypes());
     model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
-    model.addAttribute("managerStartTime", startTime);
-    model.addAttribute("managerEndTime", endTime);
+    model.addAttribute("date", date);
     model.addAttribute("managerId", managerId);
     model.addAttribute("expertId", expertId);
     return "checklist/create";

@@ -196,6 +196,7 @@
             managerId = id;
 
             let shiftsList = document.getElementById('work-shifts');
+            shiftsList.innerHTML = '';
 
             fetch('/api/opportunities/bydate/' + date)
                 .then(response => response.json())

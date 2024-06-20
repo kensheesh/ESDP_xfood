@@ -35,3 +35,4 @@ values
        ((select id from managers where phone_number = '76651256983'), (select id from pizzerias where name='Реутов-1'), '2024-06-15', '11:00:00', '18:00:00'),
        ((select id from managers where phone_number = '76651256983'), (select id from pizzerias where name='Реутов-1'), '2024-06-16', '08:00:00', '17:00:00')
 ;
+
