@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -18,7 +19,7 @@ public class OpportunityCreateDto {
     private Long id;
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime date;
+    private Date date;
     @NotNull @Max(23)
     private Integer startTimeHour;
     @NotNull @Max(59)

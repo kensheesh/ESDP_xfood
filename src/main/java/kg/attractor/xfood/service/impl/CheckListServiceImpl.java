@@ -91,7 +91,7 @@ public class CheckListServiceImpl implements CheckListService {
         }
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
-                .date(date)
+//                .date(date)
                 .startTime(createDto.getStartTime())
                 .endTime(createDto.getEndTime())
                 .build();

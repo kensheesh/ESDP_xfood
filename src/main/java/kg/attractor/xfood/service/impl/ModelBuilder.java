@@ -14,7 +14,7 @@ public class ModelBuilder {
         return Opportunity.builder()
                 .id(dto.getId())
                 .user(user)
-                .date(dto.getDate())
+//                .date(dto.getDate())
                 .startTime(LocalTime.of(dto.getStartTimeHour(), dto.getStartTimeMinute()))
                 .endTime(LocalTime.of(dto.getEndTimeHour(), dto.getEndTimeMinute()))
                 .build();

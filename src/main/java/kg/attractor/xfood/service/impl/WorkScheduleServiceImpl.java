@@ -31,7 +31,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         LocalDateTime monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
 
         List<WorkSchedule> workSchedulesOfWeek =
-                workScheduleRepository.findByPizzeria_IdAndDateBetween(pizzeriaId, monday, monday.plusDays(6));
+                workScheduleRepository.findByPizzeria_IdAndStartTimeBetweenOrderByManager_SurnameAsc(pizzeriaId, monday.toLocalDate(), monday.plusDays(6).toLocalDate());
 
         Set<Manager> managersOfPizzeria = new HashSet<>();
         workSchedulesOfWeek.forEach(e -> {
@@ -41,7 +41,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         List<WeeklyScheduleShowDto> weeklyDtos = new ArrayList<>();
 
         managersOfPizzeria.forEach(e -> {
-            weeklyDtos.add(createWeeklySchedule(e, monday));
+            weeklyDtos.add(createWeeklySchedule(e, pizzeriaId, monday));
         });
 
         return weeklyDtos;
@@ -60,23 +60,24 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, startTime, endTime));
     }
 
-   public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, LocalDateTime monday) {
+   public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, Long pizzeriaId, LocalDateTime monday) {
         WeeklyScheduleShowDto dto = new WeeklyScheduleShowDto();
         List<DailyWorkScheduleShowDto> managerSchedules = new ArrayList<>();
 
         for (LocalDateTime dayOfWeek = monday; dayOfWeek.isBefore(monday.plusDays(7)); dayOfWeek = dayOfWeek.plusDays(1)) {
             DailyWorkScheduleShowDto shift = new DailyWorkScheduleShowDto();
-            Optional<WorkSchedule> schedule = workScheduleRepository.findByManagerAndDate(manager, dayOfWeek.toLocalDate().atStartOfDay());
+            Optional<WorkSchedule> schedule = workScheduleRepository.findByManager_IdAndPizzeria_IdAndStartTime(manager.getId(), pizzeriaId, dayOfWeek.toLocalDate());
             log.info("Optional schedule: " + schedule);
             if (schedule.isPresent()){
                 shift.setId(schedule.get().getId());
-                shift.setDate(dayOfWeek);
                 shift.setWorkDay(true);
-//                shift.setStartTime(schedule.get().getStartTime());
-//                shift.setEndTime(schedule.get().getEndTime());
-//                log.info("Shift: " + shift);
+                //ToDo добавить форматтеры дат
+                shift.setDate(schedule.get().getStartTime().toLocalDate().toString());
+                shift.setStartTime(schedule.get().getStartTime().toLocalTime().toString());
+                shift.setEndTime(schedule.get().getEndTime().toLocalTime().toString());
+                log.info("Shift: " + shift);
             } else {
-                shift.setDate(dayOfWeek);
+                shift.setDate(dayOfWeek.toLocalDate().toString());
                 shift.setWorkDay(false);
                 log.info("Shift: " + shift);
             }
