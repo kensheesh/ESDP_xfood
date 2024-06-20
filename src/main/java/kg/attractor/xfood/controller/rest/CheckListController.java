@@ -13,7 +13,7 @@ public class CheckListController {
     private final CheckListService checkListService;
 
     @GetMapping("{id}")
-    public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") Long id) {
         try {
             String uuidLink = checkListService.getResult(id).getUuidLink();
             return ResponseEntity.ok(uuidLink);

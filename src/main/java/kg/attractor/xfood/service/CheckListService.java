@@ -22,6 +22,7 @@ public interface CheckListService {
     List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status);
 
     CheckListResultDto getResult(String checkListId);
+    CheckListResultDto getResult(Long checkListId);
 
     CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto);
 

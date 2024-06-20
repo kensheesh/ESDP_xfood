@@ -102,7 +102,7 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public CheckList getModelCheckListById(String id) {
-        return checkListRepository.findByUuidLink(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by ID "+id));
+        return checkListRepository.findByUuidLink(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by uuid "+id));
     }
 
     @Override
@@ -126,6 +126,20 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public CheckListResultDto getResult(String checkListId) {
+        CheckList checkList = getModelCheckListById(checkListId);
+
+        if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
+            return dtoBuilder.buildCheckListResultDto(
+                    checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
+                            .orElseThrow(() -> new NotFoundException("Check list not found"))
+            );
+        }
+
+        throw new IllegalArgumentException("По данной проверке нет еще результатов");
+    }
+
+    @Override
+    public CheckListResultDto getResult(Long checkListId) {
         CheckList checkList = getModelCheckListById(checkListId);
 
         if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {

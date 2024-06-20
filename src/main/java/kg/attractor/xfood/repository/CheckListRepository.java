@@ -32,6 +32,14 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<CheckList> findByIdAndStatus(String checkListId, Status status);
 
     @Query(value = """
+            SELECT c
+            FROM CheckList c
+            where c.id = ?1
+            and CAST(c.status as text) = :#{#status.getStatus()}
+            """)
+    Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+
+    @Query(value = """
 		    SELECT c
 		    FROM CheckList c
 		    WHERE CAST(c.status as text) = :#{#status.getStatus()}
