@@ -3,7 +3,11 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
+import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
+import kg.attractor.xfood.repository.CriteriaRepository;
+import kg.attractor.xfood.repository.SectionRepository;
+import kg.attractor.xfood.repository.ZoneRepository;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
@@ -22,6 +26,9 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final CriteriaService criteriaService;
     private final CheckListService checkListService;
     private final DtoBuilder dtoBuilder;
+    private final CriteriaRepository criteriaRepository;
+    private final SectionRepository sectionRepository;
+    private final ZoneRepository zoneRepository;
 
     @Override
     public void save(List<SaveCriteriaDto> saveCriteriaDto) {
@@ -85,6 +92,35 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     public void deleteWowFactor(Long id, Long checkListId) {
         CheckListsCriteria checkListsCriteria = isPresentOptional(id, checkListId);
         if(checkListsCriteria != null) checkListCriteriaRepository.delete(checkListsCriteria);
+    }
+
+    @Override
+    public CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description) {
+        if(description != null) {
+            Criteria criteria = Criteria.builder()
+                    .description(description)
+                    .section(sectionRepository.findById(1L).get())
+                    .zone(zoneRepository.findById(9L).get())
+                    .coefficient(1)
+                    .build();
+
+            Criteria newCriteria = criteriaRepository.save(criteria);
+            saveCriteriaDto.setCriteriaId(newCriteria.getId());
+        }
+
+        CheckListsCriteria checkListsCriteria = isPresentOptional(saveCriteriaDto.getCriteriaId(), saveCriteriaDto.getCheckListId());
+        if (checkListsCriteria == null) {
+            CheckListsCriteria checkListsCriteria1 = CheckListsCriteria.builder()
+                    .maxValue(0)
+                    .checklist(checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId()))
+                    .criteria(criteriaService.getCriteriaById(saveCriteriaDto.getCriteriaId()))
+                    .value(saveCriteriaDto.getValue())
+                    .build();
+            CheckListsCriteria model =  checkListCriteriaRepository.save(checkListsCriteria1);
+            return dtoBuilder.buildCheckListCriteriaDto(model);
+        }
+
+        throw new IllegalArgumentException("Такой wow-фактор уже существует! Вы можете добавить только один раз!");
     }
 
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {

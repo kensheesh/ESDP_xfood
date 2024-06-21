@@ -69,6 +69,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
         ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
         model.addAttribute("checkList", checkListDto);
         model.addAttribute("wowCriteria", criteriaService.getWowCriteria());
+        model.addAttribute("critCriteria", criteriaService.getCritCriteria());
         return "check_list/check_list";
     }
 

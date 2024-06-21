@@ -26,4 +26,18 @@ public class CheckListCriteriaController {
         checkListCriteriaService.deleteWowFactor(id, checkListId);
         return HttpStatus.OK;
     }
+
+    @PostMapping("create/crit")
+    public ResponseEntity<CheckListCriteriaDto> createNewCritFactor(
+            @RequestParam(name = "description") String description,
+            @RequestBody SaveCriteriaDto saveCriteriaDto) {
+        try{
+            long criteriaId = Long.parseLong(description);
+            saveCriteriaDto.setCriteriaId(criteriaId);
+            return ResponseEntity.ok(checkListCriteriaService.createCritFactor(saveCriteriaDto, null));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.ok(checkListCriteriaService.createCritFactor(saveCriteriaDto, description));
+        }
+
+    }
 }

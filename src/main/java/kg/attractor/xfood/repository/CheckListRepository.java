@@ -62,4 +62,5 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
             and CAST(c.status as text) = :#{#status.getStatus()}
             """)
     Optional<CheckList> findByUuidLinkAndStatus(String uuidLink, Status status);
+
 }

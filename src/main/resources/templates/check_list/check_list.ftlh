@@ -161,12 +161,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="wowFactorForm">
+                    <form id="critFactorForm">
                         <div class="mb-3">
                             <label for="critFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="critFactorDescription" aria-label=".form-select-sm example">
-                                <#list wowCriteria as wow>
-                                    <option value="${wow.id}">${wow.description}</option>
+                                <#list critCriteria as crit>
+                                    <option value="${crit.id}">${crit.description}</option>
                                 </#list>
                                 <option value="other">Другой</option>
                             </select>
@@ -175,7 +175,7 @@
                             <label for="otherDescription" class="form-label">Введите описание</label>
                             <input type="text" class="form-control" id="otherDescription" name="otherDescription" />
                         </div>
-                        <button type="submit" class="btn btn-primary">Добавить</button>
+                        <button type="submit" id="addCritFactor" class="btn btn-primary">Добавить</button>
                     </form>
                 </div>
             </div>
@@ -270,14 +270,14 @@
                 if (newCriteria.criteria !== undefined) {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                    <td class="text-center bg-success">WOW фактор</td>
-                    <td class="bg-success">` + newCriteria.criteria + `</td>
-                    <td class="bg-success"></td>
-                    <td class="text-center bg-success d-flex">
-                        <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
-                        <button class="delete-factor" data-id="` + newCriteria.id + `">Delete</button>
-                    </td>
-                `;
+                <td class="text-center bg-success">WOW фактор</td>
+                <td class="bg-success">` + newCriteria.criteria + `</td>
+                <td class="bg-success"></td>
+                <td class="text-center bg-success d-flex">
+                    <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
+                    <button class="delete-factor" data-id="` + newCriteria.id + `">Delete</button>
+                </td>
+            `;
 
                     document.getElementById('mainTableBody').appendChild(newRow);
 
@@ -295,9 +295,60 @@
                 let selectedValue = this.value;
                 let otherDescriptionDiv = document.getElementById('otherDescriptionDiv');
                 if (selectedValue === 'other') {
-                    otherDescriptionDiv.style.display = 'block'; // Показываем поле ввода
+                    otherDescriptionDiv.style.display = 'block';
                 } else {
-                    otherDescriptionDiv.style.display = 'none'; // Скрываем поле ввода
+                    otherDescriptionDiv.style.display = 'none';
+                }
+            });
+
+            document.getElementById('critFactorForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const selectedValue = document.getElementById('critFactorDescription').value;
+                let description;
+
+                if (selectedValue === 'other') {
+                    description = document.getElementById('otherDescription').value;
+                } else {
+                    description = selectedValue;
+                }
+
+                const object = {
+                    value: 0,
+                    checkListId: ${checkList.id},
+                    maxValue: 0
+                };
+
+                const response = await fetch('/api/checklist/criteria/create/crit?description=' + description, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                });
+
+                const newCriteria = await response.json();
+
+                if (newCriteria.description !== undefined) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                <td class="text-center bg-danger">Критический фактор</td>
+                <td class="bg-danger">` + newCriteria.description + `</td>
+                <td class="bg-danger"></td>
+                <td class="text-center bg-danger d-flex">
+                    <input type="number" class="text-center form-control score-input" value="0" id="` + newCriteria.id + `">
+                    <button class="delete-factor" data-id="` + newCriteria.id + `">Delete</button>
+                </td>
+            `;
+
+                    document.getElementById('mainTableBody').appendChild(newRow);
+
+                    const newInput = newRow.querySelector('.score-input');
+                    newInput.addEventListener('input', updatePercentage);
+
+                    const newDeleteButton = newRow.querySelector('.delete-factor');
+                    newDeleteButton.addEventListener('click', deleteFactor);
+
+                    updatePercentage();
                 }
             });
 
@@ -305,6 +356,7 @@
                 button.addEventListener('click', deleteFactor);
             });
         });
+
     </script>
 
 

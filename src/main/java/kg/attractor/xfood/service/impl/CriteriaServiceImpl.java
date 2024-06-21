@@ -94,5 +94,12 @@ public class CriteriaServiceImpl implements CriteriaService {
                 .stream().map(dtoBuilder::buildCriteriaSupervisorShowDto)
                 .toList();
     }
+
+    @Override
+    public List<CriteriaSupervisorShowDto> getCritCriteria() {
+        return criteriaRepository.findCriteriaWhereSectionCrit()
+                .stream().map(dtoBuilder::buildCriteriaSupervisorShowDto)
+                .toList();
+    }
 }
 

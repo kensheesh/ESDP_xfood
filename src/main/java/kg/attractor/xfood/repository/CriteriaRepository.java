@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -21,4 +22,7 @@ public interface CriteriaRepository extends JpaRepository<Criteria, Long> {
 
     @Query(value = "select c from Criteria c where c.section.id = 2")
     List<Criteria> findCriteriaWhereSectionWow();
+
+    @Query(value = "select c from Criteria c where c.section.id = 1")
+    List<Criteria> findCriteriaWhereSectionCrit();
 }

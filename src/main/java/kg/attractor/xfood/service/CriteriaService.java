@@ -24,4 +24,6 @@ public interface CriteriaService {
     Criteria getCriteriaById(Long criteriaId);
 
     List<CriteriaSupervisorShowDto> getWowCriteria();
+
+    List<CriteriaSupervisorShowDto> getCritCriteria();
 }
