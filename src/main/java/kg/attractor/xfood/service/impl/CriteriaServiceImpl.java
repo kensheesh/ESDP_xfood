@@ -3,22 +3,17 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.model.Criteria;
-import kg.attractor.xfood.model.Section;
-import kg.attractor.xfood.model.Zone;
 import kg.attractor.xfood.repository.CriteriaRepository;
 import kg.attractor.xfood.repository.SectionRepository;
 import kg.attractor.xfood.repository.ZoneRepository;
 import kg.attractor.xfood.service.CriteriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.*;
-
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
