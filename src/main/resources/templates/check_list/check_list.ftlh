@@ -43,7 +43,7 @@
         .delete-factor {
             background-color: transparent;
             border: none;
-            color: #dc3545;
+            color: black;
             cursor: pointer;
             font-size: 1.2rem;
             margin-left: 0.5rem;
@@ -84,7 +84,9 @@
                             <td>${criteria.description}</td>
                             <td class="text-center border">${criteria.maxValue}</td>
                             <td class="text-center">
-                                <input type="number" class="text-center form-control score-input" min="0" max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}" aria-valuemax="${criteria.maxValue}">
+                                <input type="number" class="text-center form-control score-input" min="0"
+                                       max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
+                                       aria-valuemax="${criteria.maxValue}">
                             </td>
                             <#assign maxSum = maxSum + criteria.maxValue>
                         <#else>
@@ -92,17 +94,29 @@
                                 <td class="text-center bg-danger">${criteria.section}</td>
                                 <td class="bg-danger">${criteria.description}</td>
                                 <td class="bg-danger"></td>
-                                <td class="text-center bg-danger d-flex align-items-center">
-                                    <input type="number" class="text-center form-control score-input" value="${criteria.value}" id="${criteria.id}">
-                                    <button class="delete-factor" data-id="${criteria.id}">&times;</button>
+                                <td class="text-center bg-danger">
+                                    <div class="input-group">
+                                        <input type="number" class="text-center form-control score-input"
+                                               value="${criteria.value}" id="${criteria.id}">
+                                        <div class="input-group-append">
+                                            <button class="delete-factor btn btn-outline-danger"
+                                                    data-id="${criteria.id}">&times;
+                                            </button>
+                                        </div>
+                                    </div>
                                 </td>
                             <#elseif criteria.section == 'WOW фактор'>
                                 <td class="text-center bg-success">${criteria.section}</td>
                                 <td class="bg-success">${criteria.description}</td>
                                 <td class="bg-success"></td>
-                                <td class="text-center bg-success d-flex align-items-center align-items-stretch">
-                                    <input type="number" class="text-center form-control score-input" min="0" value="${criteria.value}" id="${criteria.id}">
-                                    <button class="delete-factor" data-id="${criteria.id}">&times;</button>
+                                <td class="text-center bg-success">
+                                    <div class="input-group">
+                                        <input type="number" class="text-center form-control score-input" min="0"
+                                               value="${criteria.value}" id="${criteria.id}">
+                                        <div class="input-group-append">
+                                            <button class="delete-factor" data-id="${criteria.id}">&times;</button>
+                                        </div>
+                                    </div>
                                 </td>
                             </#if>
                         </#if>
@@ -115,15 +129,20 @@
                     <td colspan="2" class="text-center"><strong>${maxSum}</strong></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов) x 100%</strong></td>
+                    <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
+                            x 100%</strong></td>
                     <td colspan="2" class="text-center" id="percentageResult"></td>
                 </tr>
                 </tfoot>
             </table>
         </div>
         <div class="text-end mb-5 mt-2">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить wow-фактор</button>
-            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический фактор</button>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
+                wow-фактор
+            </button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
+                фактор
+            </button>
             <button id="calculateButton" class="btn btn-warning">Сохранить</button>
         </div>
     </main>
@@ -139,7 +158,8 @@
                     <form id="wowFactorForm">
                         <div class="mb-3">
                             <label for="wowFactorDescription" class="form-label">Описание</label>
-                            <select class="form-select form-select-sm" id="wowFactorDescription" aria-label=".form-select-sm example">
+                            <select class="form-select form-select-sm" id="wowFactorDescription"
+                                    aria-label=".form-select-sm example">
                                 <#list wowCriteria as wow>
                                     <option value="${wow.id}">${wow.description}</option>
                                 </#list>
@@ -153,7 +173,8 @@
     </div>
 
 
-    <div class="modal fade" id="critFactorModal" tabindex="-1" aria-labelledby="critwowFactorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="critFactorModal" tabindex="-1" aria-labelledby="critwowFactorModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -164,7 +185,8 @@
                     <form id="critFactorForm">
                         <div class="mb-3">
                             <label for="critFactorDescription" class="form-label">Описание</label>
-                            <select class="form-select form-select-sm" id="critFactorDescription" aria-label=".form-select-sm example">
+                            <select class="form-select form-select-sm" id="critFactorDescription"
+                                    aria-label=".form-select-sm example">
                                 <#list critCriteria as crit>
                                     <option value="${crit.id}">${crit.description}</option>
                                 </#list>
@@ -173,7 +195,7 @@
                         </div>
                         <div class="mb-3" id="otherDescriptionDiv" style="display: none;">
                             <label for="otherDescription" class="form-label">Введите описание</label>
-                            <input type="text" class="form-control" id="otherDescription" name="otherDescription" />
+                            <input type="text" class="form-control" id="otherDescription" name="otherDescription"/>
                         </div>
                         <button type="submit" id="addCritFactor" class="btn btn-primary">Добавить</button>
                     </form>
@@ -218,12 +240,54 @@
                 });
             }
 
+            async function fetchToCreate(url, object) {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                });
+
+                return response;
+            }
+
+            async function createNewElement(factor, typeClass, newCriteria) {
+                if (newCriteria.criteria !== undefined) {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                <td class="text-center bg-` + typeClass + `">factor фактор</td>
+                <td class="bg-` + typeClass + `">` + newCriteria.criteria + `</td>
+                <td class="bg-` + typeClass + `"></td>
+                <td class="text-center bg-` + typeClass + ` d-flex">
+                    <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
+                    <button class="delete-factor" data-id=<div class="input-group">
+                                        <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
+                                        <div class="input-group-append">
+                                            <button class="delete-factor" data-id="` + newCriteria.id + `">&times;</button>
+                                        </div>
+                                    </div>
+                </td>
+            `;
+
+                    document.getElementById('mainTableBody').appendChild(newRow);
+
+                    const newInput = newRow.querySelector('.score-input');
+                    newInput.addEventListener('input', updatePercentage);
+
+                    const newDeleteButton = newRow.querySelector('.delete-factor');
+                    newDeleteButton.addEventListener('click', await deleteFactor);
+
+                    updatePercentage();
+                }
+            }
+
             async function deleteFactor(event) {
                 const button = event.target;
                 const row = button.closest('tr');
                 const criteriaId = button.getAttribute('data-id');
 
-                await fetch(`/api/checklist/criteria/wow/delete/` + criteriaId + `?checkListId=` + ${checkList.id}, {
+                await fetch(`/api/checklist/criteria/delete/` + criteriaId + `?checkListId=` + ${checkList.id}, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -244,8 +308,6 @@
 
             calculateButton.addEventListener('click', saveScores);
 
-            updatePercentage();
-
             document.getElementById('wowFactorForm').addEventListener('submit', async (event) => {
                 event.preventDefault();
                 const descriptionId = document.getElementById('wowFactorDescription').value;
@@ -257,41 +319,13 @@
                     maxValue: 0
                 };
 
-                const response = await fetch('/api/checklist/criteria/create/wow', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(object)
-                });
-
+                let response = await fetchToCreate('/api/checklist/criteria/create/wow', object)
                 const newCriteria = await response.json();
+                await createNewElement('WOW', 'success', newCriteria)
 
-                if (newCriteria.criteria !== undefined) {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                <td class="text-center bg-success">WOW фактор</td>
-                <td class="bg-success">` + newCriteria.criteria + `</td>
-                <td class="bg-success"></td>
-                <td class="text-center bg-success d-flex">
-                    <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
-                    <button class="delete-factor" data-id="` + newCriteria.id + `">Delete</button>
-                </td>
-            `;
-
-                    document.getElementById('mainTableBody').appendChild(newRow);
-
-                    const newInput = newRow.querySelector('.score-input');
-                    newInput.addEventListener('input', updatePercentage);
-
-                    const newDeleteButton = newRow.querySelector('.delete-factor');
-                    newDeleteButton.addEventListener('click', deleteFactor);
-
-                    updatePercentage();
-                }
             });
 
-            document.getElementById('critFactorDescription').addEventListener('change', function() {
+            document.getElementById('critFactorDescription').addEventListener('change', function () {
                 let selectedValue = this.value;
                 let otherDescriptionDiv = document.getElementById('otherDescriptionDiv');
                 if (selectedValue === 'other') {
@@ -318,38 +352,9 @@
                     maxValue: 0
                 };
 
-                const response = await fetch('/api/checklist/criteria/create/crit?description=' + description, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(object)
-                });
-
+                let response = fetchToCreate('/api/checklist/criteria/create/crit?description=' + description, object)
                 const newCriteria = await response.json();
-
-                if (newCriteria.description !== undefined) {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                <td class="text-center bg-danger">Критический фактор</td>
-                <td class="bg-danger">` + newCriteria.description + `</td>
-                <td class="bg-danger"></td>
-                <td class="text-center bg-danger d-flex">
-                    <input type="number" class="text-center form-control score-input" value="0" id="` + newCriteria.id + `">
-                    <button class="delete-factor" data-id="` + newCriteria.id + `">Delete</button>
-                </td>
-            `;
-
-                    document.getElementById('mainTableBody').appendChild(newRow);
-
-                    const newInput = newRow.querySelector('.score-input');
-                    newInput.addEventListener('input', updatePercentage);
-
-                    const newDeleteButton = newRow.querySelector('.delete-factor');
-                    newDeleteButton.addEventListener('click', deleteFactor);
-
-                    updatePercentage();
-                }
+                await createNewElement('Критический', 'danger', newCriteria)
             });
 
             document.querySelectorAll('.delete-factor').forEach(button => {

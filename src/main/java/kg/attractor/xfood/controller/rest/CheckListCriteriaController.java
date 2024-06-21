@@ -21,7 +21,7 @@ public class CheckListCriteriaController {
         return ResponseEntity.ok(checkListCriteriaService.createWowFactor(saveCriteriaDto));
     }
 
-    @DeleteMapping("wow/delete/{id}")
+    @DeleteMapping("delete/{id}")
     public HttpStatus deleteWowFactor(@PathVariable(name = "id") Long id, @RequestParam(name = "checkListId") Long checkListId) {
         checkListCriteriaService.deleteWowFactor(id, checkListId);
         return HttpStatus.OK;
