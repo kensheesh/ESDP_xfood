@@ -28,5 +28,8 @@ public class Location {
 
     @OneToMany(mappedBy = "location")
     private List<Pizzeria> pizzerias;
+    
+    @Column(name="country")
+    private String countryCode;
 
 }

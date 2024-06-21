@@ -35,4 +35,6 @@ public class Manager {
     @OneToMany(mappedBy = "manager")
     private List<WorkSchedule> workSchedules;
 
+    @Column(name = "uuid")
+    private String uuid;
 }
