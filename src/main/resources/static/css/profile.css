@@ -35,7 +35,8 @@
 }
 
 .list-items {
-    position: relative;
+    position: absolute;
+    z-index: 1000; /* Adjust the z-index value as needed */
     margin-top: 15px;
     border-radius: 8px;
     padding: 16px;
@@ -46,9 +47,11 @@
     overflow-y: auto;
 }
 
+
 .select-btn.open ~ .list-items {
     display: block;
 }
+
 
 .list-items .item {
     display: flex;

@@ -41,12 +41,15 @@ function fillClock(time) {
         updateTimes()
     }, 1000)
 }
+const selectedLanguages = JSON.parse(localStorage.getItem('selectedLanguages'));
+if (selectedLanguages !== null && selectedLanguages !== undefined) {
+    createClock(".times")
+    createClock(".times_second")
 
-createClock(".times")
-createClock(".times_second")
+    fillClock("section.times div")
+    fillClock("section.times_second div")
+}
 
-fillClock("section.times div")
-fillClock("section.times_second div")
 // ----------------------------------------------------------------------------------------------
 
 all_timezones = [
