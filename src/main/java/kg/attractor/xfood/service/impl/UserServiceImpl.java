@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserDto() {
         return dtoBuilder.buildUserDto(
                 userRepository.findByEmail(AuthParams.getPrincipal().getUsername())
-                        .orElseThrow(() -> new NotFoundException("Check list not found"))
+                        .orElseThrow(() -> new NotFoundException("User not found"))
         );
     }
 

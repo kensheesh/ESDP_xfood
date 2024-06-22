@@ -43,9 +43,8 @@
                                 <div class="card rounded-4 border-0 shadow-sm">
                                     <div class="card-body">
                                         <div class="d-flex flex-column row-gap-2 text-center">
-                                            <span>МСК 14:45</span>
-                                            <span>ЕКБ 16:45</span>
-                                            <span>БИШ 17:45</span>
+                                            <span data-timezone="Europe/Moscow">МСК 14:45</span>
+                                            <span data-timezone="Asia/Bishkek">БИШ 17:45</span>
                                         </div>
                                     </div>
                                 </div>
