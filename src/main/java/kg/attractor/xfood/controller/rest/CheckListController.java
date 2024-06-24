@@ -1,5 +1,8 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.enums.Status;
+import kg.attractor.xfood.model.CheckList;
+import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/checks")
 public class CheckListController {
     private final CheckListService checkListService;
+    private final CheckListRepository checkListRepository;
 
     @GetMapping("{id}")
-    public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") CheckList checkList) {
         try {
-            String uuidLink = checkListService.getResult(id).getUuidLink();
+            String uuidLink = checkList.getUuidLink();
             return ResponseEntity.ok(uuidLink);
         } catch (Exception e) {
             System.err.println("Error retrieving UUID link: " + e.getMessage());
@@ -32,6 +36,13 @@ public class CheckListController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    @PostMapping("change/status/{id}")
+    public HttpStatus changeStatusToInProgress(@PathVariable(name = "id") CheckList checkList) {
+        checkList.setStatus(Status.IN_PROGRESS);
+        checkListRepository.save(checkList);
+        return HttpStatus.OK;
     }
 
 

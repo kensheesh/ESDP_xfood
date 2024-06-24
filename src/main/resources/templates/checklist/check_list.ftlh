@@ -84,7 +84,7 @@
                             <td>${criteria.description}</td>
                             <td class="text-center border">${criteria.maxValue}</td>
                             <td class="text-center">
-                                <input type="number" class="text-center form-control score-input" min="0"
+                                <input type="number" step="${criteria.maxValue}" class="text-center form-control score-input"
                                        max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
                                        aria-valuemax="${criteria.maxValue}">
                             </td>
@@ -111,7 +111,7 @@
                                 <td class="bg-success"></td>
                                 <td class="text-center bg-success">
                                     <div class="input-group">
-                                        <input type="number" class="text-center form-control score-wow-input" min="0"
+                                        <input type="number"  class="text-center form-control score-wow-input" min="0"
                                                value="${criteria.value}" id="${criteria.id}">
                                         <div class="input-group-append">
                                             <button class="delete-factor" data-id="${criteria.id}">&times;</button>
@@ -144,6 +144,32 @@
                 фактор
             </button>
             <button id="calculateButton" class="btn btn-warning">Сохранить</button>
+
+            <#if checkList.status == 'IN_PROGRESS'>
+                <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Опубликовать
+                </button>
+            </#if>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
+                                публиковать
+                            </button>
+                            <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -204,20 +230,28 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const maxSum = ${maxSum};
             const percentageDisplay = document.getElementById('percentageResult');
             const calculateButton = document.getElementById('calculateButton');
             let criteria = [];
 
-            function updatePercentage() {
+            async function updatePercentage() {
                 let totalScore = 0;
                 document.querySelectorAll('.score-input').forEach(input => {
                     totalScore += parseFloat(input.value) || 0;
                 });
+
+                await fetch('/api/checks/change/status/' + ${checkList.id}, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+
                 let percentage = (totalScore / maxSum) * 100;
 
-                if(percentage < 100) {
+                if (percentage < 100) {
                     document.querySelectorAll('.score-wow-input').forEach(input => {
                         totalScore += parseFloat(input.value) || 0;
                     })
@@ -226,7 +260,8 @@
 
                 percentageDisplay.textContent = Math.round(percentage) + '%';
             }
-            updatePercentage()
+
+            await updatePercentage()
 
             async function saveScores() {
                 criteria = [];
@@ -287,7 +322,7 @@
                     const newDeleteButton = newRow.querySelector('.delete-factor');
                     newDeleteButton.addEventListener('click', await deleteFactor);
 
-                    updatePercentage();
+                    await updatePercentage();
                 }
             }
 
@@ -369,7 +404,61 @@
             document.querySelectorAll('.delete-factor').forEach(button => {
                 button.addEventListener('click', deleteFactor);
             });
+
+
+            let uuidLink
+            let url = 'http://localhost:2345/checks/'
+
+            async function getUrl() {
+                try {
+                    let response = await fetch(`/api/checks/${checkList.id}`);
+                    uuidLink = await response.text();
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+
+            await updatePercentage();
+            let a = document.createElement('a')
+            await getUrl()
+            a.href = url + uuidLink + '/result'
+
+            document.getElementById('getTemplate').addEventListener('click', () => {
+                const percentage = document.getElementById('percentageResult').textContent;
+                const message = `Дата: ${checkList.managerWorkStartDate}\n` +
+                    `Пиццерия: ${checkList.pizzeria.name}\n` +
+                    `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
+                    `Результат проверки в %: ` + percentage +
+                    `\nПоложительная обратная связь: \n` +
+                    `Критический фактор: \n` +
+                    `WOW фактор: \n` +
+                    `Поделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
+                    a;
+
+                navigator.clipboard.writeText(message)
+                    .then(() => alert("Скопировано в буфер обмена!"))
+                    .catch(err => console.error(err));
+            });
+
+            document.getElementById('post').addEventListener('click', fetchToResult);
+
+            async function fetchToResult() {
+                try {
+                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, {method: 'POST'});
+                    if (!response.ok) {
+                        let errorMessage = await response.text();
+                        throw new Error(errorMessage);
+                    }
+                    await getUrl();
+                    navigator.clipboard.writeText(url + uuidLink + '/result')
+                        .then(() => console.log("Скопировано в буфер обмена!"))
+                        .catch(err => console.error(err));
+                } catch (error) {
+                    alert(error.message)
+                }
+            }
         });
 
     </script>
+
 </@main.layout>

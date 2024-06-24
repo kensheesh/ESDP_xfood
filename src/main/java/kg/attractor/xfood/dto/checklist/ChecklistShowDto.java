@@ -22,5 +22,6 @@ public class ChecklistShowDto {
 	private ManagerShowDto manager;
 	private String managerWorkStartDate;
 	private String managerWorkEndDate;
+	private String uuidLink;
 	private List<CriteriaExpertShowDto> criteria;
 }

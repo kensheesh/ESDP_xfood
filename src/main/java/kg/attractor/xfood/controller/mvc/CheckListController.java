@@ -104,10 +104,9 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
         return null;
     }
 
-
     @GetMapping ("/{id}/result")
     public String getResult (@PathVariable (name = "id") String checkListId, Model model) {
-        model.addAttribute("checkList", checkListService.getResult(checkListId));
+        model.addAttribute("checkList", checkListService.getCheckListById(checkListId));
         return "checklist/result";
     }
 

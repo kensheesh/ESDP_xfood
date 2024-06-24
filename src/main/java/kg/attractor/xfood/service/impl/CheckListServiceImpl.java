@@ -208,7 +208,6 @@ public class CheckListServiceImpl implements CheckListService {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");
         }
 
-        checkList.setUuidLink(String.valueOf(UUID.randomUUID()));
         checkList.setStatus(Status.DONE);
         return ResponseEntity.ok(checkListRepository.save(checkList));
     }
