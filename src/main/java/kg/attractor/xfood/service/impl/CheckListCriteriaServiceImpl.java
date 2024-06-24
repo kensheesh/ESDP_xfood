@@ -72,7 +72,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     }
 
     @Override
-    public CheckListCriteriaDto createWowFactor(SaveCriteriaDto saveCriteriaDto) {
+    public CheckListCriteriaDto createNewFactor(SaveCriteriaDto saveCriteriaDto) {
         CheckListsCriteria checkListsCriteria = isPresentOptional(saveCriteriaDto.getCriteriaId(), saveCriteriaDto.getCheckListId());
         if (checkListsCriteria == null) {
             CheckListsCriteria criteria = CheckListsCriteria.builder()
@@ -89,7 +89,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     }
 
     @Override
-    public void deleteWowFactor(Long id, Long checkListId) {
+    public void deleteFactor(Long id, Long checkListId) {
         CheckListsCriteria checkListsCriteria = isPresentOptional(id, checkListId);
         if(checkListsCriteria != null) checkListCriteriaRepository.delete(checkListsCriteria);
     }
@@ -106,21 +106,10 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
             Criteria newCriteria = criteriaRepository.save(criteria);
             saveCriteriaDto.setCriteriaId(newCriteria.getId());
+            saveCriteriaDto.setValue(-8);
         }
 
-        CheckListsCriteria checkListsCriteria = isPresentOptional(saveCriteriaDto.getCriteriaId(), saveCriteriaDto.getCheckListId());
-        if (checkListsCriteria == null) {
-            CheckListsCriteria checkListsCriteria1 = CheckListsCriteria.builder()
-                    .maxValue(0)
-                    .checklist(checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId()))
-                    .criteria(criteriaService.getCriteriaById(saveCriteriaDto.getCriteriaId()))
-                    .value(saveCriteriaDto.getValue())
-                    .build();
-            CheckListsCriteria model =  checkListCriteriaRepository.save(checkListsCriteria1);
-            return dtoBuilder.buildCheckListCriteriaDto(model);
-        }
-
-        throw new IllegalArgumentException("Такой wow-фактор уже существует! Вы можете добавить только один раз!");
+        return createNewFactor(saveCriteriaDto);
     }
 
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {

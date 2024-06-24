@@ -72,7 +72,7 @@
                     <th class="text-center">Раздел</th>
                     <th class="text-center">Что проверить</th>
                     <th class="text-center">Оценка</th>
-                    <th class="text-center">${checkList.managerWorkDate}</th>
+                    <th class="text-center">${checkList.managerWorkStartDate}</th>
                 </tr>
                 </thead>
                 <tbody id="mainTableBody">
@@ -111,7 +111,7 @@
                                 <td class="bg-success"></td>
                                 <td class="text-center bg-success">
                                     <div class="input-group">
-                                        <input type="number" class="text-center form-control score-input" min="0"
+                                        <input type="number" class="text-center form-control score-wow-input" min="0"
                                                value="${criteria.value}" id="${criteria.id}">
                                         <div class="input-group-append">
                                             <button class="delete-factor" data-id="${criteria.id}">&times;</button>
@@ -215,9 +215,18 @@
                 document.querySelectorAll('.score-input').forEach(input => {
                     totalScore += parseFloat(input.value) || 0;
                 });
-                const percentage = (totalScore / maxSum) * 100;
+                let percentage = (totalScore / maxSum) * 100;
+
+                if(percentage < 100) {
+                    document.querySelectorAll('.score-wow-input').forEach(input => {
+                        totalScore += parseFloat(input.value) || 0;
+                    })
+                    percentage = Math.min((totalScore / maxSum) * 100, 100)
+                }
+
                 percentageDisplay.textContent = Math.round(percentage) + '%';
             }
+            updatePercentage()
 
             async function saveScores() {
                 criteria = [];

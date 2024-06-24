@@ -2,7 +2,6 @@ package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
-import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +17,12 @@ public class CheckListCriteriaController {
 
     @PostMapping("create/wow")
     public ResponseEntity<CheckListCriteriaDto> createNewWowFactor(@RequestBody SaveCriteriaDto saveCriteriaDto) {
-        return ResponseEntity.ok(checkListCriteriaService.createWowFactor(saveCriteriaDto));
+        return ResponseEntity.ok(checkListCriteriaService.createNewFactor(saveCriteriaDto));
     }
 
     @DeleteMapping("delete/{id}")
     public HttpStatus deleteWowFactor(@PathVariable(name = "id") Long id, @RequestParam(name = "checkListId") Long checkListId) {
-        checkListCriteriaService.deleteWowFactor(id, checkListId);
+        checkListCriteriaService.deleteFactor(id, checkListId);
         return HttpStatus.OK;
     }
 
