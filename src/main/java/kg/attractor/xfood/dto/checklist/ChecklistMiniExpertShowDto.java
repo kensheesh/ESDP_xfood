@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -17,7 +18,8 @@ public class ChecklistMiniExpertShowDto {
 	private Long id;
 	private Status status;
 	private ManagerShowDto manager;
-	private LocalDate managerWorkDate;
+	private String managerWorkStartDate;
+	private String managerWorkEndDate;
 	private String pizzeria;
 	private String uuid;
 }

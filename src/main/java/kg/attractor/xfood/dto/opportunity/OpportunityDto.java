@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class DailyOpportunityShowDto {
+@AllArgsConstructor
+public class OpportunityDto {
+    private Long id;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;

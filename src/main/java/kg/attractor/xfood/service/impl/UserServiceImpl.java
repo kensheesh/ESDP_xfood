@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder encoder;
 
+    private final DtoBuilder dtoBuilder;
+
 	public void register(RegisterUserDto dto) {
 		if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
 		User user = User.builder()
@@ -37,15 +39,19 @@ public class UserServiceImpl implements UserService {
 		//NOT THE FINAL VERSION!!!
 	}
 
-    private final DtoBuilder dtoBuilder;
-
     @Override
     public UserDto getUserDto() {
         return dtoBuilder.buildUserDto(
                 userRepository.findByEmail(AuthParams.getPrincipal().getUsername())
-                        .orElseThrow(() -> new NotFoundException("Check list not found"))
+                        .orElseThrow(() -> new NotFoundException("User not found"))
         );
     }
+
+	public User getByEmail(String name) {
+		return userRepository.getByEmail(name)
+				.orElseThrow(() -> new NotFoundException("User not found"));
+	}
+
 
     @Override
     public List<UserDto> getAllExperts() {

@@ -1,15 +1,23 @@
 package kg.attractor.xfood.controller.mvc;
 
+import jakarta.validation.Valid;
+import kg.attractor.xfood.dto.opportunity.OpportunityCreateWrapper;
+import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/expert")
 public class ExpertController {
+    private final OpportunityService opportunityService;
 
     @GetMapping("/checks")
     public String getChecks () {
@@ -17,13 +25,17 @@ public class ExpertController {
         return "TODO_sketches/checks";
     }
 
-    @GetMapping ("/opportunity-map")
+    @GetMapping ("/opportunities")
     public String getOpportunityMap (Model model) {
-        /* TODO
-            Карта (календарь) возможностей.
-            Можно задать предпочтительное время работы
-        */
-        return null;
+        model.addAttribute("opportunities", opportunityService.getAllByExpert());
+        model.addAttribute("monday", LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()-1));
+        return "expert/opportunities";
+    }
+
+    @PostMapping("/opportunities/change")
+    public String changeOpportunities (@Valid OpportunityCreateWrapper opportunities, Authentication auth) {
+        opportunityService.changeExpertOpportunities(opportunities, auth);
+        return "redirect:/expert/opportunities";
     }
 
     @GetMapping("/profile")

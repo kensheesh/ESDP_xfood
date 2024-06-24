@@ -363,6 +363,4 @@
         });
 
     </script>
-
-
 </@main.layout>

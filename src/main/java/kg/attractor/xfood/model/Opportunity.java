@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -14,8 +13,8 @@ import java.util.List;
 @Setter
 @Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "opportunities")
 public class Opportunity {
     @Id
@@ -27,11 +26,11 @@ public class Opportunity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
+    
     @NotNull
     @Column(name = "date", nullable = false)
-    private LocalDateTime date;
-
+    private LocalDate date;
+    
     @Column(name = "start_time")
     private LocalTime startTime;
 

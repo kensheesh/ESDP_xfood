@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,10 +29,10 @@ public class CheckListController {
 
 //    // ROLE: SUPERVISOR
 @GetMapping("/create")
-public String create (@RequestParam(name = "date", required = true) LocalDateTime date, @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
+public String create (@RequestParam(name = "date", required = true) LocalDate date,  @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
     model.addAttribute("zones",zoneService.getZones() );
     model.addAttribute("sections", sectionService.getSections());
-    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId, date));
+    model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId,date));
     model.addAttribute("types",checkTypeService.getTypes());
     model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
     model.addAttribute("date", date);
@@ -45,7 +44,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
 
     // ROLE: SUPERVISOR
     @PostMapping("/create")
-    public String create (CheckListSupervisorCreateDto createDto, BindingResult result, Model model) {
+    public String create (CheckListSupervisorCreateDto createDto) {
        CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
         checkListService.bindChecklistWithCriterion(checklistDto );
         return "redirect:/supervisor/weekly";
@@ -65,7 +64,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
 
     // ROLE: EXPERT
     @GetMapping ("/{id}/check")
-    public String check (@PathVariable (name="id") Long checkListId, Model model) {
+    public String check (@PathVariable (name="id") String checkListId, Model model) {
         ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
         model.addAttribute("checkList", checkListDto);
         model.addAttribute("wowCriteria", criteriaService.getWowCriteria());
@@ -107,7 +106,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDateTim
 
 
     @GetMapping ("/{id}/result")
-    public String getResult (@PathVariable (name = "id") Long checkListId, Model model) {
+    public String getResult (@PathVariable (name = "id") String checkListId, Model model) {
         model.addAttribute("checkList", checkListService.getResult(checkListId));
         return "checklist/result";
     }
