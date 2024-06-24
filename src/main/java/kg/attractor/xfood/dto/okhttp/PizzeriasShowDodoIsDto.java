@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PizzeriasShowDodoIsDto {
+	@JsonProperty("countryCode")
+	private String countryCode;
 	@JsonProperty("OrganizationName")
 	private String organizationName;
 	@JsonProperty("UUId")
@@ -20,11 +22,11 @@ public class PizzeriasShowDodoIsDto {
 	@JsonProperty("Alias")
 	private String alias;
 	@JsonProperty("TranslitAlias")
-	private String alternativeAlias;
+	private String translitAlias;
 	@JsonProperty("Address")
 	private String address;
 	@JsonProperty("AddressText")
-	private String fullAddress;
+	private String addressText;
 	@JsonProperty("Orientation")
 	private String orientation;
 	

@@ -5,5 +5,8 @@ import kg.attractor.xfood.dto.okhttp.PizzeriasShowDodoIsDto;
 import java.util.List;
 
 public interface OkHttpService {
-	List<PizzeriasShowDodoIsDto> getAllPizzerias(String country);
+	
+	List<PizzeriasShowDodoIsDto> getPizzeriasByMatch(String name);
+	
+	void rewritePizzeriasToRedis(List<String> countryCodes);
 }
