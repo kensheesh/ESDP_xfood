@@ -13,6 +13,7 @@ import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -110,6 +111,11 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         }
 
         return createNewFactor(saveCriteriaDto);
+    }
+
+    @Override
+    public List<CheckListsCriteria> findAllByChecklistId(Long id) {
+        return checkListCriteriaRepository.findAllByChecklistId(id);
     }
 
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {
