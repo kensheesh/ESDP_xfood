@@ -27,7 +27,7 @@ public class CheckList {
     private WorkSchedule workSchedule;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "opportunity_id", nullable = false)
     private Opportunity opportunity;
 
@@ -44,7 +44,6 @@ public class CheckList {
     public Time duration;
 
     @Enumerated(EnumType.STRING)
-
     private Status status;
 
 }

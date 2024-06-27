@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -15,8 +16,8 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class DailyWorkScheduleShowDto {
     private Long id;
-    private LocalDateTime date;
     private boolean isWorkDay;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private String date;
+    private String startTime;
+    private String endTime;
 }

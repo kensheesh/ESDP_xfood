@@ -1,8 +1,8 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
+    <link rel="stylesheet" href="/css/analytics.css">
 
-    <main class="container mt-4">
-        <div class="row row-cols-md-2 row-gap-3">
+    <div class="row row-cols-md-2 row-gap-3 mt-4">
             <div class="col-md-4 col-xl-3 bg-body sidebar">
                 <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
                     <div class="card-body">
@@ -43,9 +43,8 @@
                                 <div class="card rounded-4 border-0 shadow-sm">
                                     <div class="card-body">
                                         <div class="d-flex flex-column row-gap-2 text-center">
-                                            <span>МСК 14:45</span>
-                                            <span>ЕКБ 16:45</span>
-                                            <span>БИШ 17:45</span>
+                                            <span data-timezone="Europe/Moscow">МСК 14:45</span>
+                                            <span data-timezone="Asia/Bishkek">БИШ 17:45</span>
                                         </div>
                                     </div>
                                 </div>
@@ -177,26 +176,7 @@
                 </div>
             </div>
         </div>
-    </main>
 
-    <style>
-        body {
-            min-height: 100vh;
-        }
-
-        @media screen and (max-width: 575px) {
-            .sidebar {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                z-index: 2;
-            }
-        }
-
-        .filter-width label {
-            width: 100%;
-        }
-    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             let pizzeriaSelects = document.querySelectorAll('.pizzeria-select');
@@ -266,7 +246,6 @@
                         console.error('Ошибка при загрузке данных:', error);
                     });
             });
-        });
-    </script>
+        });</script>
 
 </@main.layout>

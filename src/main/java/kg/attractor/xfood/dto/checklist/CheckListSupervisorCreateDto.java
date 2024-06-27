@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckListSupervisorCreateDto {
-    private LocalDateTime date;
+    private LocalDate date;
     @NotNull
     private LocalTime startTime;
     @NotNull

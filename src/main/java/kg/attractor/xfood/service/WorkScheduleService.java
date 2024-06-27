@@ -12,7 +12,7 @@ public interface WorkScheduleService {
     List<WeeklyScheduleShowDto> getWeeklySchedulesByPizzeriaId(long pizzeriaId);
 
 
-    WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDateTime date);
+    WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date);
 
-    WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDateTime date);
+    WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDate date);
 }

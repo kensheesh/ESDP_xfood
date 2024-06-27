@@ -1,8 +1,13 @@
 package kg.attractor.xfood.service.impl;
 
+import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
+import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
+import kg.attractor.xfood.repository.CriteriaRepository;
+import kg.attractor.xfood.repository.SectionRepository;
+import kg.attractor.xfood.repository.ZoneRepository;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
@@ -20,6 +25,10 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final ChecklistCriteriaRepository checkListCriteriaRepository;
     private final CriteriaService criteriaService;
     private final CheckListService checkListService;
+    private final DtoBuilder dtoBuilder;
+    private final CriteriaRepository criteriaRepository;
+    private final SectionRepository sectionRepository;
+    private final ZoneRepository zoneRepository;
 
     @Override
     public void save(List<SaveCriteriaDto> saveCriteriaDto) {
@@ -31,15 +40,13 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
                 Long checkListId = checkListService.getModelCheckListById(c.getCheckListId()).getId();
                 Long criteriaId = criteriaService.getCriteriaById(c.getCriteriaId()).getId();
 
-                Optional<CheckListsCriteria> optional = checkListCriteriaRepository
-                        .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
+                CheckListsCriteria optional = isPresentOptional(criteriaId, checkListId);
 
-                if(optional.isPresent()) {
-                    CheckListsCriteria criteria = optional.get();
-                    criteria.setMaxValue(maxValue);
-                    criteria.setValue(c.getValue());
+                if (optional != null) {
+                    optional.setMaxValue(maxValue);
+                    optional.setValue(c.getValue());
 
-                    checkListCriteriaRepository.save(criteria);
+                    checkListCriteriaRepository.save(optional);
                 } else {
                     CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
                             .value(c.getValue())
@@ -57,11 +64,90 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         });
 
     }
-    private final ChecklistCriteriaRepository criteriaRepository;
 
     @Override
     public void save(CheckListsCriteria checkListsCriteria) {
-        criteriaRepository.save(checkListsCriteria);
+        checkListCriteriaRepository.save(checkListsCriteria);
         log.info("Saved checklist criteria: {}, {}, {}", checkListsCriteria.getCriteria(), checkListsCriteria.getMaxValue(), checkListsCriteria.getChecklist());
+    }
+
+    @Override
+    public CheckListCriteriaDto createNewFactor(SaveCriteriaDto saveCriteriaDto) {
+        CheckListsCriteria checkListsCriteria = isPresentOptional(saveCriteriaDto.getCriteriaId(), saveCriteriaDto.getCheckListId());
+        if (checkListsCriteria == null) {
+            CheckListsCriteria criteria = CheckListsCriteria.builder()
+                    .maxValue(0)
+                    .checklist(checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId()))
+                    .criteria(criteriaService.getCriteriaById(saveCriteriaDto.getCriteriaId()))
+                    .value(saveCriteriaDto.getValue())
+                    .build();
+            CheckListsCriteria model =  checkListCriteriaRepository.save(criteria);
+            return dtoBuilder.buildCheckListCriteriaDto(model);
+        }
+
+        throw new IllegalArgumentException("Такой критерий уже существует! Вы можете добавить только один раз!");
+    }
+
+    @Override
+    public void deleteFactor(Long id, Long checkListId) {
+        CheckListsCriteria checkListsCriteria = isPresentOptional(id, checkListId);
+        if(checkListsCriteria != null) checkListCriteriaRepository.delete(checkListsCriteria);
+    }
+
+    @Override
+    public CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description) {
+        if(description.isEmpty()) throw new IllegalArgumentException("Описание не может быть пустым!");
+
+        Criteria criteria = Criteria.builder()
+                .description(description)
+                .section(sectionRepository.findById(1L).get())
+                .zone(zoneRepository.findById(9L).get())
+                .coefficient(1)
+                .build();
+
+        Criteria newCriteria = criteriaRepository.save(criteria);
+        saveCriteriaDto.setCriteriaId(newCriteria.getId());
+        saveCriteriaDto.setValue(-8);
+
+        return createNewFactor(saveCriteriaDto);
+    }
+
+    @Override
+    public Integer getPercentageById(Long id) {
+        List<CheckListsCriteria> criteriaList = checkListCriteriaRepository.findCriteriaByCheckListId(id);
+        Double normalMaxSum = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getMaxValue)
+                .sum();
+
+        Double normalValue = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double wowValue = criteriaList.stream()
+                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double percentage = (normalValue / normalMaxSum) * 100;
+
+        if (percentage < 100) {
+            Double totalValue = normalValue + wowValue;
+            percentage = (totalValue / normalMaxSum) * 100;
+
+            if (percentage > 100) {
+                percentage = 100.0;
+            }
+        }
+
+        return (int) Math.ceil(percentage);
+    }
+
+    private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {
+        Optional<CheckListsCriteria> optional = checkListCriteriaRepository
+                .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
+
+        return optional.orElse(null);
     }
 }

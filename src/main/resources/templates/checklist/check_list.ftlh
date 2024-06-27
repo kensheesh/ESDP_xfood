@@ -1,0 +1,535 @@
+<#import "../layout.ftlh" as main>
+<@main.layout>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .table-responsive {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #ffc107;
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+
+        .bg-danger, .bg-success {
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem;
+        }
+
+        .bg-danger {
+            background-color: #dc3545;
+        }
+
+        .bg-success {
+            background-color: #28a745;
+        }
+
+        .delete-factor {
+            background-color: transparent;
+            border: none;
+            color: black;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+        }
+
+        .delete-factor:hover {
+            text-decoration: underline;
+        }
+
+        .form-control {
+            width: auto;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+    </style>
+
+    <main class="container mt-4">
+        <div class="table-responsive rounded p-3">
+            <table id="mainTable" class="table rounded-3">
+                <thead>
+                <tr>
+                    <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
+                    <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Раздел</th>
+                    <th class="text-center">Что проверить</th>
+                    <th class="text-center">Оценка</th>
+                    <th class="text-center">${checkList.managerWorkStartDate}</th>
+                </tr>
+                </thead>
+                <tbody id="mainTableBody">
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
+                    <td colspan="2" class="text-center"><strong></strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
+                            x 100%</strong></td>
+                    <td colspan="2" class="text-center" id="percentageResult"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="text-end mb-5 mt-2">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
+                wow-фактор
+            </button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
+                фактор
+            </button>
+
+            <#if checkList.status == 'IN_PROGRESS'>
+                <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Опубликовать
+                </button>
+            </#if>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
+                                публиковать
+                            </button>
+                            <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wowFactorModalLabel">Добавить WOW-фактор</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="wowFactorForm">
+                        <div class="mb-3">
+                            <label for="wowFactorDescription" class="form-label">Описание</label>
+                            <select class="form-select form-select-sm" id="wowFactorDescription"
+                                    aria-label=".form-select-sm example">
+
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="critFactorModal" tabindex="-1" aria-labelledby="critwowFactorModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="wowFactorModalLabel">Добавить критический фактор</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="critFactorForm">
+                        <div class="mb-3">
+                            <label for="critFactorDescription" class="form-label">Описание</label>
+                            <select class="form-select form-select-sm" id="critFactorDescription"
+                                    aria-label=".form-select-sm example">
+                            </select>
+                        </div>
+                        <div class="mb-3" id="otherDescriptionDiv" style="display: none;">
+                            <label for="otherDescription" class="form-label">Введите описание</label>
+                            <input type="text" class="form-control" id="otherDescription" name="otherDescription"/>
+                        </div>
+                        <button type="submit" id="addCritFactor" data-bs-dismiss="modal" class="btn btn-primary">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async (node, child) => {
+            const mainTableBody = document.getElementById('mainTableBody');
+            const percentageDisplay = document.getElementById('percentageResult');
+            const criticalSelect = document.getElementById('critFactorDescription');
+            const wowSelect = document.getElementById('wowFactorDescription');
+            let initialInputValue;
+
+            await updatePercentage()
+            await showCriticalFactors()
+            await showWowFactors()
+            await showFactors()
+            inputUpdate()
+
+            function inputUpdate() {
+                document.querySelectorAll('.score-input').forEach(input => {
+                    input.addEventListener('input', updatePercentage);
+                    input.addEventListener('focus', handleFocus);
+                    input.addEventListener('blur', handleBlur);
+                });
+            }
+
+            async function showFactors() {
+                let maxSum = 0;
+                mainTableBody.innerHTML = '';
+
+                let response = await fetch('/api/checklist/criteria/${checkList.uuidLink}')
+                let data = await response.json()
+                data.forEach(criteria => {
+                    const row = document.createElement('tr');
+
+                    if (criteria.maxValue && criteria.maxValue > 0) {
+                        const zoneCell = createTableCell('td', 'text-center', criteria.zone);
+                        const descriptionCell = createTableCell('td', '', criteria.description);
+                        const maxValueCell = createTableCell('td', 'text-center border', criteria.maxValue);
+
+                        const inputCell = document.createElement('td');
+                        inputCell.classList.add('text-center');
+
+                        const scoreInput = document.createElement('input');
+                        scoreInput.type = 'number';
+                        scoreInput.step = criteria.maxValue;
+                        scoreInput.classList.add('text-center', 'form-control', 'score-input');
+                        scoreInput.max = criteria.maxValue;
+                        scoreInput.value = criteria.value;
+                        scoreInput.id = criteria.id;
+                        scoreInput.setAttribute('aria-valuemax', criteria.maxValue);
+
+                        scoreInput.addEventListener('input', updatePercentage);
+                        scoreInput.addEventListener('focus', handleFocus);
+                        scoreInput.addEventListener('blur', handleBlur);
+
+                        inputCell.appendChild(scoreInput);
+
+                        row.appendChild(zoneCell);
+                        row.appendChild(descriptionCell);
+                        row.appendChild(maxValueCell);
+                        row.appendChild(inputCell);
+
+                        maxSum += criteria.maxValue;
+                    } else {
+                        let sectionCell, descriptionCell, inputCell, maxValueCell;
+
+                        if (criteria.section === 'Критический фактор') {
+                            sectionCell = createTableCell('td', 'text-center bg-danger', criteria.section);
+                            descriptionCell = createTableCell('td', 'bg-danger', criteria.description);
+                            maxValueCell = createTableCell('td', 'bg-danger', '')
+
+                            inputCell = document.createElement('td');
+                            inputCell.classList.add('text-center', 'bg-danger');
+
+                            const inputGroup = createInputGroup('8', criteria.value, criteria.id);
+                            inputCell.appendChild(inputGroup);
+                        } else if (criteria.section === 'WOW фактор') {
+                            sectionCell = createTableCell('td', 'text-center bg-success', criteria.section);
+                            descriptionCell = createTableCell('td', 'bg-success', criteria.description);
+                            maxValueCell = createTableCell('td', 'bg-success', '')
+
+                            inputCell = document.createElement('td');
+                            inputCell.classList.add('text-center', 'bg-success');
+
+                            const inputGroup = createInputGroup('0', criteria.value, criteria.id);
+                            inputCell.appendChild(inputGroup);
+                        }
+
+                        row.appendChild(sectionCell);
+                        row.appendChild(descriptionCell);
+                        row.appendChild(maxValueCell);
+                        row.appendChild(inputCell);
+                    }
+
+                    mainTableBody.appendChild(row);
+                });
+                await updatePercentage()
+            }
+
+            function createTableCell(tagName, className, textContent) {
+                const cell = document.createElement(tagName);
+                cell.className = className;
+                cell.textContent = textContent || '';
+                return cell;
+            }
+
+            function createInputGroup(step, value, id) {
+                const inputGroup = document.createElement('div');
+                inputGroup.classList.add('input-group');
+
+                const scoreInput = document.createElement('input');
+                scoreInput.type = 'number';
+                scoreInput.step = step;
+                scoreInput.classList.add('text-center', 'form-control', 'score-input');
+                scoreInput.value = value;
+                scoreInput.id = id;
+
+                const inputGroupAppend = document.createElement('div');
+                inputGroupAppend.classList.add('input-group-append');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-factor', 'btn', 'btn-outline-danger');
+                deleteButton.dataset.id = id;
+                deleteButton.textContent = '×';
+                deleteButton.addEventListener('click', deleteFactor);
+
+                inputGroupAppend.appendChild(deleteButton);
+                inputGroup.appendChild(scoreInput);
+                inputGroup.appendChild(inputGroupAppend);
+
+                return inputGroup;
+            }
+
+            async function showCriticalFactors() {
+                try {
+                    let response = await fetch('/api/criteria/critical');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    let data = await response.json();
+
+                    data.forEach((criteria) => {
+                        let option = document.createElement('option')
+                        option.value = criteria.id
+                        option.innerText = criteria.description
+                        criticalSelect.appendChild(option)
+                    })
+
+                    let otherOption = document.createElement('option');
+                    otherOption.id = 'other';
+                    otherOption.value = 'other';
+                    otherOption.innerText = 'Другой';
+                    criticalSelect.appendChild(otherOption);
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+
+            async function showWowFactors() {
+                try {
+                    let response = await fetch('/api/criteria/wow');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    let data = await response.json();
+
+                    data.forEach((criteria) => {
+                        let option = document.createElement('option')
+                        option.value = criteria.id
+                        option.innerText = criteria.description
+                        wowSelect.appendChild(option)
+                    })
+
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+
+            async function updatePercentage() {
+                let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
+                let data = await response.json()
+                await fetch('/api/checks/change/status/' + ${checkList.id}, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                percentageDisplay.textContent = data + '%';
+                return data;
+            }
+
+            function handleFocus(event) {
+                initialInputValue = event.target.value;
+            }
+
+            async function handleBlur(event) {
+                if (event.target.value !== initialInputValue) {
+                    let score = {
+                        criteriaId: event.target.id,
+                        value: event.target.value,
+                        checkListId: ${checkList.id},
+                        maxValue: event.target.getAttribute('aria-valuemax')
+                    };
+
+                    await fetch('/criteria/save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify([score])
+                    });
+
+                    await updatePercentage();
+                }
+            }
+
+            async function fetchToCreate(url, object) {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                });
+
+                return response.json();
+            }
+
+            async function deleteFactor(event) {
+                const button = event.target;
+                const row = button.closest('tr');
+                const criteriaId = button.getAttribute('data-id');
+
+                await fetch(`/api/checklist/criteria/delete/`+ criteriaId+ `?checkListId=${checkList.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        row.remove();
+                        updatePercentage();
+                    } else {
+                        console.error('Ошибка при удалении фактора');
+                    }
+                });
+                await showFactors()
+                await updatePercentage()
+            }
+
+            document.getElementById('wowFactorForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const descriptionId = document.getElementById('wowFactorDescription').value;
+
+                const object = {
+                    criteriaId: descriptionId,
+                    value: 0,
+                    checkListId: ${checkList.id},
+                    maxValue: 0
+                };
+
+                await fetchToCreate('/api/checklist/criteria/create/wow', object);
+                $('#wowFactorModal').modal('hide')
+                alert('Добавлен WOW-фактор')
+                await showFactors()
+                inputUpdate()
+            });
+
+            document.getElementById('critFactorDescription').addEventListener('change', function () {
+                let selectedValue = this.value;
+                let otherDescriptionDiv = document.getElementById('otherDescriptionDiv');
+                if (selectedValue === 'other') {
+                    otherDescriptionDiv.style.display = 'block';
+                } else {
+                    otherDescriptionDiv.style.display = 'none';
+                }
+            });
+
+            document.getElementById('critFactorForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const selectedValue = document.getElementById('critFactorDescription').value;
+                let description;
+
+                if (selectedValue === 'other') {
+                    description = document.getElementById('otherDescription').value;
+                } else {
+                    description = selectedValue;
+                }
+
+                const object = {
+                    value: 0,
+                    checkListId: ${checkList.id},
+                    maxValue: 0
+                };
+
+                await fetchToCreate(`/api/checklist/criteria/create/crit?description=`+ description, object);
+                $('#critFactorModal').modal('hide')
+                alert('Критический фактор добавлен');
+                await showFactors()
+                inputUpdate()
+            });
+
+            document.querySelectorAll('.delete-factor').forEach(button => {
+                button.addEventListener('click', deleteFactor);
+            });
+
+            let uuidLink;
+            const url = 'http://localhost:2345/checks/';
+
+            async function getUrl() {
+                try {
+                    let response = await fetch(`/api/checks/${checkList.id}`);
+                    uuidLink = await response.text();
+                } catch (error) {
+                    console.error('There was a проблема с fetch операцией:', error);
+                }
+            }
+
+            let a = document.createElement('a');
+            await getUrl();
+            a.href = url + uuidLink + '/result';
+
+            document.getElementById('getTemplate').addEventListener('click', async () => {
+                const message = `Дата: ${checkList.managerWorkStartDate}\n` +
+                    `Пиццерия: ${checkList.pizzeria.name}\n` +
+                    `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
+                    `Результат проверки в %: `+ await updatePercentage() +``+
+                    `Положительная обратная связь: \n` +
+                    `Критический фактор: \n` +
+                    `WOW фактор: \n` +
+                    `Поделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
+                    a.href;
+
+                await navigator.clipboard.writeText(message);
+
+                alert("Скопировано в буфер обмена!");
+            });
+
+            document.getElementById('post').addEventListener('click', fetchToResult);
+
+            async function fetchToResult() {
+                try {
+                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, { method: 'POST' });
+                    if (!response.ok) {
+                        let errorMessage = await response.text();
+                        throw new Error(errorMessage);
+                    }
+                    await getUrl();
+                    await navigator.clipboard.writeText(url + uuidLink + '/result');
+                    console.log("Скопировано в буфер обмена!");
+                } catch (error) {
+                    alert(error.message);
+                }
+            }
+        });
+    </script>
+
+</@main.layout>

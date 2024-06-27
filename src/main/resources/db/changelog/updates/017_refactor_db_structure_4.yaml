@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete column date and replace start/endTimes type to timestamp;
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              alter table work_schedules drop column date;
+              alter table work_schedules drop column start_time;
+              alter table work_schedules drop column end_time;
+              alter table work_schedules add column start_time timestamp;
+              alter table work_schedules add column end_time timestamp;
+
+  - changeSet:
+      id: add column isWeekend to opportunity table
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              alter table opportunities add column is_weekend boolean;
+
+  - changeSet:
+      id: change type of date in opportunities table to DATE type
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              alter table opportunities alter column date set data type DATE;

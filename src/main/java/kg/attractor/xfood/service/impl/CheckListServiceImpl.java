@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
+import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import jakarta.persistence.*;
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,16 +42,12 @@ public class CheckListServiceImpl implements CheckListService {
     private final WorkScheduleService workScheduleService;
     private final DtoBuilder dtoBuilder;
     private final UserService userService;
-    private final OpportunityService opportunityService;
-    private final CheckTypeService checkTypeService;
     private final CriteriaService criteriaService;
-    private final CriteriaTypeService criteriaTypeService;
-    //	private final CheckListCriteriaService checkListsCriteriaService;
     private final CriteriaPizzeriaService criteriaPizzeriaService;
-    private final EntityManager entityManager;
     private final OpportunityRepository opportunityRepository;
     private final CheckListRepository checkListRepository;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
+    private final CheckListDao checkListDao;
 
 
     @Override
@@ -72,18 +70,26 @@ public class CheckListServiceImpl implements CheckListService {
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
-        if (createDto.getEndTime().isBefore(workSchedule.getStartTime())) {
+        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())){
             throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
         }
         //TODO уточнить надо ли делать проверку по work_schedule, opportunity and type и если необходимо добавить
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
+
+        LocalDate date;
+        if (workSchedule.getStartTime().toLocalDate().isBefore(workSchedule.getEndTime().toLocalDate())) {
+            date = workSchedule.getEndTime().toLocalDate();
+        } else {
+            date = workSchedule.getEndTime().toLocalDate();
+        }
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
-                .date(createDto.getDate())
+                .date(date)
                 .startTime(createDto.getStartTime())
                 .endTime(createDto.getEndTime())
                 .build();
+
         Long id = opportunityRepository.save(opportunity).getId();
         checkListRepository.saveChecklist(id, workSchedule.getId(), Status.NEW.getStatus());
         checkListRepository.flush();
@@ -91,15 +97,19 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public ChecklistShowDto getCheckListById(Long id) {
+    public ChecklistShowDto getCheckListById(String id) {
         CheckList checkList = getModelCheckListById(id);
         return dtoBuilder.buildChecklistShowDto(checkList);
     }
 
     @Override
+    public CheckList getModelCheckListById(String id) {
+        return checkListRepository.findByUuidLink(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by uuid "+id));
+    }
+
+    @Override
     public CheckList getModelCheckListById(Long id) {
-        return checkListRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Чек-лист с ID:" + id + " не найден"));
+        return checkListRepository.findById(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by ID "+id));
     }
 
     @Override
@@ -115,6 +125,20 @@ public class CheckListServiceImpl implements CheckListService {
                 .toList();
     }
 
+
+    @Override
+    public CheckListResultDto getResult(String checkListId) {
+        CheckList checkList = getModelCheckListById(checkListId);
+
+        if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
+            return dtoBuilder.buildCheckListResultDto(
+                    checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
+                            .orElseThrow(() -> new NotFoundException("Check list not found"))
+            );
+        }
+
+        throw new IllegalArgumentException("По данной проверке нет еще результатов");
+    }
 
     @Override
     public CheckListResultDto getResult(Long checkListId) {
@@ -159,9 +183,10 @@ public class CheckListServiceImpl implements CheckListService {
         if (startDate != null && endDate != null) {
             checkLists = checkLists.stream()
                     .filter(checkList -> {
-                        LocalDate date = checkList.getWorkSchedule().getDate().toLocalDate();
-                        return (date.isEqual(startDate) || date.isAfter(startDate)) &&
-                                (date.isEqual(endDate) || date.isBefore(endDate));
+                        LocalDate startTime = checkList.getWorkSchedule().getStartTime().toLocalDate();
+                        LocalDate endTime = checkList.getWorkSchedule().getEndTime().toLocalDate();
+                        return (startTime.isEqual(startDate) || startTime.isAfter(startDate)) &&
+                                (endTime.isEqual(endDate) || endTime.isBefore(endDate));
                     })
                     .collect(Collectors.toList());
         }
@@ -178,16 +203,15 @@ public class CheckListServiceImpl implements CheckListService {
         );
     }
 
+
     @Override
-    public ResponseEntity<?> updateCheckStatusCheckList(Long id) {
+    public void updateCheckStatusCheckList(String id) {
         CheckList checkList = getModelCheckListById(id);
         if(checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");
         }
 
-        checkList.setUuidLink(String.valueOf(UUID.randomUUID()));
-        checkList.setStatus(Status.DONE);
-        return ResponseEntity.ok(checkListRepository.save(checkList));
+        checkListDao.updateStatus(Status.DONE, checkList);
     }
 
 
@@ -195,7 +219,9 @@ public class CheckListServiceImpl implements CheckListService {
     public void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto) {
         CheckList checkList = checkListRepository.findCheckListByWorkSchedule_IdAndAndOpportunity_Id(checklistDto.getWorkScheduleId(), checklistDto.getOpportunityId());
         log.info(checkList.toString());
-
+        String uuid = UUID.randomUUID().toString();
+        checkList.setUuidLink(uuid);
+        checkListRepository.save(checkList);
         for (CriteriaMaxValueDto criteriaMaxValueDto : checklistDto.getCriteriaMaxValueDtoList()) {
             CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
                     .checklist(checkList)
