@@ -2,10 +2,10 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
-import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
@@ -15,17 +15,17 @@ import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.dto.user.UserDto;
-import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -82,11 +82,14 @@ public class DtoBuilder {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
 				.map(this::buildCriteriaShowDto)
+				.sorted(Comparator.comparing(CriteriaExpertShowDto::getZone))
+				.sorted(Comparator.comparing(CriteriaExpertShowDto::getSection))
 				.collect(toList());
 		ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
 		PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
 
 		return ChecklistShowDto.builder()
+				.uuidLink(model.getUuidLink())
 				.id(model.getId())
 				.pizzeria(pizzeriaDto)
 				.manager(managerDto)
@@ -212,6 +215,12 @@ public class DtoBuilder {
         return dtos;
     }
 
+	protected List<PizzeriaWeeklyDto> buildPizzeriaWeeklyDtos(List<Pizzeria> pizzerias) {
+		List<PizzeriaWeeklyDto> dtos = new ArrayList<>();
+		pizzerias.forEach(e -> dtos.add(buildPizzeriaWeeklyDto(e)));
+		return dtos;
+	}
+
 	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
 		return PizzeriaShowDto.builder()
 				.id(pizzeria.getId())
@@ -219,6 +228,13 @@ public class DtoBuilder {
 				.location(pizzeria.getLocation())
 				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
 				.workSchedules(pizzeria.getWorkSchedules()).build();
+	}
+
+	protected PizzeriaWeeklyDto buildPizzeriaWeeklyDto(Pizzeria pizzeria) {
+		return PizzeriaWeeklyDto.builder()
+				.id(pizzeria.getId())
+				.name(pizzeria.getName())
+				.build();
 	}
 
 	protected ZoneSupervisorShowDto buildZoneDto(Zone model){
@@ -266,6 +282,15 @@ public class DtoBuilder {
 				.date(model.getDate())
 				.startTime(model.getStartTime())
 				.endTime((model.getEndTime()))
+				.build();
+	}
+
+	protected CheckListCriteriaDto buildCheckListCriteriaDto(CheckListsCriteria model) {
+		return CheckListCriteriaDto.builder()
+				.criteria(model.getCriteria().getDescription())
+				.value(model.getValue())
+				.id(model.getId())
+				.maxValue(model.getMaxValue())
 				.build();
 	}
 

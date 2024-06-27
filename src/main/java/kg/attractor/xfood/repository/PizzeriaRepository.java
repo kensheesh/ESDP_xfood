@@ -8,7 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PizzeriaRepository extends JpaRepository<Pizzeria, Long> {
-    Pizzeria findFirstByLocation_IdOrderByNameAsc(Long id);
-
     List<Pizzeria> findByLocation_IdOrderByNameAsc(Long id);
 }

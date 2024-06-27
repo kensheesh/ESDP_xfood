@@ -87,4 +87,19 @@ public class CriteriaServiceImpl implements CriteriaService {
         return criteriaRepository.findById(criteriaId)
                 .orElseThrow(() -> new NoSuchElementException("Критерия с ID: " + criteriaId + " не найдена!"));
     }
+
+    @Override
+    public List<CriteriaSupervisorShowDto> getWowCriteria() {
+        return criteriaRepository.findCriteriaWhereSectionWow()
+                .stream().map(dtoBuilder::buildCriteriaSupervisorShowDto)
+                .toList();
+    }
+
+    @Override
+    public List<CriteriaSupervisorShowDto> getCritCriteria() {
+        return criteriaRepository.findCriteriaWhereSectionCrit()
+                .stream().map(dtoBuilder::buildCriteriaSupervisorShowDto)
+                .toList();
+    }
 }
+

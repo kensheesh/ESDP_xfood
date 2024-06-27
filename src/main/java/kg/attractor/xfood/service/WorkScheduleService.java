@@ -15,4 +15,6 @@ public interface WorkScheduleService {
     WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date);
 
     WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDate date);
+
+    void save(WorkSchedule workSchedule);
 }

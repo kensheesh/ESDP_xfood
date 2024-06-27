@@ -84,7 +84,7 @@ async function addCriteriaToList(id) {
              <td>${criteria.description}</td>
              <td>${criteria.section === '' ?
                 `<input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-${id}">` :
-                `${criteria.coefficient}<input type="hidden" name="criteriaMaxValueDtoList[${id}].maxValue" value="${criteria.coefficient}" id="maxValueInput-${id}">`}
+                `${criteria.coefficient}`/*<input type="hidden" name="criteriaMaxValueDtoList[${id}].maxValue" value="${criteria.coefficient}" id="maxValueInput-${id}">*/}
              </td>
              <td>
                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${id}">
@@ -164,7 +164,7 @@ async function validate(event) {
                 '<td>' +
                 (data.section === ''
                     ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-' + createdId + '">'
-                    : data.coefficient + '<input type="hidden" name="criteriaMaxValueDtoList[' + createdId + '].maxValue" value="'+data.coefficient+'" id="maxValueInput-' + createdId + '"/> ') +
+                    : data.coefficient /*+ '<input type="hidden" name="criteriaMaxValueDtoList[' + createdId + '].maxValue" value="'+data.coefficient+'" id="maxValueInput-' + createdId + '"/> '*/) +
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
@@ -270,7 +270,7 @@ async function getCriterion(value, pizzeriaId) {
                 '<td>' +
                 (criterion[i].section === ''
                     ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-' + criterion[i].id + '">'
-                    : criterion[i].coefficient + '<input type="hidden" name="criteriaMaxValueDtoList[' + i + '].maxValue" value="'+criterion[i].coefficient+'" id="maxValueInput-' + criterion[i].id + '">') +
+                    : criterion[i].coefficient/* + '<input type="hidden" name="criteriaMaxValueDtoList[' + i + '].maxValue" value="'+criterion[i].coefficient+'" id="maxValueInput-' + criterion[i].id + '">'*/) +
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '" id="maxValueInput-' + criterion[i].id + '">' +

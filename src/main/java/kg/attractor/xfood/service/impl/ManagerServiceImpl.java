@@ -1,6 +1,8 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.manager.ManagerDto;
+import kg.attractor.xfood.exception.NotFoundException;
+import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.repository.ManagerRepository;
 import kg.attractor.xfood.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +24,19 @@ public class ManagerServiceImpl implements ManagerService {
                 .stream()
                 .map(dtoBuilder::buildManagerDto)
                 .toList();
+    }
+
+    @Override
+    public List<ManagerDto> getAllAvailable(String uuid) {
+        //TODO после исправления бд доставать только менеджеров данной пиццерии
+        return managerRepository.findAll()
+                .stream()
+                .map(dtoBuilder::buildManagerDto)
+                .toList();
+    }
+
+    @Override
+    public Manager findById(Long id) {
+      return managerRepository.findById(id).orElseThrow(() -> new NotFoundException("Manager not found by id: " + id));
     }
 }
