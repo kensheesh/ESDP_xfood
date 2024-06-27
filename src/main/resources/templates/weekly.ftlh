@@ -51,9 +51,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="work-shifts" class="row row-cols-1 row-gap-3">
-                        <div class="row">
-                        </div>
+                    <div id="work-shifts" class="row row-cols-1 row-gap-3 mx-1">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -89,9 +87,9 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+<#--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"-->
+<#--            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">-->
+<#--    </script>-->
 
     <script>
         let currentDate;
@@ -107,6 +105,7 @@
                     data.forEach(item => {
                         const pizzeria = document.createElement('p');
                         const pizzeriaLink = document.createElement('a');
+                        pizzeriaLink.className = 'text-decoration-none'
                         pizzeriaLink.href = "/api/managers-work-schedule/pizzeria/" + item.id;
                         pizzeriaLink.textContent = item.name;
                         pizzeriaLink.addEventListener('click', function() {
@@ -157,7 +156,7 @@
                                                 </div>
                                             </div>
                                             <div class="col">
-                                                <button class="btn btn-sm btn-success rounded-4 calendar-button"
+                                                <button class="btn btn-sm btn-green  rounded-4 calendar-button"
                                                         style="font-size: 11px;" id="" value="` + schedule.date + `" data-bs-toggle="modal"
                                                         data-bs-target="#workShiftModal" onclick="handleWorkDayClick(` + item.manager.id + `, this.value)">
                                                     <div>` + schedule.startTime + ` - ` + schedule.endTime + `</div>
@@ -202,10 +201,8 @@
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(item => {
-                        let opportunity = document.createElement('div');
-                        opportunity.className = 'row';
                         let card = document.createElement('a');
-                        card.className = 'card';
+                        card.className = 'card link-secondary text-decoration-none border-0 shadow-sm rounded-4';
                         card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + item.user.id;
                         let cardBody = document.createElement('div');
                         cardBody.className = 'card-body';
@@ -219,10 +216,8 @@
                             `;
                             cardBody.insertAdjacentElement('beforeend', row)
                         })
-
-                        opportunity.insertAdjacentElement('beforeend', card);
                         card.insertAdjacentElement('beforeend', cardBody);
-                        shiftsList.insertAdjacentElement('beforeend', opportunity);
+                        shiftsList.insertAdjacentElement('beforeend', card);
                     });
                 })
                 .catch(error => console.error('Error fetching pizzerias:', error));
