@@ -211,7 +211,6 @@
                             <label for="critFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="critFactorDescription"
                                     aria-label=".form-select-sm example">
-                                <option value="other">Другой</option>
                             </select>
                         </div>
                         <div class="mb-3" id="otherDescriptionDiv" style="display: none;">
@@ -225,7 +224,7 @@
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', async (node, child) => {
             const maxSum = ${maxSum};
             const percentageDisplay = document.getElementById('percentageResult');
             const calculateButton = document.getElementById('calculateButton');
@@ -247,6 +246,12 @@
                         option.innerText = criteria.description
                         criticalSelect.appendChild(option)
                     })
+
+                    let otherOption = document.createElement('option');
+                    otherOption.id = 'other';
+                    otherOption.value = 'other';
+                    otherOption.innerText = 'Другой';
+                    criticalSelect.appendChild(otherOption);
                 } catch (error) {
                     console.error('There was a problem with the fetch operation:', error);
                 }
@@ -266,6 +271,7 @@
                         option.innerText = criteria.description
                         wowSelect.appendChild(option)
                     })
+
                 } catch (error) {
                     console.error('There was a problem with the fetch operation:', error);
                 }
@@ -401,7 +407,7 @@
 
                 let newCriteria = await fetchToCreate('/api/checklist/criteria/create/wow', object);
                 await createNewElement('WOW', 'success', newCriteria);
-                document.getElementById('wowFactorModal')
+                $('#wowFactorModal').modal('hide')
                 alert('Добавлен WOW-фактор')
             });
 
@@ -434,7 +440,7 @@
 
                 let newCriteria = await fetchToCreate(`/api/checklist/criteria/create/crit?description=`+ description, object);
                 await createNewElement('Критический', 'danger', newCriteria)
-                document. getElementById('critFactorModal').style.display = 'none';
+                $('#critFactorModal').modal('hide')
                 alert('Критический фактор добавлен');
             });
 

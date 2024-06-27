@@ -85,7 +85,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
             return dtoBuilder.buildCheckListCriteriaDto(model);
         }
 
-        throw new IllegalArgumentException("Такой wow-фактор уже существует! Вы можете добавить только один раз!");
+        throw new IllegalArgumentException("Такой критерий уже существует! Вы можете добавить только один раз!");
     }
 
     @Override
@@ -96,9 +96,8 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
     @Override
     public CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description) {
-        if(description.isEmpty()) {
-            throw new IllegalArgumentException("Описание не может быть пустым");
-        }
+        if(description.isEmpty()) throw new IllegalArgumentException("Описание не может быть пустым!");
+
         Criteria criteria = Criteria.builder()
                 .description(description)
                 .section(sectionRepository.findById(1L).get())

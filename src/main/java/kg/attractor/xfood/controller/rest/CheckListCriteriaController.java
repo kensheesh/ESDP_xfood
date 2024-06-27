@@ -33,7 +33,7 @@ public class CheckListCriteriaController {
         try{
             long criteriaId = Long.parseLong(description);
             saveCriteriaDto.setCriteriaId(criteriaId);
-            return ResponseEntity.ok(checkListCriteriaService.createCritFactor(saveCriteriaDto, null));
+            return ResponseEntity.ok(checkListCriteriaService.createNewFactor(saveCriteriaDto));
         } catch (NumberFormatException e) {
             return ResponseEntity.ok(checkListCriteriaService.createCritFactor(saveCriteriaDto, description));
         }
