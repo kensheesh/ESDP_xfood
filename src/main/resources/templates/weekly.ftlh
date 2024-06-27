@@ -13,7 +13,7 @@
                                     <option selected disabled>Выберите территорию</option>
                                     <#if locations?has_content>
                                         <#list locations as location>
-                                            <option value="${location.id}">${location.name}</option>
+                                            <option value="${location.id}" <#if location.id == locationId>selected</#if>>${location.name}</option>
                                         </#list>
                                     <#else>
                                         <option disabled>Нет доступных территорий</option>
@@ -21,7 +21,13 @@
                                 </select>
                             </div>
                             <div class="px-3" id="pizzeria-list">
-                                <span class="text-secondary">Список пуст</span>
+                                <#if pizzerias?has_content>
+                                    <#list pizzerias as pizzeria>
+                                        <div class="btn border w-100 text-start p-2 my-1" id="${pizzeria.id}" onclick="handlePizzeriaClick(this.id)">${pizzeria.name}</div>
+                                    </#list>
+                                <#else>
+                                    <span class="text-secondary">Список пуст</span>
+                                </#if>
                             </div>
                         </div>
                     </div>
@@ -34,8 +40,49 @@
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <tbody id="schedule-list">
-
-                            </tbody>
+                                <tr>
+                                    <#if schedules?has_content>
+                                        <#list schedules as schedule>
+                                            <td class="align-middle">
+                                                <span>${schedule.manager.name}<br>${schedule.manager.surname}</span>
+                                            </td>
+                                            <#list schedule.weeklySchedule as day>
+                                                <td>
+                                                    <#if day.workDay>
+                                                        <div class="row row-cols-1">
+                                                            <div class="col">
+                                                                <div class="text-body-secondary fw-medium calendar-date">${day.date}</div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <button class="btn btn-sm btn-success rounded-4 calendar-button"
+                                                                        style="font-size: 11px;" id="" value="${day.date}" data-bs-toggle="modal"
+                                                                        data-bs-target="#workShiftModal" onclick="handleWorkDayClick(${schedule.manager.id}, this.value)">
+                                                                    <div>${day.startTime} - ${day.endTime}</div>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    <#else>
+                                                        <div class="row row-cols-1">
+                                                            <div class="col">
+                                                                <div class="text-body-secondary fw-medium calendar-date">
+                                                                    ${day.date}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <button class="btn btn-sm btn-light rounded-4 calendar-button" disabled>
+                                                                    <i class="bi bi-ban"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </#if>
+                                                </td>
+                                            </#list>
+                                        </#list>
+                                    <#else>
+                                        <span class="text-center fs-4 p-4">Нет результатов</span>
+                                    </#if>
+                                </tr>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -97,102 +144,20 @@
         let currentDate;
         let managerId;
         let expertId;
+        let locationId;
 
         async function handleSelectChange(selectedValue) {
-            let pizzeriaList = document.getElementById('pizzeria-list');
-            pizzeriaList.innerHTML = '';
-            fetch('/api/pizzerias/location/' + selectedValue)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    data.forEach(item => {
-                        let pizzeria = document.createElement('p');
-                        let pizzeriaButton = document.createElement('div');
-                        pizzeriaButton.className = 'btn border w-100 text-start p-2';
-                        pizzeriaButton.id = item.id;
-                        pizzeriaButton.textContent = item.name;
-                        pizzeriaButton.addEventListener('click', function() {
-                            handlePizzeriaClick(this.id);
-                        });
-                        pizzeria.appendChild(pizzeriaButton);
-
-                        pizzeriaList.insertAdjacentElement('beforeend', pizzeria);
-                    });
-                })
-                .catch(error => console.error('Error fetching pizzerias:', error));
+            locationId = selectedValue;
+            localStorage.setItem('locationId', locationId);
+            window.location.href = '/supervisor/weekly?locId=' + locationId
         }
 
         async function handlePizzeriaClick(pizzeriaId) {
-            let scheduleList = document.getElementById('schedule-list');
-            scheduleList.innerHTML = '';
-
-            fetch("/api/managers-work-schedule/pizzeria/" + pizzeriaId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        let loss = document.createElement('span');
-                        loss.className = 'text-center fs-4 p-4';
-                        loss.innerHTML = 'Нет результатов';
-                        scheduleList.insertAdjacentElement('beforeend', loss);
-                    } else {
-                        data.forEach(item => {
-                            let row = document.createElement('tr');
-                            let manager = document.createElement('td');
-                            manager.className = 'align-middle';
-                            manager.innerHTML =
-                                `
-                                <span>` + item.manager.surname + `<br>` + item.manager.name + `</span>
-                            `;
-
-                            row.insertAdjacentElement('beforeend', manager);
-
-                            item.weeklySchedule.forEach(schedule => {
-                                let day = document.createElement('td');
-                                if(schedule.workDay) {
-                                    day.innerHTML =
-                                        `
-                                        <div class="row row-cols-1">
-                                            <div class="col">
-                                                <div class="text-body-secondary fw-medium calendar-date">
-                                                    ` + schedule.date + `
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                        style="font-size: 11px;" id="" value="` + schedule.date + `" data-bs-toggle="modal"
-                                                        data-bs-target="#workShiftModal" onclick="handleWorkDayClick(` + item.manager.id + `, this.value)">
-                                                    <div>` + schedule.startTime + ` - ` + schedule.endTime + `</div>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        `;
-                                } else {
-                                    day.innerHTML =
-                                        `
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                ` + schedule.date + `
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button" disabled>
-                                                <i class="bi bi-ban"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    `;
-                                }
-                                row.insertAdjacentElement('beforeend', day);
-                            })
-                        scheduleList.insertAdjacentElement('beforeend', row);
-                        });
-                    }
-                })
-                .catch(error => console.error('Error fetching work schedules:', error));
+            locationId = localStorage.getItem('locationId');
+            window.location.href = '/supervisor/weekly?locId=' + locationId + '&pizzId=' + pizzeriaId;
         }
 
-        function handleWorkDayClick(id, date) {
+        /*function handleWorkDayClick(id, date) {
             currentDate = date;
             managerId = id;
 
@@ -228,8 +193,81 @@
                 })
                 .catch(error => console.error('Error fetching pizzerias:', error));
 
+        }*/
+
+
+        function handleWorkDayClick(id, date) {
+            currentDate = date;
+            managerId = id;
+
+            let shiftsList = document.getElementById('work-shifts');
+            shiftsList.innerHTML = '';
+
+            fetch('/api/opportunities/bydate/' + date)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            let opportunity = document.createElement('div');
+                            opportunity.className = 'row';
+                            let card = document.createElement('a');
+                            card.className = 'card text-decoration-none mb-2';
+                            card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + item.user.id;
+                            let cardBody = document.createElement('div');
+                            cardBody.className = 'card-body';
+                            cardBody.innerHTML = `
+                        <h5 class="card-title">` + item.user.surname + ` ` + item.user.name + `</h5>
+                    `;
+                            item.shifts.forEach(shift => {
+                                let row = document.createElement('p');
+                                row.innerHTML = shift.startTime + ` - ` + shift.endTime;
+                                cardBody.appendChild(row);
+                            });
+                            card.appendChild(cardBody);
+                            opportunity.appendChild(card);
+                            shiftsList.appendChild(opportunity);
+                        });
+                    } else {
+                        let noOpportunities = document.createElement('div');
+                        noOpportunities.className = 'text-center text-secondary';
+                        noOpportunities.innerText = 'Нет доступных экспертов на выбранную дату';
+                        shiftsList.appendChild(noOpportunities);
+                    }
+                    fetchAllExperts();
+                })
+                .catch(error => console.error('Error fetching opportunities:', error));
         }
 
+        function fetchAllExperts() {
+            fetch('/api/experts')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(expert => {
+                        if (!document.querySelector(`[href*="&expertId=` + expert.id + `"]`)) {
+                            let expertElement = document.createElement('div');
+                            expertElement.className = 'row';
+                            let card = document.createElement('a');
+                            card.className = 'card mb-2';
+                            card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + expert.id;
+                            let cardBody = document.createElement('div');
+                            cardBody.className = 'card-body';
+                            cardBody.innerHTML = `
+                        <h5 class="card-title">` + expert.surname + ` ` + expert.name + `</h5>
+                        <span class="text-secondary">Нет доступных смен</span>
+                    `;
+                            card.appendChild(cardBody);
+                            expertElement.appendChild(card);
+                            document.getElementById('work-shifts').appendChild(expertElement);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching experts:', error));
+        }
+
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            locationId = localStorage.getItem('locationId');
+        });
     </script>
 
 </@main.layout>

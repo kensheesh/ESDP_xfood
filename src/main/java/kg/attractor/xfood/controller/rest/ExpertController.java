@@ -2,6 +2,7 @@ package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
@@ -35,12 +36,19 @@ public class ExpertController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/fetch")
+    public ResponseEntity<List<ExpertShowDto>> fetchAllExperts() {
+        List<ExpertShowDto> experts = userService.fetchAllExperts();
+        return ResponseEntity.ok(experts);
+    }
+
+
     // ROLE: SUPERVISOR
     @GetMapping("/availability")
     public ResponseEntity<Map<String, List<?>>> getAllByAvailability(
             @RequestParam(name = "datetime") LocalDateTime checkTime
     ) {
-        /*    TODO:
+        /*    TODO: (сделано через fetch('/api/opportunities/bydate/' + date))
                  Метод для получения списка
                  ДОСТУПНЫХ на данное время и
                  ОСТАЛЬНЫХ экспертов при назначений

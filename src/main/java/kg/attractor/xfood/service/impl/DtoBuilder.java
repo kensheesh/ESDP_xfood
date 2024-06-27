@@ -77,7 +77,6 @@ public class DtoBuilder {
                 .build();
     }
 
-
 	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
@@ -187,6 +186,14 @@ public class DtoBuilder {
     }
 
     protected ExpertShowDto buildExpertShowDto(User user) {
+        return ExpertShowDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .build();
+    }
+
+    protected ExpertShowDto buildExpertShowDto(UserDto user) {
         return ExpertShowDto.builder()
                 .id(user.getId())
                 .name(user.getName())
