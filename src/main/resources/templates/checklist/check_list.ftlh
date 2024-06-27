@@ -76,57 +76,12 @@
                 </tr>
                 </thead>
                 <tbody id="mainTableBody">
-                <#assign maxSum = 0>
-                <#list checkList.criteria as criteria>
-                    <tr>
-                        <#if criteria.maxValue?? && criteria.maxValue gt 0>
-                            <td class="text-center">${criteria.zone}</td>
-                            <td>${criteria.description}</td>
-                            <td class="text-center border">${criteria.maxValue}</td>
-                            <td class="text-center">
-                                <input type="number" step="${criteria.maxValue}" class="text-center form-control score-input"
-                                       max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
-                                       aria-valuemax="${criteria.maxValue}">
-                            </td>
-                            <#assign maxSum = maxSum + criteria.maxValue>
-                        <#else>
-                            <#if criteria.section == 'Критический фактор'>
-                                <td class="text-center bg-danger">${criteria.section}</td>
-                                <td class="bg-danger">${criteria.description}</td>
-                                <td class="bg-danger"></td>
-                                <td class="text-center bg-danger">
-                                    <div class="input-group">
-                                        <input type="number" step="8" class="text-center form-control score-input"
-                                               value="${criteria.value}" id="${criteria.id}">
-                                        <div class="input-group-append">
-                                            <button class="delete-factor btn btn-outline-danger"
-                                                    data-id="${criteria.id}">&times;
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            <#elseif criteria.section == 'WOW фактор'>
-                                <td class="text-center bg-success">${criteria.section}</td>
-                                <td class="bg-success">${criteria.description}</td>
-                                <td class="bg-success"></td>
-                                <td class="text-center bg-success">
-                                    <div class="input-group">
-                                        <input type="number"  class="text-center form-control score-wow-input" min="0"
-                                               value="${criteria.value}" id="${criteria.id}">
-                                        <div class="input-group-append">
-                                            <button class="delete-factor" data-id="${criteria.id}">&times;</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </#if>
-                        </#if>
-                    </tr>
-                </#list>
+
                 </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
-                    <td colspan="2" class="text-center"><strong>${maxSum}</strong></td>
+                    <td colspan="2" class="text-center"><strong></strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
@@ -143,7 +98,6 @@
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
                 фактор
             </button>
-            <button id="calculateButton" class="btn btn-warning">Сохранить</button>
 
             <#if checkList.status == 'IN_PROGRESS'>
                 <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
@@ -225,12 +179,133 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
-            const maxSum = ${maxSum};
+            const mainTableBody = document.getElementById('mainTableBody');
             const percentageDisplay = document.getElementById('percentageResult');
-            const calculateButton = document.getElementById('calculateButton');
             const criticalSelect = document.getElementById('critFactorDescription');
             const wowSelect = document.getElementById('wowFactorDescription');
-            let criteria = [];
+            let initialInputValue;
+
+            await updatePercentage()
+            await showCriticalFactors()
+            await showWowFactors()
+            await showFactors()
+            inputUpdate()
+
+            function inputUpdate() {
+                document.querySelectorAll('.score-input').forEach(input => {
+                    input.addEventListener('input', updatePercentage);
+                    input.addEventListener('focus', handleFocus);
+                    input.addEventListener('blur', handleBlur);
+                });
+            }
+
+            async function showFactors() {
+                let maxSum = 0;
+                mainTableBody.innerHTML = '';
+
+                let response = await fetch('/api/checklist/criteria/${checkList.uuidLink}')
+                let data = await response.json()
+                data.forEach(criteria => {
+                    const row = document.createElement('tr');
+
+                    if (criteria.maxValue && criteria.maxValue > 0) {
+                        const zoneCell = createTableCell('td', 'text-center', criteria.zone);
+                        const descriptionCell = createTableCell('td', '', criteria.description);
+                        const maxValueCell = createTableCell('td', 'text-center border', criteria.maxValue);
+
+                        const inputCell = document.createElement('td');
+                        inputCell.classList.add('text-center');
+
+                        const scoreInput = document.createElement('input');
+                        scoreInput.type = 'number';
+                        scoreInput.step = criteria.maxValue;
+                        scoreInput.classList.add('text-center', 'form-control', 'score-input');
+                        scoreInput.max = criteria.maxValue;
+                        scoreInput.value = criteria.value;
+                        scoreInput.id = criteria.id;
+                        scoreInput.setAttribute('aria-valuemax', criteria.maxValue);
+
+                        scoreInput.addEventListener('input', updatePercentage);
+                        scoreInput.addEventListener('focus', handleFocus);
+                        scoreInput.addEventListener('blur', handleBlur);
+
+                        inputCell.appendChild(scoreInput);
+
+                        row.appendChild(zoneCell);
+                        row.appendChild(descriptionCell);
+                        row.appendChild(maxValueCell);
+                        row.appendChild(inputCell);
+
+                        maxSum += criteria.maxValue;
+                    } else {
+                        let sectionCell, descriptionCell, inputCell, maxValueCell;
+
+                        if (criteria.section === 'Критический фактор') {
+                            sectionCell = createTableCell('td', 'text-center bg-danger', criteria.section);
+                            descriptionCell = createTableCell('td', 'bg-danger', criteria.description);
+                            maxValueCell = createTableCell('td', 'bg-danger', '')
+
+                            inputCell = document.createElement('td');
+                            inputCell.classList.add('text-center', 'bg-danger');
+
+                            const inputGroup = createInputGroup('8', criteria.value, criteria.id);
+                            inputCell.appendChild(inputGroup);
+                        } else if (criteria.section === 'WOW фактор') {
+                            sectionCell = createTableCell('td', 'text-center bg-success', criteria.section);
+                            descriptionCell = createTableCell('td', 'bg-success', criteria.description);
+                            maxValueCell = createTableCell('td', 'bg-success', '')
+
+                            inputCell = document.createElement('td');
+                            inputCell.classList.add('text-center', 'bg-success');
+
+                            const inputGroup = createInputGroup('0', criteria.value, criteria.id);
+                            inputCell.appendChild(inputGroup);
+                        }
+
+                        row.appendChild(sectionCell);
+                        row.appendChild(descriptionCell);
+                        row.appendChild(maxValueCell);
+                        row.appendChild(inputCell);
+                    }
+
+                    mainTableBody.appendChild(row);
+                });
+                await updatePercentage()
+            }
+
+            function createTableCell(tagName, className, textContent) {
+                const cell = document.createElement(tagName);
+                cell.className = className;
+                cell.textContent = textContent || '';
+                return cell;
+            }
+
+            function createInputGroup(step, value, id) {
+                const inputGroup = document.createElement('div');
+                inputGroup.classList.add('input-group');
+
+                const scoreInput = document.createElement('input');
+                scoreInput.type = 'number';
+                scoreInput.step = step;
+                scoreInput.classList.add('text-center', 'form-control', 'score-input');
+                scoreInput.value = value;
+                scoreInput.id = id;
+
+                const inputGroupAppend = document.createElement('div');
+                inputGroupAppend.classList.add('input-group-append');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-factor', 'btn', 'btn-outline-danger');
+                deleteButton.dataset.id = id;
+                deleteButton.textContent = '×';
+                deleteButton.addEventListener('click', deleteFactor);
+
+                inputGroupAppend.appendChild(deleteButton);
+                inputGroup.appendChild(scoreInput);
+                inputGroup.appendChild(inputGroupAppend);
+
+                return inputGroup;
+            }
 
             async function showCriticalFactors() {
                 try {
@@ -276,15 +351,10 @@
                     console.error('There was a problem with the fetch operation:', error);
                 }
             }
-            await showCriticalFactors()
-            await showWowFactors()
 
             async function updatePercentage() {
-                let totalScore = 0;
-                document.querySelectorAll('.score-input').forEach(input => {
-                    totalScore += parseFloat(input.value) || 0;
-                });
-
+                let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
+                let data = await response.json()
                 await fetch('/api/checks/change/status/' + ${checkList.id}, {
                     method: 'post',
                     headers: {
@@ -292,39 +362,33 @@
                     },
                 });
 
-                let percentage = (totalScore / maxSum) * 100;
-
-                if (percentage < 100) {
-                    document.querySelectorAll('.score-wow-input').forEach(input => {
-                        totalScore += parseFloat(input.value) || 0;
-                    });
-                    percentage = Math.min((totalScore / maxSum) * 100, 100);
-                }
-
-                percentageDisplay.textContent = Math.round(percentage) + '%';
+                percentageDisplay.textContent = data + '%';
+                return data;
             }
 
-            await updatePercentage();
+            function handleFocus(event) {
+                initialInputValue = event.target.value;
+            }
 
-            async function saveScores() {
-                criteria = [];
-                document.querySelectorAll('.score-input').forEach(input => {
-                    let scores = {
-                        criteriaId: input.id,
-                        value: input.value,
+            async function handleBlur(event) {
+                if (event.target.value !== initialInputValue) {
+                    let score = {
+                        criteriaId: event.target.id,
+                        value: event.target.value,
                         checkListId: ${checkList.id},
-                        maxValue: input.getAttribute('aria-valuemax')
+                        maxValue: event.target.getAttribute('aria-valuemax')
                     };
-                    criteria.push(scores);
-                });
 
-                await fetch('/criteria/save', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(criteria)
-                });
+                    await fetch('/criteria/save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify([score])
+                    });
+
+                    await updatePercentage();
+                }
             }
 
             async function fetchToCreate(url, object) {
@@ -337,35 +401,6 @@
                 });
 
                 return response.json();
-            }
-
-            async function createNewElement(factor, typeClass, newCriteria) {
-                if (newCriteria.criteria !== undefined) {
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td class="text-center bg-`+typeClass+`">`+factor+` фактор</td>
-                        <td class="bg-`+typeClass+`">`+newCriteria.criteria+`</td>
-                        <td class="bg-`+typeClass+`"></td>
-                        <td class="text-center bg-`+typeClass+` d-flex">
-                            <div class="input-group">
-                                <input type="number" class="text-center form-control score-input" value="0" id="`+newCriteria.id+`">
-                                <div class="input-group-append">
-                                    <button class="delete-factor btn btn-outline-danger" data-id="`+newCriteria.id+`">&times;</button>
-                                </div>
-                            </div>
-                        </td>
-                    `;
-
-                    document.getElementById('mainTableBody').appendChild(newRow);
-
-                    const newInput = newRow.querySelector('.score-input');
-                    newInput.addEventListener('input', updatePercentage);
-
-                    const newDeleteButton = newRow.querySelector('.delete-factor');
-                    newDeleteButton.addEventListener('click', deleteFactor);
-
-                    await updatePercentage();
-                }
             }
 
             async function deleteFactor(event) {
@@ -386,13 +421,9 @@
                         console.error('Ошибка при удалении фактора');
                     }
                 });
+                await showFactors()
+                await updatePercentage()
             }
-
-            document.querySelectorAll('.score-input').forEach(input => {
-                input.addEventListener('input', updatePercentage);
-            });
-
-            calculateButton.addEventListener('click', saveScores);
 
             document.getElementById('wowFactorForm').addEventListener('submit', async (event) => {
                 event.preventDefault();
@@ -405,10 +436,11 @@
                     maxValue: 0
                 };
 
-                let newCriteria = await fetchToCreate('/api/checklist/criteria/create/wow', object);
-                await createNewElement('WOW', 'success', newCriteria);
+                await fetchToCreate('/api/checklist/criteria/create/wow', object);
                 $('#wowFactorModal').modal('hide')
                 alert('Добавлен WOW-фактор')
+                await showFactors()
+                inputUpdate()
             });
 
             document.getElementById('critFactorDescription').addEventListener('change', function () {
@@ -438,10 +470,11 @@
                     maxValue: 0
                 };
 
-                let newCriteria = await fetchToCreate(`/api/checklist/criteria/create/crit?description=`+ description, object);
-                await createNewElement('Критический', 'danger', newCriteria)
+                await fetchToCreate(`/api/checklist/criteria/create/crit?description=`+ description, object);
                 $('#critFactorModal').modal('hide')
                 alert('Критический фактор добавлен');
+                await showFactors()
+                inputUpdate()
             });
 
             document.querySelectorAll('.delete-factor').forEach(button => {
@@ -460,18 +493,15 @@
                 }
             }
 
-            await updatePercentage();
-
             let a = document.createElement('a');
             await getUrl();
             a.href = url + uuidLink + '/result';
 
             document.getElementById('getTemplate').addEventListener('click', async () => {
-                const percentage = document.getElementById('percentageResult').textContent;
                 const message = `Дата: ${checkList.managerWorkStartDate}\n` +
                     `Пиццерия: ${checkList.pizzeria.name}\n` +
                     `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
-                    `Результат проверки в %: `+ percentage +``+
+                    `Результат проверки в %: `+ await updatePercentage() +``+
                     `Положительная обратная связь: \n` +
                     `Критический фактор: \n` +
                     `WOW фактор: \n` +

@@ -1,6 +1,7 @@
 package kg.attractor.xfood.repository;
 
 import kg.attractor.xfood.model.CheckListsCriteria;
+import kg.attractor.xfood.model.Criteria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,7 @@ public interface ChecklistCriteriaRepository extends JpaRepository<CheckListsCri
     @Query("select clc from CheckListsCriteria clc " +
             "where clc.checklist.id = :checkListId and clc.criteria.id = :criteriaId")
     Optional<CheckListsCriteria> findByCheckListIdAndCriteriaId(Long checkListId, Long criteriaId);
+
+    @Query("select clc from CheckListsCriteria clc where clc.checklist.id = :checkListId")
+    List<CheckListsCriteria> findCriteriaByCheckListId(Long checkListId);
 }

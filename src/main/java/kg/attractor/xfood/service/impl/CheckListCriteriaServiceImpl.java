@@ -112,6 +112,38 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         return createNewFactor(saveCriteriaDto);
     }
 
+    @Override
+    public Integer getPercentageById(Long id) {
+        List<CheckListsCriteria> criteriaList = checkListCriteriaRepository.findCriteriaByCheckListId(id);
+        Double normalMaxSum = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getMaxValue)
+                .sum();
+
+        Double normalValue = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double wowValue = criteriaList.stream()
+                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double percentage = (normalValue / normalMaxSum) * 100;
+
+        if (percentage < 100) {
+            Double totalValue = normalValue + wowValue;
+            percentage = (totalValue / normalMaxSum) * 100;
+
+            if (percentage > 100) {
+                percentage = 100.0;
+            }
+        }
+
+        return (int) Math.ceil(percentage);
+    }
+
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {
         Optional<CheckListsCriteria> optional = checkListCriteriaRepository
                 .findByCheckListIdAndCriteriaId(checkListId, criteriaId);

@@ -26,4 +26,5 @@ public interface CriteriaService {
     List<CriteriaSupervisorShowDto> getWowCriteria();
 
     List<CriteriaSupervisorShowDto> getCritCriteria();
+
 }
