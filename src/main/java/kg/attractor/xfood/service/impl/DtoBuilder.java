@@ -15,6 +15,7 @@ import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.model.*;
@@ -214,6 +215,12 @@ public class DtoBuilder {
         return dtos;
     }
 
+	protected List<PizzeriaWeeklyDto> buildPizzeriaWeeklyDtos(List<Pizzeria> pizzerias) {
+		List<PizzeriaWeeklyDto> dtos = new ArrayList<>();
+		pizzerias.forEach(e -> dtos.add(buildPizzeriaWeeklyDto(e)));
+		return dtos;
+	}
+
 	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
 		return PizzeriaShowDto.builder()
 				.id(pizzeria.getId())
@@ -221,6 +228,13 @@ public class DtoBuilder {
 				.location(pizzeria.getLocation())
 				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
 				.workSchedules(pizzeria.getWorkSchedules()).build();
+	}
+
+	protected PizzeriaWeeklyDto buildPizzeriaWeeklyDto(Pizzeria pizzeria) {
+		return PizzeriaWeeklyDto.builder()
+				.id(pizzeria.getId())
+				.name(pizzeria.getName())
+				.build();
 	}
 
 	protected ZoneSupervisorShowDto buildZoneDto(Zone model){

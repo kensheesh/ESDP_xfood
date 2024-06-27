@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.repository.PizzeriaRepository;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
@@ -20,9 +21,10 @@ public class PizzeriaServiceImpl implements PizzeriaService {
     private final DtoBuilder dtoBuilder;
 
     @Override
-    public List<PizzeriaShowDto> getPizzeriasByLocationId(long locationId) {
+    public List<PizzeriaWeeklyDto> getPizzeriasByLocationId(long locationId) {
         List<Pizzeria> pizzerias = pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId);
-        return dtoBuilder.buildPizzeriaShowDtos(pizzerias);
+        log.info("Размер списка пиццерий: " + pizzerias.size());
+        return dtoBuilder.buildPizzeriaWeeklyDtos(pizzerias);
     }
 
     @Override

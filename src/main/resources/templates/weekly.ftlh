@@ -104,15 +104,17 @@
             fetch('/api/pizzerias/location/' + selectedValue)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data);
                     data.forEach(item => {
-                        const pizzeria = document.createElement('p');
-                        const pizzeriaLink = document.createElement('a');
-                        pizzeriaLink.href = "/api/managers-work-schedule/pizzeria/" + item.id;
-                        pizzeriaLink.textContent = item.name;
-                        pizzeriaLink.addEventListener('click', function() {
-                            handlePizzeriaClick(this.href);
+                        let pizzeria = document.createElement('p');
+                        let pizzeriaButton = document.createElement('div');
+                        pizzeriaButton.className = 'btn border w-100 text-start p-2';
+                        pizzeriaButton.id = item.id;
+                        pizzeriaButton.textContent = item.name;
+                        pizzeriaButton.addEventListener('click', function() {
+                            handlePizzeriaClick(this.id);
                         });
-                        pizzeria.appendChild(pizzeriaLink);
+                        pizzeria.appendChild(pizzeriaButton);
 
                         pizzeriaList.insertAdjacentElement('beforeend', pizzeria);
                     });
@@ -120,12 +122,11 @@
                 .catch(error => console.error('Error fetching pizzerias:', error));
         }
 
-        async function handlePizzeriaClick(href) {
-            event.preventDefault();
+        async function handlePizzeriaClick(pizzeriaId) {
             let scheduleList = document.getElementById('schedule-list');
             scheduleList.innerHTML = '';
 
-            fetch(href)
+            fetch("/api/managers-work-schedule/pizzeria/" + pizzeriaId)
                 .then(response => response.json())
                 .then(data => {
                     if (data.length === 0) {
