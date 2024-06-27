@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.manager.ManagerDto;
+import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.repository.ManagerRepository;
 import kg.attractor.xfood.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -23,4 +24,12 @@ public class ManagerServiceImpl implements ManagerService {
                 .map(dtoBuilder::buildManagerDto)
                 .toList();
     }
+	
+	protected Manager getManagersByUuid(String staffId) {
+		return managerRepository.findByUuid(staffId);
+	}
+	
+	public void addManager(Manager manager) {
+		managerRepository.saveAndFlush(manager);
+	}
 }

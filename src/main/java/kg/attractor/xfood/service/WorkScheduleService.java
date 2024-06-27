@@ -5,7 +5,6 @@ import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
 import kg.attractor.xfood.model.WorkSchedule;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface WorkScheduleService {
@@ -15,4 +14,5 @@ public interface WorkScheduleService {
     WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date);
 
     WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDate date);
+	
 }

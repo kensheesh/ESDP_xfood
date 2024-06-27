@@ -14,4 +14,5 @@ public class PizzeriaDto {
     private Long id;
     private String name;
     private LocationDto location;
+    private String uuid;
 }

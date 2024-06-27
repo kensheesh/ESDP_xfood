@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
-@Builder
+@Builder()
 @NoArgsConstructor
 @AllArgsConstructor
-public class PizzeriasShowDodoIsDto {
+public class PizzeriasShowDodoIsDto implements Serializable {
 	@JsonProperty("countryCode")
 	private String countryCode;
 	@JsonProperty("OrganizationName")
@@ -30,14 +32,4 @@ public class PizzeriasShowDodoIsDto {
 	@JsonProperty("Orientation")
 	private String orientation;
 	
-/* пример
-			"OrganizationName": "\"КРАСТ СПБ\"",
-			"UUId": "000D3A29FF6BA94311E87467527E6D6F",
-			"Name": "Санкт-Петербург 1-5",
-			"Alias": "пр-т. Большевиков",
-			"TranslitAlias": "bolshevikov2",
-			"Address": "пр-т Большевиков, 2",
-			"AddressText": "пр-т. Большевиков (пр-т Большевиков, 2)",
-			"Orientation": "В 200 метрах от станции метро Проспект Большевиков",
- */
 }
