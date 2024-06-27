@@ -27,7 +27,8 @@ import static kg.attractor.xfood.enums.Role.SUPERVISOR;
 public class SecurityConfig {
 	
 	private static final String[] WHITE_LIST_URL = {
-			"/auth/**"
+			"/auth/**",
+			"/css/layout.css"
 	};
 	
 	@Bean
