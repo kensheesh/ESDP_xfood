@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
+import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
@@ -23,6 +24,7 @@ import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -162,6 +164,7 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .location(this.buildLocationDto(model.getLocation()))
+		        .uuid(model.getUuid())
                 .build();
     }
 
@@ -170,6 +173,7 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .timezone(model.getTimezone())
+		        .countryCode(model.getCountryCode())
                 .build();
     }
 

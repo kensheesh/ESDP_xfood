@@ -2,7 +2,12 @@ package kg.attractor.xfood.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.*;
+import kg.attractor.xfood.dto.okhttp.PizzeriaManagerShiftDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriasShowDodoIsDto;
+import kg.attractor.xfood.model.Manager;
+import kg.attractor.xfood.model.Pizzeria;
+import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.service.OkHttpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,11 +37,88 @@ public class OkHttpServiceImpl implements OkHttpService {
 	private static final String PIZZERIA_CACHE_KEY = "pizzerias";
 	private static final MediaType JSON = MediaType.APPLICATION_JSON;
 	private static final String API_URL = "https://api.dodois.io";
+	private static final String BEARER = "7dc2a57fa42216378d3f3034b0c14b783c8e17463af4d94c4c54fba055b92eab";
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	private final OkHttpClient client = new OkHttpClient();
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final PizzeriaServiceImpl pizzeriaService;
+	private final ManagerServiceImpl managerService;
+	private final ModelBuilder modelBuilder;
+	private final WorkScheduleServiceImpl workScheduleService;
+	
+	
+	@Override
+	public List<PizzeriaManagerShiftDto> getWorksheetOfPizzeriaManagers(Long pizId) {
+		String pizzeriaUuid = pizzeriaService.getPizzeriaById(pizId).getUuid();
+		String countryCode = pizzeriaService.getPizzeriaById(pizId).getLocation().getCountryCode();
+		
+		List<PizzeriaManagerShiftDto> shifts = new ArrayList<>();
+		
+		try {
+			String json = authApiRunner(getPizzeriasWeeklyShiftsUrl(countryCode, pizzeriaUuid, getMonday(), getSunday()), BEARER);
+			if (json != null) {
+				JsonArray schedules = JsonParser.parseString(json).getAsJsonObject().getAsJsonArray("schedules");
+				for (JsonElement scheduleElement : schedules) {
+					JsonObject schedule = scheduleElement.getAsJsonObject();
+					if ("Менеджеры".equals(schedule.get("workStationName").getAsString())) {
+						shifts.add(PizzeriaManagerShiftDto.builder()
+								.scheduledShiftStartAtLocal(LocalDateTime.parse(schedule.get("scheduledShiftStartAtLocal").getAsString()))
+								.scheduledShiftEndAtLocal(LocalDateTime.parse(schedule.get("scheduledShiftEndAtLocal").getAsString()))
+								.staffId(schedule.get("staffId").getAsString())
+								.unitId(schedule.get("unitId").getAsString())
+								.unitName(schedule.get("unitName").getAsString())
+								.build());
+					}
+				}
+			}
+		} catch (JsonParseException e) {
+			log.error("Error parsing JSON: {} ()", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		try {
+			String json = authApiRunner(getPizzeriasStaffMembersUrl(countryCode, pizzeriaUuid), BEARER);
+			if (json != null) {
+				JsonArray members = JsonParser.parseString(json).getAsJsonObject().getAsJsonArray("members");
+				shifts.forEach(e -> {
+					for (JsonElement memberElement : members) {
+						JsonObject member = memberElement.getAsJsonObject();
+						if (e.getStaffId().equals(member.get("id").getAsString())) {
+							e.setName(member.get("firstName").getAsString());
+							e.setSurname(member.get("lastName").getAsString());
+							e.setPhNumber(member.get("phoneNumber").getAsString());
+						}
+					}
+				});
+			}
+		} catch (JsonParseException e) {
+			log.error("Error parsing JSON: {}", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		List<WorkSchedule> workSchedules = new ArrayList<>();
+		shifts.forEach(e -> {
+			Pizzeria p = pizzeriaService.getPizzeriaByUuid(e.getUnitId());
+			if (p != null) {
+				Manager m = managerService.getManagersByUuid(e.getStaffId());
+				if (m == null) {
+					m = modelBuilder.buildManager(e);
+					managerService.addManager(m);
+				}
+				WorkSchedule workSchedule = modelBuilder.buildWorkSchedule(e, p, m);
+				if (! workScheduleService.exists(workSchedule)) {
+					workSchedules.add(workSchedule);
+				}
+			}
+		});
+		
+		workSchedules.forEach(workScheduleService :: add);
+		return shifts;
+	}
 	
 	@Override
 	public List<PizzeriasShowDodoIsDto> getPizzeriasByMatch(String s) {
@@ -138,7 +224,10 @@ public class OkHttpServiceImpl implements OkHttpService {
 	
 	//need token
 	private String getPizzeriasStaffMembersUrl(String countryCode, String pizzeriaUUID) {
-		return String.format("%s/dodopizza/%s/staff/members?statuses=Active&units=%s", API_URL, countryCode, pizzeriaUUID);
+		return String.format("%s/dodopizza/%s/staff/members?" +
+						"statuses=Active" +
+						"&units=%s&take=1000",
+				API_URL, countryCode, pizzeriaUUID);
 	}
 	
 	//need token
@@ -146,8 +235,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 		return String.format("%s/dodopizza/%s/staff/schedules" +
 						"?beginFrom=%s" +
 						"&beginTo=%s" +
-						"&units=%s" +
-						"&staffType=KitchenMember",
+						"&units=%s",
 				API_URL, countryCode, weekStart, weekEnd, pizzeriaUUID);
 	}
 	
@@ -160,10 +248,13 @@ public class OkHttpServiceImpl implements OkHttpService {
 		return objectMapper.convertValue(map, PizzeriasShowDodoIsDto.class);
 	}
 	
+	private String getMonday() {
+		return LocalDateTime.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).withHour(0).withMinute(0).withSecond(0).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	}
 	
-/* пока не нужны
-	private final String AUTH_URL = "https://auth.dodois.io";
-	private final String REDIRECT_URL = "https://localhost:5001";
-	private final Dotenv dotenv = Dotenv.load();
-*/
+	private String getSunday() {
+		return LocalDateTime.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	}
+	
+	
 }

@@ -1,6 +1,8 @@
 package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
+import kg.attractor.xfood.service.OkHttpService;
+import kg.attractor.xfood.service.PizzeriaService;
 import kg.attractor.xfood.service.impl.WorkScheduleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.util.List;
 @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
 public class WorkScheduleController {
     private final WorkScheduleServiceImpl workScheduleService;
+    private final OkHttpService okHttpService;
+    private final PizzeriaService pizzeriaService;
     
     @GetMapping("pizzeria/{id}")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
@@ -25,6 +29,8 @@ public class WorkScheduleController {
             @PathVariable (name = "id") Long pizzeriaId
     ) {
         List<WeeklyScheduleShowDto> dtos = workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId);
+        okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId);
+        
         return ResponseEntity.ok(dtos);
     }
 

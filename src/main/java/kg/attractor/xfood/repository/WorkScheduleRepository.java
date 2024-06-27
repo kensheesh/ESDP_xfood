@@ -1,10 +1,8 @@
 package kg.attractor.xfood.repository;
 
-import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.model.WorkSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -32,4 +30,6 @@ public interface WorkScheduleRepository extends JpaRepository<WorkSchedule, Long
             where w.manager.id = ?1 and w.pizzeria.id = ?2 and FUNCTION('DATE', w.startTime) = ?3
             """)
     Optional<WorkSchedule> findByManager_IdAndPizzeria_IdAndStartTime(Long id, Long id1, LocalDate startTime);
+    
+    boolean existsByManagerIdAndPizzeriaIdAndStartTimeAndEndTime(Long id, Long id1, LocalDateTime startTime, LocalDateTime endTime);
 }

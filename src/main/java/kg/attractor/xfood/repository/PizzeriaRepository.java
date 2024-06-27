@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface PizzeriaRepository extends JpaRepository<Pizzeria, Long> {
     List<Pizzeria> findByLocation_IdOrderByNameAsc(Long id);
+	
+	Pizzeria findByUuidEqualsIgnoreCase(String uuid);
 }

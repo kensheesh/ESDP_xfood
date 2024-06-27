@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.Manager;
+import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.repository.ManagerRepository;
 import kg.attractor.xfood.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +40,12 @@ public class ManagerServiceImpl implements ManagerService {
     public Manager findById(Long id) {
       return managerRepository.findById(id).orElseThrow(() -> new NotFoundException("Manager not found by id: " + id));
     }
+	
+	protected Manager getManagersByUuid(String staffId) {
+		return managerRepository.findByUuid(staffId);
+	}
+	
+	public void addManager(Manager manager) {
+		managerRepository.saveAndFlush(manager);
+	}
 }

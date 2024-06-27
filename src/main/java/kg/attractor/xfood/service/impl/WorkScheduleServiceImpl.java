@@ -10,6 +10,7 @@ import kg.attractor.xfood.repository.WorkScheduleRepository;
 import kg.attractor.xfood.service.WorkScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -22,8 +23,10 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class WorkScheduleServiceImpl implements WorkScheduleService {
+   
     private final WorkScheduleRepository workScheduleRepository;
     private final DtoBuilder dtoBuilder;
+    private final PizzeriaServiceImpl pizzeriaService;
 
 
     @Override
@@ -35,16 +38,16 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
                 workScheduleRepository.findByPizzeria_IdAndStartTimeBetweenOrderByManager_SurnameAsc(pizzeriaId, monday.toLocalDate(), monday.plusDays(6).toLocalDate());
 
         Set<Manager> managersOfPizzeria = new HashSet<>();
-        workSchedulesOfWeek.forEach(e -> {
-            managersOfPizzeria.add(e.getManager());
-        });
+        workSchedulesOfWeek.forEach(e -> managersOfPizzeria.add(e.getManager()));
 
         List<WeeklyScheduleShowDto> weeklyDtos = new ArrayList<>();
 
-        managersOfPizzeria.forEach(e -> {
-            weeklyDtos.add(createWeeklySchedule(e, pizzeriaId, monday));
-        });
-
+        managersOfPizzeria.forEach(e -> weeklyDtos.add(createWeeklySchedule(e, pizzeriaId, monday)));
+        
+        weeklyDtos.forEach(e->e.setPizzeriaDto(
+                dtoBuilder.buildPizzeriaDto(pizzeriaService.getPizzeriaById(pizzeriaId))
+        ));
+        
         return weeklyDtos;
     }
 
@@ -93,4 +96,25 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         dto.setWeeklySchedule(managerSchedules);
         return dto;
     }
+    
+    @Modifying
+    public void add(WorkSchedule e) {
+        workScheduleRepository.save(e);
+    }
+    
+    public boolean exists(WorkSchedule workSchedule) {
+        return workScheduleRepository.existsByManagerIdAndPizzeriaIdAndStartTimeAndEndTime(
+                workSchedule.getManager().getId(),
+                workSchedule.getPizzeria().getId(),
+                workSchedule.getStartTime(),
+                workSchedule.getEndTime());
+    }
+//
+//    private LocalDate getMonday() {
+//        return LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+//    }
+//
+//    private LocalDate getSunday() {
+//        return LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+//    }
 }
