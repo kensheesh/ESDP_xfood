@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -209,13 +210,18 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public ResponseEntity<?> updateCheckStatusCheckList(String id) {
+    public ResponseEntity<?> updateCheckStatusCheckList(String id, LocalTime duration) {
         CheckList checkList = getModelCheckListById(id);
         if(checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");
         }
 
         checkList.setStatus(Status.DONE);
+        if (duration == null) {
+            throw new IncorrectDateException("Введите время,затраченное на проверку чек-листа!");
+        }
+        checkList.setDuration(duration);
+        log.info(duration+"Duration for checklist with id "+checkList.getId());
         return ResponseEntity.ok(checkListRepository.save(checkList));
     }
 

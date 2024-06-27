@@ -132,7 +132,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
 
     // ROLE: SUPERVISOR
     @PostMapping ("/{id}/update")
-    public String edit (@PathVariable (name="id") String uuid, CheckListSupervisorEditDto checkList, BindingResult result, Model model) {
+    public String edit (@PathVariable (name="id") String uuid, CheckListSupervisorEditDto checkList) {
         checkListService.edit(checkList);
         return "redirect:/checks/"+uuid+"/check";
     }

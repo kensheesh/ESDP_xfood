@@ -7,6 +7,7 @@ import kg.attractor.xfood.model.CheckList;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface CheckListService {
@@ -33,7 +34,7 @@ public interface CheckListService {
 
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
-    ResponseEntity<?> updateCheckStatusCheckList(String id);
+    ResponseEntity<?> updateCheckStatusCheckList(String id, LocalTime localTime);
 
     CheckListSupervisorEditDto getChecklistByUuid(String uuid);
 

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
+
 @RestController("checkListControllerRest")
 @RequiredArgsConstructor
 @RequestMapping("api/checks")
@@ -29,10 +31,10 @@ public class CheckListController {
     }
 
 
-    @PostMapping("post/{id}")
-    public ResponseEntity<?> postCheck(@PathVariable(name = "id") String id) {
+    @PostMapping("post/{id}/{duration}")
+    public ResponseEntity<?> postCheck(@PathVariable(name = "id") String id, @PathVariable LocalTime duration) {
         try{
-            return ResponseEntity.ok(checkListService.updateCheckStatusCheckList(id));
+            return ResponseEntity.ok(checkListService.updateCheckStatusCheckList(id, duration));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

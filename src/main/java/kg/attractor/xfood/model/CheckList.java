@@ -6,6 +6,7 @@ import kg.attractor.xfood.enums.Status;
 import lombok.*;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -41,7 +42,7 @@ public class CheckList {
     public String feedback;
     
     @Column(name = "duration")
-    public Time duration;
+    public LocalTime duration;
 
     @Enumerated(EnumType.STRING)
 
