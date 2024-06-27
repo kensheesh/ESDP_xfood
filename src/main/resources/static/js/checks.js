@@ -39,14 +39,14 @@ function displayChecks(checks, status) {
                 <div class="card border-0 rounded-4 bg-primary-subtle">
                     <div class="card-body">
                         <div class="row row-cols-4">
-                            <div class="col-4 d-flex align-items-center">
+                            <div class="col-3 d-flex align-items-center">
                                 <span>${c.pizzeria}</span>
                             </div>
                             <div class="col-4 d-flex align-items-center">
-                                <span>Мндр: ${c.manager.name} ${c.manager.surname}</span>
+                                <span>${c.manager.name} ${c.manager.surname}</span>
                             </div>
-                            <div class="col-3 d-flex align-items-center">
-                                <span>${c.managerWorkStartDate}</span> -  <span>${c.managerWorkEndDate}</span>
+                            <div class="col-5 d-flex align-items-center column-gap-1">
+                                <span>${c.managerWorkStartDate}</span>-<span>${c.managerWorkEndDate}</span>
                             </div>
                         </div>
                     </div>

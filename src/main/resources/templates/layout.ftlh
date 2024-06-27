@@ -1,6 +1,11 @@
 <#import "spring.ftl" as spring>
 
 <#macro layout>
+    <#assign known = SPRING_SECURITY_CONTEXT??>
+    <#if known>
+        <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
+    </#if>
+
     <!doctype html>
     <html lang="en">
 
@@ -14,13 +19,17 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <!-- Fontawesome CDN Link -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/layout.css">
     </head>
 
     <body>
     <header>
         <nav class="navbar navbar-expand fw-medium bg-white border-bottom " id="navbar">
             <div class="container">
-                <a class="navbar-brand" href="#">XFOOD</a>
+                <a class="navbar-brand fw-semibold " href="#">XFOOD</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -28,29 +37,33 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item dropdown" href="#">
-                            <a a
-                               class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
-                               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle fs-5 m-0 p-0 "></i>
-                                <span>Иван Иванов</span> <#-- TODO username -->
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
-                                <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="/logout">Выход</a></li>
-                            </ul>
-                        </li>
+                        <#if authorizedUser??>
+                            <li class="nav-item dropdown" href="#">
+                                <a
+                                        class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
+                                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle fs-5 m-0 p-0 "></i>
+                                    <span>
+                                    ${authorizedUser.name}
+                                </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
+                                    <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="/logout">Выход</a></li>
+                                </ul>
+                            </li>
+                        </#if>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="container mt-4">
+    <main class="container my-4">
         <#nested spring>
     </main>
 
