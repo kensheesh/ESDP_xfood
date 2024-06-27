@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout ; spting>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -137,6 +137,20 @@
             </table>
         </div>
         <div class="text-end mb-5 mt-2">
+            <#assign
+            known = SPRING_SECURITY_CONTEXT??
+            >
+            <#if known>
+                <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+                <#assign name = user.getUsername()>
+                <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+
+                <#list authorities as authority>
+                    <#if authority.authority == 'ROLE_SUPERVISOR'>
+                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                    </#if>
+                </#list>
+            </#if>
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
                 wow-фактор
             </button>
@@ -197,7 +211,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="critFactorModal" tabindex="-1" aria-labelledby="critwowFactorModalLabel"
          aria-hidden="true">

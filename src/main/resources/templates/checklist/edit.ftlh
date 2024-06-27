@@ -87,7 +87,7 @@
                             <th scope="row">${c.section}</th>
                             <td>${c.zone}</td>
                             <td>${c.description}</td>
-                            <input type="hidden" name="criterion[${c?index}].id">
+                            <input type="hidden" name="criterion[${c?index}].id" value="${c.id}">
                              <td><input type="number" class="form-control" name="criterion[${c?index}].maxValue" id="value-${c.id}" required min="1" value="${c.maxValue}"></td>
                         </tr>
                     </#list>

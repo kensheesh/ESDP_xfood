@@ -23,6 +23,7 @@ import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,9 +46,14 @@ public class CheckListServiceImpl implements CheckListService {
     private final CriteriaPizzeriaService criteriaPizzeriaService;
     private final OpportunityService opportunityService;
     private final CheckListRepository checkListRepository;
-    private final CheckListCriteriaService checkListCriteriaService;
+    // private final CheckListCriteriaService checkListCriteriaService;
     private final ManagerService managerService;
+    private CheckListCriteriaServiceImpl checkListCriteriaService;
 
+    @Autowired
+    public void setCheckListCriteriaService(@Lazy CheckListCriteriaServiceImpl checkListCriteriaService) {
+        this.checkListCriteriaService = checkListCriteriaService;
+    }
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
@@ -292,15 +298,18 @@ public class CheckListServiceImpl implements CheckListService {
                 .build();
         opportunityService.save(opportunity);
         List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
-        for (int i = 0; i < checkListsCriteria.size(); i++) {
-            for (int j = i + 1; j <checkListDto.getCriterion().size(); j++) {
-                if (checkListsCriteria.get(i).getCriteria().getId().equals(checkListDto.getCriterion().get(j).getId())) {
-                    checkListsCriteria.get(i).setMaxValue(checkListDto.getCriterion().get(j).getMaxValue());
-                    checkListCriteriaService.save(checkListsCriteria.get(i));
-                }
+        for (CheckListsCriteria checkListCriteria : checkListsCriteria) {
+            for (CriteriaExpertShowDto criterionDto : checkListDto.getCriterion()) {
+                if (checkListCriteria.getCriteria().getId().equals(criterionDto.getId())) {
 
+                    checkListCriteria.setMaxValue(criterionDto.getMaxValue());
+                    log.info(checkListCriteria.getMaxValue().toString());
+                    checkListCriteriaService.save(checkListCriteria);
+                    break;
+                }
             }
         }
+
 
         checkList.setWorkSchedule(workSchedule);
         checkList.setOpportunity(opportunity);
