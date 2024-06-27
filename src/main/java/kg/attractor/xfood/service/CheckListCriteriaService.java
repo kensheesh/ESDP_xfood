@@ -18,4 +18,6 @@ public interface CheckListCriteriaService {
     void deleteFactor(Long id, Long checkListId);
 
     CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description);
+
+    List<CheckListsCriteria> findAllByChecklistId(Long id);
 }

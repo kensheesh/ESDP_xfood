@@ -2,6 +2,7 @@ package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
+import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.service.*;
@@ -25,6 +26,9 @@ public class CheckListController {
     private final ZoneService zoneService;
     private final SectionService sectionService;
     private final WorkScheduleService workScheduleService;
+    private final UserService userService;
+    private final ManagerService managerService;
+    private final OpportunityService opportunityService;
 
 
 //    // ROLE: SUPERVISOR
@@ -115,6 +119,22 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
         model.addAttribute("checkList", checkListService.getResultByUuidLink(checkListId));
         model.addAttribute("all", "all");
         return "checklist/result";
+    }
+
+    // ROLE: SUPERVISOR
+    @GetMapping ("/{id}/update")
+    public String edit (@PathVariable (name="id") String uuid, Model model) {
+            model.addAttribute("checklist", checkListService.getChecklistByUuid(uuid));
+            model.addAttribute("experts", userService.getAllExperts());
+            model.addAttribute("managers", managerService.getAllAvailable(uuid));
+        return "checklist/edit";
+    }
+
+    // ROLE: SUPERVISOR
+    @PostMapping ("/{id}/update")
+    public String edit (@PathVariable (name="id") String uuid, CheckListSupervisorEditDto checkList, BindingResult result, Model model) {
+        checkListService.edit(checkList);
+        return "redirect:/checks/"+uuid+"/check";
     }
 
 }

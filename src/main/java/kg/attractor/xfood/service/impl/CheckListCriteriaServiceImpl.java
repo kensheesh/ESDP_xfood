@@ -13,6 +13,8 @@ import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +26,18 @@ import java.util.Optional;
 public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final ChecklistCriteriaRepository checkListCriteriaRepository;
     private final CriteriaService criteriaService;
-    private final CheckListService checkListService;
+    private  CheckListService checkListService;
     private final DtoBuilder dtoBuilder;
     private final CriteriaRepository criteriaRepository;
     private final SectionRepository sectionRepository;
     private final ZoneRepository zoneRepository;
+
+
+    @Autowired
+    public void setCheckListCriteriaService(CheckListService checkListService) {
+        this.checkListService = checkListService;
+    }
+
 
     @Override
     public void save(List<SaveCriteriaDto> saveCriteriaDto) {
@@ -110,6 +119,11 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         }
 
         return createNewFactor(saveCriteriaDto);
+    }
+
+    @Override
+    public List<CheckListsCriteria> findAllByChecklistId(Long id) {
+        return checkListCriteriaRepository.findAllByChecklistId(id);
     }
 
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {

@@ -61,7 +61,12 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         return dtoBuilder.buildWorkScheduleShowDto(findWorkScheduleByManagerAndDate(managerId, date));
     }
 
-   public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, Long pizzeriaId, LocalDateTime monday) {
+    @Override
+    public void save(WorkSchedule workSchedule) {
+        workScheduleRepository.save(workSchedule);
+    }
+
+    public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, Long pizzeriaId, LocalDateTime monday) {
         WeeklyScheduleShowDto dto = new WeeklyScheduleShowDto();
         List<DailyWorkScheduleShowDto> managerSchedules = new ArrayList<>();
 

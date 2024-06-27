@@ -1,13 +1,12 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
-import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
+import kg.attractor.xfood.dto.checklist.*;
 import jakarta.persistence.*;
-import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
-import kg.attractor.xfood.dto.checklist.CheckListResultDto;
-import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
-import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
-import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
+import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.enums.Status;
@@ -24,6 +23,8 @@ import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,10 +44,16 @@ public class CheckListServiceImpl implements CheckListService {
     private final UserService userService;
     private final CriteriaService criteriaService;
     private final CriteriaPizzeriaService criteriaPizzeriaService;
-    private final OpportunityRepository opportunityRepository;
+    private final OpportunityService opportunityService;
     private final CheckListRepository checkListRepository;
-    private final ChecklistCriteriaRepository checklistCriteriaRepository;
+    // private final CheckListCriteriaService checkListCriteriaService;
+    private final ManagerService managerService;
+    private CheckListCriteriaServiceImpl checkListCriteriaService;
 
+    @Autowired
+    public void setCheckListCriteriaService(@Lazy CheckListCriteriaServiceImpl checkListCriteriaService) {
+        this.checkListCriteriaService = checkListCriteriaService;
+    }
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
@@ -88,7 +95,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .endTime(createDto.getEndTime())
                 .build();
 
-        Long id = opportunityRepository.save(opportunity).getId();
+        Long id = opportunityService.save(opportunity);
         checkListRepository.saveChecklist(id, workSchedule.getId(), Status.NEW.getStatus());
         checkListRepository.flush();
         return CheckListMiniSupervisorCreateDto.builder().opportunityId(id).workScheduleId(workSchedule.getId()).criteriaMaxValueDtoList(createDto.getCriteriaMaxValueDtoList()).pizzeria(workSchedule.getPizzeria()).build();
@@ -212,6 +219,103 @@ public class CheckListServiceImpl implements CheckListService {
         return ResponseEntity.ok(checkListRepository.save(checkList));
     }
 
+    @Override
+    public CheckListSupervisorEditDto getChecklistByUuid(String uuid) {
+        CheckList checkList = checkListRepository.findByUuidLink(uuid).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + uuid));
+        ExpertShowDto expert = dtoBuilder.buildExpertShowDto(checkList.getOpportunity().getUser());
+
+        OpportunityEditDto opportunityEditDto = OpportunityEditDto.builder()
+                .id(checkList.getOpportunity().getId())
+                .date(checkList.getOpportunity().getDate())
+                .startTime(checkList.getOpportunity().getStartTime())
+                .endTime(checkList.getOpportunity().getEndTime())
+                .user(expert)
+                .build();
+
+        WorkScheduleSupervisorEditDto workScheduleDto = WorkScheduleSupervisorEditDto.builder()
+                .id(checkList.getWorkSchedule().getId())
+                .startTime(checkList.getWorkSchedule().getStartTime())
+                .endTime(checkList.getWorkSchedule().getEndTime())
+                .pizzeria(dtoBuilder.buildPizzeriaDto(checkList.getWorkSchedule().getPizzeria()))
+                .manager(dtoBuilder.buildManagerShowDto(checkList.getWorkSchedule().getManager()))
+                .build();
+
+        List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
+        List <CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>() ;
+        for (CheckListsCriteria criteria : checkListsCriteria) {
+            criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
+                    .id(criteria.getCriteria().getId())
+                    .maxValue(criteria.getMaxValue())
+                    .description(criteria.getCriteria().getDescription())
+                    .zone(criteria.getCriteria().getZone().getName())
+                    .section(criteria.getCriteria().getSection().getName())
+                    .build());
+        }
+        criterionWithMaxValue.removeIf(criteria -> !criteria.getSection().equals(""));
+        return CheckListSupervisorEditDto.builder()
+                .id(checkList.getUuidLink())
+                .opportunity(opportunityEditDto)
+                .workSchedule(workScheduleDto)
+                .criterion(criterionWithMaxValue.stream()
+                        .sorted(Comparator.comparing(CriteriaExpertShowDto::getSection)
+                                .thenComparing(CriteriaExpertShowDto::getZone)).toList())
+                .build();
+    }
+
+    @Transactional
+    @Override
+    public void edit(CheckListSupervisorEditDto checkListDto) {
+        log.info(checkListDto.toString());
+        CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
+        Manager manager = managerService.findById(checkListDto.getWorkSchedule().getManager().getId());
+        if (checkListDto.getWorkSchedule().getStartTime().isAfter(checkListDto.getWorkSchedule().getEndTime())) {
+            throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени конца смены");
+        }
+        if (checkListDto.getOpportunity().getStartTime().isAfter(checkListDto.getOpportunity().getEndTime())) {
+            throw new IncorrectDateException("Время начала смены эксперта не может быть позже времени конца смены");
+        }
+        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getEndTime())){
+            throw new IncorrectDateException("Время конца смены эксперта не может быть раньше времени конца смены менеджера");
+        }
+        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getStartTime())){
+            throw new IncorrectDateException("Время конца смены эксперта не может быть раньше времени начала смены менеджера");
+        }
+
+        WorkSchedule workSchedule = WorkSchedule.builder()
+                .id(checkList.getWorkSchedule().getId())
+                .manager(manager)
+                .startTime(checkListDto.getWorkSchedule().getStartTime())
+                .endTime(checkListDto.getWorkSchedule().getEndTime())
+                .pizzeria(checkList.getWorkSchedule().getPizzeria())
+                .build();
+        workScheduleService.save(workSchedule);
+        Opportunity opportunity = Opportunity.builder()
+                .id(checkList.getOpportunity().getId())
+                .date(checkListDto.getOpportunity().getDate())
+                .startTime(checkListDto.getOpportunity().getStartTime())
+                .endTime(checkListDto.getOpportunity().getEndTime())
+                .user(userService.findById(checkListDto.getOpportunity().getUser().getId()))
+                .build();
+        opportunityService.save(opportunity);
+        List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
+        for (CheckListsCriteria checkListCriteria : checkListsCriteria) {
+            for (CriteriaExpertShowDto criterionDto : checkListDto.getCriterion()) {
+                if (checkListCriteria.getCriteria().getId().equals(criterionDto.getId())) {
+
+                    checkListCriteria.setMaxValue(criterionDto.getMaxValue());
+                    log.info(checkListCriteria.getMaxValue().toString());
+                    checkListCriteriaService.save(checkListCriteria);
+                    break;
+                }
+            }
+        }
+
+
+        checkList.setWorkSchedule(workSchedule);
+        checkList.setOpportunity(opportunity);
+        checkListRepository.save(checkList);
+    }
+
 
     @Override
     public void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto) {
@@ -231,7 +335,7 @@ public class CheckListServiceImpl implements CheckListService {
                 checkListsCriteria.setMaxValue(1);
             }
             log.info("чеклист {} связан с критерием {}", checkList, criteriaMaxValueDto.getCriteriaId());
-            checklistCriteriaRepository.save(checkListsCriteria);
+            checkListCriteriaService.save(checkListsCriteria);
 
             CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
                     .pizzeria(checklistDto.getPizzeria())
