@@ -1,6 +1,8 @@
 <#import "../layout.ftlh" as main>
 
 <@main.layout>
+    <link rel="stylesheet" href="/css/opportunities.css">
+
     <div class="row row-cols-md-2 row-gap-3">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
@@ -9,17 +11,17 @@
                         <div class="col">
                             <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                 <div class="col">
-                                    <a href="#" class="btn btn-light rounded-4 w-100 h-100 active">
+                                    <a href="#" class="btn rounded-4 w-100 h-100 disabled btn-dodo-light">
                                         График
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/expert/checks" class="btn btn-light rounded-4 w-100 h-100">
+                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Проверки
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/analytics" class="btn btn-light rounded-4 w-100 h-100">
+                                    <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Аналитика
                                     </a>
                                 </div>
@@ -54,10 +56,10 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-9">
-            <div class="card border-0 shadow-sm rounded-4">
+            <div class="card border-0 rounded-4 shadow-sm">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table text-center table-borderless">
+                        <table class="table text-center table-bordered align-middle">
                             <thead>
                             <tr>
                                 <th scope="col">
@@ -68,242 +70,253 @@
                                     </button>
                                 </th>
                                 <th scope="col">
-                                    <div class="text-body-secondary" style="font-size: 12px;">${monday.plusDays(1)}</div>
+                                    <div class="text-body-secondary"
+                                         style="font-size: 12px;">${monday.plusDays(1)}</div>
                                     <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
-                                            data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday.plusDays(1)}">
+                                            data-bs-toggle="modal" data-bs-target="#workShiftModal"
+                                            id="${monday.plusDays(1)}">
                                         Вт
                                     </button>
                                 </th>
                                 <th scope="col">
-                                    <div class="text-body-secondary" style="font-size: 12px;">${monday.plusDays(2)}</div>
+                                    <div class="text-body-secondary"
+                                         style="font-size: 12px;">${monday.plusDays(2)}</div>
                                     <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
-                                            data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday.plusDays(2)}">
+                                            data-bs-toggle="modal" data-bs-target="#workShiftModal"
+                                            id="${monday.plusDays(2)}">
                                         Ср
                                     </button>
                                 </th>
                                 <th scope="col">
-                                    <div class="text-body-secondary" style="font-size: 12px;">${monday.plusDays(3)}</div>
+                                    <div class="text-body-secondary"
+                                         style="font-size: 12px;">${monday.plusDays(3)}</div>
                                     <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
-                                            data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday.plusDays(3)}">
+                                            data-bs-toggle="modal" data-bs-target="#workShiftModal"
+                                            id="${monday.plusDays(3)}">
                                         Чт
                                     </button>
                                 </th>
                                 <th scope="col">
                                     <div class="text-body-secondary" style="font-size: 12px">${monday.plusDays(4)}</div>
                                     <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
-                                            data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday.plusDays(4)}">
+                                            data-bs-toggle="modal" data-bs-target="#workShiftModal"
+                                            id="${monday.plusDays(4)}">
                                         Пт
                                     </button>
                                 </th>
                                 <th scope="col">
-                                    <div class="text-body-secondary" style="font-size: 12px;">${monday.plusDays(5)}</div>
+                                    <div class="text-body-secondary"
+                                         style="font-size: 12px;">${monday.plusDays(5)}</div>
                                     <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
-                                            data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday.plusDays(5)}">
+                                            data-bs-toggle="modal" data-bs-target="#workShiftModal"
+                                            id="${monday.plusDays(5)}">
                                         Сб
                                     </button>
                                 </th>
                                 <th scope="col">
-                                    <div class="text-body-secondary" style="font-size: 12px;">${monday.plusDays(6)}</div>
+                                    <div class="text-body-secondary"
+                                         style="font-size: 12px;">${monday.plusDays(6)}</div>
                                     <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
-                                            data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday.plusDays(6)}">
+                                            data-bs-toggle="modal" data-bs-target="#workShiftModal"
+                                            id="${monday.plusDays(6)}">
                                         Вс
                                     </button>
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                                <#assign firstDay = opportunities[monday]>
-                                <#assign secondDay = opportunities[monday.plusDays(1)]>
-                                <#assign thirdDay = opportunities[monday.plusDays(2)]>
-                                <#assign fourthDay = opportunities[monday.plusDays(3)]>
-                                <#assign fifthDay = opportunities[monday.plusDays(4)]>
-                                <#assign sixthDay = opportunities[monday.plusDays(5)]>
-                                <#assign seventhDay = opportunities[monday.plusDays(6)]>
-                                <tr>
-                                    <td>
-                                        <#if firstDay[0]??>
-                                            ${firstDay[0].startTime}-${firstDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if secondDay[0]??>
-                                            ${secondDay[0].startTime}-${secondDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if thirdDay[0]??>
-                                            ${thirdDay[0].startTime}-${thirdDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fourthDay[0]??>
-                                            ${fourthDay[0].startTime}-${fourthDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fifthDay[0]??>
-                                            ${fifthDay[0].startTime}-${fifthDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if sixthDay[0]??>
-                                            ${sixthDay[0].startTime}-${sixthDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if seventhDay[0]??>
-                                            ${seventhDay[0].startTime}-${seventhDay[0].endTime}
-                                        </#if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <#if firstDay[1]??>
-                                            ${firstDay[1].startTime}-${firstDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if secondDay[1]??>
-                                            ${secondDay[1].startTime}-${secondDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if thirdDay[1]??>
-                                            ${thirdDay[1].startTime}-${thirdDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fourthDay[1]??>
-                                            ${fourthDay[1].startTime}-${fourthDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fifthDay[1]??>
-                                            ${fifthDay[1].startTime}-${fifthDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if sixthDay[1]??>
-                                            ${sixthDay[1].startTime}-${sixthDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if seventhDay[1]??>
-                                            ${seventhDay[1].startTime}-${seventhDay[1].endTime}
-                                        </#if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <#if firstDay[2]??>
-                                            ${firstDay[2].startTime}-${firstDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if secondDay[2]??>
-                                            ${secondDay[2].startTime}-${secondDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if thirdDay[2]??>
-                                            ${thirdDay[2].startTime}-${thirdDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fourthDay[2]??>
-                                            ${fourthDay[2].startTime}-${fourthDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fifthDay[2]??>
-                                            ${fifthDay[2].startTime}-${fifthDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if sixthDay[2]??>
-                                            ${sixthDay[2].startTime}-${sixthDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if seventhDay[2]??>
-                                            ${seventhDay[2].startTime}-${seventhDay[2].endTime}
-                                        </#if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <#if firstDay[3]??>
-                                            ${firstDay[3].startTime}-${firstDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if secondDay[3]??>
-                                            ${secondDay[3].startTime}-${secondDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if thirdDay[3]??>
-                                            ${thirdDay[3].startTime}-${thirdDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fourthDay[3]??>
-                                            ${fourthDay[3].startTime}-${fourthDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fifthDay[3]??>
-                                            ${fifthDay[3].startTime}-${fifthDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if sixthDay[3]??>
-                                            ${sixthDay[3].startTime}-${sixthDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if seventhDay[3]??>
-                                            ${seventhDay[3].startTime}-${seventhDay[3].endTime}
-                                        </#if>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <#if firstDay[4]??>
-                                            ${firstDay[4].startTime}-${firstDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if secondDay[4]??>
-                                            ${secondDay[4].startTime}-${secondDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if thirdDay[4]??>
-                                            ${thirdDay[4].startTime}-${thirdDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fourthDay[4]??>
-                                            ${fourthDay[4].startTime}-${fourthDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if fifthDay[4]??>
-                                            ${fifthDay[4].startTime}-${fifthDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if sixthDay[4]??>
-                                            ${sixthDay[4].startTime}-${sixthDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                    <td>
-                                        <#if seventhDay[4]??>
-                                            ${seventhDay[4].startTime}-${seventhDay[4].endTime}
-                                        </#if>
-                                    </td>
-                                </tr>
+                            <#assign firstDay = opportunities[monday]>
+                            <#assign secondDay = opportunities[monday.plusDays(1)]>
+                            <#assign thirdDay = opportunities[monday.plusDays(2)]>
+                            <#assign fourthDay = opportunities[monday.plusDays(3)]>
+                            <#assign fifthDay = opportunities[monday.plusDays(4)]>
+                            <#assign sixthDay = opportunities[monday.plusDays(5)]>
+                            <#assign seventhDay = opportunities[monday.plusDays(6)]>
+                            <tr>
+                                <td>
+                                    <#if firstDay[0]??>
+                                        ${firstDay[0].startTime}-${firstDay[0].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if secondDay[0]??>
+                                        ${secondDay[0].startTime}-${secondDay[0].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if thirdDay[0]??>
+                                        ${thirdDay[0].startTime}-${thirdDay[0].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fourthDay[0]??>
+                                        ${fourthDay[0].startTime}-${fourthDay[0].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fifthDay[0]??>
+                                        ${fifthDay[0].startTime}-${fifthDay[0].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if sixthDay[0]??>
+                                        ${sixthDay[0].startTime}-${sixthDay[0].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if seventhDay[0]??>
+                                        ${seventhDay[0].startTime}-${seventhDay[0].endTime}
+                                    </#if>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <#if firstDay[1]??>
+                                        ${firstDay[1].startTime}-${firstDay[1].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if secondDay[1]??>
+                                        ${secondDay[1].startTime}-${secondDay[1].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if thirdDay[1]??>
+                                        ${thirdDay[1].startTime}-${thirdDay[1].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fourthDay[1]??>
+                                        ${fourthDay[1].startTime}-${fourthDay[1].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fifthDay[1]??>
+                                        ${fifthDay[1].startTime}-${fifthDay[1].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if sixthDay[1]??>
+                                        ${sixthDay[1].startTime}-${sixthDay[1].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if seventhDay[1]??>
+                                        ${seventhDay[1].startTime}-${seventhDay[1].endTime}
+                                    </#if>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <#if firstDay[2]??>
+                                        ${firstDay[2].startTime}-${firstDay[2].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if secondDay[2]??>
+                                        ${secondDay[2].startTime}-${secondDay[2].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if thirdDay[2]??>
+                                        ${thirdDay[2].startTime}-${thirdDay[2].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fourthDay[2]??>
+                                        ${fourthDay[2].startTime}-${fourthDay[2].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fifthDay[2]??>
+                                        ${fifthDay[2].startTime}-${fifthDay[2].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if sixthDay[2]??>
+                                        ${sixthDay[2].startTime}-${sixthDay[2].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if seventhDay[2]??>
+                                        ${seventhDay[2].startTime}-${seventhDay[2].endTime}
+                                    </#if>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <#if firstDay[3]??>
+                                        ${firstDay[3].startTime}-${firstDay[3].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if secondDay[3]??>
+                                        ${secondDay[3].startTime}-${secondDay[3].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if thirdDay[3]??>
+                                        ${thirdDay[3].startTime}-${thirdDay[3].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fourthDay[3]??>
+                                        ${fourthDay[3].startTime}-${fourthDay[3].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fifthDay[3]??>
+                                        ${fifthDay[3].startTime}-${fifthDay[3].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if sixthDay[3]??>
+                                        ${sixthDay[3].startTime}-${sixthDay[3].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if seventhDay[3]??>
+                                        ${seventhDay[3].startTime}-${seventhDay[3].endTime}
+                                    </#if>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <#if firstDay[4]??>
+                                        ${firstDay[4].startTime}-${firstDay[4].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if secondDay[4]??>
+                                        ${secondDay[4].startTime}-${secondDay[4].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if thirdDay[4]??>
+                                        ${thirdDay[4].startTime}-${thirdDay[4].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fourthDay[4]??>
+                                        ${fourthDay[4].startTime}-${fourthDay[4].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if fifthDay[4]??>
+                                        ${fifthDay[4].startTime}-${fifthDay[4].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if sixthDay[4]??>
+                                        ${sixthDay[4].startTime}-${sixthDay[4].endTime}
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if seventhDay[4]??>
+                                        ${seventhDay[4].startTime}-${seventhDay[4].endTime}
+                                    </#if>
+                                </td>
+                            </tr>
 
                             </tbody>
                         </table>
@@ -327,89 +340,7 @@
                     </div>
 
                     <div id="workShifts" class="row row-cols-1 row-gap-3">
-                        <div class="row row-cols-2">
-                            <div class="col-auto">
-                                <div class="input-group">
-                                    <select class="form-select rounded-start-4">
-                                        <option value="">
-                                            12
-                                        </option>
-                                    </select>
-                                    <div class="input-group-text">
-                                        :
-                                    </div>
-                                    <select class="form-select">
-                                        <option value="">
-                                            00
-                                        </option>
-                                    </select>
-                                    <div class="input-group-text">
-                                        —
-                                    </div>
-                                    <select class="form-select">
-                                        <option value="">
-                                            12
-                                        </option>
-                                    </select>
-                                    <div class="input-group-text">
-                                        :
-                                    </div>
-                                    <select class="form-select rounded-end-4">
-                                        <option value="">
-                                            00
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-auto px-0">
-                                <button class="btn btn-danger rounded-4" onclick="deleteInput(event)">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="row row-cols-2">
-                            <div class="col-auto">
-                                <div class="input-group">
-                                    <select class="form-select rounded-start-4">
-                                        <option value="">
-                                            12
-                                        </option>
-                                    </select>
-                                    <div class="input-group-text">
-                                        :
-                                    </div>
-                                    <select class="form-select">
-                                        <option value="">
-                                            00
-                                        </option>
-                                    </select>
-                                    <div class="input-group-text">
-                                        —
-                                    </div>
-                                    <select class="form-select">
-                                        <option value="">
-                                            12
-                                        </option>
-                                    </select>
-                                    <div class="input-group-text">
-                                        :
-                                    </div>
-                                    <select class="form-select rounded-end-4">
-                                        <option value="">
-                                            00
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-auto px-0">
-                                <button class="btn btn-danger rounded-4" onclick="deleteInput(event)">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <button id="add-shift-btn" class="btn btn-light rounded-4">Добавить период</button>
-                        </div>
+
                     </div>
                     <div class="form-check ms-1 mt-3">
                         <input class="form-check-input" type="checkbox" value="" id="day-off">
@@ -420,39 +351,11 @@
                 </div>
                 <div class="modal-footer">
                     <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
-                    <button type="submit" class="btn btn-primary rounded-4">Сохранить</button>
+                    <button type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <style>
-        body {
-            min-height: 100vh;
-        }
-
-        @media screen and (max-width: 575px) {
-            .sidebar {
-                position: fixed;
-                bottom: 0px;
-                left: 0;
-                z-index: 2;
-            }
-        }
-
-        td {
-            height: 40px;
-        }
-
-        .form-control {
-            max-width: 65px;
-        }
-
-        .modal-btn {
-            min-width: 80px;
-        }
-
-    </style>
     <script>
         window.lastInput = -1;
         let modal = document.getElementById('workShiftModal')
@@ -461,7 +364,7 @@
         dayOffBtn.addEventListener('change', onChecked)
         modal.addEventListener('show.bs.modal', onShowModal)
 
-        async function onShowModal (event) {
+        async function onShowModal(event) {
             let dateString = event.relatedTarget.id;
             inputs.innerHTML = `
                 <div class="col">
@@ -473,7 +376,7 @@
             let workShiftsModalLabel = document.getElementById('workShiftModalLabel')
             workShiftsModalLabel.innerText = 'Выберите время, когда Вы можете работать ' + dateString
 
-            let addShiftBtn = document.getElementById ('add-shift-btn')
+            let addShiftBtn = document.getElementById('add-shift-btn')
             addShiftBtn.addEventListener('click', addInput)
 
             try {
@@ -484,37 +387,37 @@
                         let startTimeParts = opportunities[i].startTime.split(":")
                         let endTimeParts = opportunities[i].endTime.split(":")
 
-                        let input = document.createElement ('div')
-                        input.classList.add('row', 'row-cols-2' , 'col')
+                        let input = document.createElement('div')
+                        input.classList.add('row', 'row-cols-2', 'col')
 
-                        input.innerHTML=`<div class="col-auto">
-                            <input type="hidden" name="opportunities[` + i + `].id" value="`+ opportunities[i].id +`">
+                        input.innerHTML = `<div class="col-auto">
+                            <input type="hidden" name="opportunities[` + i + `].id" value="` + opportunities[i].id + `">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
                                     type="number" min="0" max="23" value="` + startTimeParts[0] + `"
-                                    name="opportunities[` + i + `].startTimeHour" required>
+                                    name="opportunities[` + i + `].startTimeHour" oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control" type="number" min="0" max="59" value="` + startTimeParts[1] + `"
-                                    name="opportunities[` + i + `].startTimeMinute" required>
+                                    name="opportunities[` + i + `].startTimeMinute" oninput="validate(event)" required>
                                 <div class="col-auto input-group-text">
                                     —
                                 </div>
                                 <input class="form-control" type="number" min="0" max="23" value="` + endTimeParts[0] + `"
-                                    name="opportunities[` + i + `].endTimeHour" required>
+                                    name="opportunities[` + i + `].endTimeHour" oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control rounded-end-4" type="number" min="0" max="59" value="` + endTimeParts[1] + `"
-                                    name="opportunities[` + i + `].endTimeMinute" required>
+                                    name="opportunities[` + i + `].endTimeMinute" oninput="validate(event)" required>
                             </div>
                         </div>
                         <div class="col-auto px-0">
-                            <button type="button" class="btn btn-danger rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
+                            <button type="button" class="btn btn-dodo-light rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
                         </div>`;
 
-                        let addShiftBtn = document.getElementById ('add-shift-btn')
+                        let addShiftBtn = document.getElementById('add-shift-btn')
                         inputs.insertBefore(input, addShiftBtn.parentElement)
 
                         window.lastInput = i;
@@ -528,7 +431,7 @@
             }
         }
 
-        function onChecked () {
+        function onChecked() {
             if (dayOffBtn.checked == true) {
                 inputs.innerHTML = ''
             }
@@ -544,7 +447,7 @@
 
         }
 
-        function addInput (dateString) {
+        function addInput(dateString) {
             event.preventDefault()
             let parts = dateString.toString().split('-');
             let day = Number(parts[2]);
@@ -553,44 +456,56 @@
             let date = new Date(Date.UTC(year, month, day, 0, 0, 0, 0)).toISOString()
             console.log(date)
 
-            if (inputs.childElementCount < 4) {
-                let input=document.createElement ('div')
-                input.classList.add('row', 'row-cols-2' )
+            if (inputs.childElementCount < 7) {
+                let input = document.createElement('div')
+                input.classList.add('row', 'row-cols-2')
                 window.lastInput++;
-                input.innerHTML=`<div class="col-auto">
+                input.innerHTML = `<div class="col-auto">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
                                     type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].startTimeHour"
-                                    required>
+                                     oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].startTimeMinute"
-                                    required>
+                                     oninput="validate(event)" required>
                                 <div class="col-auto input-group-text">
                                     —
                                 </div>
                                 <input class="form-control" type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].endTimeHour"
-                                    required>
+                                     oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control rounded-end-4" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].endTimeMinute"
-                                    required>
+                                     oninput="validate(event)" required>
                             </div>
                         </div>
                         <div class="col-auto px-0">
-                            <button type="button" class="btn btn-danger rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
+                            <button type="button" class="btn btn-dodo-light rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
                         </div>`;
 
-                let addShiftBtn = document.getElementById ('add-shift-btn')
+                let addShiftBtn = document.getElementById('add-shift-btn')
                 inputs.insertBefore(input, addShiftBtn.parentElement)
             }
         }
 
-        function deleteInput (event) {
+        function deleteInput(event) {
             let btn = event.currentTarget;
             btn.parentElement.parentElement.remove();
+        }
+
+        function validate(event) {
+            let inputName = event.target.name;
+
+            let indexStr = inputName.match(/\[(.*?)\]/)[1]
+            let index = Number(indexStr)
+
+            let param = inputName.split('.')[1]
+            console.log(param)
+
+
         }
     </script>
 </@main.layout>
