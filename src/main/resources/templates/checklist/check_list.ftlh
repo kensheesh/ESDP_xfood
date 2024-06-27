@@ -136,25 +136,31 @@
                 </tfoot>
             </table>
         </div>
-        <div class="form-group m-3 shadow-sm">
-            <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
-            <input type="time" id="duration" class="form-control" name="duration"  required>
+        <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
+            Введите длительность проверки !
         </div>
+        <#assign
+        known = SPRING_SECURITY_CONTEXT??
+        >
+        <#if known>
+        <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+        <#assign name = user.getUsername()>
+        <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+             <#list authorities as authority>
+              <#if authority.authority == 'ROLE_EXPERT' && checkList.status = 'IN_PROGRESS'>
+                  <div class="form-group m-3 shadow-sm">
+                      <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
+                      <input type="time" id="duration" class="form-control" name="duration"  required>
+                  </div>
+              </#if>
+             </#list>
         <div class="text-end mb-5 mt-2">
-            <#assign
-            known = SPRING_SECURITY_CONTEXT??
-            >
-            <#if known>
-                <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
-                <#assign name = user.getUsername()>
-                <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
-
                 <#list authorities as authority>
                     <#if authority.authority == 'ROLE_SUPERVISOR'>
                             <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
                     </#if>
                 </#list>
-            </#if>
+
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
                 wow-фактор
             </button>
@@ -189,6 +195,7 @@
                 </div>
             </div>
         </div>
+        </#if>
     </main>
 
     <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel" aria-hidden="true">
@@ -461,10 +468,11 @@
 
             async function fetchToResult() {
                 let duration = document.getElementById('duration').value
-                let uuid = `${checkList.uuidLink}`
-                if (!duration){
-                    console.log("dasda")
+                if (duration==null || duration ===""){
+                    document.getElementById('error-message').style.display = 'block';
+                    return;
                 }
+                let uuid = `${checkList.uuidLink}`
                 console.log(duration)
                 try {
                     let response = await fetch('/api/checks/post/'+uuid+'/'+duration, {method: 'POST'});
@@ -472,7 +480,7 @@
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
-                    console.log(done)
+                    window.location.href = 'http://localhost:2346/analytics';
                     await getUrl();
                     navigator.clipboard.writeText(url + uuidLink + '/result')
                         .then(() => console.log("Скопировано в буфер обмена!"))
