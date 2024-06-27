@@ -136,6 +136,10 @@
                 </tfoot>
             </table>
         </div>
+        <div class="form-group m-3 shadow-sm">
+            <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
+            <input type="time" id="duration" class="form-control" name="duration"  required>
+        </div>
         <div class="text-end mb-5 mt-2">
             <#assign
             known = SPRING_SECURITY_CONTEXT??
@@ -456,12 +460,19 @@
             document.getElementById('post').addEventListener('click', fetchToResult);
 
             async function fetchToResult() {
+                let duration = document.getElementById('duration').value
+                let uuid = `${checkList.uuidLink}`
+                if (!duration){
+                    console.log("dasda")
+                }
+                console.log(duration)
                 try {
-                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, {method: 'POST'});
+                    let response = await fetch('/api/checks/post/'+uuid+'/'+duration, {method: 'POST'});
                     if (!response.ok) {
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
+                    console.log(done)
                     await getUrl();
                     navigator.clipboard.writeText(url + uuidLink + '/result')
                         .then(() => console.log("Скопировано в буфер обмена!"))
@@ -471,7 +482,6 @@
                 }
             }
         });
-
     </script>
 
 </@main.layout>
