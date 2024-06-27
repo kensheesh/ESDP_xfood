@@ -96,18 +96,19 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
     @Override
     public CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description) {
-        if(description != null) {
-            Criteria criteria = Criteria.builder()
-                    .description(description)
-                    .section(sectionRepository.findById(1L).get())
-                    .zone(zoneRepository.findById(9L).get())
-                    .coefficient(1)
-                    .build();
-
-            Criteria newCriteria = criteriaRepository.save(criteria);
-            saveCriteriaDto.setCriteriaId(newCriteria.getId());
-            saveCriteriaDto.setValue(-8);
+        if(description.isEmpty()) {
+            throw new IllegalArgumentException("Описание не может быть пустым");
         }
+        Criteria criteria = Criteria.builder()
+                .description(description)
+                .section(sectionRepository.findById(1L).get())
+                .zone(zoneRepository.findById(9L).get())
+                .coefficient(1)
+                .build();
+
+        Criteria newCriteria = criteriaRepository.save(criteria);
+        saveCriteriaDto.setCriteriaId(newCriteria.getId());
+        saveCriteriaDto.setValue(-8);
 
         return createNewFactor(saveCriteriaDto);
     }

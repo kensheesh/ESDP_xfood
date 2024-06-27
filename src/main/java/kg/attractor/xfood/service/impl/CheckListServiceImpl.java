@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
+import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import jakarta.persistence.*;
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
@@ -46,6 +47,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final OpportunityRepository opportunityRepository;
     private final CheckListRepository checkListRepository;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
+    private final CheckListDao checkListDao;
 
 
     @Override
@@ -201,15 +203,15 @@ public class CheckListServiceImpl implements CheckListService {
         );
     }
 
+
     @Override
-    public ResponseEntity<?> updateCheckStatusCheckList(String id) {
+    public void updateCheckStatusCheckList(String id) {
         CheckList checkList = getModelCheckListById(id);
         if(checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");
         }
 
-        checkList.setStatus(Status.DONE);
-        return ResponseEntity.ok(checkListRepository.save(checkList));
+        checkListDao.updateStatus(Status.DONE, checkList);
     }
 
 

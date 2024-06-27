@@ -67,8 +67,6 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
     public String check (@PathVariable (name="id") String checkListId, Model model) {
         ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
         model.addAttribute("checkList", checkListDto);
-        model.addAttribute("wowCriteria", criteriaService.getWowCriteria());
-        model.addAttribute("critCriteria", criteriaService.getCritCriteria());
         return "checklist/check_list";
     }
 
@@ -107,13 +105,6 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
     @GetMapping ("/{id}/result")
     public String getResult (@PathVariable (name = "id") String checkListId, Model model) {
         model.addAttribute("checkList", checkListService.getCheckListById(checkListId));
-        return "checklist/result";
-    }
-
-    @GetMapping ("all/{uuid}/result")
-    public String getResultUuid (@PathVariable (name = "uuid") String checkListId, Model model) {
-        model.addAttribute("checkList", checkListService.getResultByUuidLink(checkListId));
-        model.addAttribute("all", "all");
         return "checklist/result";
     }
 

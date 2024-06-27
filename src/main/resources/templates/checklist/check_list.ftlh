@@ -96,7 +96,7 @@
                                 <td class="bg-danger"></td>
                                 <td class="text-center bg-danger">
                                     <div class="input-group">
-                                        <input type="number" class="text-center form-control score-input"
+                                        <input type="number" step="8" class="text-center form-control score-input"
                                                value="${criteria.value}" id="${criteria.id}">
                                         <div class="input-group-append">
                                             <button class="delete-factor btn btn-outline-danger"
@@ -186,9 +186,7 @@
                             <label for="wowFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="wowFactorDescription"
                                     aria-label=".form-select-sm example">
-                                <#list wowCriteria as wow>
-                                    <option value="${wow.id}">${wow.description}</option>
-                                </#list>
+
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Добавить</button>
@@ -213,9 +211,6 @@
                             <label for="critFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="critFactorDescription"
                                     aria-label=".form-select-sm example">
-                                <#list critCriteria as crit>
-                                    <option value="${crit.id}">${crit.description}</option>
-                                </#list>
                                 <option value="other">Другой</option>
                             </select>
                         </div>
@@ -223,7 +218,7 @@
                             <label for="otherDescription" class="form-label">Введите описание</label>
                             <input type="text" class="form-control" id="otherDescription" name="otherDescription"/>
                         </div>
-                        <button type="submit" id="addCritFactor" class="btn btn-primary">Добавить</button>
+                        <button type="submit" id="addCritFactor" data-bs-dismiss="modal" class="btn btn-primary">Добавить</button>
                     </form>
                 </div>
             </div>
@@ -234,7 +229,49 @@
             const maxSum = ${maxSum};
             const percentageDisplay = document.getElementById('percentageResult');
             const calculateButton = document.getElementById('calculateButton');
+            const criticalSelect = document.getElementById('critFactorDescription');
+            const wowSelect = document.getElementById('wowFactorDescription');
             let criteria = [];
+
+            async function showCriticalFactors() {
+                try {
+                    let response = await fetch('/api/criteria/critical');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    let data = await response.json();
+
+                    data.forEach((criteria) => {
+                        let option = document.createElement('option')
+                        option.value = criteria.id
+                        option.innerText = criteria.description
+                        criticalSelect.appendChild(option)
+                    })
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+
+            async function showWowFactors() {
+                try {
+                    let response = await fetch('/api/criteria/wow');
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    let data = await response.json();
+
+                    data.forEach((criteria) => {
+                        let option = document.createElement('option')
+                        option.value = criteria.id
+                        option.innerText = criteria.description
+                        wowSelect.appendChild(option)
+                    })
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+            await showCriticalFactors()
+            await showWowFactors()
 
             async function updatePercentage() {
                 let totalScore = 0;
@@ -247,21 +284,21 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                })
+                });
 
                 let percentage = (totalScore / maxSum) * 100;
 
                 if (percentage < 100) {
                     document.querySelectorAll('.score-wow-input').forEach(input => {
                         totalScore += parseFloat(input.value) || 0;
-                    })
-                    percentage = Math.min((totalScore / maxSum) * 100, 100)
+                    });
+                    percentage = Math.min((totalScore / maxSum) * 100, 100);
                 }
 
                 percentageDisplay.textContent = Math.round(percentage) + '%';
             }
 
-            await updatePercentage()
+            await updatePercentage();
 
             async function saveScores() {
                 criteria = [];
@@ -293,26 +330,25 @@
                     body: JSON.stringify(object)
                 });
 
-                return response;
+                return response.json();
             }
 
             async function createNewElement(factor, typeClass, newCriteria) {
                 if (newCriteria.criteria !== undefined) {
                     const newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                <td class="text-center bg-` + typeClass + `">factor фактор</td>
-                <td class="bg-` + typeClass + `">` + newCriteria.criteria + `</td>
-                <td class="bg-` + typeClass + `"></td>
-                <td class="text-center bg-` + typeClass + ` d-flex">
-                    <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
-                    <button class="delete-factor" data-id=<div class="input-group">
-                                        <input type="number" class="text-center form-control score-input" min="0" value="0" id="` + newCriteria.id + `">
-                                        <div class="input-group-append">
-                                            <button class="delete-factor" data-id="` + newCriteria.id + `">&times;</button>
-                                        </div>
-                                    </div>
-                </td>
-            `;
+                        <td class="text-center bg-`+typeClass+`">`+factor+` фактор</td>
+                        <td class="bg-`+typeClass+`">`+newCriteria.criteria+`</td>
+                        <td class="bg-`+typeClass+`"></td>
+                        <td class="text-center bg-`+typeClass+` d-flex">
+                            <div class="input-group">
+                                <input type="number" class="text-center form-control score-input" value="0" id="`+newCriteria.id+`">
+                                <div class="input-group-append">
+                                    <button class="delete-factor btn btn-outline-danger" data-id="`+newCriteria.id+`">&times;</button>
+                                </div>
+                            </div>
+                        </td>
+                    `;
 
                     document.getElementById('mainTableBody').appendChild(newRow);
 
@@ -320,7 +356,7 @@
                     newInput.addEventListener('input', updatePercentage);
 
                     const newDeleteButton = newRow.querySelector('.delete-factor');
-                    newDeleteButton.addEventListener('click', await deleteFactor);
+                    newDeleteButton.addEventListener('click', deleteFactor);
 
                     await updatePercentage();
                 }
@@ -331,7 +367,7 @@
                 const row = button.closest('tr');
                 const criteriaId = button.getAttribute('data-id');
 
-                await fetch(`/api/checklist/criteria/delete/` + criteriaId + `?checkListId=` + ${checkList.id}, {
+                await fetch(`/api/checklist/criteria/delete/`+ criteriaId+ `?checkListId=${checkList.id}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
@@ -363,10 +399,10 @@
                     maxValue: 0
                 };
 
-                let response = await fetchToCreate('/api/checklist/criteria/create/wow', object)
-                const newCriteria = await response.json();
-                await createNewElement('WOW', 'success', newCriteria)
-
+                let newCriteria = await fetchToCreate('/api/checklist/criteria/create/wow', object);
+                await createNewElement('WOW', 'success', newCriteria);
+                document.getElementById('wowFactorModal')
+                alert('Добавлен WOW-фактор')
             });
 
             document.getElementById('critFactorDescription').addEventListener('change', function () {
@@ -396,69 +432,68 @@
                     maxValue: 0
                 };
 
-                let response = fetchToCreate('/api/checklist/criteria/create/crit?description=' + description, object)
-                const newCriteria = await response.json();
+                let newCriteria = await fetchToCreate(`/api/checklist/criteria/create/crit?description=`+ description, object);
                 await createNewElement('Критический', 'danger', newCriteria)
+                document. getElementById('critFactorModal').style.display = 'none';
+                alert('Критический фактор добавлен');
             });
 
             document.querySelectorAll('.delete-factor').forEach(button => {
                 button.addEventListener('click', deleteFactor);
             });
 
-
-            let uuidLink
-            let url = 'http://localhost:2345/checks/'
+            let uuidLink;
+            const url = 'http://localhost:2345/checks/';
 
             async function getUrl() {
                 try {
                     let response = await fetch(`/api/checks/${checkList.id}`);
                     uuidLink = await response.text();
                 } catch (error) {
-                    console.error('There was a problem with the fetch operation:', error);
+                    console.error('There was a проблема с fetch операцией:', error);
                 }
             }
 
             await updatePercentage();
-            let a = document.createElement('a')
-            await getUrl()
-            a.href = url + uuidLink + '/result'
 
-            document.getElementById('getTemplate').addEventListener('click', () => {
+            let a = document.createElement('a');
+            await getUrl();
+            a.href = url + uuidLink + '/result';
+
+            document.getElementById('getTemplate').addEventListener('click', async () => {
                 const percentage = document.getElementById('percentageResult').textContent;
                 const message = `Дата: ${checkList.managerWorkStartDate}\n` +
                     `Пиццерия: ${checkList.pizzeria.name}\n` +
                     `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
-                    `Результат проверки в %: ` + percentage +
-                    `\nПоложительная обратная связь: \n` +
+                    `Результат проверки в %: `+ percentage +``+
+                    `Положительная обратная связь: \n` +
                     `Критический фактор: \n` +
                     `WOW фактор: \n` +
                     `Поделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
-                    a;
+                    a.href;
 
-                navigator.clipboard.writeText(message)
-                    .then(() => alert("Скопировано в буфер обмена!"))
-                    .catch(err => console.error(err));
+                await navigator.clipboard.writeText(message);
+
+                alert("Скопировано в буфер обмена!");
             });
 
             document.getElementById('post').addEventListener('click', fetchToResult);
 
             async function fetchToResult() {
                 try {
-                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, {method: 'POST'});
+                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, { method: 'POST' });
                     if (!response.ok) {
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
                     await getUrl();
-                    navigator.clipboard.writeText(url + uuidLink + '/result')
-                        .then(() => console.log("Скопировано в буфер обмена!"))
-                        .catch(err => console.error(err));
+                    await navigator.clipboard.writeText(url + uuidLink + '/result');
+                    console.log("Скопировано в буфер обмена!");
                 } catch (error) {
-                    alert(error.message)
+                    alert(error.message);
                 }
             }
         });
-
     </script>
 
 </@main.layout>

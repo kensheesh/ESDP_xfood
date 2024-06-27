@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.repository.CheckListRepository;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/checks")
 public class CheckListController {
     private final CheckListService checkListService;
-    private final CheckListRepository checkListRepository;
+    private final CheckListDao checkListDao;
 
     @GetMapping("{id}")
     public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") CheckList checkList) {
@@ -30,21 +31,19 @@ public class CheckListController {
 
 
     @PostMapping("post/{id}")
-    public ResponseEntity<?> postCheck(@PathVariable(name = "id") String id) {
+    public HttpStatus postCheck(@PathVariable(name = "id") String id) {
         try{
-            return ResponseEntity.ok(checkListService.updateCheckStatusCheckList(id));
+            checkListService.updateCheckStatusCheckList(id);
+            return HttpStatus.OK;
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 
     @PostMapping("change/status/{id}")
     public HttpStatus changeStatusToInProgress(@PathVariable(name = "id") CheckList checkList) {
-        checkList.setStatus(Status.IN_PROGRESS);
-        checkListRepository.save(checkList);
+        checkListDao.updateStatus(Status.IN_PROGRESS, checkList);
         return HttpStatus.OK;
     }
-
-
 
 }
