@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.service.OkHttpService;
 import kg.attractor.xfood.service.impl.LocationServiceImpl;
 import kg.attractor.xfood.service.impl.PizzeriaServiceImpl;
 import kg.attractor.xfood.service.impl.WorkScheduleServiceImpl;
@@ -19,6 +20,7 @@ public class SupervisorController {
     private final LocationServiceImpl locationService;
     private final PizzeriaServiceImpl pizzeriaService;
     private final WorkScheduleServiceImpl workScheduleService;
+    private final OkHttpService okHttpService;
 
 
     @GetMapping("/opportunity-map")
@@ -41,8 +43,10 @@ public class SupervisorController {
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public String getWeeklySchedule (
             @RequestParam(name = "locId", defaultValue = "0") long locationId,
-            @RequestParam(name = "pizzId", defaultValue = "0") long pizzeriaId,
+            @RequestParam(name = "pizzId", defaultValue = "1") long pizzeriaId,
             Model model) {
+        okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId);
+        
         model.addAttribute("locationId", locationId);
         model.addAttribute("locations", locationService.getLocations());
         model.addAttribute("pizzerias", pizzeriaService.getPizzeriasByLocationId(locationId));

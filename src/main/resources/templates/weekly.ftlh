@@ -40,10 +40,10 @@
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <tbody id="schedule-list">
-                                <tr>
                                     <#if schedules?has_content>
-                                        <#list schedules as schedule>
-                                            <td class="align-middle">
+                                    <#list schedules as schedule>
+                                    <tr>
+                                    <td class="align-middle">
                                                 <span>${schedule.manager.name}<br>${schedule.manager.surname}</span>
                                             </td>
                                             <#list schedule.weeklySchedule as day>
@@ -78,10 +78,10 @@
                                                 </td>
                                             </#list>
                                         </#list>
+                                        </tr>
                                     <#else>
                                         <span class="text-center fs-4 p-4">Нет результатов</span>
                                     </#if>
-                                </tr>
                                 </tbody>
                         </table>
                     </div>
