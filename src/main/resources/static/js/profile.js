@@ -8,7 +8,7 @@ function createClock(time) {
 
         const span = document.createElement('span');
         span.classList.add('time_name');
-        span.textContent = timezone.split('/')[1] + `\u00A0`;
+        span.textContent = timezone.split('/')[1] + '\u00A0';
 
         const output = document.createElement('output');
         output.classList.add('time_clock');
@@ -21,36 +21,29 @@ function createClock(time) {
     });
 }
 
-// ----------------------------------------------------------------------------------------------
-
 function fillClock(time) {
-    const locations = document.querySelectorAll(time)
+    const locations = document.querySelectorAll(time);
 
     const updateTimes = function () {
         locations.forEach(location => {
-            const output = location.querySelector("output")
-            const timezone = location.getAttribute("data-timezone")
-
-            const now = luxon.DateTime.now().setZone(timezone)
-
-            output.innerHTML = now.toFormat("HH:mm:ss")
-        })
-    }
-    updateTimes()
-    setInterval(function () {
-        updateTimes()
-    }, 1000)
+            const output = location.querySelector("output");
+            const timezone = location.getAttribute("data-timezone");
+            const now = luxon.DateTime.now().setZone(timezone);
+            output.innerHTML = now.toFormat("HH:mm:ss");
+        });
+    };
+    updateTimes();
+    setInterval(updateTimes, 1000);
 }
+
 const selectedLanguages = JSON.parse(localStorage.getItem('selectedLanguages'));
 if (selectedLanguages !== null && selectedLanguages !== undefined) {
-    createClock(".times")
-    createClock(".times_second")
-
-    fillClock("section.times div")
-    fillClock("section.times_second div")
+    createClock(".times");
+    createClock(".times_second");
+    fillClock("section.times div");
+    fillClock("section.times_second div");
 }
 
-// ----------------------------------------------------------------------------------------------
 
 all_timezones = [
     "Africa/Abidjan",
@@ -629,51 +622,52 @@ all_timezones = [
     "UTC",
 ]
 
-const languagesList = document.getElementById('languages-list');
+const timezoneItems = document.getElementById('timezone-items');
 
-function populateLanguages() {
-    all_timezones.forEach(language => {
+function populateTimezones() {
+    timezoneItems.innerHTML = "";
+    all_timezones.forEach(timezone => {
         const li = document.createElement('li');
         li.className = 'item';
-        let languageInUpperCase = language.toUpperCase();
         li.innerHTML = `
                     <span class="checkbox">
                         <i class="fa-solid fa-check check-icon"></i>
                     </span>
-                    <span class="item-text">` + languageInUpperCase + `</span>
+                    <span class="item-text">${timezone}</span>
                 `;
-        languagesList.appendChild(li);
+        timezoneItems.appendChild(li);
+    });
+
+    const items = document.querySelectorAll(".item");
+    items.forEach(item => {
+        item.addEventListener("click", () => {
+            let checked = document.querySelectorAll(".checked");
+            if (!item.classList.contains("checked") && checked.length >= 3) {
+                alert("Вы не можете выбрать больше 3 часовых поясов");
+                return;
+            }
+            item.classList.toggle("checked");
+
+            checked = document.querySelectorAll(".checked");
+            let btnText = document.querySelector(".btn-text");
+
+            if (checked && checked.length > 0) {
+                btnText.innerText = checked.length + '\u00A0' + "выбрано";
+            } else {
+                btnText.innerText = "Выберите часовой пояс";
+            }
+        });
     });
 }
 
-populateLanguages();
+populateTimezones();
 
 const selectBtn = document.querySelector(".select-btn"),
-    items = document.querySelectorAll(".item"),
-    saveBtn = document.getElementById("saveBtn");
+    saveBtn = document.getElementById("saveBtn"),
+    searchInput = document.getElementById("timezone-search");
 
 selectBtn.addEventListener("click", () => {
     selectBtn.classList.toggle("open");
-});
-
-items.forEach(item => {
-    item.addEventListener("click", () => {
-        let checked = document.querySelectorAll(".checked");
-        if (!item.classList.contains("checked") && checked.length >= 3) {
-            alert("Вы не можете выбрать больше 3 часовых поясов");
-            return;
-        }
-        item.classList.toggle("checked");
-
-        checked = document.querySelectorAll(".checked");
-        let btnText = document.querySelector(".btn-text");
-
-        if (checked && checked.length > 0) {
-            btnText.innerText = checked.length + `\u00A0` + `выбрано`;
-        } else {
-            btnText.innerText = "Выберите часовой пояс";
-        }
-    });
 });
 
 saveBtn.addEventListener("click", () => {
@@ -694,12 +688,33 @@ saveBtn.addEventListener("click", () => {
 
 window.addEventListener("load", () => {
     let savedItems = JSON.parse(localStorage.getItem("selectedLanguages"));
-    if (savedItems && savedItems.length > 0) {
+    if (savedItems) {
+        const items = document.querySelectorAll(".item");
         items.forEach(item => {
             if (savedItems.includes(item.querySelector(".item-text").innerText)) {
                 item.classList.add("checked");
             }
         });
-        document.querySelector(".btn-text").innerText = savedItems.length + `\u00A0` + `выбрано`;
+        let btnText = document.querySelector(".btn-text");
+        btnText.innerText = savedItems.length + '\u00A0' + "выбрано";
     }
+});
+
+searchInput.addEventListener("input", function () {
+    const filter = searchInput.value.toLowerCase();
+    const items = document.querySelectorAll(".item");
+    items.forEach(item => {
+        const text = item.querySelector(".item-text").innerText.toLowerCase();
+        item.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+
+const resetBtn = document.querySelector(".btn-reset");
+
+resetBtn.addEventListener("click", () => {
+    const items = document.querySelectorAll(".item.checked");
+    items.forEach(item => {
+        item.classList.remove("checked");
+    });
+    document.querySelector(".btn-text").innerText = "Выберите часовой пояс";
 });

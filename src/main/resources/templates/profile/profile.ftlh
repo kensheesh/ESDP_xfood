@@ -77,18 +77,25 @@
                             <h3 class="fs-4 mb-4">Смена часовых поясов</h3>
                             <div class="row row-gap-3">
                                 <div class="col-xl-8 px-2">
-                                    <div class="select-btn rounded-4 row row-cols-2 align-items-center justify-content-between w-100 m-0">
-                                        <div class="col-11 px-0">
-                                            <span class="btn-text">Выбери часовые пояса</span>
+                                    <div class="dropdown w-100">
+                                        <div class="select-btn rounded-4 row row-cols-2 align-items-center justify-content-between w-100 m-0">
+                                            <div class="col-11 px-0">
+                                                <span class="btn-text">Выбери часовые пояса</span>
+                                            </div>
+                                            <div class="col-1 px-0">
+                                                <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
+                                            </div>
                                         </div>
-                                        <div class="col-1 px-0">
-                                            <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
-                                        </div>
-
+                                        <ul class="list-items dropdown-menu w-100">
+                                            <button type="button" class="btn btn-reset rounded-4 w-100 mb-3">Сбросить
+                                                выборы
+                                            </button>
+                                            <input type="text" id="timezone-search" class="form-control rounded-4 mb-3"
+                                                   placeholder="Поиск часовых поясов...">
+                                            <div id="timezone-items">
+                                            </div>
+                                        </ul>
                                     </div>
-                                    <ul class="list-items" id="languages-list">
-
-                                    </ul>
                                 </div>
                                 <div class="col-xl-4 px-2">
                                     <button class="btn btn-green rounded-4 p-2 h-100 col-auto col-xl-12"
@@ -98,12 +105,8 @@
                             </div>
                         </div>
                     </div>
-<#--                    <div class="border rounded-1 p-3 border-1 border-secondary-subtle">-->
-<#--                        -->
-<#--                    </div>-->
                 </div>
             </div>
-
         </div>
     </div>
 
