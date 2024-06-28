@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
+import io.github.cdimascio.dotenv.Dotenv;
 import kg.attractor.xfood.dto.okhttp.PizzeriaManagerShiftDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriasShowDodoIsDto;
 import kg.attractor.xfood.model.Manager;
@@ -34,10 +35,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OkHttpServiceImpl implements OkHttpService {
 	
+	private static final Dotenv dotenv = Dotenv.load();
 	private static final String PIZZERIA_CACHE_KEY = "pizzerias";
 	private static final MediaType JSON = MediaType.APPLICATION_JSON;
 	private static final String API_URL = "https://api.dodois.io";
-	private static final String BEARER = "7dc2a57fa42216378d3f3034b0c14b783c8e17463af4d94c4c54fba055b92eab";
+	private static final String BEARER = dotenv.get("BEARER");
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
