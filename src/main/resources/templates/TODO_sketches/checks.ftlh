@@ -42,9 +42,7 @@
                                             <i class="bi bi-clock"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li class="dropdown-item">МСК 14:45</li>
-                                            <li class="dropdown-item">ЕКБ 16:45</li>
-                                            <li class="dropdown-item">БИШ 17:45</li>
+                                            <section class="times_second"></section>
                                         </ul>
                                     </div>
                                 </div>
@@ -53,11 +51,8 @@
                         <div class="col align-self-end d-none d-md-block">
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
-                                    <div class="d-flex flex-column row-gap-2 text-center">
-                                        <span>МСК 14:45</span>
-                                        <span>ЕКБ 16:45</span>
-                                        <span>БИШ 17:45</span>
-                                    </div>
+                                    <section class="d-flex flex-column row-gap-2 text-center times">
+                                    </section>
                                 </div>
                             </div>
                         </div>
@@ -95,6 +90,9 @@
         /*    !*background-color: #28A745;*!*/
         /*}*/
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
+    <script src="/js/clock.js"></script>
     <script src="../js/checks.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
