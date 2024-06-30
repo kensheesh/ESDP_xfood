@@ -1,12 +1,12 @@
 server:
-  port: ${server_port}
+  port: 2564
 
 spring:
   datasource:
-    url: ${db_url}
-    username: ${db_username}
-    password: ${db_password}
-    driver-class-name: ${db_driver_class_name}
+    url: jdbc:postgresql://localhost:5050/xfood_db
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
 
   liquibase:
     change-log: classpath:/db/changelog/master.yml
@@ -23,10 +23,10 @@ spring:
   freemarker:
     expose-session-attributes: true
   mail:
-    host: ${mail_host}
-    username: ${mail_username}
-    password: ${mail_password}
-    port: ${mail_port}
+    host: smtp.gmail.com
+    username: example@gmail.com
+    password:
+    port: 587
     properties:
       mail:
         smtp:
@@ -36,9 +36,6 @@ spring:
   data:
     jdbc:
       dialect: postgresql
-    redis:
-      host: localhost
-      port: 6379
 
 logging:
   level:
