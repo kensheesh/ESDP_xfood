@@ -35,6 +35,13 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-9">
+            <nav aria-label="navigation">
+                <ul class="pagination justify-content-center my-3">
+                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder - 1}">Previous</a></li>
+                    <span class="text-secondary pt-2 mx-3">${week.monday} - ${week.sunday}</span>
+                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder + 1}">Next</a></li>
+                </ul>
+            </nav>
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -44,7 +51,7 @@
                                     <#list schedules as schedule>
                                     <tr>
                                     <td class="align-middle">
-                                                <span>${schedule.manager.name}<br>${schedule.manager.surname}</span>
+                                            <span>${schedule.manager.name}<br>${schedule.manager.surname}</span>
                                             </td>
                                             <#list schedule.weeklySchedule as day>
                                                 <td>
@@ -134,28 +141,24 @@
         }
     </style>
 
-<#--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"-->
-<#--            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">-->
-<#--    </script>-->
-
     <script>
         let currentDate;
         let managerId;
         let expertId;
         let locationId;
 
-        async function handleSelectChange(selectedValue) {
+        function handleSelectChange(selectedValue) {
             locationId = selectedValue;
             localStorage.setItem('locationId', locationId);
             window.location.href = '/supervisor/weekly?locId=' + locationId
         }
 
-        async function handlePizzeriaClick(pizzeriaId) {
+        function handlePizzeriaClick(pizzeriaId) {
             locationId = localStorage.getItem('locationId');
             window.location.href = '/supervisor/weekly?locId=' + locationId + '&pizzId=' + pizzeriaId;
         }
 
-        function handleWorkDayClick(id, date) {
+        async function handleWorkDayClick(id, date) {
             currentDate = date;
             managerId = id;
 
@@ -197,7 +200,7 @@
                 .catch(error => console.error('Error fetching opportunities:', error));
         }
 
-        function fetchAllExperts() {
+        async function fetchAllExperts() {
             fetch('/api/experts')
                 .then(response => response.json())
                 .then(data => {
@@ -222,7 +225,6 @@
                 })
                 .catch(error => console.error('Error fetching experts:', error));
         }
-
 
         document.addEventListener('DOMContentLoaded', (event) => {
             locationId = localStorage.getItem('locationId');

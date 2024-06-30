@@ -43,14 +43,19 @@ public class SupervisorController {
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public String getWeeklySchedule (
             @RequestParam(name = "locId", defaultValue = "0") long locationId,
-            @RequestParam(name = "pizzId", defaultValue = "1") long pizzeriaId,
+            @RequestParam(name = "pizzId", defaultValue = "0") long pizzeriaId,
+            @RequestParam(name = "week", defaultValue = "0") long week,
             Model model) {
-        okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId);
-        
+        if (pizzeriaId != 0) {
+            okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId);
+        }
+
         model.addAttribute("locationId", locationId);
+        model.addAttribute("pizzeriaId", pizzeriaId);
+        model.addAttribute("week", workScheduleService.getWeekInfo(week));
         model.addAttribute("locations", locationService.getLocations());
         model.addAttribute("pizzerias", pizzeriaService.getPizzeriasByLocationId(locationId));
-        model.addAttribute("schedules", workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId));
+        model.addAttribute("schedules", workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId, week));
         return "weekly";
     }
 }

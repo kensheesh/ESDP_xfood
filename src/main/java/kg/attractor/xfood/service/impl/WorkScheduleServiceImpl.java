@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.WorkScheduleSupervisorShowDto;
 import kg.attractor.xfood.dto.workSchedule.DailyWorkScheduleShowDto;
+import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.Manager;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
@@ -29,20 +31,27 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     private final PizzeriaServiceImpl pizzeriaService;
 
 
+    public WeekDto getWeekInfo(long week) {
+        LocalDateTime monday = LocalDateTime.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime chosenMonday = monday.plusDays(7 * week);
+        LocalDateTime sunday = chosenMonday.plusDays(6);
+        return dtoBuilder.buildWeekDto(week, chosenMonday.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), sunday.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+    }
     @Override
-    public List<WeeklyScheduleShowDto> getWeeklySchedulesByPizzeriaId(long pizzeriaId) {
+    public List<WeeklyScheduleShowDto> getWeeklySchedulesByPizzeriaId(long pizzeriaId, long week) {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime chosenMonday = monday.plusDays(7 * week);
 
         List<WorkSchedule> workSchedulesOfWeek =
-                workScheduleRepository.findByPizzeria_IdAndStartTimeBetweenOrderByManager_SurnameAsc(pizzeriaId, monday.toLocalDate(), monday.plusDays(6).toLocalDate());
+                workScheduleRepository.findByPizzeria_IdAndStartTimeBetweenOrderByManager_SurnameAsc(pizzeriaId, chosenMonday.toLocalDate(), chosenMonday.plusDays(6).toLocalDate());
 
         Set<Manager> managersOfPizzeria = new HashSet<>();
         workSchedulesOfWeek.forEach(e -> managersOfPizzeria.add(e.getManager()));
 
         List<WeeklyScheduleShowDto> weeklyDtos = new ArrayList<>();
 
-        managersOfPizzeria.forEach(e -> weeklyDtos.add(createWeeklySchedule(e, pizzeriaId, monday)));
+        managersOfPizzeria.forEach(e -> weeklyDtos.add(createWeeklySchedule(e, pizzeriaId, chosenMonday)));
         
         weeklyDtos.forEach(e->e.setPizzeriaDto(
                 dtoBuilder.buildPizzeriaDto(pizzeriaService.getPizzeriaById(pizzeriaId))

@@ -19,12 +19,14 @@ import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
+import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -176,6 +178,14 @@ public class DtoBuilder {
 		        .countryCode(model.getCountryCode())
                 .build();
     }
+
+	protected WeekDto buildWeekDto(Long weekOrder, String mondayDate, String sundayDate) {
+		return WeekDto.builder()
+				.weekOrder(weekOrder)
+				.monday(mondayDate)
+				.sunday(sundayDate)
+				.build();
+	}
 
     protected WorkScheduleDto buildWorkScheduleDto(WorkSchedule model) {
         return WorkScheduleDto.builder()
