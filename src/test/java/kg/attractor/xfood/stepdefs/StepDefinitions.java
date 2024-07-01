@@ -5,7 +5,6 @@ import io.cucumber.java.ru.Тогда;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.service.ManagerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,11 +14,6 @@ public class StepDefinitions {
 
     private ManagerDto managerDto;
     private final ManagerService managerService;
-
-//    public StepDefinitions(ManagerDto managerDto, ManagerService managerService) {
-//        this.managerDto = managerDto;
-//        this.managerService = managerService;
-//    }
 
     @Когда("я запрашиваю менеджера с id {long}")
     public void яЗапрашиваюМенеджераСId(long managerId) {
