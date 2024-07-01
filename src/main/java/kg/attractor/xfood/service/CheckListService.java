@@ -33,10 +33,11 @@ public interface CheckListService {
 
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
-    void updateCheckStatusCheckList(String id);
-    ResponseEntity<?> updateCheckStatusCheckList(String id, LocalTime localTime);
+    void updateCheckStatusCheckList(String id, LocalTime localTime);
 
     CheckListSupervisorEditDto getChecklistByUuid(String uuid);
 
     void edit(CheckListSupervisorEditDto checkList);
+
+    Integer getMaxPoints(Long id);
 }

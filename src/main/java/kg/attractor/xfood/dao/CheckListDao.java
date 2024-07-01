@@ -7,8 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+import java.sql.Time;
 
 @Component
 @RequiredArgsConstructor
@@ -16,7 +15,18 @@ public class CheckListDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public void updateStatus(Status status, CheckList checkList) {
+    public void updateStatusToDone(Status status, CheckList checkList) {
+        String sql = "update check_lists set status = ?, duration = ? where id = ?";
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setObject(1, status, java.sql.Types.OTHER);
+            ps.setTime(2, Time.valueOf(checkList.getDuration()));
+            ps.setLong(3, checkList.getId());
+            return ps;
+        });
+    }
+
+    public void updateStatusToInProgress(Status status, CheckList checkList){
         String sql = "update check_lists set status = ? where id = ?";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql);

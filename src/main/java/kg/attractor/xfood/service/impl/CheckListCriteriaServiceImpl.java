@@ -128,7 +128,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         List<CheckListsCriteria> criteriaList = checkListCriteriaRepository.findCriteriaByCheckListId(id);
         Double normalMaxSum = criteriaList.stream()
                 .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(CheckListsCriteria::getMaxValue)
+                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
                 .sum();
 
         Double normalValue = criteriaList.stream()

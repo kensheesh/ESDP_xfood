@@ -53,4 +53,10 @@ public class CheckListCriteriaController {
     public ResponseEntity<List<CriteriaExpertShowDto>> getCriteriaByCheckListId(@PathVariable(name = "uuid") String checkListUUID) {
         return ResponseEntity.ok(checkListService.getCheckListById(checkListUUID).getCriteria());
     }
+
+    @PostMapping("save")
+    public String saveCriteriaForCheckList(@RequestBody List<SaveCriteriaDto> saveCriteriaDto) {
+        checkListCriteriaService.save(saveCriteriaDto);
+        return "redirect:";
+    }
 }

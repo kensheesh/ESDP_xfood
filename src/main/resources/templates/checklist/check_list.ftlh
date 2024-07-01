@@ -76,57 +76,11 @@
                 </tr>
                 </thead>
                 <tbody id="mainTableBody">
-                <#assign maxSum = 0>
-                <#list checkList.criteria as criteria>
-                    <tr>
-                        <#if criteria.maxValue?? && criteria.maxValue gt 0>
-                            <td class="text-center">${criteria.zone}</td>
-                            <td>${criteria.description}</td>
-                            <td class="text-center border">${criteria.maxValue}</td>
-                            <td class="text-center">
-                                <input type="number" step="${criteria.maxValue}" class="text-center form-control score-input"
-                                       max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
-                                       aria-valuemax="${criteria.maxValue}">
-                            </td>
-                            <#assign maxSum = maxSum + criteria.maxValue>
-                        <#else>
-                            <#if criteria.section == 'Критический фактор'>
-                                <td class="text-center bg-danger">${criteria.section}</td>
-                                <td class="bg-danger">${criteria.description}</td>
-                                <td class="bg-danger"></td>
-                                <td class="text-center bg-danger">
-                                    <div class="input-group">
-                                        <input type="number" class="text-center form-control score-input"
-                                               value="${criteria.value}" id="${criteria.id}">
-                                        <div class="input-group-append">
-                                            <button class="delete-factor btn btn-outline-danger"
-                                                    data-id="${criteria.id}">&times;
-                                            </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            <#elseif criteria.section == 'WOW фактор'>
-                                <td class="text-center bg-success">${criteria.section}</td>
-                                <td class="bg-success">${criteria.description}</td>
-                                <td class="bg-success"></td>
-                                <td class="text-center bg-success">
-                                    <div class="input-group">
-                                        <input type="number"  class="text-center form-control score-wow-input" min="0"
-                                               value="${criteria.value}" id="${criteria.id}">
-                                        <div class="input-group-append">
-                                            <button class="delete-factor" data-id="${criteria.id}">&times;</button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </#if>
-                        </#if>
-                    </tr>
-                </#list>
                 </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
-                    <td colspan="2" class="text-center"><strong>${maxSum}</strong></td>
+                    <td colspan="2" class="text-center" id="maxPoint"><strong></strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
@@ -254,12 +208,14 @@
             const percentageDisplay = document.getElementById('percentageResult');
             const criticalSelect = document.getElementById('critFactorDescription');
             const wowSelect = document.getElementById('wowFactorDescription');
+            const maxPoint = document.getElementById('maxPoint')
             let initialInputValue;
 
             await updatePercentage()
             await showCriticalFactors()
             await showWowFactors()
             await showFactors()
+            await showMaxPoint()
             inputUpdate()
 
             function inputUpdate() {
@@ -434,6 +390,7 @@
                 });
 
                 percentageDisplay.textContent = data + '%';
+                console.log('Сделан запрос' + data)
                 return data;
             }
 
@@ -449,14 +406,16 @@
                         checkListId: ${checkList.id},
                         maxValue: event.target.getAttribute('aria-valuemax')
                     };
+                    console.log(score)
 
-                    await fetch('/criteria/save', {
+                    await fetch('/api/checklist/criteria/save', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify([score])
                     });
+
 
                     await updatePercentage();
                 }
@@ -595,18 +554,25 @@
                 let uuid = `${checkList.uuidLink}`
                 console.log(duration)
                 try {
-                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, {method: 'POST'});
+                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}/` + duration, {method: 'POST'});
                     if (!response.ok) {
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
-                    window.location.href = 'http://localhost:2346/analytics';
                     await getUrl();
                     await navigator.clipboard.writeText(url + uuidLink + '/result');
                     console.log("Скопировано в буфер обмена!");
+                    window.location.href = 'http://localhost:2345/analytics';
                 } catch (error) {
                     alert(error.message);
                 }
+            }
+
+            async function showMaxPoint() {
+                let response = await fetch('/api/checks/${checkList.id}/points')
+                let data = await response.json()
+                console.log(data)
+                maxPoint.innerText = data
             }
         });
 
