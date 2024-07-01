@@ -19,5 +19,7 @@ public interface CheckListCriteriaService {
 
     CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description);
 
+    List<CheckListsCriteria> findAllByChecklistId(Long id);
+
     Integer getPercentageById(Long id);
 }

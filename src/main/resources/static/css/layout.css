@@ -1,0 +1,93 @@
+body {
+    min-height: 100vh;
+
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+@media screen and (max-width: 575px) {
+    .sidebar {
+        position: fixed;
+        bottom: 0px;
+        left: 0;
+        z-index: 2;
+    }
+}
+
+.btn-dodo-light {
+    background-color: #FFF0E6;
+    color: #D15700;
+}
+
+.btn-dodo-light:hover {
+    background-color: #FFD2B3;
+    color: #D15700;
+}
+
+a.btn.btn-dodo-light:active  {
+    background-color: transparent;
+    border: 3px solid #F1D8C7;
+    color: #F1D8C7;
+}
+
+a.btn.disabled.btn-dodo-light  {
+    background-color: #F1D8C7;
+    color: #D15700;
+    border: 0;
+}
+
+.btn.btn-green {
+    color: #ffffff;
+    background-color: #28A745;
+}
+
+.btn.btn-green:hover {
+    color: #ffffff;
+    background-color: #146827;
+}
+
+.btn.btn-green:active {
+    color: #28A745;
+    background-color: transparent;
+}
+
+.btn.btn-green.disabled {
+    background-color: #28A745;
+}
+
+.btn.btn-light-green {
+    background-color: #E6F9E6;
+    color: #007B00;
+}
+
+.btn.btn-light-green:hover {
+    background-color: #B3E6B3;
+    color: #007B00;
+}
+
+.btn.btn-light-green:active {
+    color: #ffffff;
+    background-color: #28A745;
+}
+
+.status-circle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+
+.btn.btn-dodo {
+    background-color: #FF6900;
+    color: #fff;
+}
+
+.btn.btn-dodo:hover {
+    background-color: #e86100;
+    color: #fff;
+}
+
+.btn.btn-dodo:active {
+    background-color: #FF6900;
+    color: #FFA566
+}

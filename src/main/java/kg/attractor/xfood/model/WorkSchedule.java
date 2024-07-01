@@ -2,8 +2,7 @@ package kg.attractor.xfood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +10,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "work_schedules")
 public class WorkSchedule {

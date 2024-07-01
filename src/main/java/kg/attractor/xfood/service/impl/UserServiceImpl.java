@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.auth.RegisterUserDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.exception.NotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -60,6 +62,15 @@ public class UserServiceImpl implements UserService {
                 .map(dtoBuilder::buildUserDto)
                 .toList();
     }
+
+	@Override
+	public List<ExpertShowDto> fetchAllExperts() {
+		List<UserDto> users = getAllExperts();
+		List<ExpertShowDto> expertDtos = users.stream()
+				.map(user -> dtoBuilder.buildExpertShowDto(user))
+				.collect(Collectors.toList());
+		return expertDtos;
+	}
 
 	@Override
 	public User findById(Long expertId) {

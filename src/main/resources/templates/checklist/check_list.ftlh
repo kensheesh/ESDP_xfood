@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout ; spting>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -76,12 +76,57 @@
                 </tr>
                 </thead>
                 <tbody id="mainTableBody">
-
+                <#assign maxSum = 0>
+                <#list checkList.criteria as criteria>
+                    <tr>
+                        <#if criteria.maxValue?? && criteria.maxValue gt 0>
+                            <td class="text-center">${criteria.zone}</td>
+                            <td>${criteria.description}</td>
+                            <td class="text-center border">${criteria.maxValue}</td>
+                            <td class="text-center">
+                                <input type="number" step="${criteria.maxValue}" class="text-center form-control score-input"
+                                       max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
+                                       aria-valuemax="${criteria.maxValue}">
+                            </td>
+                            <#assign maxSum = maxSum + criteria.maxValue>
+                        <#else>
+                            <#if criteria.section == 'Критический фактор'>
+                                <td class="text-center bg-danger">${criteria.section}</td>
+                                <td class="bg-danger">${criteria.description}</td>
+                                <td class="bg-danger"></td>
+                                <td class="text-center bg-danger">
+                                    <div class="input-group">
+                                        <input type="number" class="text-center form-control score-input"
+                                               value="${criteria.value}" id="${criteria.id}">
+                                        <div class="input-group-append">
+                                            <button class="delete-factor btn btn-outline-danger"
+                                                    data-id="${criteria.id}">&times;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            <#elseif criteria.section == 'WOW фактор'>
+                                <td class="text-center bg-success">${criteria.section}</td>
+                                <td class="bg-success">${criteria.description}</td>
+                                <td class="bg-success"></td>
+                                <td class="text-center bg-success">
+                                    <div class="input-group">
+                                        <input type="number"  class="text-center form-control score-wow-input" min="0"
+                                               value="${criteria.value}" id="${criteria.id}">
+                                        <div class="input-group-append">
+                                            <button class="delete-factor" data-id="${criteria.id}">&times;</button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </#if>
+                        </#if>
+                    </tr>
+                </#list>
                 </tbody>
                 <tfoot>
                 <tr>
                     <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
-                    <td colspan="2" class="text-center"><strong></strong></td>
+                    <td colspan="2" class="text-center"><strong>${maxSum}</strong></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
@@ -91,13 +136,38 @@
                 </tfoot>
             </table>
         </div>
+        <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
+            Введите длительность проверки !
+        </div>
+        <#assign
+        known = SPRING_SECURITY_CONTEXT??
+        >
+        <#if known>
+        <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+        <#assign name = user.getUsername()>
+        <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+             <#list authorities as authority>
+              <#if authority.authority == 'ROLE_EXPERT' && checkList.status = 'IN_PROGRESS'>
+                  <div class="form-group m-3 shadow-sm">
+                      <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
+                      <input type="time" id="duration" class="form-control" name="duration"  required>
+                  </div>
+              </#if>
+             </#list>
         <div class="text-end mb-5 mt-2">
+                <#list authorities as authority>
+                    <#if authority.authority == 'ROLE_SUPERVISOR'>
+                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                    </#if>
+                </#list>
+
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
                 wow-фактор
             </button>
             <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
                 фактор
             </button>
+            <button id="calculateButton" class="btn btn-warning">Сохранить</button>
 
             <#if checkList.status == 'IN_PROGRESS'>
                 <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
@@ -125,6 +195,7 @@
                 </div>
             </div>
         </div>
+        </#if>
     </main>
 
     <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel" aria-hidden="true">
@@ -516,12 +587,20 @@
             document.getElementById('post').addEventListener('click', fetchToResult);
 
             async function fetchToResult() {
+                let duration = document.getElementById('duration').value
+                if (duration==null || duration ===""){
+                    document.getElementById('error-message').style.display = 'block';
+                    return;
+                }
+                let uuid = `${checkList.uuidLink}`
+                console.log(duration)
                 try {
-                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, { method: 'POST' });
+                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}`, {method: 'POST'});
                     if (!response.ok) {
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
+                    window.location.href = 'http://localhost:2346/analytics';
                     await getUrl();
                     await navigator.clipboard.writeText(url + uuidLink + '/result');
                     console.log("Скопировано в буфер обмена!");
@@ -530,6 +609,7 @@
                 }
             }
         });
+
     </script>
 
 </@main.layout>

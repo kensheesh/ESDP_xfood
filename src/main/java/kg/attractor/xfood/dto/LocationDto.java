@@ -13,4 +13,5 @@ public class LocationDto {
     private Long id;
     private String name;
     private Integer timezone;
+    private String countryCode;
 }

@@ -32,5 +32,7 @@ public class Pizzeria {
 
     @OneToMany(mappedBy = "pizzeria")
     private List<WorkSchedule> workSchedules;
-
+    
+    @Column(name = "uuid")
+    private String uuid;
 }

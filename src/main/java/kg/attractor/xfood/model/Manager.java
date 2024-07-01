@@ -3,12 +3,15 @@ package kg.attractor.xfood.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "managers")
 public class Manager {
@@ -35,4 +38,6 @@ public class Manager {
     @OneToMany(mappedBy = "manager")
     private List<WorkSchedule> workSchedules;
 
+    @Column(name = "uuid")
+    private String uuid;
 }

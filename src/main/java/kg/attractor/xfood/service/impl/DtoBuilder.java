@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
+import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
@@ -15,13 +16,17 @@ import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
+import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -75,7 +80,6 @@ public class DtoBuilder {
                 .phoneNumber(manager.getPhoneNumber())
                 .build();
     }
-
 
 	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -162,6 +166,7 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .location(this.buildLocationDto(model.getLocation()))
+		        .uuid(model.getUuid())
                 .build();
     }
 
@@ -170,8 +175,17 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .timezone(model.getTimezone())
+		        .countryCode(model.getCountryCode())
                 .build();
     }
+
+	protected WeekDto buildWeekDto(Long weekOrder, String mondayDate, String sundayDate) {
+		return WeekDto.builder()
+				.weekOrder(weekOrder)
+				.monday(mondayDate)
+				.sunday(sundayDate)
+				.build();
+	}
 
     protected WorkScheduleDto buildWorkScheduleDto(WorkSchedule model) {
         return WorkScheduleDto.builder()
@@ -186,6 +200,14 @@ public class DtoBuilder {
     }
 
     protected ExpertShowDto buildExpertShowDto(User user) {
+        return ExpertShowDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .build();
+    }
+
+    protected ExpertShowDto buildExpertShowDto(UserDto user) {
         return ExpertShowDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -214,6 +236,12 @@ public class DtoBuilder {
         return dtos;
     }
 
+	protected List<PizzeriaWeeklyDto> buildPizzeriaWeeklyDtos(List<Pizzeria> pizzerias) {
+		List<PizzeriaWeeklyDto> dtos = new ArrayList<>();
+		pizzerias.forEach(e -> dtos.add(buildPizzeriaWeeklyDto(e)));
+		return dtos;
+	}
+
 	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
 		return PizzeriaShowDto.builder()
 				.id(pizzeria.getId())
@@ -221,6 +249,13 @@ public class DtoBuilder {
 				.location(pizzeria.getLocation())
 				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
 				.workSchedules(pizzeria.getWorkSchedules()).build();
+	}
+
+	protected PizzeriaWeeklyDto buildPizzeriaWeeklyDto(Pizzeria pizzeria) {
+		return PizzeriaWeeklyDto.builder()
+				.id(pizzeria.getId())
+				.name(pizzeria.getName())
+				.build();
 	}
 
 	protected ZoneSupervisorShowDto buildZoneDto(Zone model){

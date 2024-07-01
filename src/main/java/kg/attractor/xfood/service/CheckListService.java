@@ -1,10 +1,12 @@
 package kg.attractor.xfood.service;
 
+import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface CheckListService {
@@ -32,4 +34,9 @@ public interface CheckListService {
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
     void updateCheckStatusCheckList(String id);
+    ResponseEntity<?> updateCheckStatusCheckList(String id, LocalTime localTime);
+
+    CheckListSupervisorEditDto getChecklistByUuid(String uuid);
+
+    void edit(CheckListSupervisorEditDto checkList);
 }

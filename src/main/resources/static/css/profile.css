@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 .select-btn {
-    display: flex;
     height: 50px;
-    align-items: center;
-    justify-content: space-between;
     padding: 0 16px;
     border-radius: 8px;
     cursor: pointer;

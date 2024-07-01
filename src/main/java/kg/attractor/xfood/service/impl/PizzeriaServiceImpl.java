@@ -1,9 +1,8 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
-import kg.attractor.xfood.model.Pizzeria;
-import kg.attractor.xfood.repository.PizzeriaRepository;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
+import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.repository.PizzeriaRepository;
 import kg.attractor.xfood.service.PizzeriaService;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +15,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PizzeriaServiceImpl implements PizzeriaService {
+
     private final PizzeriaRepository pizzeriaRepository;
     private final DtoBuilder dtoBuilder;
 
     @Override
-    public List<PizzeriaShowDto> getPizzeriasByLocationId(long locationId) {
+    public List<PizzeriaWeeklyDto> getPizzeriasByLocationId(long locationId) {
         List<Pizzeria> pizzerias = pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId);
-        return dtoBuilder.buildPizzeriaShowDtos(pizzerias);
+        log.info("Размер списка пиццерий: " + pizzerias.size());
+        return dtoBuilder.buildPizzeriaWeeklyDtos(pizzerias);
     }
 
     @Override
@@ -31,5 +32,20 @@ public class PizzeriaServiceImpl implements PizzeriaService {
                 .stream()
                 .map(dtoBuilder::buildPizzeriaDto)
                 .toList();
+    }
+
+    @Override
+    public PizzeriaDto getPizzeriaDtoById(long id) {
+        Pizzeria pizzeria = pizzeriaRepository.findById(id).orElseThrow(null);
+        return dtoBuilder.buildPizzeriaDto(pizzeria);
+    }
+
+
+    protected Pizzeria getPizzeriaById(Long id) {
+        return pizzeriaRepository.findById(id).orElse(null);
+    }
+
+    protected Pizzeria getPizzeriaByUuid(String unitId) {
+        return pizzeriaRepository.findByUuidEqualsIgnoreCase(unitId);
     }
 }

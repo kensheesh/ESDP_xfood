@@ -13,7 +13,7 @@
                                     <option selected disabled>Выберите территорию</option>
                                     <#if locations?has_content>
                                         <#list locations as location>
-                                            <option value="${location.id}">${location.name}</option>
+                                            <option value="${location.id}" <#if location.id == locationId>selected</#if>>${location.name}</option>
                                         </#list>
                                     <#else>
                                         <option disabled>Нет доступных территорий</option>
@@ -21,7 +21,13 @@
                                 </select>
                             </div>
                             <div class="px-3" id="pizzeria-list">
-                                <span class="text-secondary">Список пуст</span>
+                                <#if pizzerias?has_content>
+                                    <#list pizzerias as pizzeria>
+                                        <div class="btn border w-100 text-start p-2 my-1" id="${pizzeria.id}" onclick="handlePizzeriaClick(this.id)">${pizzeria.name}</div>
+                                    </#list>
+                                <#else>
+                                    <span class="text-secondary">Список пуст</span>
+                                </#if>
                             </div>
                         </div>
                     </div>
@@ -29,13 +35,61 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-9">
+            <nav aria-label="navigation">
+                <ul class="pagination justify-content-center my-3">
+                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder - 1}">Previous</a></li>
+                    <span class="text-secondary pt-2 mx-3">${week.monday} - ${week.sunday}</span>
+                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder + 1}">Next</a></li>
+                </ul>
+            </nav>
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <tbody id="schedule-list">
-
-                            </tbody>
+                                    <#if schedules?has_content>
+                                    <#list schedules as schedule>
+                                    <tr>
+                                    <td class="align-middle">
+                                            <span>${schedule.manager.name}<br>${schedule.manager.surname}</span>
+                                            </td>
+                                            <#list schedule.weeklySchedule as day>
+                                                <td>
+                                                    <#if day.workDay>
+                                                        <div class="row row-cols-1">
+                                                            <div class="col">
+                                                                <div class="text-body-secondary fw-medium calendar-date">${day.date}</div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <button class="btn btn-sm btn-success rounded-4 calendar-button"
+                                                                        style="font-size: 11px;" id="" value="${day.date}" data-bs-toggle="modal"
+                                                                        data-bs-target="#workShiftModal" onclick="handleWorkDayClick(${schedule.manager.id}, this.value)">
+                                                                    <div>${day.startTime} - ${day.endTime}</div>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    <#else>
+                                                        <div class="row row-cols-1">
+                                                            <div class="col">
+                                                                <div class="text-body-secondary fw-medium calendar-date">
+                                                                    ${day.date}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <button class="btn btn-sm btn-light rounded-4 calendar-button" disabled>
+                                                                    <i class="bi bi-ban"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </#if>
+                                                </td>
+                                            </#list>
+                                        </#list>
+                                        </tr>
+                                    <#else>
+                                        <span class="text-center fs-4 p-4">Нет результатов</span>
+                                    </#if>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -51,9 +105,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="work-shifts" class="row row-cols-1 row-gap-3">
-                        <div class="row">
-                        </div>
+                    <div id="work-shifts" class="row row-cols-1 row-gap-3 mx-1">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -89,109 +141,24 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
-
     <script>
         let currentDate;
         let managerId;
         let expertId;
+        let locationId;
 
-        async function handleSelectChange(selectedValue) {
-            let pizzeriaList = document.getElementById('pizzeria-list');
-            pizzeriaList.innerHTML = '';
-            fetch('/api/pizzerias/location/' + selectedValue)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(item => {
-                        const pizzeria = document.createElement('p');
-                        const pizzeriaLink = document.createElement('a');
-                        pizzeriaLink.href = "/api/managers-work-schedule/pizzeria/" + item.id;
-                        pizzeriaLink.textContent = item.name;
-                        pizzeriaLink.addEventListener('click', function() {
-                            handlePizzeriaClick(this.href);
-                        });
-                        pizzeria.appendChild(pizzeriaLink);
-
-                        pizzeriaList.insertAdjacentElement('beforeend', pizzeria);
-                    });
-                })
-                .catch(error => console.error('Error fetching pizzerias:', error));
+        function handleSelectChange(selectedValue) {
+            locationId = selectedValue;
+            localStorage.setItem('locationId', locationId);
+            window.location.href = '/supervisor/weekly?locId=' + locationId
         }
 
-        async function handlePizzeriaClick(href) {
-            event.preventDefault();
-            let scheduleList = document.getElementById('schedule-list');
-            scheduleList.innerHTML = '';
-
-            fetch(href)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        let loss = document.createElement('span');
-                        loss.className = 'text-center fs-4 p-4';
-                        loss.innerHTML = 'Нет результатов';
-                        scheduleList.insertAdjacentElement('beforeend', loss);
-                    } else {
-                        data.forEach(item => {
-                            let row = document.createElement('tr');
-                            let manager = document.createElement('td');
-                            manager.className = 'align-middle';
-                            manager.innerHTML =
-                                `
-                                <span>` + item.manager.surname + `<br>` + item.manager.name + `</span>
-                            `;
-
-                            row.insertAdjacentElement('beforeend', manager);
-
-                            item.weeklySchedule.forEach(schedule => {
-                                let day = document.createElement('td');
-                                if(schedule.workDay) {
-                                    day.innerHTML =
-                                        `
-                                        <div class="row row-cols-1">
-                                            <div class="col">
-                                                <div class="text-body-secondary fw-medium calendar-date">
-                                                    ` + schedule.date + `
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-sm btn-success rounded-4 calendar-button"
-                                                        style="font-size: 11px;" id="" value="` + schedule.date + `" data-bs-toggle="modal"
-                                                        data-bs-target="#workShiftModal" onclick="handleWorkDayClick(` + item.manager.id + `, this.value)">
-                                                    <div>` + schedule.startTime + ` - ` + schedule.endTime + `</div>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        `;
-                                } else {
-                                    day.innerHTML =
-                                        `
-                                    <div class="row row-cols-1">
-                                        <div class="col">
-                                            <div class="text-body-secondary fw-medium calendar-date">
-                                                ` + schedule.date + `
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-sm btn-light rounded-4 calendar-button" disabled>
-                                                <i class="bi bi-ban"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    `;
-                                }
-                                row.insertAdjacentElement('beforeend', day);
-                            })
-                        scheduleList.insertAdjacentElement('beforeend', row);
-                        });
-                    }
-                })
-                .catch(error => console.error('Error fetching work schedules:', error));
+        function handlePizzeriaClick(pizzeriaId) {
+            locationId = localStorage.getItem('locationId');
+            window.location.href = '/supervisor/weekly?locId=' + locationId + '&pizzId=' + pizzeriaId;
         }
 
-        function handleWorkDayClick(id, date) {
+        async function handleWorkDayClick(id, date) {
             currentDate = date;
             managerId = id;
 
@@ -201,34 +168,67 @@
             fetch('/api/opportunities/bydate/' + date)
                 .then(response => response.json())
                 .then(data => {
-                    data.forEach(item => {
-                        let opportunity = document.createElement('div');
-                        opportunity.className = 'row';
-                        let card = document.createElement('a');
-                        card.className = 'card';
-                        card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + item.user.id;
-                        let cardBody = document.createElement('div');
-                        cardBody.className = 'card-body';
-                        cardBody.innerHTML = `
-                                <h5 class="card-title">` + item.user.surname + ` ` + item.user.name + `</h5>
-                                             `;
-                        item.shifts.forEach(shift => {
-                            let row = document.createElement('span');
-                            row.innerHTML = `
-                                ` + shift.startTime + `-` + shift.endTime + `
-                            `;
-                            cardBody.insertAdjacentElement('beforeend', row)
-                        })
-
-                        opportunity.insertAdjacentElement('beforeend', card);
-                        card.insertAdjacentElement('beforeend', cardBody);
-                        shiftsList.insertAdjacentElement('beforeend', opportunity);
-                    });
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            let opportunity = document.createElement('div');
+                            opportunity.className = 'row';
+                            let card = document.createElement('a');
+                            card.className = 'card text-decoration-none mb-2';
+                            card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + item.user.id;
+                            let cardBody = document.createElement('div');
+                            cardBody.className = 'card-body';
+                            cardBody.innerHTML = `
+                        <h5 class="card-title">` + item.user.surname + ` ` + item.user.name + `</h5>
+                    `;
+                            item.shifts.forEach(shift => {
+                                let row = document.createElement('p');
+                                row.innerHTML = shift.startTime + ` - ` + shift.endTime;
+                                cardBody.appendChild(row);
+                            });
+                            card.appendChild(cardBody);
+                            opportunity.appendChild(card);
+                            shiftsList.appendChild(opportunity);
+                        });
+                    } else {
+                        let noOpportunities = document.createElement('div');
+                        noOpportunities.className = 'text-center text-secondary';
+                        noOpportunities.innerText = 'Нет доступных экспертов на выбранную дату';
+                        shiftsList.appendChild(noOpportunities);
+                    }
+                    fetchAllExperts();
                 })
-                .catch(error => console.error('Error fetching pizzerias:', error));
-
+                .catch(error => console.error('Error fetching opportunities:', error));
         }
 
+        async function fetchAllExperts() {
+            fetch('/api/experts')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(expert => {
+                        if (!document.querySelector(`[href*="&expertId=` + expert.id + `"]`)) {
+                            let expertElement = document.createElement('div');
+                            expertElement.className = 'row';
+                            let card = document.createElement('a');
+                            card.className = 'card mb-2';
+                            card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + expert.id;
+                            let cardBody = document.createElement('div');
+                            cardBody.className = 'card-body';
+                            cardBody.innerHTML = `
+                        <h5 class="card-title">` + expert.surname + ` ` + expert.name + `</h5>
+                        <span class="text-secondary">Нет доступных смен</span>
+                    `;
+                            card.appendChild(cardBody);
+                            expertElement.appendChild(card);
+                            document.getElementById('work-shifts').appendChild(expertElement);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error fetching experts:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            locationId = localStorage.getItem('locationId');
+        });
     </script>
 
 </@main.layout>
