@@ -40,8 +40,15 @@ public class ManagerServiceImpl implements ManagerService {
     public Manager findById(Long id) {
       return managerRepository.findById(id).orElseThrow(() -> new NotFoundException("Manager not found by id: " + id));
     }
-	
-	protected Manager getManagersByUuid(String staffId) {
+
+    @Override
+    public ManagerDto getManagerDtoById(Long id) {
+        Manager manager =  findById(id);
+        return dtoBuilder.buildManagerDto(manager);
+    }
+
+
+    protected Manager getManagersByUuid(String staffId) {
 		return managerRepository.findByUuid(staffId);
 	}
 	

@@ -11,4 +11,5 @@ public interface ManagerService {
     List<ManagerDto> getAllAvailable(String uuid);
 
     Manager findById(Long id);
+    ManagerDto getManagerDtoById(Long id);
 }
