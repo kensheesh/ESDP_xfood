@@ -28,7 +28,7 @@ public class WorkScheduleController {
     public ResponseEntity<List<WeeklyScheduleShowDto>> getManagersSchedules (
             @PathVariable (name = "id") Long pizzeriaId
     ) {
-        List<WeeklyScheduleShowDto> dtos = workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId);
+        List<WeeklyScheduleShowDto> dtos = workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId, 0);
         okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId);
         
         return ResponseEntity.ok(dtos);
