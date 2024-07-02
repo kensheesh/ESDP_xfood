@@ -29,8 +29,8 @@ public class TestController {
 		return ResponseEntity.ok(okHttpService.getPizzeriasByMatch(name));
 	}
 	
-//	@GetMapping("/pizz/{uuid}/")
-//	public ResponseEntity<?> getschedule(@PathVariable String uuid) {
-//		return ResponseEntity.ok(okHttpService.getWorksheetOfPizzeriaManagers(uuid,"ru"));
-//	}
+	@GetMapping("/pizz/{uuid}/")
+	public ResponseEntity<?> getschedule(@PathVariable String uuid) {
+		return ResponseEntity.ok(okHttpService.getPizzeriaStaff(uuid,"ru"));
+	}
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@Builder()
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PizzeriasShowDodoIsDto implements Serializable {

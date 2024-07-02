@@ -1,10 +1,13 @@
 package kg.attractor.xfood.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import kg.attractor.xfood.dto.okhttp.PizzeriaManagerShiftDto;
+import kg.attractor.xfood.dto.okhttp.PizzeriaStaffMemberDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriasShowDodoIsDto;
 import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.model.Pizzeria;
@@ -26,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -156,6 +160,20 @@ public class OkHttpServiceImpl implements OkHttpService {
 			
 			log.info("Saved {} pizzerias to Redis for country code: {}", dtos.size(), countryCode);
 		});
+	}
+	
+	@Override
+	public List<PizzeriaStaffMemberDto> getPizzeriaStaff(String countryCode, String pizzeriaUuid) {
+		try {
+			String json = authApiRunner(getPizzeriasStaffMembersUrl(countryCode, pizzeriaUuid), BEARER);
+			if (json == null) return Collections.emptyList();
+			
+			JsonNode membersNode = objectMapper.readTree(json).path("members");
+			return objectMapper.convertValue(membersNode, new TypeReference<>() {});
+		} catch (JsonProcessingException e) {
+			log.error("Error processing JSON: {}", e.getMessage(), e);
+			return Collections.emptyList();
+		}
 	}
 	
 	private List<PizzeriasShowDodoIsDto> getAllPizzeriasByCountry(String countryCode) {
