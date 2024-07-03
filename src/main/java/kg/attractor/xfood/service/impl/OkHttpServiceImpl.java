@@ -169,7 +169,8 @@ public class OkHttpServiceImpl implements OkHttpService {
 			if (json == null) return Collections.emptyList();
 			
 			JsonNode membersNode = objectMapper.readTree(json).path("members");
-			return objectMapper.convertValue(membersNode, new TypeReference<>() {});
+			return objectMapper.convertValue(membersNode, new TypeReference<>() {
+			});
 		} catch (JsonProcessingException e) {
 			log.error("Error processing JSON: {}", e.getMessage(), e);
 			return Collections.emptyList();

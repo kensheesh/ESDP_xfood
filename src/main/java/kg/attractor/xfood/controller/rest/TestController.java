@@ -31,6 +31,6 @@ public class TestController {
 	
 	@GetMapping("/pizz/{uuid}/")
 	public ResponseEntity<?> getschedule(@PathVariable String uuid) {
-		return ResponseEntity.ok(okHttpService.getPizzeriaStaff(uuid,"ru"));
+		return ResponseEntity.ok(okHttpService.getPizzeriaStaff("ru",uuid));
 	}
 }
