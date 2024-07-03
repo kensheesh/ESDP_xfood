@@ -2,7 +2,8 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.*;
-import jakarta.persistence.*;
+import kg.attractor.xfood.dao.CheckListDao;
+import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
@@ -17,7 +18,6 @@ import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
-import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
@@ -25,13 +25,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,6 +48,8 @@ public class CheckListServiceImpl implements CheckListService {
     // private final CheckListCriteriaService checkListCriteriaService;
     private final ManagerService managerService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
+    private final ChecklistCriteriaRepository checklistCriteriaRepository;
+    private final CheckListDao checkListDao;
 
     @Autowired
     public void setCheckListCriteriaService(@Lazy CheckListCriteriaServiceImpl checkListCriteriaService) {
@@ -210,7 +210,7 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public ResponseEntity<?> updateCheckStatusCheckList(String id, LocalTime duration) {
+    public void updateCheckStatusCheckList(String id, LocalTime duration) {
         CheckList checkList = getModelCheckListById(id);
         if(checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");
@@ -222,7 +222,7 @@ public class CheckListServiceImpl implements CheckListService {
         }
         checkList.setDuration(duration);
         log.info(duration+"Duration for checklist with id "+checkList.getId());
-        return ResponseEntity.ok(checkListRepository.save(checkList));
+        checkListDao.updateStatusToDone(Status.DONE, checkList);
     }
 
     @Override
@@ -320,6 +320,15 @@ public class CheckListServiceImpl implements CheckListService {
         checkList.setWorkSchedule(workSchedule);
         checkList.setOpportunity(opportunity);
         checkListRepository.save(checkList);
+    }
+
+    @Override
+    public Integer getMaxPoints(Long id) {
+        List<CheckListsCriteria> criteriaList = checklistCriteriaRepository.findCriteriaByCheckListId(id);
+        return (int) criteriaList.stream()
+                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
+                .sum();
+
     }
 
 

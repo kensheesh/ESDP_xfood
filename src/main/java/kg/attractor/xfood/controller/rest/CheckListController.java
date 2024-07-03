@@ -1,8 +1,8 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.time.LocalTime;
 @RequestMapping("api/checks")
 public class CheckListController {
     private final CheckListService checkListService;
-    private final CheckListRepository checkListRepository;
+    private final CheckListDao checkListDao;
 
     @GetMapping("{id}")
     public ResponseEntity<String> getUuidLinkById(@PathVariable(name = "id") CheckList checkList) {
@@ -30,21 +30,25 @@ public class CheckListController {
         }
     }
 
-
     @PostMapping("post/{id}/{duration}")
-    public ResponseEntity<?> postCheck(@PathVariable(name = "id") String id, @PathVariable LocalTime duration) {
+    public HttpStatus postCheck(@PathVariable(name = "id") String id, @PathVariable LocalTime duration) {
         try{
-            return ResponseEntity.ok(checkListService.updateCheckStatusCheckList(id, duration));
+            checkListService.updateCheckStatusCheckList(id,duration);
+            return HttpStatus.OK;
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 
     @PostMapping("change/status/{id}")
     public HttpStatus changeStatusToInProgress(@PathVariable(name = "id") CheckList checkList) {
-        checkList.setStatus(Status.IN_PROGRESS);
-        checkListRepository.save(checkList);
+        checkListDao.updateStatusToInProgress(Status.IN_PROGRESS, checkList);
         return HttpStatus.OK;
+    }
+
+    @GetMapping("{id}/points")
+    public ResponseEntity<Integer> getMaxPointsCheckList(@PathVariable Long id) {
+        return ResponseEntity.ok(checkListService.getMaxPoints(id));
     }
 
 

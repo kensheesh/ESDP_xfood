@@ -4,7 +4,6 @@ import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -34,9 +33,11 @@ public interface CheckListService {
 
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
-    ResponseEntity<?> updateCheckStatusCheckList(String id, LocalTime localTime);
+    void updateCheckStatusCheckList(String id, LocalTime localTime);
 
     CheckListSupervisorEditDto getChecklistByUuid(String uuid);
 
     void edit(CheckListSupervisorEditDto checkList);
+
+    Integer getMaxPoints(Long id);
 }

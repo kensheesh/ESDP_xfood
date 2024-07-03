@@ -45,7 +45,6 @@ public class CheckList {
     public LocalTime duration;
 
     @Enumerated(EnumType.STRING)
-
     private Status status;
 
 }

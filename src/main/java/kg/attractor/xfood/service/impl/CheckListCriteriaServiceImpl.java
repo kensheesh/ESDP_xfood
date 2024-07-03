@@ -96,7 +96,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
             return dtoBuilder.buildCheckListCriteriaDto(model);
         }
 
-        throw new IllegalArgumentException("Такой wow-фактор уже существует! Вы можете добавить только один раз!");
+        throw new IllegalArgumentException("Такой критерий уже существует! Вы можете добавить только один раз!");
     }
 
     @Override
@@ -107,20 +107,52 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
     @Override
     public CheckListCriteriaDto createCritFactor(SaveCriteriaDto saveCriteriaDto, String description) {
-        if(description != null) {
-            Criteria criteria = Criteria.builder()
-                    .description(description)
-                    .section(sectionRepository.findById(1L).get())
-                    .zone(zoneRepository.findById(9L).get())
-                    .coefficient(1)
-                    .build();
+        if(description.isEmpty()) throw new IllegalArgumentException("Описание не может быть пустым!");
 
-            Criteria newCriteria = criteriaRepository.save(criteria);
-            saveCriteriaDto.setCriteriaId(newCriteria.getId());
-            saveCriteriaDto.setValue(-8);
-        }
+        Criteria criteria = Criteria.builder()
+                .description(description)
+                .section(sectionRepository.findById(1L).get())
+                .zone(zoneRepository.findById(9L).get())
+                .coefficient(1)
+                .build();
+
+        Criteria newCriteria = criteriaRepository.save(criteria);
+        saveCriteriaDto.setCriteriaId(newCriteria.getId());
+        saveCriteriaDto.setValue(-8);
 
         return createNewFactor(saveCriteriaDto);
+    }
+
+    @Override
+    public Integer getPercentageById(Long id) {
+        List<CheckListsCriteria> criteriaList = checkListCriteriaRepository.findCriteriaByCheckListId(id);
+        Double normalMaxSum = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
+                .sum();
+
+        Double normalValue = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double wowValue = criteriaList.stream()
+                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double percentage = (normalValue / normalMaxSum) * 100;
+
+        if (percentage < 100) {
+            Double totalValue = normalValue + wowValue;
+            percentage = (totalValue / normalMaxSum) * 100;
+
+            if (percentage > 100) {
+                percentage = 100.0;
+            }
+        }
+
+        return (int) Math.ceil(percentage);
     }
 
     @Override
