@@ -37,7 +37,7 @@ public class Criteria {
     @ColumnDefault("1")
     @Column(name = "coefficient", nullable = false)
     private Integer coefficient;
-    
+
     @OneToMany(mappedBy = "criteria")
     private List<CriteriaPizzeria> criteriaPizzerias;
 
