@@ -33,7 +33,7 @@ public interface CheckListService {
 
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
-    void updateCheckStatusCheckList(String id, LocalTime localTime);
+    CheckList updateCheckStatusCheckList(String id, LocalTime localTime);
 
     CheckListSupervisorEditDto getChecklistByUuid(String uuid);
 

@@ -21,6 +21,8 @@ import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,10 +212,10 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public void updateCheckStatusCheckList(String id, LocalTime duration) {
+    public CheckList updateCheckStatusCheckList(String id, LocalTime duration) {
         CheckList checkList = getModelCheckListById(id);
         if(checkList.getStatus().equals(Status.DONE)) {
-            throw new IllegalArgumentException("Даннный чеклист уже опубликован");
+            throw new IllegalArgumentException("Данный чеклист уже опубликован");
         }
 
         checkList.setStatus(Status.DONE);
@@ -223,6 +225,7 @@ public class CheckListServiceImpl implements CheckListService {
         checkList.setDuration(duration);
         log.info(duration+"Duration for checklist with id "+checkList.getId());
         checkListDao.updateStatusToDone(Status.DONE, checkList);
+        return checkList;
     }
 
     @Override
