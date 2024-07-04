@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "check_lists")
+@ToString
 public class CheckList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

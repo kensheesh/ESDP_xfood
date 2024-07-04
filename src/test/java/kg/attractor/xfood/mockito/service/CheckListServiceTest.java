@@ -1,4 +1,4 @@
-package kg.attractor.xfood.service;
+package kg.attractor.xfood.mockito.service;
 
 import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.enums.Status;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-public class UpdateCheckListTest {
+public class CheckListServiceTest {
 
     @Mock
     private CheckListDao checkListDao;
@@ -61,7 +61,6 @@ public class UpdateCheckListTest {
         checkList.setUuidLink(uuid);
         checkList.setStatus(Status.DONE);
         when(checkListRepository.findByUuidLink(uuid)).thenReturn(Optional.of(checkList));
-
 
         var exception = assertThrows(IllegalArgumentException.class, () -> {
             checkListService.updateCheckStatusCheckList(uuid, duration);

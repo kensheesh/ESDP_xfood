@@ -33,16 +33,13 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     private final SectionRepository sectionRepository;
     private final ZoneRepository zoneRepository;
 
-
     @Autowired
     public void setCheckListCriteriaService(CheckListService checkListService) {
         this.checkListService = checkListService;
     }
 
-
     @Override
     public void save(List<SaveCriteriaDto> saveCriteriaDto) {
-
         saveCriteriaDto.forEach(c -> {
             try {
                 int maxValue = (c.getMaxValue() != null) ? c.getMaxValue() : 0;
@@ -73,7 +70,6 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
                 e.printStackTrace();
             }
         });
-
     }
 
     @Override
