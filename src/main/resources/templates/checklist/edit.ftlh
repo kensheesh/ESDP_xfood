@@ -7,7 +7,8 @@
                     <p class="">${checklist.workSchedule.pizzeria.name}</p>
                     <p class="">${checklist.workSchedule.pizzeria.location.name}</p>
 
-                    <input type="hidden" name="workSchedule.pizzeria" value="${checklist.workSchedule.pizzeria}">
+
+                    <input type="hidden" name="uuid" value="${checklist.id}">
                 </div>
             </div>
             <div class="row">
