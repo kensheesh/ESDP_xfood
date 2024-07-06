@@ -137,7 +137,7 @@ public class DtoBuilder {
 				.build();
 	}
 
-    protected CheckListAnalyticsDto buildCheckListAnalyticsDto(CheckList model) {
+    public CheckListAnalyticsDto buildCheckListAnalyticsDto(CheckList model) {
         CheckListAnalyticsDto checkListAnalyticsDto = new CheckListAnalyticsDto();
         checkListAnalyticsDto.setId(model.getId());
         checkListAnalyticsDto.setPizzeria(model.getWorkSchedule().getPizzeria());

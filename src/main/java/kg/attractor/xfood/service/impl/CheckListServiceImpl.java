@@ -1,26 +1,22 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
-import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dao.CheckListDao;
-import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
+import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
-import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.IncorrectDateException;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.*;
-import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
-import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.repository.UserRepository;
-import kg.attractor.xfood.service.CheckListService;
+import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +72,7 @@ public class CheckListServiceImpl implements CheckListService {
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
-        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())){
+        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())) {
             throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
         }
         //TODO уточнить надо ли делать проверку по work_schedule, opportunity and type и если необходимо добавить
@@ -110,12 +106,12 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public CheckList getModelCheckListById(String id) {
-        return checkListRepository.findByUuidLink(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by uuid "+id));
+        return checkListRepository.findByUuidLink(id).orElseThrow(() -> new NoSuchElementException("Can't find checklist by uuid " + id));
     }
 
     @Override
     public CheckList getModelCheckListById(Long id) {
-        return checkListRepository.findById(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by ID "+id));
+        return checkListRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Can't find checklist by ID " + id));
     }
 
     @Override
@@ -136,7 +132,7 @@ public class CheckListServiceImpl implements CheckListService {
     public CheckListResultDto getResult(String checkListId) {
         CheckList checkList = getModelCheckListById(checkListId);
 
-        if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
+        if (checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
             return dtoBuilder.buildCheckListResultDto(
                     checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
                             .orElseThrow(() -> new NotFoundException("Check list not found"))
@@ -150,7 +146,7 @@ public class CheckListServiceImpl implements CheckListService {
     public CheckListResultDto getResult(Long checkListId) {
         CheckList checkList = getModelCheckListById(checkListId);
 
-        if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
+        if (checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
             return dtoBuilder.buildCheckListResultDto(
                     checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
                             .orElseThrow(() -> new NotFoundException("Check list not found"))
@@ -212,7 +208,7 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     public void updateCheckStatusCheckList(String id, LocalTime duration) {
         CheckList checkList = getModelCheckListById(id);
-        if(checkList.getStatus().equals(Status.DONE)) {
+        if (checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Даннный чеклист уже опубликован");
         }
 
@@ -221,7 +217,7 @@ public class CheckListServiceImpl implements CheckListService {
             throw new IncorrectDateException("Введите время,затраченное на проверку чек-листа!");
         }
         checkList.setDuration(duration);
-        log.info(duration+"Duration for checklist with id "+checkList.getId());
+        log.info(duration + "Duration for checklist with id " + checkList.getId());
         checkListDao.updateStatusToDone(Status.DONE, checkList);
     }
 
@@ -247,7 +243,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .build();
 
         List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
-        List <CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>() ;
+        List<CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>();
         for (CheckListsCriteria criteria : checkListsCriteria) {
             criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                     .id(criteria.getCriteria().getId())
@@ -280,10 +276,10 @@ public class CheckListServiceImpl implements CheckListService {
         if (checkListDto.getOpportunity().getStartTime().isAfter(checkListDto.getOpportunity().getEndTime())) {
             throw new IncorrectDateException("Время начала смены эксперта не может быть позже времени конца смены");
         }
-        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getEndTime())){
+        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getEndTime())) {
             throw new IncorrectDateException("Время конца смены эксперта не может быть раньше времени конца смены менеджера");
         }
-        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getStartTime())){
+        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getStartTime())) {
             throw new IncorrectDateException("Время конца смены эксперта не может быть раньше времени начала смены менеджера");
         }
 
