@@ -18,7 +18,6 @@ public class ProfileController {
     @GetMapping
     public String getProfile(Model model) {
         model.addAttribute("user", userService.getUserDto());
-
         return "profile/profile";
     }
 }

@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-class CheckListServiceTests {
+class CheckListServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -130,6 +130,7 @@ class CheckListServiceTests {
         List<CheckListAnalyticsDto> result = checkListService.getAnalytics("default", "default", "default", null, null);
 
         assertEquals(1, result.size());
+
         verify(userRepository, times(1)).findByEmail(anyString());
         verify(checkListRepository, times(1)).findByStatus(eq(Status.DONE));
         verify(dtoBuilder, times(1)).buildCheckListAnalyticsDto(any(CheckList.class));

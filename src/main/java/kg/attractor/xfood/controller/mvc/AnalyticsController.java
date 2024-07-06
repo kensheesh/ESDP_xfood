@@ -31,6 +31,7 @@ public class AnalyticsController {
         model.addAttribute("checklists", checkListService.getAnalytics(
                 pizzeria, manager, expert, startDate, endDate
         ));
+
         model.addAttribute("user", userService.getUserDto());
 
         model.addAttribute("currentPizzeria", pizzeria);

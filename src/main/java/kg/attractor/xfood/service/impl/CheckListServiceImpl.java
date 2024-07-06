@@ -166,6 +166,7 @@ public class CheckListServiceImpl implements CheckListService {
             checkLists = checkListRepository.findByStatus(Status.DONE);
         }
 
+
         if (!"default".equals(pizzeriaId)) {
             checkLists = checkLists.stream()
                     .filter(checkList -> checkList.getWorkSchedule().getPizzeria().getId().equals(Long.parseLong(pizzeriaId)))
