@@ -40,7 +40,7 @@ public class DtoBuilder {
     private final ChecklistCriteriaRepository checkListsCriteriaRepository;
 
 
-    protected ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
+    public ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         String uuid = model.getUuidLink();
         String pizzeria = model.getWorkSchedule().getPizzeria().getName();
@@ -57,7 +57,7 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected UserDto buildUserDto(User model) {
+    public UserDto buildUserDto(User model) {
         return UserDto.builder()
                 .id(model.getId())
                 .name(model.getName())
@@ -72,7 +72,7 @@ public class DtoBuilder {
     }
 
 
-    protected ManagerDto buildManagerDto(Manager manager) {
+	public ManagerDto buildManagerDto(Manager manager) {
         return ManagerDto.builder()
                 .id(manager.getId())
                 .name(manager.getName())
@@ -81,7 +81,7 @@ public class DtoBuilder {
                 .build();
     }
 
-	protected ChecklistShowDto buildChecklistShowDto(CheckList model) {
+	public ChecklistShowDto buildChecklistShowDto(CheckList model) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
 				.map(this::buildCriteriaShowDto)
@@ -102,8 +102,8 @@ public class DtoBuilder {
 				.criteria(criteriaDtos)
 				.build();
 	}
-	
-	protected CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
+
+	public CriteriaExpertShowDto buildCriteriaShowDto(CheckListsCriteria model) {
 		return CriteriaExpertShowDto.builder()
 				.id(model.getCriteria().getId())
 				.zone(model.getCriteria().getZone().getName())
@@ -114,8 +114,8 @@ public class DtoBuilder {
 				.value(model.getValue())
 				.build();
 	}
-	
-	protected ManagerShowDto buildManagerShowDto(Manager manager) {
+
+	public ManagerShowDto buildManagerShowDto(Manager manager) {
 		return ManagerShowDto.builder()
 				.id(manager.getId())
 				.name(manager.getName())
@@ -123,7 +123,7 @@ public class DtoBuilder {
 				.build();
 	}
 
-	protected CheckListResultDto buildCheckListResultDto(CheckList model) {
+	public CheckListResultDto buildCheckListResultDto(CheckList model) {
 		return CheckListResultDto.builder()
 				.id(model.getId())
 				.criteria(
@@ -161,7 +161,7 @@ public class DtoBuilder {
     }
 
 
-    protected PizzeriaDto buildPizzeriaDto(Pizzeria model) {
+	public PizzeriaDto buildPizzeriaDto(Pizzeria model) {
         return PizzeriaDto.builder()
                 .id(model.getId())
                 .name(model.getName())
@@ -170,7 +170,7 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected LocationDto buildLocationDto(Location model) {
+	public LocationDto buildLocationDto(Location model) {
         return LocationDto.builder()
                 .id(model.getId())
                 .name(model.getName())
@@ -179,7 +179,7 @@ public class DtoBuilder {
                 .build();
     }
 
-	protected WeekDto buildWeekDto(Long weekOrder, String mondayDate, String sundayDate) {
+	public WeekDto buildWeekDto(Long weekOrder, String mondayDate, String sundayDate) {
 		return WeekDto.builder()
 				.weekOrder(weekOrder)
 				.monday(mondayDate)
@@ -187,7 +187,7 @@ public class DtoBuilder {
 				.build();
 	}
 
-    protected WorkScheduleDto buildWorkScheduleDto(WorkSchedule model) {
+    public WorkScheduleDto buildWorkScheduleDto(WorkSchedule model) {
         return WorkScheduleDto.builder()
                 .id(model.getId())
                 .manager(this.buildManagerShowDto(model.getManager()))
@@ -199,7 +199,7 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected ExpertShowDto buildExpertShowDto(User user) {
+	public ExpertShowDto buildExpertShowDto(User user) {
         return ExpertShowDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -207,7 +207,7 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected ExpertShowDto buildExpertShowDto(UserDto user) {
+	public ExpertShowDto buildExpertShowDto(UserDto user) {
         return ExpertShowDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -215,13 +215,13 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
+	public List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
         List<LocationShowDto> dtos = new ArrayList<>();
         locations.forEach(e -> dtos.add(buildLocationShowDto(e)));
         return dtos;
     }
 
-    protected LocationShowDto buildLocationShowDto(Location location) {
+	public LocationShowDto buildLocationShowDto(Location location) {
         return LocationShowDto.builder()
                 .id(location.getId())
                 .name(location.getName())
@@ -230,19 +230,19 @@ public class DtoBuilder {
                 .build();
     }
 
-    protected List<PizzeriaShowDto> buildPizzeriaShowDtos(List<Pizzeria> pizzerias) {
+	public List<PizzeriaShowDto> buildPizzeriaShowDtos(List<Pizzeria> pizzerias) {
         List<PizzeriaShowDto> dtos = new ArrayList<>();
         pizzerias.forEach(e -> dtos.add(buildPizzeriaShowDto(e)));
         return dtos;
     }
 
-	protected List<PizzeriaWeeklyDto> buildPizzeriaWeeklyDtos(List<Pizzeria> pizzerias) {
+	public List<PizzeriaWeeklyDto> buildPizzeriaWeeklyDtos(List<Pizzeria> pizzerias) {
 		List<PizzeriaWeeklyDto> dtos = new ArrayList<>();
 		pizzerias.forEach(e -> dtos.add(buildPizzeriaWeeklyDto(e)));
 		return dtos;
 	}
 
-	protected PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
+	public PizzeriaShowDto buildPizzeriaShowDto(Pizzeria pizzeria) {
 		return PizzeriaShowDto.builder()
 				.id(pizzeria.getId())
 				.name(pizzeria.getName())
@@ -251,28 +251,28 @@ public class DtoBuilder {
 				.workSchedules(pizzeria.getWorkSchedules()).build();
 	}
 
-	protected PizzeriaWeeklyDto buildPizzeriaWeeklyDto(Pizzeria pizzeria) {
+	public PizzeriaWeeklyDto buildPizzeriaWeeklyDto(Pizzeria pizzeria) {
 		return PizzeriaWeeklyDto.builder()
 				.id(pizzeria.getId())
 				.name(pizzeria.getName())
 				.build();
 	}
 
-	protected ZoneSupervisorShowDto buildZoneDto(Zone model){
+	public ZoneSupervisorShowDto buildZoneDto(Zone model){
 		return ZoneSupervisorShowDto.builder()
 				.id(model.getId())
 				.name(model.getName())
 				.build();
 	}
 
-	protected SectionSupervisorShowDto buildSectionDto(Section model){
+	public SectionSupervisorShowDto buildSectionDto(Section model){
 		return SectionSupervisorShowDto.builder()
 				.id(model.getId())
 				.name(model.getName())
 				.build();
 	}
 
-	protected CriteriaSupervisorShowDto buildCriteriaSupervisorShowDto(Criteria model) {
+	public CriteriaSupervisorShowDto buildCriteriaSupervisorShowDto(Criteria model) {
 		return CriteriaSupervisorShowDto.builder()
 				.id(model.getId())
 				.description(model.getDescription())
@@ -282,14 +282,14 @@ public class DtoBuilder {
 				.build();
 	}
 
-	protected CheckTypeSupervisorViewDto buildCheckTypeShowDto(CheckType model) {
+	public CheckTypeSupervisorViewDto buildCheckTypeShowDto(CheckType model) {
 		return CheckTypeSupervisorViewDto.builder()
 				.id(model.getId())
 				.name(model.getName())
 				.build();
 	}
 
-	protected WorkScheduleSupervisorShowDto buildWorkScheduleShowDto(WorkSchedule model) {
+	public WorkScheduleSupervisorShowDto buildWorkScheduleShowDto(WorkSchedule model) {
 		return WorkScheduleSupervisorShowDto.builder()
 				.pizzeriaId(model.getPizzeria().getId())
 				.endTime(model.getEndTime().toLocalTime())
@@ -297,7 +297,7 @@ public class DtoBuilder {
 				.build();
 	}
 
-	protected OpportunityDto buildOpportunityDto (Opportunity model) {
+	public OpportunityDto buildOpportunityDto (Opportunity model) {
 		return OpportunityDto.builder()
 				.id(model.getId())
 				.date(model.getDate())
@@ -306,7 +306,7 @@ public class DtoBuilder {
 				.build();
 	}
 
-	protected CheckListCriteriaDto buildCheckListCriteriaDto(CheckListsCriteria model) {
+	public CheckListCriteriaDto buildCheckListCriteriaDto(CheckListsCriteria model) {
 		return CheckListCriteriaDto.builder()
 				.criteria(model.getCriteria().getDescription())
 				.value(model.getValue())
