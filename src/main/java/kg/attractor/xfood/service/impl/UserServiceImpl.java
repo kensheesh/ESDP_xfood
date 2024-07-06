@@ -22,24 +22,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder encoder;
-
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
     private final DtoBuilder dtoBuilder;
 
-	public void register(RegisterUserDto dto) {
-		if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
-		User user = User.builder()
-				.email(dto.getEmail())
-				.password(encoder.encode(dto.getPassword()))
-				.name(dto.getName())
-				.surname(dto.getSurname())
-				.role(dto.getRole())
-				.phoneNumber(dto.getPhoneNumber())
-				.build();
-		userRepository.save(user);
-		//NOT THE FINAL VERSION!!!
-	}
+    public void register(RegisterUserDto dto) {
+        if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
+        User user = User.builder()
+                .email(dto.getEmail())
+                .password(encoder.encode(dto.getPassword()))
+                .name(dto.getName())
+                .surname(dto.getSurname())
+                .role(dto.getRole())
+                .phoneNumber(dto.getPhoneNumber())
+                .build();
+        userRepository.save(user);
+    }
 
     @Override
     public UserDto getUserDto() {
@@ -49,10 +47,10 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-	public User getByEmail(String name) {
-		return userRepository.getByEmail(name)
-				.orElseThrow(() -> new NotFoundException("User not found"));
-	}
+    public User getByEmail(String name) {
+        return userRepository.getByEmail(name)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
 
 
     @Override
@@ -63,17 +61,17 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
-	@Override
-	public List<ExpertShowDto> fetchAllExperts() {
-		List<UserDto> users = getAllExperts();
-		List<ExpertShowDto> expertDtos = users.stream()
-				.map(user -> dtoBuilder.buildExpertShowDto(user))
-				.collect(Collectors.toList());
-		return expertDtos;
-	}
+    @Override
+    public List<ExpertShowDto> fetchAllExperts() {
+        List<UserDto> users = getAllExperts();
+        List<ExpertShowDto> expertDtos = users.stream()
+                .map(user -> dtoBuilder.buildExpertShowDto(user))
+                .collect(Collectors.toList());
+        return expertDtos;
+    }
 
-	@Override
-	public User findById(Long expertId) {
-		return userRepository.findById(expertId).orElseThrow(()-> new NotFoundException("Expert not found"));
-	}
+    @Override
+    public User findById(Long expertId) {
+        return userRepository.findById(expertId).orElseThrow(() -> new NotFoundException("Expert not found"));
+    }
 }
