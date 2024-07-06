@@ -323,7 +323,9 @@
                 <h1>${status}</h1>
                 <h2><span data-l10n>UH OH</span>! <span data-l10n>${reason}</span></h2>
                 <!--        <p data-l10n>{{ description></p>-->
-
+                <#if errorMessage??>
+                    <h3>${errorMessage}</h3>
+                </#if>
                 <#if details??>
                     <ul class="details">
                         <#if message??>
