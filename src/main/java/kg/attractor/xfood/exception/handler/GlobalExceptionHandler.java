@@ -2,6 +2,7 @@ package kg.attractor.xfood.exception.handler;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
+import kg.attractor.xfood.exception.IncorrectDateException;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,16 @@ public class GlobalExceptionHandler implements ErrorController {
 		model.addAttribute("reason", HttpStatus.CONFLICT.getReasonPhrase());
 		model.addAttribute("details", request);
 		return "/errors/error";
+	}
+
+	@ExceptionHandler(IncorrectDateException.class)
+	private String incorrectDate(HttpServletRequest request, Model model, IncorrectDateException ex) {
+		log.error(ex.getMessage());
+		model.addAttribute("errorMessage", ex.getMessage());
+		model.addAttribute("status", HttpStatus.CONFLICT.value());
+		model.addAttribute("reason", HttpStatus.CONFLICT.getReasonPhrase());
+		model.addAttribute("details", request);
+		return "error/error";
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
