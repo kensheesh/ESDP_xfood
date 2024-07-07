@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -24,6 +25,6 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public Section findByName(String section) {
-        return sectionRepository.findByName(section);
+        return sectionRepository.findByName(section).orElseThrow(()->new NoSuchElementException("Раздел с именем "+section+" не найден"));
     }
 }

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -20,9 +21,8 @@ public class ZoneServiceImpl implements ZoneService {
     public List<ZoneSupervisorShowDto> getZones() {
         return zoneRepository.findAll().stream().map(dtoBuilder::buildZoneDto).toList();
     }
-
     @Override
     public Zone findByName(String zone) {
-        return zoneRepository.findByName(zone);
+        return zoneRepository.findByName(zone).orElseThrow(()-> new NoSuchElementException("Зона с названием "+zone+" не найдена"));
     }
 }

@@ -347,14 +347,14 @@ public class CheckListServiceImpl implements CheckListService {
                 checkListsCriteria.setMaxValue(1);
             }
             log.info("чеклист {} связан с критерием {}", checkList, criteriaMaxValueDto.getCriteriaId());
-            checkListCriteriaService.save(checkListsCriteria);
+
 
             CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
                     .pizzeria(checklistDto.getPizzeria())
                     .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
                     .build();
             criteriaPizzeriaService.save(criteriaPizzeria);
-
+            checkListCriteriaService.save(checkListsCriteria);
             log.info("Чек лист и все необходимые связи созданы");
 
         }

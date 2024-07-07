@@ -12,6 +12,7 @@ import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.*;
+import kg.attractor.xfood.service.impl.CheckListCriteriaServiceImpl;
 import kg.attractor.xfood.service.impl.CheckListServiceImpl;
 import kg.attractor.xfood.service.impl.DtoBuilder;
 import org.junit.jupiter.api.Assertions;
@@ -31,6 +32,7 @@ import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -47,6 +49,14 @@ class CheckListServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private CriteriaService criteriaService;
+
+
+    @Mock
+    private CriteriaPizzeriaService criteriaPizzeriaService;
+
 
     @Mock
     private CheckListRepository checkListRepository;
@@ -79,6 +89,7 @@ class CheckListServiceTest {
                 .roles(String.valueOf(Role.EXPERT))
                 .build();
         when(authentication.getPrincipal()).thenReturn(userDetails);
+
     }
 
     @Test
@@ -389,5 +400,5 @@ class CheckListServiceTest {
         Assertions.assertEquals("Время начала смены менеджера не может быть позже времени окончания работы эксперта", thrown.getMessage());
 
     }
-
+    
 }
