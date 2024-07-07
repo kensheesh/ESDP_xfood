@@ -67,7 +67,7 @@ public class CheckListServiceImpl implements CheckListService {
             throw new IncorrectDateException("Чек лист не содержит критериев");
         }
         if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
-            throw new IncorrectDateException("Время начала не может быть позже время конца смены");
+            throw new IncorrectDateException("Время начала не может быть позже времени конца смены");
         }
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         log.info(workSchedule.getStartTime().toString());
