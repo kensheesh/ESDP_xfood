@@ -18,6 +18,7 @@ import kg.attractor.xfood.service.UserService;
 import kg.attractor.xfood.service.WorkScheduleService;
 import kg.attractor.xfood.service.impl.CheckListServiceImpl;
 import kg.attractor.xfood.service.impl.DtoBuilder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -248,7 +249,7 @@ class CheckListServiceTest {
     }
 
     @Test
-    void testCheckListCreatingWithAllDataValid() {
+    void testCheckListCreatingWithAllValidData() {
         User user = new User();
         user.setId(1L);
         user.setRole(Role.EXPERT);
@@ -265,14 +266,6 @@ class CheckListServiceTest {
                 .pizzeria(pizzeria)
                 .build();
 
-        Opportunity opportunity = Opportunity.builder()
-                .user(user)
-                .date(LocalDate.parse("2024-06-30"))
-                .startTime(LocalTime.parse("10:00:00"))
-                .endTime(LocalTime.parse("17:00:00"))
-                .build();
-
-        Long id = 100L;
 
         CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
                 .checkTypeId(1L)
@@ -285,14 +278,57 @@ class CheckListServiceTest {
                 .build();
 
         when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
-        when(opportunityService.save(any(Opportunity.class))).thenReturn(id);
+        when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
         when(userService.findById(1L)).thenReturn(user);
 
         CheckListMiniSupervisorCreateDto createDto = checkListService.create(createDtoSupervisor);
 
         assertNotNull(createDto);
-        assertEquals(id, createDto.getOpportunityId());
+        assertEquals(1L, createDto.getOpportunityId());
         assertEquals(workSchedule.getId(), createDto.getWorkScheduleId());
         assertEquals(createDtoSupervisor.getCriteriaMaxValueDtoList(), createDto.getCriteriaMaxValueDtoList());
     }
+
+    @Test
+    void testCheckListCreatingWithEmptyCriterion() {
+        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
+
+            User user = new User();
+            user.setId(1L);
+            user.setRole(Role.EXPERT);
+
+            Manager manager = Manager.builder()
+                    .id(1L)
+                    .build();
+            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
+
+            WorkSchedule workSchedule = WorkSchedule.builder()
+                    .manager(manager)
+                    .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+                    .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+                    .pizzeria(pizzeria)
+                    .build();
+
+
+            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
+                    .checkTypeId(1L)
+                    .criteriaMaxValueDtoList(Collections.emptyList())
+                    .date(LocalDate.parse("2024-06-30"))
+                    .managerId(manager.getId())
+                    .expertId(user.getId())
+                    .startTime(LocalTime.parse("10:00:00"))
+                    .endTime(LocalTime.parse("17:00:00"))
+                    .build();
+
+            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
+            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
+            when(userService.findById(1L)).thenReturn(user);
+
+            CheckListMiniSupervisorCreateDto createDto = checkListService.create(createDtoSupervisor);
+        });
+
+        Assertions.assertEquals("Чек лист не содержит критериев", thrown.getMessage());
+
+    }
+
 }
