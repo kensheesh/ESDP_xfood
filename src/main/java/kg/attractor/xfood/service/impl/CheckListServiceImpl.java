@@ -42,14 +42,13 @@ public class CheckListServiceImpl implements CheckListService {
     private final OpportunityService opportunityService;
     private final CheckListRepository checkListRepository;
     private final ManagerService managerService;
-    private CheckListCriteriaServiceImpl checkListCriteriaService;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
     private final CheckListDao checkListDao;
 
     @Autowired
-    public void setCheckListCriteriaService(@Lazy CheckListCriteriaServiceImpl checkListCriteriaService) {
-        this.checkListCriteriaService = checkListCriteriaService;
-    }
+    @Lazy
+    private CheckListCriteriaServiceImpl checkListCriteriaService;
+
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
@@ -254,6 +253,7 @@ public class CheckListServiceImpl implements CheckListService {
                     .section(criteria.getCriteria().getSection().getName())
                     .build());
         }
+
         criterionWithMaxValue.removeIf(criteria -> !criteria.getSection().equals(""));
         return CheckListSupervisorEditDto.builder()
                 .id(checkList.getUuidLink())

@@ -4,7 +4,13 @@ import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
+import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.IncorrectDateException;
@@ -25,6 +31,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -53,6 +60,8 @@ class CheckListServiceTest {
     @Mock
     private CriteriaService criteriaService;
 
+    @Mock
+    private CheckListCriteriaServiceImpl checkListCriteriaService;
 
     @Mock
     private CriteriaPizzeriaService criteriaPizzeriaService;
@@ -89,6 +98,7 @@ class CheckListServiceTest {
                 .roles(String.valueOf(Role.EXPERT))
                 .build();
         when(authentication.getPrincipal()).thenReturn(userDetails);
+        ReflectionTestUtils.setField(checkListService, "checkListCriteriaService", checkListCriteriaService);
 
     }
 
@@ -400,5 +410,88 @@ class CheckListServiceTest {
         Assertions.assertEquals("Время начала смены менеджера не может быть позже времени окончания работы эксперта", thrown.getMessage());
 
     }
-    
+
+
+    @Test
+    void testGetChecklistByUuid() {
+        String uuid = "2900fd68-3139-466b-ba51-04242077b67d";
+        User user = new User();
+        user.setId(1L);
+        user.setRole(Role.EXPERT);
+
+        Manager manager = Manager.builder().id(1L).build();
+        Pizzeria pizzeria = Pizzeria.builder().name("Test Pizzeria").build();
+        CheckList checkList = CheckList.builder()
+                .id(1L)
+                .workSchedule(WorkSchedule.builder()
+                        .id(1L)
+                        .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+                        .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+                        .manager(manager)
+                        .pizzeria(pizzeria)
+                        .build())
+                .opportunity(Opportunity.builder().id(1L)
+                        .date(LocalDate.parse("2024-06-30"))
+                        .startTime(LocalTime.parse("10:00:00"))
+                        .endTime(LocalTime.parse("17:00:00"))
+                        .user(user)
+                        .build())
+                .uuidLink(uuid)
+                .build();
+
+        WorkScheduleSupervisorEditDto workScheduleSupervisorEditDto = WorkScheduleSupervisorEditDto.builder()
+                .id(1L)
+                .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+                .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+                .pizzeria(PizzeriaDto.builder().name(pizzeria.getName()).build())
+                .build();
+
+        List<CheckListsCriteria> checkListsCriteria = List.of(CheckListsCriteria.builder()
+                .id(1L)
+                .checklist(checkList)
+                .criteria(Criteria.builder()
+                        .id(1L)
+                        .description("Description")
+                        .zone(Zone.builder().id(1L).name("Zone").build())
+                        .section(Section.builder().id(1L).name("Section").build())
+                        .build())
+                .build());
+
+        CheckListSupervisorEditDto expectedDto = CheckListSupervisorEditDto.builder()
+                .id(uuid)
+                .opportunity(OpportunityEditDto.builder()
+                        .id(1L)
+                        .startTime(LocalTime.parse("10:00"))
+                        .endTime(LocalTime.parse("17:00"))
+                        .date(LocalDate.parse("2024-06-30"))
+                        .build())
+                .workSchedule(WorkScheduleSupervisorEditDto.builder()
+                        .id(1L)
+                        .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+                        .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+                        .pizzeria(PizzeriaDto.builder().name(pizzeria.getName()).build())
+                        .build())
+                .criterion(Collections.emptyList())
+                .build();
+
+        when(checkListRepository.findByUuidLink(uuid)).thenReturn(Optional.of(checkList));
+        when(checkListCriteriaService.findAllByChecklistId(1L)).thenReturn(checkListsCriteria);
+        when(dtoBuilder.buildExpertShowDto(user)).thenReturn(new ExpertShowDto());
+        when(dtoBuilder.buildPizzeriaDto(any(Pizzeria.class))).thenReturn(workScheduleSupervisorEditDto.getPizzeria());
+        when(dtoBuilder.buildManagerShowDto(any(Manager.class))).thenReturn(workScheduleSupervisorEditDto.getManager());
+
+        CheckListSupervisorEditDto dto = checkListService.getChecklistByUuid(uuid);
+
+        assertNotNull(dto);
+        assertEquals(expectedDto.getId(), dto.getId());
+        assertEquals(expectedDto.getOpportunity().getId(), dto.getOpportunity().getId());
+        assertEquals(expectedDto.getOpportunity().getStartTime(), dto.getOpportunity().getStartTime());
+        assertEquals(expectedDto.getOpportunity().getEndTime(), dto.getOpportunity().getEndTime());
+        assertEquals(expectedDto.getOpportunity().getDate(), dto.getOpportunity().getDate());
+        assertEquals(expectedDto.getWorkSchedule().getId(), dto.getWorkSchedule().getId());
+        assertEquals(expectedDto.getWorkSchedule().getStartTime(), dto.getWorkSchedule().getStartTime());
+        assertEquals(expectedDto.getWorkSchedule().getEndTime(), dto.getWorkSchedule().getEndTime());
+        assertEquals(expectedDto.getWorkSchedule().getPizzeria().getName(), dto.getWorkSchedule().getPizzeria().getName());
+    }
+
 }
