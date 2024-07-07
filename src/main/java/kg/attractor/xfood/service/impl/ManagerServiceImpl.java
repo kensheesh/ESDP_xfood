@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -39,7 +40,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public Manager findById(Long id) {
-      return managerRepository.findById(id).orElseThrow(() -> new NotFoundException("Manager not found by id: " + id));
+      return managerRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Manager not found by id: " + id));
     }
 
     @Override
