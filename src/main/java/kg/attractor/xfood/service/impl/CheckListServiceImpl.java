@@ -76,9 +76,9 @@ public class CheckListServiceImpl implements CheckListService {
             throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
         }
         //TODO уточнить надо ли делать проверку по work_schedule, opportunity and type и если необходимо добавить
-        createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
-        createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
-
+        List<CriteriaMaxValueDto> criteriaList = new ArrayList<>(createDto.getCriteriaMaxValueDtoList());
+        criteriaList.removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
+        criteriaList.sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
         LocalDate date;
         if (workSchedule.getStartTime().toLocalDate().isBefore(workSchedule.getEndTime().toLocalDate())) {
             date = workSchedule.getEndTime().toLocalDate();
@@ -94,7 +94,7 @@ public class CheckListServiceImpl implements CheckListService {
 
         Long id = opportunityService.save(opportunity);
         checkListRepository.saveChecklist(id, workSchedule.getId(), Status.NEW.getStatus());
-        checkListRepository.flush();
+
         return CheckListMiniSupervisorCreateDto.builder().opportunityId(id).workScheduleId(workSchedule.getId()).criteriaMaxValueDtoList(createDto.getCriteriaMaxValueDtoList()).pizzeria(workSchedule.getPizzeria()).build();
     }
 

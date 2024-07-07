@@ -2,13 +2,20 @@ package kg.attractor.xfood.mockito.service;
 
 import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
+import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
+import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
+import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.IncorrectDateException;
-import kg.attractor.xfood.model.CheckList;
-import kg.attractor.xfood.model.User;
+import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.CheckListRepository;
+import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.repository.UserRepository;
+import kg.attractor.xfood.repository.WorkScheduleRepository;
+import kg.attractor.xfood.service.OpportunityService;
+import kg.attractor.xfood.service.UserService;
+import kg.attractor.xfood.service.WorkScheduleService;
 import kg.attractor.xfood.service.impl.CheckListServiceImpl;
 import kg.attractor.xfood.service.impl.DtoBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
@@ -38,10 +46,17 @@ class CheckListServiceTest {
     private CheckListServiceImpl checkListService;
 
     @Mock
+    private UserService userService;
+
+    @Mock
     private UserRepository userRepository;
 
     @Mock
     private CheckListRepository checkListRepository;
+    @Mock
+    private WorkScheduleService workScheduleService;
+    @Mock
+    private OpportunityService opportunityService;
 
     @Mock
     private DtoBuilder dtoBuilder;
@@ -54,6 +69,9 @@ class CheckListServiceTest {
 
     @Mock
     private Authentication authentication;
+
+    @Mock
+    private UserDetails userDetails;
 
     @BeforeEach
     void setUp() {
@@ -227,5 +245,54 @@ class CheckListServiceTest {
         verify(checkListRepository, times(1)).findCheckListByExpertEmailAndStatus(anyString(), eq(Status.DONE));
 
         verify(dtoBuilder, never()).buildCheckListAnalyticsDto(any());
+    }
+
+    @Test
+    void testCheckListCreatingWithAllDataValid() {
+        User user = new User();
+        user.setId(1L);
+        user.setRole(Role.EXPERT);
+
+        Manager manager = Manager.builder()
+                .id(1L)
+                .build();
+        Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
+
+        WorkSchedule workSchedule = WorkSchedule.builder()
+                .manager(manager)
+                .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+                .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+                .pizzeria(pizzeria)
+                .build();
+
+        Opportunity opportunity = Opportunity.builder()
+                .user(user)
+                .date(LocalDate.parse("2024-06-30"))
+                .startTime(LocalTime.parse("10:00:00"))
+                .endTime(LocalTime.parse("17:00:00"))
+                .build();
+
+        Long id = 100L;
+
+        CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
+                .checkTypeId(1L)
+                .criteriaMaxValueDtoList(List.of(CriteriaMaxValueDto.builder().criteriaId(1L).maxValue(2).build()))
+                .date(LocalDate.parse("2024-06-30"))
+                .managerId(manager.getId())
+                .expertId(user.getId())
+                .startTime(LocalTime.parse("10:00:00"))
+                .endTime(LocalTime.parse("17:00:00"))
+                .build();
+
+        when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
+        when(opportunityService.save(any(Opportunity.class))).thenReturn(id);
+        when(userService.findById(1L)).thenReturn(user);
+
+        CheckListMiniSupervisorCreateDto createDto = checkListService.create(createDtoSupervisor);
+
+        assertNotNull(createDto);
+        assertEquals(id, createDto.getOpportunityId());
+        assertEquals(workSchedule.getId(), createDto.getWorkScheduleId());
+        assertEquals(createDtoSupervisor.getCriteriaMaxValueDtoList(), createDto.getCriteriaMaxValueDtoList());
     }
 }
