@@ -30,6 +30,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public List<ManagerDto> getAllAvailable(String uuid) {
         //TODO после исправления бд доставать только менеджеров данной пиццерии
+        //TODO написать тест после исправления
         return managerRepository.findAll()
                 .stream()
                 .map(dtoBuilder::buildManagerDto)
