@@ -494,4 +494,32 @@ class CheckListServiceTest {
         assertEquals(expectedDto.getWorkSchedule().getPizzeria().getName(), dto.getWorkSchedule().getPizzeria().getName());
     }
 
+    @Test
+    void testBindChecklistWithCriterion() {
+        String uuid = "2900fd68-3139-466b-ba51-04242077b67d";
+        CheckListMiniSupervisorCreateDto checklistDto = CheckListMiniSupervisorCreateDto.builder()
+                .workScheduleId(1L)
+                .opportunityId(1L)
+                .criteriaMaxValueDtoList(List.of(CriteriaMaxValueDto.builder().maxValue(3).criteriaId(1L).build()))
+                .pizzeria(Pizzeria.builder().build())
+                .build();
+
+        CheckList checkList = CheckList.builder()
+                .uuidLink(uuid)
+                .id(1L)
+                .build();
+
+        Criteria criteria = Criteria.builder().id(1L).section(Section.builder().build()).build();
+
+        when(checkListRepository.findCheckListByWorkSchedule_IdAndAndOpportunity_Id(1L, 1L)).thenReturn(checkList);
+        when(criteriaService.findById(1L)).thenReturn(criteria);
+
+        checkListService.bindChecklistWithCriterion(checklistDto);
+
+        verify(checkListRepository).save(checkList);
+        verify(checkListCriteriaService, times(1)).save(any(CheckListsCriteria.class));
+        verify(criteriaPizzeriaService, times(1)).save(any(CriteriaPizzeria.class));
+    }
 }
+
+
