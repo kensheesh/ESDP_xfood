@@ -10,12 +10,8 @@ import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.IncorrectDateException;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.CheckListRepository;
-import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.repository.UserRepository;
-import kg.attractor.xfood.repository.WorkScheduleRepository;
-import kg.attractor.xfood.service.OpportunityService;
-import kg.attractor.xfood.service.UserService;
-import kg.attractor.xfood.service.WorkScheduleService;
+import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.service.impl.CheckListServiceImpl;
 import kg.attractor.xfood.service.impl.DtoBuilder;
 import org.junit.jupiter.api.Assertions;
@@ -71,8 +67,6 @@ class CheckListServiceTest {
     @Mock
     private Authentication authentication;
 
-    @Mock
-    private UserDetails userDetails;
 
     @BeforeEach
     void setUp() {

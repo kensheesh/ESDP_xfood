@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.SectionSupervisorShowDto;
+import kg.attractor.xfood.model.Section;
 import kg.attractor.xfood.repository.SectionRepository;
 import kg.attractor.xfood.service.SectionService;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,10 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public List<SectionSupervisorShowDto> getSections() {
         return sectionRepository.findAll().stream().map(dtoBuilder::buildSectionDto).toList();
+    }
+
+    @Override
+    public Section findByName(String section) {
+        return sectionRepository.findByName(section);
     }
 }

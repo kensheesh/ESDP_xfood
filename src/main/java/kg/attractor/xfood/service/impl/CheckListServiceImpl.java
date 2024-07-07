@@ -41,7 +41,6 @@ public class CheckListServiceImpl implements CheckListService {
     private final CriteriaPizzeriaService criteriaPizzeriaService;
     private final OpportunityService opportunityService;
     private final CheckListRepository checkListRepository;
-    // private final CheckListCriteriaService checkListCriteriaService;
     private final ManagerService managerService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
