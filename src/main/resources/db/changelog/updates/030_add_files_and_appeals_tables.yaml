@@ -29,8 +29,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: tg_username
-                  type: varchar(255)
+                  name: tg_link_message
+                  type: text
+                  constraints:
+                    nullable: true
+              - column:
+                  name: link_to_external_src
+                  type: text
                   constraints:
                     nullable: true
               - column:

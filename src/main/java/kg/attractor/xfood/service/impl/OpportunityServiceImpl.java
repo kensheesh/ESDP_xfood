@@ -1,25 +1,22 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.dto.opportunity.*;
+import jakarta.transaction.Transactional;
+import kg.attractor.xfood.AuthParams;
+import kg.attractor.xfood.dto.opportunity.DailyOpportunityShowDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityCreateWrapper;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
 import kg.attractor.xfood.model.Opportunity;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.OpportunityRepository;
-import jakarta.transaction.Transactional;
-import kg.attractor.xfood.AuthParams;
-import kg.attractor.xfood.exception.ShiftIntersectionException;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -62,16 +59,16 @@ public class OpportunityServiceImpl implements OpportunityService {
         OpportunityShowDto dto = new OpportunityShowDto();
         List<DailyOpportunityShowDto> shifts = new ArrayList<>();
 
-        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date);
+//        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date);
 
         dto.setUser(dtoBuilder.buildExpertShowDto(user));
-        expertsOpportunities.forEach(e -> {
-            DailyOpportunityShowDto shift = new DailyOpportunityShowDto();
-            shift.setDate(e.getDate());
-            shift.setStartTime(e.getStartTime());
-            shift.setEndTime(e.getEndTime());
-            shifts.add(shift);
-        });
+//        expertsOpportunities.forEach(e -> {
+//            DailyOpportunityShowDto shift = new DailyOpportunityShowDto();
+//            shift.setDate(e.getDate());
+////            shift.setStartTime(e.getStartTime());
+////            shift.setEndTime(e.getEndTime());
+//            shifts.add(shift);
+//        });
         dto.setShifts(shifts);
         return dto;
     }
@@ -119,19 +116,19 @@ public class OpportunityServiceImpl implements OpportunityService {
         if (wrapper.getOpportunities() != null) {
             List<Opportunity> opportunities = wrapper.getOpportunities().stream()
                     .map(dto -> modelBuilder.buildNewOpportunity(dto, wrapper.getDate(), expert))
-                    .sorted(Comparator.comparing(Opportunity::getStartTime))
+//                    .sorted(Comparator.comparing(Opportunity::getStartTime))
                     .toList();
 
             for (int i = 0; i < opportunities.size(); i++) {
-                if (opportunities.get(i).getStartTime().isAfter(opportunities.get(i).getEndTime())) {
-                    throw new IllegalArgumentException("Некорректное время");
-                }
-
-                if (i > 0) {
-                    if (opportunities.get(i-1).getEndTime().isAfter(opportunities.get(i).getStartTime())) {
-                        throw new ShiftIntersectionException("Смены не могут пересекаться");
-                    }
-                }
+//                if (opportunities.get(i).getStartTime().isAfter(opportunities.get(i).getEndTime())) {
+//                    throw new IllegalArgumentException("Некорректное время");
+//                }
+//
+//                if (i > 0) {
+//                    if (opportunities.get(i-1).getEndTime().isAfter(opportunities.get(i).getStartTime())) {
+//                        throw new ShiftIntersectionException("Смены не могут пересекаться");
+//                    }
+//                }
 
                 Opportunity opportunity = opportunities.get(i);
                 opportunityRepository.save(opportunity);

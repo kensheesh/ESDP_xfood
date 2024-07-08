@@ -2,7 +2,6 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
-import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
@@ -14,19 +13,17 @@ import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.location.LocationShowDto;
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.manager.ManagerShowDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.dto.user.UserDto;
-import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -301,8 +298,8 @@ public class DtoBuilder {
 		return OpportunityDto.builder()
 				.id(model.getId())
 				.date(model.getDate())
-				.startTime(model.getStartTime())
-				.endTime((model.getEndTime()))
+//				.startTime(model.getStartTime())
+//				.endTime((model.getEndTime()))
 				.build();
 	}
 

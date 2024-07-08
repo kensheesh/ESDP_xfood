@@ -86,8 +86,8 @@ public class CheckListServiceImpl implements CheckListService {
         Opportunity opportunity = Opportunity.builder()
                 .user(userService.findById(createDto.getExpertId()))
                 .date(date)
-                .startTime(createDto.getStartTime())
-                .endTime(createDto.getEndTime())
+//                .startTime(createDto.getStartTime())
+//                .endTime(createDto.getEndTime())
                 .build();
 
         Long id = opportunityService.save(opportunity);
@@ -229,8 +229,8 @@ public class CheckListServiceImpl implements CheckListService {
         OpportunityEditDto opportunityEditDto = OpportunityEditDto.builder()
                 .id(checkList.getOpportunity().getId())
                 .date(checkList.getOpportunity().getDate())
-                .startTime(checkList.getOpportunity().getStartTime())
-                .endTime(checkList.getOpportunity().getEndTime())
+//                .startTime(checkList.getOpportunity().getStartTime())
+//                .endTime(checkList.getOpportunity().getEndTime())
                 .user(expert)
                 .build();
 
@@ -295,8 +295,8 @@ public class CheckListServiceImpl implements CheckListService {
         Opportunity opportunity = Opportunity.builder()
                 .id(checkList.getOpportunity().getId())
                 .date(checkListDto.getOpportunity().getDate())
-                .startTime(checkListDto.getOpportunity().getStartTime())
-                .endTime(checkListDto.getOpportunity().getEndTime())
+//                .startTime(checkListDto.getOpportunity().getStartTime())
+//                .endTime(checkListDto.getOpportunity().getEndTime())
                 .user(userService.findById(checkListDto.getOpportunity().getUser().getId()))
                 .build();
         opportunityService.save(opportunity);

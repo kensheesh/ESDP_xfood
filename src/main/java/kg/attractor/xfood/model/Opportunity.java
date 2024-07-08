@@ -31,11 +31,11 @@ public class Opportunity {
     @Column(name = "date", nullable = false)
     private LocalDate date;
     
-    @Column(name = "start_time")
-    private LocalTime startTime;
-
-    @Column(name = "end_time")
-    private LocalTime endTime;
+//    @Column(name = "start_time")
+//    private LocalTime startTime;
+//
+//    @Column(name = "end_time")
+//    private LocalTime endTime;
 
     @OneToMany(mappedBy = "opportunity")
     private List<CheckList> checkLists ;

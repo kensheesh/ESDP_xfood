@@ -42,7 +42,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 	private static final Dotenv dotenv = Dotenv.load();
 	private static final String PIZZERIA_CACHE_KEY = "pizzerias";
 	private static final MediaType JSON = MediaType.APPLICATION_JSON;
-	private static final String API_URL = "https://api.dodois.io";
+	private static final String API_URL =dotenv.get("API_URL");
 	private static final String BEARER = dotenv.get("BEARER");
 	
 	@Autowired

@@ -33,9 +33,11 @@ public class Appeal {
 	@Column(name = "comment", nullable = false, length = Integer.MAX_VALUE)
 	private String comment;
 	
-	@Size(max = 255)
-	@Column(name = "tg_username")
-	private String tgUsername;
+	@Column(name = "tg_link_message", length = Integer.MAX_VALUE)
+	private String tgLinkMessage;
+	
+	@Column(name = "link_to_external_src", length = Integer.MAX_VALUE)
+	private String linkToExternalSrc;
 	
 	@Column(name = "is_accepted")
 	private Boolean isAccepted;

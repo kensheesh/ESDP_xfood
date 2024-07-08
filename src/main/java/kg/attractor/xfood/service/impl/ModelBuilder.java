@@ -6,7 +6,6 @@ import kg.attractor.xfood.model.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Component
 public class ModelBuilder {
@@ -39,8 +38,8 @@ public class ModelBuilder {
                 .id(dto.getId())
                 .user(user)
                 .date(date)
-                .startTime(LocalTime.of(dto.getStartTimeHour(), dto.getStartTimeMinute()))
-                .endTime(LocalTime.of(dto.getEndTimeHour(), dto.getEndTimeMinute()))
+//                .startTime(LocalTime.of(dto.getStartTimeHour(), dto.getStartTimeMinute()))
+//                .endTime(LocalTime.of(dto.getEndTimeHour(), dto.getEndTimeMinute()))
                 .build();
     }
 }

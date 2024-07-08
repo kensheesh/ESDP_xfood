@@ -21,8 +21,8 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
     @Query("select o from Opportunity o where o.date = ?1")
     List<Opportunity> findByDate(LocalDateTime date);
 
-    @Query("SELECT o FROM Opportunity o WHERE o.user.id = :id AND FUNCTION('DATE', o.date) = :date ORDER BY o.startTime")
-    List<Opportunity> findByUser_IdAndDateOrderByStartTimeAsc(@Param("id") Long id, @Param("date") LocalDate date);
+//    @Query("SELECT o FROM Opportunity o WHERE o.user.id = :id AND FUNCTION('DATE', o.date) = :date ORDER BY o.startTime")
+//    List<Opportunity> findByUser_IdAndDateOrderByStartTimeAsc(@Param("id") Long id, @Param("date") LocalDate date);
 
     @Query("SELECT o FROM Opportunity o WHERE FUNCTION('DATE', o.date) = :date ORDER BY o.user.surname ASC")
     List<Opportunity> findByDateOrderByUser_SurnameAsc(@Param("date") LocalDate date);

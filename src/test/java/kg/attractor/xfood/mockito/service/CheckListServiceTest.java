@@ -7,7 +7,6 @@ import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
-import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
@@ -39,9 +38,11 @@ import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -432,8 +433,8 @@ class CheckListServiceTest {
                         .build())
                 .opportunity(Opportunity.builder().id(1L)
                         .date(LocalDate.parse("2024-06-30"))
-                        .startTime(LocalTime.parse("10:00:00"))
-                        .endTime(LocalTime.parse("17:00:00"))
+//                        .startTime(LocalTime.parse("10:00:00"))
+//                        .endTime(LocalTime.parse("17:00:00"))
                         .user(user)
                         .build())
                 .uuidLink(uuid)
@@ -441,8 +442,8 @@ class CheckListServiceTest {
 
         WorkScheduleSupervisorEditDto workScheduleSupervisorEditDto = WorkScheduleSupervisorEditDto.builder()
                 .id(1L)
-                .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
-                .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+//                .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+//                .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
                 .pizzeria(PizzeriaDto.builder().name(pizzeria.getName()).build())
                 .build();
 
@@ -461,14 +462,14 @@ class CheckListServiceTest {
                 .id(uuid)
                 .opportunity(OpportunityEditDto.builder()
                         .id(1L)
-                        .startTime(LocalTime.parse("10:00"))
-                        .endTime(LocalTime.parse("17:00"))
+//                        .startTime(LocalTime.parse("10:00"))
+//                        .endTime(LocalTime.parse("17:00"))
                         .date(LocalDate.parse("2024-06-30"))
                         .build())
                 .workSchedule(WorkScheduleSupervisorEditDto.builder()
                         .id(1L)
-                        .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
-                        .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+//                        .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+//                        .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
                         .pizzeria(PizzeriaDto.builder().name(pizzeria.getName()).build())
                         .build())
                 .criterion(Collections.emptyList())

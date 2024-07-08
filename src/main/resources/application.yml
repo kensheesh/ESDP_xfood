@@ -1,13 +1,13 @@
 server:
-  port: ${server_port}
+  port: ${SERVER_PORT}
 
 
 spring:
   datasource:
-    url: ${db_url}
-    username: ${db_username}
-    password: ${db_password}
-    driver-class-name: ${db_driver-class-name}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
 
   liquibase:
     change-log: classpath:/db/changelog/master.yml
@@ -24,10 +24,10 @@ spring:
   freemarker:
     expose-session-attributes: true
   mail:
-    host: ${mail_host}
-    username: ${mail_username}
-    password: ${mail_password}
-    port: ${mail_port}
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    port: ${MAIL_PORT}
     properties:
       mail:
         smtp:
@@ -53,5 +53,5 @@ logging:
     name: logs/demo.log
   logback:
     rollingpolicy:
-      max-file-size: 5MB
+      max-file-size: 25MB
       max-history: 5
