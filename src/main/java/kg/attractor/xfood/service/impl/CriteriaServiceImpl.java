@@ -7,6 +7,8 @@ import kg.attractor.xfood.repository.CriteriaRepository;
 import kg.attractor.xfood.repository.SectionRepository;
 import kg.attractor.xfood.repository.ZoneRepository;
 import kg.attractor.xfood.service.CriteriaService;
+import kg.attractor.xfood.service.SectionService;
+import kg.attractor.xfood.service.ZoneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,8 @@ import java.util.*;
 public class CriteriaServiceImpl implements CriteriaService {
     private final CriteriaRepository criteriaRepository;
     private final DtoBuilder dtoBuilder;
-    private final SectionRepository sectionRepository;
-    private final ZoneRepository zoneRepository;
+    private final SectionService sectionService;
+    private final ZoneService zoneService;
 
 
     @Override
@@ -50,9 +52,9 @@ public class CriteriaServiceImpl implements CriteriaService {
             createDto.setCoefficient(1);
         }
         return  criteriaRepository.save(Criteria.builder()
-                        .section(sectionRepository.findByName(createDto.getSection()))
+                        .section(sectionService.findByName(createDto.getSection()))
                         .description(createDto.getDescription())
-                        .zone(zoneRepository.findByName(createDto.getZone()))
+                        .zone(zoneService.findByName(createDto.getZone()))
                         .coefficient(createDto.getCoefficient())
                 .build()).getId();
     }

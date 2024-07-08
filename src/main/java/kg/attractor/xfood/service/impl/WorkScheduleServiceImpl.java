@@ -65,7 +65,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date) {
         return workScheduleRepository.findByManager_IdAndStartTimeDate(
                         managerId, date)
-                .orElseThrow(() -> new NotFoundException("No such work_schedule"));
+                .orElseThrow(() -> new NoSuchElementException("No such work_schedule"));
     }
 
     @Override
