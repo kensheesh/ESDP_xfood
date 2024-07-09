@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Repository
 public interface OpportunityRepository extends JpaRepository<Opportunity, Long> {
@@ -21,12 +22,12 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
     @Query("select o from Opportunity o where o.date = ?1")
     List<Opportunity> findByDate(LocalDateTime date);
 
-//    @Query("SELECT o FROM Opportunity o WHERE o.user.id = :id AND FUNCTION('DATE', o.date) = :date ORDER BY o.startTime")
-//    List<Opportunity> findByUser_IdAndDateOrderByStartTimeAsc(@Param("id") Long id, @Param("date") LocalDate date);
-
-    @Query("SELECT o FROM Opportunity o WHERE FUNCTION('DATE', o.date) = :date ORDER BY o.user.surname ASC")
+    @Query("SELECT o FROM Opportunity o WHERE o.date = :date ORDER BY o.user.surname ASC")
     List<Opportunity> findByDateOrderByUser_SurnameAsc(@Param("date") LocalDate date);
 
     @Modifying
     void deleteAllByUserEmailAndDate(String userEmail, LocalDate date);
+
+    @Query("select o from Opportunity o where o.user.id = ?1 and o.date = ?2")
+    Optional<Opportunity> findByUser_IdAndDate(Long id, LocalDate date);
 }

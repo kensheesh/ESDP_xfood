@@ -32,7 +32,6 @@ public class OpportunityController {
             @PathVariable(name = "date") LocalDate date
     ) {
         List<OpportunityShowDto> dtos = opportunityService.getOppotunitiesByDate(date);
-
         return ResponseEntity.ok(dtos);
     }
 
@@ -41,5 +40,4 @@ public class OpportunityController {
         var opportunities = opportunityService.getAllByExpertAndDate(AuthParams.getPrincipal().getUsername(), date);
         return ResponseEntity.ok(opportunities);
     }
-    
 }

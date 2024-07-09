@@ -2,11 +2,11 @@ package kg.attractor.xfood.service.impl;
 
 import jakarta.transaction.Transactional;
 import kg.attractor.xfood.AuthParams;
-import kg.attractor.xfood.dto.opportunity.DailyOpportunityShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateWrapper;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
 import kg.attractor.xfood.model.Opportunity;
+import kg.attractor.xfood.model.Shift;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
@@ -28,11 +28,11 @@ public class OpportunityServiceImpl implements OpportunityService {
     private final ModelBuilder modelBuilder;
 
     private final UserServiceImpl userService;
+    private final ShiftServiceImpl shiftService;
 
     @Override
     public List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date) {
         List<Opportunity> opportunities = opportunityRepository.findByDateOrderByUser_SurnameAsc(date);
-
         Set<User> expertsOfDay = new HashSet<>();
 
         opportunities.forEach(e -> {
@@ -48,29 +48,25 @@ public class OpportunityServiceImpl implements OpportunityService {
         return dailyOpportunityDtos;
     }
 
+    private OpportunityShowDto createDailyOpportunityDto(User user, LocalDate date) {
+        OpportunityShowDto dto = new OpportunityShowDto();
+        Optional<Opportunity> expertOpportunity = opportunityRepository.findByUser_IdAndDate(user.getId(), date);
+        if (expertOpportunity.isPresent()) {
+            List<Shift> shifts = shiftService.getShiftsByOpportunityId(expertOpportunity.get().getId());
+            dto.setUser(dtoBuilder.buildExpertShowDto(user));
+            dto.setDate(date);
+            dto.setShifts(dtoBuilder.buildShiftTimeShowDtos(shifts));
+            return dto;
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public Long save(Opportunity opportunity) {
         Long id =  opportunityRepository.save(opportunity).getId();
         log.info("opportunity saved {}", opportunity);
         return id;
-    }
-
-    private OpportunityShowDto createDailyOpportunityDto(User user, LocalDate date) {
-        OpportunityShowDto dto = new OpportunityShowDto();
-        List<DailyOpportunityShowDto> shifts = new ArrayList<>();
-
-//        List<Opportunity> expertsOpportunities = opportunityRepository.findByUser_IdAndDateOrderByStartTimeAsc(user.getId(), date);
-
-        dto.setUser(dtoBuilder.buildExpertShowDto(user));
-//        expertsOpportunities.forEach(e -> {
-//            DailyOpportunityShowDto shift = new DailyOpportunityShowDto();
-//            shift.setDate(e.getDate());
-////            shift.setStartTime(e.getStartTime());
-////            shift.setEndTime(e.getEndTime());
-//            shifts.add(shift);
-//        });
-        dto.setShifts(shifts);
-        return dto;
     }
 
     @Override

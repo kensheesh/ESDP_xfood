@@ -177,9 +177,10 @@
                             card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + item.user.id;
                             let cardBody = document.createElement('div');
                             cardBody.className = 'card-body';
-                            cardBody.innerHTML = `
-                        <h5 class="card-title">` + item.user.surname + ` ` + item.user.name + `</h5>
-                    `;
+                            cardBody.innerHTML =
+                                `
+                                <h5 class="card-title">` + item.user.surname + ` ` + item.user.name + `</h5>
+                                `;
                             item.shifts.forEach(shift => {
                                 let row = document.createElement('p');
                                 row.innerHTML = shift.startTime + ` - ` + shift.endTime;
@@ -209,14 +210,14 @@
                             let expertElement = document.createElement('div');
                             expertElement.className = 'row';
                             let card = document.createElement('a');
-                            card.className = 'card mb-2';
+                            card.className = 'card text-decoration-none mb-2';
                             card.href = '/checks/create?date=' + currentDate + '&managerId=' + managerId + '&expertId=' + expert.id;
                             let cardBody = document.createElement('div');
                             cardBody.className = 'card-body';
                             cardBody.innerHTML = `
-                        <h5 class="card-title">` + expert.surname + ` ` + expert.name + `</h5>
-                        <span class="text-secondary">Нет доступных смен</span>
-                    `;
+                                    <h5 class="card-title">` + expert.surname + ` ` + expert.name + `</h5>
+                                    <span class="text-secondary">Нет доступных смен</span>
+                                `;
                             card.appendChild(cardBody);
                             expertElement.appendChild(card);
                             document.getElementById('work-shifts').appendChild(expertElement);

@@ -17,6 +17,7 @@ import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
+import kg.attractor.xfood.dto.shift.ShiftTimeShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
@@ -211,6 +212,21 @@ public class DtoBuilder {
                 .surname(user.getSurname())
                 .build();
     }
+
+	public ShiftTimeShowDto buildShiftTimeShowDto(Shift shift) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		return ShiftTimeShowDto.builder()
+				.id(shift.getId())
+				.opportunityId(shift.getOpportunity().getId())
+				.startTime(shift.getStartTime().format(formatter))
+				.endTime(shift.getEndTime().format(formatter)).build();
+	}
+
+	public List<ShiftTimeShowDto> buildShiftTimeShowDtos(List<Shift> shifts) {
+		List<ShiftTimeShowDto> dtos = new ArrayList<>();
+		shifts.forEach(e -> dtos.add(buildShiftTimeShowDto(e)));
+		return dtos;
+	}
 
 	public List<LocationShowDto> buildLocationShowDtos(List<Location> locations) {
         List<LocationShowDto> dtos = new ArrayList<>();
