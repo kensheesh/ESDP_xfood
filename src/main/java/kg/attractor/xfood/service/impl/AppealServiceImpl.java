@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
 public class AppealServiceImpl implements AppealService {
     @Override
     public void create(CreateAppealDto createDto) {
-        
+
     }
 }

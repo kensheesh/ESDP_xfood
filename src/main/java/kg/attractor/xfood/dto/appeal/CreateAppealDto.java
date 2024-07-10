@@ -1,6 +1,5 @@
 package kg.attractor.xfood.dto.appeal;
 
-import kg.attractor.xfood.model.CheckListsCriteria;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

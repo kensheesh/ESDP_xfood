@@ -5,12 +5,9 @@ import kg.attractor.xfood.service.AppealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController("restAppealController")
 @RequiredArgsConstructor
 @RequestMapping("api/appeal")
 public class AppealController {
@@ -18,7 +15,7 @@ public class AppealController {
 
 
     @PostMapping(value = "", consumes = "multipart/form-data")
-    public HttpStatus createAppeal(@RequestBody CreateAppealDto createDto) {
+    public HttpStatus createAppeal(@ModelAttribute CreateAppealDto createDto) {
         appealService.create(createDto);
         return HttpStatus.OK;
     }

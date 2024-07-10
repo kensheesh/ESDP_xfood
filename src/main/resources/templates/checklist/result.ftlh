@@ -46,6 +46,17 @@
             display: inline-block;
             margin-right: 0.5rem;
         }
+
+        .appeal-button {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .table tbody tr:hover .appeal-button {
+            display: inline-block;
+        }
     </style>
 
     <main class="container mt-4">
@@ -54,13 +65,14 @@
                 <thead>
                 <tr>
                     <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
-                    <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
+                    <th colspan="2" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
                 </tr>
                 <tr>
                     <th class="text-center">Раздел</th>
                     <th class="text-center">Что проверить</th>
                     <th class="text-center">Оценка</th>
                     <th class="text-center">${checkList.managerWorkStartDate}</th>
+                    <th class="text-center">Действия</th>
                 </tr>
                 </thead>
                 <tbody id="mainTableBody">
@@ -72,9 +84,15 @@
                             <td>${criteria.description}</td>
                             <td class="text-center border">${criteria.maxValue}</td>
                             <td class="text-center">
-                                <input type="number" disabled class="text-center form-control score-input" min="0"
+                                <input aria-label="" type="number" disabled class="text-center form-control score-input"
+                                       min="0"
                                        max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
                                        aria-valuemax="${criteria.maxValue}">
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-warning btn-sm appeal-button"
+                                        data-criteria-id="${criteria.id}">Подать апелляцию
+                                </button>
                             </td>
                             <#assign maxSum = maxSum + criteria.maxValue>
                         <#else>
@@ -83,17 +101,24 @@
                                 <td class="bg-danger">${criteria.description}</td>
                                 <td class="bg-danger"></td>
                                 <td class="text-center bg-danger">
-                                    <input type="number" disabled class="text-center form-control score-input"
-                                           value="${criteria.value}" id="${criteria.id}">
+                                    <input aria-label="" type="number" disabled
+                                           class="text-center form-control score-input"
+                                           value="${criteria.value}" id="${criteria.id}"/>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-warning btn-sm appeal-button"
+                                            data-criteria-id="${criteria.id}">Подать апелляцию
+                                    </button>
                                 </td>
                             <#elseif criteria.section == 'WOW фактор'>
                                 <td class="text-center bg-success">${criteria.section}</td>
                                 <td class="bg-success">${criteria.description}</td>
                                 <td class="bg-success"></td>
                                 <td class="text-center bg-success">
-                                    <input type="number" disabled class="text-center form-control score-wow-input"
+                                    <input aria-label="" type="number" disabled
+                                           class="text-center form-control score-wow-input"
                                            min="0"
-                                           value="${criteria.value}" id="${criteria.id}">
+                                           value="${criteria.value}" id="${criteria.id}"/>
                                 </td>
                             </#if>
                         </#if>
@@ -113,13 +138,10 @@
                 </tfoot>
             </table>
         </div>
-        <div class="text-end mb-5 mt-2">
-            <button class="btn btn-warning">Подать апелляцию</button>
-        </div>
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const maxSum = ${maxSum};
             const percentageDisplay = document.getElementById('percentageResult');
 
@@ -141,6 +163,20 @@
             }
 
             updatePercentage()
+
+            console.log("Сборка кнопок")
+            const appealButtons = document.querySelectorAll('.appeal-button');
+            appealButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const criteria = button.getAttribute('data-criteria-id');
+                    fetchToAppeal(criteria)
+                });
+            });
+
+            function fetchToAppeal(criteria) {
+                window.location.href = "/appeal?criteriaId=" + criteria + "&checkListId=${checkList.uuidLink}"
+            }
+
         })
     </script>
 
