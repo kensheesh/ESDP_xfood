@@ -1,25 +1,25 @@
 package kg.attractor.xfood.dto.opportunity;
 
-import jakarta.validation.constraints.Max;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import kg.attractor.xfood.dto.shift.ShiftDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class OpportunityCreateDto {
     private Long id;
     @NotNull
-    @NotNull @Max(23)
-    private Integer startTimeHour;
-    @NotNull @Max(59)
-    private Integer startTimeMinute;
-    @NotNull @Max(23)
-    private Integer endTimeHour;
-    @NotNull @Max(59)
-    private Integer endTimeMinute;
+    private LocalDate date;
+    private Boolean isDayOff;
+    @Valid
+    private List<ShiftDto> shifts;
 }

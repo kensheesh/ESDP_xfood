@@ -17,6 +17,7 @@ import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
+import kg.attractor.xfood.dto.shift.ShiftDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
@@ -297,9 +298,18 @@ public class DtoBuilder {
 	public OpportunityDto buildOpportunityDto (Opportunity model) {
 		return OpportunityDto.builder()
 				.id(model.getId())
-				.date(model.getDate())
-//				.startTime(model.getStartTime())
-//				.endTime((model.getEndTime()))
+				.isDayOff(model.getIsDayOff())
+				.shifts(model.getShifts().stream()
+						.map(this::buildShiftDto)
+						.toList())
+				.build();
+	}
+
+	public ShiftDto buildShiftDto (Shift model) {
+		return ShiftDto.builder()
+				.id(model.getId())
+				.startTime(model.getStartTime())
+				.endTime(model.getEndTime())
 				.build();
 	}
 
