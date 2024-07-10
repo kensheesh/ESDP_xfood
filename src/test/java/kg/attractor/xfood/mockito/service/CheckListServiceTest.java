@@ -15,6 +15,7 @@ import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.IncorrectDateException;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.CheckListRepository;
+import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.service.impl.CheckListCriteriaServiceImpl;
@@ -35,14 +36,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -70,6 +69,12 @@ class CheckListServiceTest {
 
     @Mock
     private CheckListRepository checkListRepository;
+
+    @Mock
+    private ChecklistCriteriaRepository checklistCriteriaRepository;
+
+    private Long id;
+    List<CheckListsCriteria> criteriaList = new ArrayList<>();
     @Mock
     private WorkScheduleService workScheduleService;
     @Mock
@@ -91,6 +96,41 @@ class CheckListServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        Zone zone = Zone.builder()
+                .id(1L)
+                .name("Кухня")
+                .build();
+        Section section = Section.builder()
+                .id(1L)
+                .name(" ")
+                .build();
+        Opportunity opportunity = Opportunity.builder()
+                .date(LocalDate.of(2020, 1, 8))
+                .user(new User())
+                .build();
+        CheckList checkList = CheckList.builder()
+                .id(1L)
+                .status(Status.DONE)
+                .opportunity(opportunity)
+                .build();
+        Criteria criteria = Criteria.builder()
+                .id(1L)
+                .coefficient(1)
+                .description("Хорошая работа")
+                .zone(zone)
+                .section(section)
+                .build();
+        CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                .id(1L)
+                .value(2)
+                .maxValue(2)
+                .criteria(criteria)
+                .checklist(checkList)
+                .build();
+        criteriaList.add(checkListsCriteria);
+        id = 1L;
+        
         SecurityContextHolder.setContext(securityContext);
         when(securityContext.getAuthentication()).thenReturn(authentication);
 
@@ -150,6 +190,92 @@ class CheckListServiceTest {
             checkListService.updateCheckStatusCheckList(uuid, null);
         });
         assertEquals("Введите время,затраченное на проверку чек-листа!", exception.getMessage());
+    }
+
+    @Test
+    public void testGetPercentageById_NormalCase() {
+        Zone zone = Zone.builder()
+                .id(1L)
+                .name("Кухня")
+                .build();
+        Section section = Section.builder()
+                .id(1L)
+                .name(" ")
+                .build();
+        Opportunity opportunity = Opportunity.builder()
+                .date(LocalDate.of(2020, 1, 8))
+                .user(new User())
+                .build();
+        CheckList checkList = CheckList.builder()
+                .id(2L)
+                .status(Status.DONE)
+                .opportunity(opportunity)
+                .build();
+        Criteria criteria = Criteria.builder()
+                .id(2L)
+                .coefficient(1)
+                .description("Хорошая работа")
+                .zone(zone)
+                .section(section)
+                .build();
+        CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                .id(2L)
+                .value(1)
+                .maxValue(2)
+                .criteria(criteria)
+                .checklist(checkList)
+                .build();
+        criteriaList.add(checkListsCriteria);
+
+        when(checklistCriteriaRepository.findCriteriaByCheckListId(id)).thenReturn(criteriaList);
+
+        Integer expectedPercentage = 75;
+        Integer actualPercentage = checkListService.getPercentageById(id);
+        assertEquals(expectedPercentage, actualPercentage);
+    }
+
+
+    @Test
+    public void testGetPercentageById_WowFactors() {
+        Zone zone = Zone.builder()
+                .id(1L)
+                .name("Кухня")
+                .build();
+        Section section = Section.builder()
+                .id(1L)
+                .name("WOW фактор")
+                .build();
+        Opportunity opportunity = Opportunity.builder()
+                .date(LocalDate.of(2020, 1, 8))
+                .user(new User())
+                .build();
+        CheckList checkList = CheckList.builder()
+                .id(2L)
+                .status(Status.DONE)
+                .opportunity(opportunity)
+                .build();
+        Criteria criteria = Criteria.builder()
+                .id(2L)
+                .coefficient(1)
+                .description("Хорошая работа")
+                .zone(zone)
+                .section(section)
+                .build();
+        CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                .id(2L)
+                .value(2)
+                .maxValue(0)
+                .criteria(criteria)
+                .checklist(checkList)
+                .build();
+
+        criteriaList.add(checkListsCriteria);
+
+        when(checklistCriteriaRepository.findCriteriaByCheckListId(id)).thenReturn(criteriaList);
+
+        Integer expectedPercentage = 100;
+        Integer actualPercentage = checkListService.getPercentageById(id);
+        assertEquals(expectedPercentage, actualPercentage);
     }
 
     @Test

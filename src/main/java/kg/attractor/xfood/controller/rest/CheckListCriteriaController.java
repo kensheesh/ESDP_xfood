@@ -46,7 +46,7 @@ public class CheckListCriteriaController {
 
     @GetMapping("percentage/{id}")
     public ResponseEntity<Integer> getPercentageByCheckList(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(checkListCriteriaService.getPercentageById(id));
+        return ResponseEntity.ok(checkListService.getPercentageById(id));
     }
 
     @GetMapping("{uuid}")

@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service;
 
+import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
@@ -41,5 +42,6 @@ public interface CheckListService {
     void edit(CheckListSupervisorEditDto checkList);
 
     Integer getMaxPoints(Long id);
-    
+   
+    Integer getPercentageById(Long id);
 }
