@@ -29,4 +29,12 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Modifying
     void deleteAllByUserEmailAndDate(String userEmail, LocalDate date);
+
+    @Modifying
+    void deleteAllByIdNotIn(List<Long> ids);
+
+    @Modifying
+    void deleteByIdIn(List<Long> ids);
+
+    List<Long> findAllIdsByUserEmail(String userEmail);
 }

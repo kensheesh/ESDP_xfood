@@ -1,6 +1,6 @@
 package kg.attractor.xfood.service;
 
-import kg.attractor.xfood.dto.opportunity.OpportunityCreateWrapper;
+import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
 import kg.attractor.xfood.model.Opportunity;
 
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public interface OpportunityService {
-    Map<String, List<OpportunityDto>> getAllByExpert();
+    Map<String, OpportunityDto> getAllByExpert();
 
     List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date);
 
@@ -22,5 +22,5 @@ public interface OpportunityService {
 
     List<OpportunityDto> getAllByExpertAndDate(String expertEmail, LocalDate date);
 
-    void changeExpertOpportunities(OpportunityCreateWrapper wrapper, Authentication auth);
+    void changeExpertOpportunities(OpportunityCreateDto dto);
 }
