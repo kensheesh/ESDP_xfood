@@ -2,7 +2,6 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
-import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
@@ -15,7 +14,6 @@ import kg.attractor.xfood.service.CriteriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -119,37 +117,6 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         return createNewFactor(saveCriteriaDto);
     }
 
-    @Override
-    public Integer getPercentageById(Long id) {
-        List<CheckListsCriteria> criteriaList = checkListCriteriaRepository.findCriteriaByCheckListId(id);
-        Double normalMaxSum = criteriaList.stream()
-                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
-                .sum();
-
-        Double normalValue = criteriaList.stream()
-                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(CheckListsCriteria::getValue)
-                .sum();
-
-        Double wowValue = criteriaList.stream()
-                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(CheckListsCriteria::getValue)
-                .sum();
-
-        Double percentage = (normalValue / normalMaxSum) * 100;
-
-        if (percentage < 100) {
-            Double totalValue = normalValue + wowValue;
-            percentage = (totalValue / normalMaxSum) * 100;
-
-            if (percentage > 100) {
-                percentage = 100.0;
-            }
-        }
-
-        return (int) Math.ceil(percentage);
-    }
 
     @Override
     public List<CheckListsCriteria> findAllByChecklistId(Long id) {
