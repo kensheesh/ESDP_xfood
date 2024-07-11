@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -31,4 +33,12 @@ public class AppealController {
         model.addAttribute("appeal", appealService.getAppealById(id));
         return "appeals/approve";
     }
+
+    @PostMapping("/approve")
+    public String approveAppeal(AppealSupervisorApproveDto appeal){
+        appealService.approve(appeal);
+        return "redirect:/profile";
+    }
+
+
 }
