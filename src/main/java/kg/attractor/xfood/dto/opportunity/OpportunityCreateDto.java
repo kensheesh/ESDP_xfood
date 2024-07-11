@@ -2,6 +2,7 @@ package kg.attractor.xfood.dto.opportunity;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import kg.attractor.xfood.dto.shift.ShiftCreateDto;
 import kg.attractor.xfood.dto.shift.ShiftDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +22,5 @@ public class OpportunityCreateDto {
     private LocalDate date;
     private Boolean isDayOff;
     @Valid
-    private List<ShiftDto> shifts;
+    private List<ShiftCreateDto> shifts;
 }
