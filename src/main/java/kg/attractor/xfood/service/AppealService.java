@@ -9,4 +9,6 @@ import org.springframework.stereotype.Service;
 public interface AppealService {
     Long create(DataAppealDto data);
     AppealDto findById(Long id);
+
+    void update(CreateAppealDto createAppealDto, Long id);
 }

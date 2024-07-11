@@ -13,6 +13,12 @@
         .remove-file {
             cursor: pointer;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 
     <div class="container mt-5">
@@ -23,7 +29,7 @@
                         Подать апелляцию
                     </div>
                     <div class="card-body">
-                        <form action="/api/appeal" method="post" enctype="multipart/form-data">
+                        <form action="/api/appeal/${appeal.id}" id="form" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Менеджер</label>
                                 <input type="text" class="form-control" disabled id="name" value="${appeal.checkListsCriteria.checklist.workSchedule.manager.getName()} ${appeal.checkListsCriteria.checklist.workSchedule.manager.getSurname()}" required>
@@ -42,27 +48,28 @@
                             </div>
                             <div class="mb-3">
                                 <label for="photo-report" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="photo-report" required>
+                                <input type="email" class="form-control" name="email" id="photo-report" required>
                             </div>
                             <div class="mb-3">
                                 <label for="photo-report" class="form-label">Имя и фамилия</label>
-                                <input type="text" class="form-control" id="photo-report" required>
+                                <input type="text" class="form-control" name="fullName" id="photo-report" required>
                             </div>
                             <div class="mb-3">
                                 <label for="violation-link" class="form-label">Ссылка на сообщение в тг</label>
-                                <input type="url" class="form-control" id="violation-link" required>
+                                <input type="url" class="form-control" name="tgLinkMessage" id="violation-link" required>
                             </div>
                             <div class="mb-3">
                                 <label for="comment" class="form-label">Комментарий</label>
-                                <textarea class="form-control" id="comment" rows="3" required></textarea>
+                                <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
                             </div>
                             <div class="mb-3">
                                 <div id="file-upload-container">
                                     <div class="file-upload">
-                                        <input type="file" class="form-control" name="files[]" multiple>
+                                        <input type="file" accept="image/*, video/*" class="form-control fileUploader" name="files[]" multiple>
+                                        <div class="error-message"></div>
                                     </div>
                                 </div>
-                                <button onclick="addFileInput()">Добавить файл</button>
+                                <button type="button" onclick="addFileInput()">Добавить файл</button>
                             </div>
 
                             <button type="submit" class="btn btn-warning text-white">Отправить</button>
@@ -78,9 +85,70 @@
             const container = document.getElementById('file-upload-container');
             const newInput = document.createElement('div');
             newInput.className = 'file-upload';
-            newInput.innerHTML = '<input type="file" class="form-control" name="files[]" multiple>';
+            newInput.innerHTML = '<input type="file" class="form-control fileUploader mt-3" name="files[]" multiple><div class="error-message"></div>';
             container.appendChild(newInput);
+            initializeFileUploaders();
         }
+
+        function initializeFileUploaders() {
+            const fileUploaders = document.querySelectorAll('.fileUploader');
+
+            fileUploaders.forEach(fileUploader => {
+                fileUploader.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    const errorMessageElement = event.target.nextElementSibling;
+                    if (file) {
+                        validateFileType(file, event.target, errorMessageElement);
+                        console.log(file);
+                    }
+                });
+            });
+        }
+
+        function validateFileType(file, input, errorMessageElement) {
+            const acceptedTypes = ['png', 'jpg', 'jpeg', 'mp4', 'mov'];
+            const acceptedTypesLong = ['image/png', 'image/jpg', 'image/jpeg', 'video/mp4', 'video/quicktime'];
+
+            const nameExtension = file.name.split('.').pop().toLowerCase();
+
+            if (!acceptedTypes.includes(nameExtension)) {
+                input.value = null;
+                errorMessageElement.textContent = "Загрузите фотографию или видео в формате png, jpg, jpeg, mp4 или mov";
+                errorMessageElement.style.display = "block";
+            } else if (!acceptedTypesLong.includes(file.type)) {
+                input.value = null;
+                errorMessageElement.textContent = "Загрузите фотографию или видео в формате png, jpg, jpeg, mp4 или mov";
+                errorMessageElement.style.display = "block";
+            } else {
+                errorMessageElement.textContent = "";
+                errorMessageElement.style.display = "none";
+            }
+
+            return true;
+        }
+
+        document.getElementById('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '/checks/${appeal.checkListsCriteria.checklist.uuidLink}/result';
+                } else {
+                    alert('Ошибка при отправке формы. Попробуйте еще раз.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Ошибка при отправке формы. Попробуйте еще раз.');
+            });
+        });
+
+        initializeFileUploaders();
     </script>
 
 </@main.layout>

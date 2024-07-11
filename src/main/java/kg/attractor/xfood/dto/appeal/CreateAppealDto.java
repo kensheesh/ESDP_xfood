@@ -12,6 +12,7 @@ public class CreateAppealDto {
 
     private String fullName;
     private String comment;
+    private String email;
     private String tgLinkMessage;
     private String linkToExternalSrc;
     private Long checkListCriteriaId;

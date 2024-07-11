@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.rest;
 
+import kg.attractor.xfood.dto.appeal.CreateAppealDto;
 import kg.attractor.xfood.dto.appeal.DataAppealDto;
 import kg.attractor.xfood.service.AppealService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,11 @@ public class AppealController {
     @PostMapping(value = "")
     public ResponseEntity<Long> createAppeal(@RequestBody DataAppealDto data) {
         return ResponseEntity.ok(appealService.create(data));
+    }
+
+    @PostMapping(value = "{id}", consumes = "multipart/form-data")
+    public HttpStatus updateAppeal(@PathVariable Long id, @ModelAttribute CreateAppealDto createAppealDto) {
+        appealService.update(createAppealDto, id);
+        return HttpStatus.OK;
     }
 }

@@ -1,10 +1,12 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.appeal.AppealDto;
+import kg.attractor.xfood.dto.appeal.CreateAppealDto;
 import kg.attractor.xfood.dto.appeal.DataAppealDto;
 import kg.attractor.xfood.model.Appeal;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.repository.AppealRepository;
+import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.NoSuchElementException;
 public class AppealServiceImpl implements AppealService {
 
     private final CheckListCriteriaService checkListCriteriaService;
+    private final ChecklistCriteriaRepository checklistCriteriaRepository;
     private final AppealRepository appealRepository;
     private final DtoBuilder dtoBuilder;
 
@@ -40,5 +43,19 @@ public class AppealServiceImpl implements AppealService {
         Appeal appeal = appealRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Аппеляция не найдена"));
         return dtoBuilder.buildAppealDto(appeal);
+    }
+
+    @Override
+    public void update(CreateAppealDto createAppealDto, Long id) {
+        Appeal appeal = appealRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Аппеляция не найдена"));
+
+        appeal.setEmail(createAppealDto.getEmail());
+        appeal.setComment(createAppealDto.getComment());
+        appeal.setFullName(createAppealDto.getFullName());
+        appeal.setIsAccepted(false);
+        appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
+        appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
+        appealRepository.save(appeal);
     }
 }
