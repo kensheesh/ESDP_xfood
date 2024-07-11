@@ -164,17 +164,34 @@
 
             updatePercentage()
 
-            console.log("Сборка кнопок")
             const appealButtons = document.querySelectorAll('.appeal-button');
             appealButtons.forEach(button => {
                 button.addEventListener('click', async () => {
                     const criteria = button.getAttribute('data-criteria-id');
-                    fetchToAppeal(criteria)
+                    await fetchToAppeal(criteria)
                 });
             });
 
-            function fetchToAppeal(criteria) {
-                window.location.href = "/appeal?criteriaId=" + criteria + "&checkListId=${checkList.uuidLink}"
+            async function fetchToAppeal(criteria) {
+                let object = buildData(criteria);
+                console.log(object)
+                let response = await fetch('/api/appeal', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                })
+
+                let data = await response.json()
+                window.location.href = '/appeal/'+data
+            }
+
+            function buildData(criteria) {
+                return {
+                    criteriaId: criteria,
+                    checkListId: ${checkList.id}
+                }
             }
 
         })

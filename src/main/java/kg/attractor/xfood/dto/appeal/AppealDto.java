@@ -1,21 +1,19 @@
 package kg.attractor.xfood.dto.appeal;
 
+import kg.attractor.xfood.model.CheckListsCriteria;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Date;
 
 @Data
 @Builder
-public class CreateAppealDto {
+public class AppealDto {
 
+    private Long id;
+    private String email;
     private String fullName;
     private String comment;
     private String tgLinkMessage;
     private String linkToExternalSrc;
-    private Long checkListCriteriaId;
-    private Date inspectionDate;
-    private MultipartFile[] files;
+    private CheckListsCriteria checkListsCriteria;
 
 }

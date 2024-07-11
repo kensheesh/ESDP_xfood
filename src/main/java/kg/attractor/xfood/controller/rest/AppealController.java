@@ -1,6 +1,6 @@
 package kg.attractor.xfood.controller.rest;
 
-import kg.attractor.xfood.dto.appeal.CreateAppealDto;
+import kg.attractor.xfood.dto.appeal.DataAppealDto;
 import kg.attractor.xfood.service.AppealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,9 +14,8 @@ public class AppealController {
     private final AppealService appealService;
 
 
-    @PostMapping(value = "", consumes = "multipart/form-data")
-    public HttpStatus createAppeal(@ModelAttribute CreateAppealDto createDto) {
-        appealService.create(createDto);
-        return HttpStatus.OK;
+    @PostMapping(value = "")
+    public ResponseEntity<Long> createAppeal(@RequestBody DataAppealDto data) {
+        return ResponseEntity.ok(appealService.create(data));
     }
 }

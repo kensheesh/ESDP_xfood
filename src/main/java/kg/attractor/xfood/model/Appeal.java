@@ -3,8 +3,7 @@ package kg.attractor.xfood.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,7 +11,10 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "appeals")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Appeal {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class Appeal {
 	@NotNull
 	@Column(name = "full_name", nullable = false)
 	private String fullName;
-	
+
 	@NotNull
 	@Column(name = "comment", nullable = false, length = Integer.MAX_VALUE)
 	private String comment;

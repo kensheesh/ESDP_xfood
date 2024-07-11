@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class DataAppealDto {
 
-    private Long criteria;
+    private Long criteriaId;
     private Long checkListId;
 }
