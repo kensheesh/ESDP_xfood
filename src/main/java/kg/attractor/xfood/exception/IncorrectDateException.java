@@ -1,8 +1,7 @@
 package kg.attractor.xfood.exception;
 
-public class IncorrectDateException extends RuntimeException {
+import lombok.experimental.StandardException;
 
-    public IncorrectDateException(String message) {
-        super(message);
-    }
+@StandardException
+public class IncorrectDateException extends RuntimeException {
 }

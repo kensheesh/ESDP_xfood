@@ -1,6 +1,5 @@
 package kg.attractor.xfood.service;
 
-import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
@@ -14,6 +13,7 @@ public interface CheckListService {
     ChecklistShowDto getCheckListById(String id);
 
     CheckList getModelCheckListById(String id);
+    
     CheckList getModelCheckListById(Long id);
 
     void save(CheckList checkList);
@@ -23,6 +23,7 @@ public interface CheckListService {
     List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status);
 
     CheckListResultDto getResult(String checkListId);
+    
     CheckListResultDto getResult(Long checkListId);
 
     CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto);
@@ -40,4 +41,5 @@ public interface CheckListService {
     void edit(CheckListSupervisorEditDto checkList);
 
     Integer getMaxPoints(Long id);
+    
 }
