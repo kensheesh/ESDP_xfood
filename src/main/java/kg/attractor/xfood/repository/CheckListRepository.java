@@ -76,4 +76,5 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
             """)
     Optional<CheckList> findByUuidLinkAndStatus(String uuidLink, Status status);
 
+    CheckList findByCheckListsCriteriaId(Long id);
 }
