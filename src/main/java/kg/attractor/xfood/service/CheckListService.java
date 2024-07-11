@@ -40,4 +40,5 @@ public interface CheckListService {
     void edit(CheckListSupervisorEditDto checkList);
 
     Integer getMaxPoints(Long id);
+    Integer getPercentageById(Long id);
 }

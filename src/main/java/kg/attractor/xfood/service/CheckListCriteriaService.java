@@ -21,5 +21,4 @@ public interface CheckListCriteriaService {
 
     List<CheckListsCriteria> findAllByChecklistId(Long id);
 
-    Integer getPercentageById(Long id);
 }
