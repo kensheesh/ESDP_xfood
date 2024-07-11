@@ -42,7 +42,9 @@
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
                                     <section class="d-flex flex-column row-gap-2 text-center times">
+
                                     </section>
+
                                 </div>
                             </div>
                         </div>
@@ -50,7 +52,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-xl-9">
+            <div class="col-md-8 col-xl-9">
             <div class="card border-0 rounded-4 shadow-sm">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -209,78 +211,50 @@
                             <tr>
                                 <td>
                                     <#if firstDay != "">
-                                        <#if !firstDay.isDayOff>
-                                            <#if firstDay.shifts[1]??>
-                                                ${firstDay.shifts[1].startTime}-${firstDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if firstDay.shifts[1]??>
+                                            ${firstDay.shifts[1].startTime}-${firstDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if secondDay != "">
-                                        <#if !secondDay.isDayOff>
-                                            <#if secondDay.shifts[1]??>
-                                                ${secondDay.shifts[1].startTime}-${secondDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if secondDay.shifts[1]??>
+                                            ${secondDay.shifts[1].startTime}-${secondDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if thirdDay != "">
-                                        <#if !thirdDay.isDayOff>
-                                            <#if thirdDay.shifts[1]??>
-                                                ${thirdDay.shifts[1].startTime}-${thirdDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if thirdDay.shifts[1]??>
+                                            ${thirdDay.shifts[1].startTime}-${thirdDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fourthDay != "">
-                                        <#if !fourthDay.isDayOff>
-                                            <#if fourthDay.shifts[1]??>
-                                                ${fourthDay.shifts[1].startTime}-${fourthDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fourthDay.shifts[1]??>
+                                            ${fourthDay.shifts[1].startTime}-${fourthDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fifthDay != "">
-                                        <#if !fifthDay.isDayOff>
-                                            <#if fifthDay.shifts[1]??>
-                                                ${fifthDay.shifts[1].startTime}-${fifthDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fifthDay.shifts[1]??>
+                                            ${fifthDay.shifts[1].startTime}-${fifthDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if sixthDay != "">
-                                        <#if !sixthDay.isDayOff>
-                                            <#if sixthDay.shifts[1]??>
-                                                ${sixthDay.shifts[1].startTime}-${sixthDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if sixthDay.shifts[1]??>
+                                            ${sixthDay.shifts[1].startTime}-${sixthDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if seventhDay != "">
-                                        <#if !seventhDay.isDayOff>
-                                            <#if seventhDay.shifts[1]??>
-                                                ${seventhDay.shifts[1].startTime}-${seventhDay.shifts[1].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if seventhDay.shifts[1]??>
+                                            ${seventhDay.shifts[1].startTime}-${seventhDay.shifts[1].endTime}
                                         </#if>
                                     </#if>
                                 </td>
@@ -288,78 +262,50 @@
                             <tr>
                                 <td>
                                     <#if firstDay != "">
-                                        <#if !firstDay.isDayOff>
-                                            <#if firstDay.shifts[2]??>
-                                                ${firstDay.shifts[2].startTime}-${firstDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if firstDay.shifts[2]??>
+                                            ${firstDay.shifts[2].startTime}-${firstDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if secondDay != "">
-                                        <#if !secondDay.isDayOff>
-                                            <#if secondDay.shifts[2]??>
-                                                ${secondDay.shifts[2].startTime}-${secondDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if secondDay.shifts[2]??>
+                                            ${secondDay.shifts[2].startTime}-${secondDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if thirdDay != "">
-                                        <#if !thirdDay.isDayOff>
-                                            <#if thirdDay.shifts[2]??>
-                                                ${thirdDay.shifts[2].startTime}-${thirdDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if thirdDay.shifts[2]??>
+                                            ${thirdDay.shifts[2].startTime}-${thirdDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fourthDay != "">
-                                        <#if !fourthDay.isDayOff>
-                                            <#if fourthDay.shifts[2]??>
-                                                ${fourthDay.shifts[2].startTime}-${fourthDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fourthDay.shifts[2]??>
+                                            ${fourthDay.shifts[2].startTime}-${fourthDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fifthDay != "">
-                                        <#if !fifthDay.isDayOff>
-                                            <#if fifthDay.shifts[2]??>
-                                                ${fifthDay.shifts[2].startTime}-${fifthDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fifthDay.shifts[2]??>
+                                            ${fifthDay.shifts[2].startTime}-${fifthDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if sixthDay != "">
-                                        <#if !sixthDay.isDayOff>
-                                            <#if sixthDay.shifts[2]??>
-                                                ${sixthDay.shifts[2].startTime}-${sixthDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if sixthDay.shifts[2]??>
+                                            ${sixthDay.shifts[2].startTime}-${sixthDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if seventhDay != "">
-                                        <#if !seventhDay.isDayOff>
-                                            <#if seventhDay.shifts[2]??>
-                                                ${seventhDay.shifts[2].startTime}-${seventhDay.shifts[2].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if seventhDay.shifts[2]??>
+                                            ${seventhDay.shifts[2].startTime}-${seventhDay.shifts[2].endTime}
                                         </#if>
                                     </#if>
                                 </td>
@@ -367,78 +313,50 @@
                             <tr>
                                 <td>
                                     <#if firstDay != "">
-                                        <#if !firstDay.isDayOff>
-                                            <#if firstDay.shifts[3]??>
-                                                ${firstDay.shifts[3].startTime}-${firstDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if firstDay.shifts[3]??>
+                                            ${firstDay.shifts[3].startTime}-${firstDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if secondDay != "">
-                                        <#if !secondDay.isDayOff>
-                                            <#if secondDay.shifts[3]??>
-                                                ${secondDay.shifts[3].startTime}-${secondDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if secondDay.shifts[3]??>
+                                            ${secondDay.shifts[3].startTime}-${secondDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if thirdDay != "">
-                                        <#if !thirdDay.isDayOff>
-                                            <#if thirdDay.shifts[3]??>
-                                                ${thirdDay.shifts[3].startTime}-${thirdDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if thirdDay.shifts[3]??>
+                                            ${thirdDay.shifts[3].startTime}-${thirdDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fourthDay != "">
-                                        <#if !fourthDay.isDayOff>
-                                            <#if fourthDay.shifts[3]??>
-                                                ${fourthDay.shifts[3].startTime}-${fourthDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fourthDay.shifts[3]??>
+                                            ${fourthDay.shifts[3].startTime}-${fourthDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fifthDay != "">
-                                        <#if !fifthDay.isDayOff>
-                                            <#if fifthDay.shifts[3]??>
-                                                ${fifthDay.shifts[3].startTime}-${fifthDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fifthDay.shifts[3]??>
+                                            ${fifthDay.shifts[3].startTime}-${fifthDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if sixthDay != "">
-                                        <#if !sixthDay.isDayOff>
-                                            <#if sixthDay.shifts[3]??>
-                                                ${sixthDay.shifts[3].startTime}-${sixthDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if sixthDay.shifts[3]??>
+                                            ${sixthDay.shifts[3].startTime}-${sixthDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if seventhDay != "">
-                                        <#if !seventhDay.isDayOff>
-                                            <#if seventhDay.shifts[3]??>
-                                                ${seventhDay.shifts[3].startTime}-${seventhDay.shifts[3].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if seventhDay.shifts[3]??>
+                                            ${seventhDay.shifts[3].startTime}-${seventhDay.shifts[3].endTime}
                                         </#if>
                                     </#if>
                                 </td>
@@ -446,78 +364,50 @@
                             <tr>
                                 <td>
                                     <#if firstDay != "">
-                                        <#if !firstDay.isDayOff>
-                                            <#if firstDay.shifts[4]??>
-                                                ${firstDay.shifts[4].startTime}-${firstDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if firstDay.shifts[4]??>
+                                            ${firstDay.shifts[4].startTime}-${firstDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if secondDay != "">
-                                        <#if !secondDay.isDayOff>
-                                            <#if secondDay.shifts[4]??>
-                                                ${secondDay.shifts[4].startTime}-${secondDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if secondDay.shifts[4]??>
+                                            ${secondDay.shifts[4].startTime}-${secondDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if thirdDay != "">
-                                        <#if !thirdDay.isDayOff>
-                                            <#if thirdDay.shifts[4]??>
-                                                ${thirdDay.shifts[4].startTime}-${thirdDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if thirdDay.shifts[4]??>
+                                            ${thirdDay.shifts[4].startTime}-${thirdDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fourthDay != "">
-                                        <#if !fourthDay.isDayOff>
-                                            <#if fourthDay.shifts[4]??>
-                                                ${fourthDay.shifts[4].startTime}-${fourthDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fourthDay.shifts[4]??>
+                                            ${fourthDay.shifts[4].startTime}-${fourthDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if fifthDay != "">
-                                        <#if !fifthDay.isDayOff>
-                                            <#if fifthDay.shifts[4]??>
-                                                ${fifthDay.shifts[4].startTime}-${fifthDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if fifthDay.shifts[4]??>
+                                            ${fifthDay.shifts[4].startTime}-${fifthDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if sixthDay != "">
-                                        <#if !sixthDay.isDayOff>
-                                            <#if sixthDay.shifts[4]??>
-                                                ${sixthDay.shifts[4].startTime}-${sixthDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if sixthDay.shifts[4]??>
+                                            ${sixthDay.shifts[4].startTime}-${sixthDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
                                 <td>
                                     <#if seventhDay != "">
-                                        <#if !seventhDay.isDayOff>
-                                            <#if seventhDay.shifts[4]??>
-                                                ${seventhDay.shifts[4].startTime}-${seventhDay.shifts[4].endTime}
-                                            </#if>
-                                        <#else>
-                                            Выходной
+                                        <#if seventhDay.shifts[4]??>
+                                            ${seventhDay.shifts[4].startTime}-${seventhDay.shifts[4].endTime}
                                         </#if>
                                     </#if>
                                 </td>
@@ -548,7 +438,7 @@
 
                     </div>
                     <div class="form-check ms-1 mt-3">
-                        <input class="form-check-input" type="checkbox" value="" id="day-off">
+                        <input class="form-check-input" type="checkbox" value="true" name="isDayOff" id="day-off">
                         <label class="form-check-label" for="day-off">
                             Выходной
                         </label>
@@ -577,59 +467,91 @@
             let dateString = event.relatedTarget.id;
             inputs.innerHTML = `
                 <div class="col">
-                    <button type="button" id="add-shift-btn" class="btn btn-light rounded-4" onclick="addInput('` + dateString + `')">Добавить период</button>
+                    <button type="button" id="add-shift-btn" class="btn btn-light rounded-4" onclick="addInput()">Добавить период</button>
                 </div>
-                <input type="hidden" name="date" value="` + dateString + `">
             `;
+
+            let opportunityId = document.getElementById('opportunity-id')
+            let opportunityDate = document.getElementById('opportunity-date')
+
+            if (opportunityDate) {
+                opportunityDate.remove()
+            }
+
+            if (opportunityId) {
+                opportunityId.remove()
+            }
+
+            let dateInputHtml = document.createElement('input')
+            dateInputHtml.type = 'hidden'
+            dateInputHtml.name = 'date'
+            dateInputHtml.id = 'opportunity-date'
+            dateInputHtml.value = dateString;
+
+            inputs.parentElement.appendChild(dateInputHtml);
 
             let workShiftsModalLabel = document.getElementById('workShiftModalLabel')
             workShiftsModalLabel.innerText = 'Выберите время, когда Вы можете работать ' + dateString
 
             let addShiftBtn = document.getElementById('add-shift-btn')
-            addShiftBtn.addEventListener('click', addInput)
+            // addShiftBtn.addEventListener('click', addInput)
 
             try {
                 let request = await fetch('/api/opportunities?d=' + event.relatedTarget.id)
                 if (request.ok) {
-                    let opportunities = await request.json();
-                    for (let i = 0; i < opportunities.length; i++) {
-                        let startTimeParts = opportunities[i].startTime.split(":")
-                        let endTimeParts = opportunities[i].endTime.split(":")
+                    let opportunity = await request.json();
+                    console.log(opportunity)
 
-                        let input = document.createElement('div')
-                        input.classList.add('row', 'row-cols-2', 'col')
+                    let opportunityIdHtml = document.createElement('input')
+                    opportunityIdHtml.type = 'hidden';
+                    opportunityIdHtml.name = 'id';
+                    opportunityIdHtml.value = opportunity.id;
+                    opportunityIdHtml.id = 'opportunity-id';
+                    inputs.parentElement.appendChild(opportunityIdHtml)
 
-                        input.innerHTML = `<div class="col-auto">
-                            <input type="hidden" name="opportunities[` + i + `].id" value="` + opportunities[i].id + `">
+                    if (opportunity.isDayOff === false || opportunity.isDayOff == null) {
+                        for (let i = 0; i < opportunity.shifts.length; i++) {
+                            let startTimeParts = opportunity.shifts[i].startTime.split(":")
+                            let endTimeParts = opportunity.shifts[i].endTime.split(":")
+
+                            let input = document.createElement('div')
+                            input.classList.add('row', 'row-cols-2', 'col')
+
+                            input.innerHTML = `<div class="col-auto">
+                            <input type="hidden" name="shifts[` + i + `].id" value="` + opportunity.shifts[i].id + `">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
                                     type="number" min="0" max="23" value="` + startTimeParts[0] + `"
-                                    name="opportunities[` + i + `].startTimeHour" oninput="validate(event)" required>
+                                    name="shifts[` + i + `].startTimeHour" oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control" type="number" min="0" max="59" value="` + startTimeParts[1] + `"
-                                    name="opportunities[` + i + `].startTimeMinute" oninput="validate(event)" required>
+                                    name="shifts[` + i + `].startTimeMinute" oninput="validate(event)" required>
                                 <div class="col-auto input-group-text">
                                     —
                                 </div>
                                 <input class="form-control" type="number" min="0" max="23" value="` + endTimeParts[0] + `"
-                                    name="opportunities[` + i + `].endTimeHour" oninput="validate(event)" required>
+                                    name="shifts[` + i + `].endTimeHour" oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
                                 <input class="form-control rounded-end-4" type="number" min="0" max="59" value="` + endTimeParts[1] + `"
-                                    name="opportunities[` + i + `].endTimeMinute" oninput="validate(event)" required>
+                                    name="shifts[` + i + `].endTimeMinute" oninput="validate(event)" required>
                             </div>
                         </div>
                         <div class="col-auto px-0">
                             <button type="button" class="btn btn-dodo-light rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
                         </div>`;
 
-                        let addShiftBtn = document.getElementById('add-shift-btn')
-                        inputs.insertBefore(input, addShiftBtn.parentElement)
+                            let addShiftBtn = document.getElementById('add-shift-btn')
+                            inputs.insertBefore(input, addShiftBtn.parentElement)
 
-                        window.lastInput = i;
+                            window.lastInput = i;
+                        }
+                    } else {
+                        dayOffBtn.checked = true;
+                        onChecked();
                     }
 
                 } else {
@@ -656,14 +578,7 @@
 
         }
 
-        function addInput(dateString) {
-            event.preventDefault()
-            let parts = dateString.toString().split('-');
-            let day = Number(parts[2]);
-            let month = parseInt(parts[1], 10) - 1;
-            let year = parseInt(parts[0], 10);
-            let date = new Date(Date.UTC(year, month, day, 0, 0, 0, 0)).toISOString()
-            console.log(date)
+        function addInput() {
 
             if (inputs.childElementCount < 7) {
                 let input = document.createElement('div')
@@ -672,22 +587,22 @@
                 input.innerHTML = `<div class="col-auto">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
-                                    type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].startTimeHour"
+                                    type="number" min="0" max="23" name="shifts[` + window.lastInput + `].startTimeHour"
                                      oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].startTimeMinute"
+                                <input class="form-control" type="number" min="0" max="60" name="shifts[` + window.lastInput + `].startTimeMinute"
                                      oninput="validate(event)" required>
                                 <div class="col-auto input-group-text">
                                     —
                                 </div>
-                                <input class="form-control" type="number" min="0" max="23" name="opportunities[` + window.lastInput + `].endTimeHour"
+                                <input class="form-control" type="number" min="0" max="23" name="shifts[` + window.lastInput + `].endTimeHour"
                                      oninput="validate(event)" required>
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control rounded-end-4" type="number" min="0" max="60" name="opportunities[` + window.lastInput + `].endTimeMinute"
+                                <input class="form-control rounded-end-4" type="number" min="0" max="60" name="shifts[` + window.lastInput + `].endTimeMinute"
                                      oninput="validate(event)" required>
                             </div>
                         </div>
@@ -703,6 +618,7 @@
         function deleteInput(event) {
             let btn = event.currentTarget;
             btn.parentElement.parentElement.remove();
+            window.lastInput--;
         }
 
         function validate(event) {

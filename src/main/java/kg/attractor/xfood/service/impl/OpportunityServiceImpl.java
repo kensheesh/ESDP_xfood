@@ -6,20 +6,21 @@ import kg.attractor.xfood.dto.opportunity.DailyOpportunityShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
+import kg.attractor.xfood.dto.shift.ShiftCreateDto;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
 import kg.attractor.xfood.model.Opportunity;
+import kg.attractor.xfood.model.Shift;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,6 +31,7 @@ public class OpportunityServiceImpl implements OpportunityService {
     private final ModelBuilder modelBuilder;
 
     private final UserServiceImpl userService;
+    private final ShiftServiceImpl shiftService;
 
     @Override
     public List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date) {
@@ -101,45 +103,69 @@ public class OpportunityServiceImpl implements OpportunityService {
     }
 
     @Override
-    public List<OpportunityDto> getAllByExpertAndDate(String expertEmail, LocalDate date) {
-        return opportunityRepository.findAllByUserEmailAndDate(expertEmail, date)
-                .stream()
-                .map(dtoBuilder::buildOpportunityDto)
-                .toList();
+    public OpportunityDto getByExpertAndDate(LocalDate date) {
+        String expertEmail = AuthParams.getAuth().getName();
+
+        return dtoBuilder.buildOpportunityDto(
+                opportunityRepository.findByUserEmailAndDate(expertEmail, date)
+                        .orElseThrow(() -> new NotFoundException("Opportunity not found"))
+        );
     }
 
     @Override
     @Transactional
     public void changeExpertOpportunities (OpportunityCreateDto dto) {
-//        User expert = userService.getByEmail(auth.getName());
-        String expertEmail = AuthParams.getAuth().getName();
+        User expert = userService.getByEmail(AuthParams.getAuth().getName());
 
-        List<Long> existingIds = opportunityRepository.findAllIdsByUserEmail(expertEmail);
-//
-//        List<Opportunity> filteredOpportunities = wrapper.getOpportunities().stream()
-//                .filter(dto -> !existingIds.contains(dto.getId()))
-//                .map(dto -> modelBuilder.buildNewOpportunity(dto, wrapper.getDate(), expert))
-//                .sorted(Comparator.comparing(Opportunity::getStartTime))
-//                .toList();
+        Opportunity newOpportunity = Opportunity.builder()
+                .id(dto.getId())
+                .user(expert)
+                .date(dto.getDate())
+                .isDayOff(dto.getIsDayOff() != null ? dto.getIsDayOff() : false)
+                .build();
 
-//        List<Long> idsToDelete = existingIds.stream()
-//                .filter(id -> !wrapperIds.contains(id))
-//                .toList();
-//
-//        opportunityRepository.deleteByIdIn(idsToDelete);
-//
-//        for (int i = 0; i < filteredOpportunities.size(); i++) {
-//            if (filteredOpportunities.get(i).getStartTime().isAfter(filteredOpportunities.get(i).getEndTime())) {
-//                throw new IllegalArgumentException("Некорректное время");
-//            }
-//
-//            if (i > 0) {
-//                if (filteredOpportunities.get(i-1).getEndTime().isAfter(filteredOpportunities.get(i).getStartTime())) {
-//                    throw new ShiftIntersectionException("Смены не могут пересекаться");
-//                }
-//            }
-//        }
-//
-//        opportunityRepository.saveAll(filteredOpportunities);
+        Opportunity savedOpportunity = opportunityRepository.save(newOpportunity);
+
+        if (savedOpportunity.getIsDayOff()) {
+            shiftService.deleteAllByOpportunityId(savedOpportunity.getId());
+        } else {
+
+            List<Long> shiftsIds;
+            List<Long> existingIds = shiftService.getAllByOpportunityId (savedOpportunity.getId());
+
+
+            if (dto.getShifts() != null) {
+                shiftsIds = dto.getShifts().stream()
+                        .map(ShiftCreateDto::getId)
+                        .toList();
+
+                List<Shift> filteredShifts = dto.getShifts().stream()
+                        .filter(shiftDto -> !existingIds.contains(shiftDto.getId()))
+                        .map(shiftCreateDto -> modelBuilder.buildNewShift(shiftCreateDto, savedOpportunity))
+                        .sorted(Comparator.comparing(Shift::getStartTime))
+                        .toList();
+
+                for (int i = 0; i < filteredShifts.size(); i++) {
+                    if (filteredShifts.get(i).getStartTime().isAfter(filteredShifts.get(i).getEndTime())) {
+                        throw new IllegalArgumentException("Некорректное время");
+                    }
+
+                    if (i > 0) {
+                        if (filteredShifts.get(i-1).getEndTime().isAfter(filteredShifts.get(i).getStartTime())) {
+                            throw new ShiftIntersectionException("Смены не могут пересекаться");
+                        }
+                    }
+                }
+                shiftService.saveAll (filteredShifts);
+            } else {
+                shiftsIds = new ArrayList<>();
+            }
+
+            List<Long> idsToDelete = existingIds.stream()
+                    .filter(id -> !shiftsIds.contains(id))
+                    .toList();
+
+            shiftService.deleteAllByIds(idsToDelete);
+        }
     }
 }
