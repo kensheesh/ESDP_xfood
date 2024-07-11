@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Repository
 public interface OpportunityRepository extends JpaRepository<Opportunity, Long> {
     List<Opportunity> findAllByUserEmailAndDateBetween(String userEmail, LocalDate after, LocalDate before);
 
-    List<Opportunity> findAllByUserEmailAndDate (String userEmail, LocalDate date);
+    Optional<Opportunity> findByUserEmailAndDate(String userEmail, LocalDate date);
 
     @Query("select o from Opportunity o where o.date = ?1")
     List<Opportunity> findByDate(LocalDateTime date);
@@ -29,4 +30,13 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Modifying
     void deleteAllByUserEmailAndDate(String userEmail, LocalDate date);
+
+    @Modifying
+    void deleteAllByIdNotIn(List<Long> ids);
+
+    @Modifying
+    void deleteByIdIn(List<Long> ids);
+
+    @Query("SELECT o.id from Opportunity o WHERE o.date = ?2 and o.user.email = ?1")
+    List<Long> findAllIdsByUserEmailAndDate(String userEmail, LocalDate date);
 }
