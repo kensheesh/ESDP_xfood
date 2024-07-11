@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
+import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorReviewDto;
 import kg.attractor.xfood.dto.appeal.AppealDto;
@@ -18,6 +19,7 @@ import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.FileService;
 import kg.attractor.xfood.service.CheckListCriteriaCommentService;
+import kg.attractor.xfood.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -37,6 +40,7 @@ public class AppealServiceImpl implements AppealService {
     private final AppealRepository appealRepository;
     private final CheckListCriteriaCommentService commentService;
     private final CheckListCriteriaServiceImpl checkListCriteriaServiceImpl;
+    private final EmailService emailService;
 
 
     private final CheckListCriteriaService checkListCriteriaService;
@@ -114,7 +118,7 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public void approve(AppealSupervisorApproveDto appealDto) {
+    public void approve(AppealSupervisorApproveDto appealDto) throws MessagingException, UnsupportedEncodingException {
         Appeal appeal = appealRepository.findAppealById(appealDto.getAppealId()).orElseThrow(()-> new NoSuchElementException("Апелляция с айди "+appealDto.getAppealId()+" не найдено"));
         appeal.setIsAccepted(appealDto.getStatus());
         //TODO после добавления в бд колонки respond сделать созранение комментария от руководителя
@@ -125,13 +129,11 @@ public class AppealServiceImpl implements AppealService {
                 criteria.setValue(0);
             }
             else {
-                log.error("KJFKLSJKLAJFSJSAsjdaskdajd{}", criteria.getMaxValue());
                 criteria.setValue(criteria.getMaxValue());
             }
             checkListCriteriaServiceImpl.save(criteria);
         }
        appealRepository.save(appeal);
-
-
+        emailService.sendEmail(appeal.getId(), appealDto.getRespond());
     }
 }

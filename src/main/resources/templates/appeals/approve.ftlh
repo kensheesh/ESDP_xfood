@@ -10,20 +10,23 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <#if appeal.status == true>
-                <div class="alert alert-success d-flex align-items-center" role="alert">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-                    <div>
-                        <i class="bi bi-check-square fs-4 text-success"></i> подтверждённая апелляция
+            <#if appeal.status??>
+                <#if appeal.status == true>
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                        <div>
+                            <i class="bi bi-check-square fs-4 text-success"></i> подтверждённая апелляция
+                        </div>
                     </div>
-                </div>
                 <#elseif appeal.status == false>
                     <div class="alert alert-danger d-flex align-items-center" role="alert">
                         <div>
                             <i class="bi bi-x-square fs-4 text-danger"></i>  отклонённая апелляция
                         </div>
                     </div>
+                </#if>
             </#if>
+
 
             <h5 class="card-title">${appeal.checkListsCriteria.pizzeria}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Период: ${appeal.checkListsCriteria.localDate}</h6>
