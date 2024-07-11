@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.CriteriaService;
@@ -28,9 +29,17 @@ public class AppealController {
     }
 
 
-    @GetMapping("{id}/approve")
+    @GetMapping("{id}")
     public String approveAppeal(@PathVariable Long id, Model model){
         model.addAttribute("appeal", appealService.getAppealById(id));
         return "appeals/approve";
     }
+
+    @PostMapping("/approve")
+    public String approveAppeal(AppealSupervisorApproveDto appeal){
+        appealService.approve(appeal);
+        return "redirect:/profile";
+    }
+
+
 }
