@@ -10,6 +10,8 @@ import kg.attractor.xfood.service.FileService;
 import kg.attractor.xfood.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,17 +35,30 @@ public class FileServiceImpl implements FileService {
 		if (! validFiles.isEmpty()) {
 			for (int i = 0; i < validFiles.size(); i++) {
 				String extension = "." + getFileExtension(files.get(i).getOriginalFilename());
-				String fileName = generateFileName(appeal, String.valueOf(i));
+				String fileName = generateFileName(appeal, String.valueOf(i + 1));
 				
 				String path = fileUtil.saveUploadedFile(files.get(i), "appealFiles", fileName + extension);
 				
-				fileRepository.save(File.builder()
+				fileRepository.saveAndFlush(File.builder()
 						.appeal(appeal)
 						.path(path)
 						.build());
 				log.info("Saved file: {}", fileName);
 			}
 		} else log.warn("No valid files found");
+	}
+	
+	@Override
+	public List<String> getPathsForAppealFiles(Long appealId) {
+		List<File> files = fileRepository.findByAppealId(appealId);
+		List<String> paths = new ArrayList<>();
+		files.forEach(e -> paths.add(e.getPath()));
+		return paths;
+	}
+	
+	@Override
+	public ResponseEntity<InputStreamResource> downloadFile(String path) {
+		return fileUtil.downloadFile(path);
 	}
 	
 	private List<MultipartFile> validateAppealFiles(List<MultipartFile> files) {

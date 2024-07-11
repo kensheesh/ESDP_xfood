@@ -2,6 +2,7 @@ package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +23,13 @@ public class FileController {
 	}
 	
 	@GetMapping("download")
-	public ResponseEntity<?> show(MultipartFile file) {
-		return null;
+	public ResponseEntity<InputStreamResource> show(String path) {
+		return fileService.downloadFile(path);
+	}
+	
+	@GetMapping("download_paths")
+	public ResponseEntity<?> show(Long appealId) {
+		return ResponseEntity.ok(fileService.getPathsForAppealFiles(appealId));
 	}
 }
 
