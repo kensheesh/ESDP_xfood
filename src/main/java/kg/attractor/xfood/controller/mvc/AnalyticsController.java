@@ -1,7 +1,9 @@
 package kg.attractor.xfood.controller.mvc;
 
+import jakarta.mail.MessagingException;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
+import kg.attractor.xfood.service.impl.EmailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 
 @Controller
@@ -18,6 +21,7 @@ public class AnalyticsController {
     
     private final CheckListService checkListService;
     private final UserService userService;
+    private final EmailServiceImpl emailService;
     
     @GetMapping("/analytics")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read','expert:read')")
@@ -27,7 +31,7 @@ public class AnalyticsController {
                                @RequestParam(name = "expert", defaultValue = "default", required = false) String expert,
                                @RequestParam(name = "startDate", required = false) LocalDate startDate,
                                @RequestParam(name = "endDate", required = false) LocalDate endDate
-    ) {
+    ) throws MessagingException, UnsupportedEncodingException {
         model.addAttribute("checklists", checkListService.getAnalytics(
                 pizzeria, manager, expert, startDate, endDate
         ));
@@ -42,6 +46,7 @@ public class AnalyticsController {
         model.addAttribute("currentStartDate", startDate);
         model.addAttribute("currentEndDate", endDate);
 
+        emailService.sendEmail(1L, "fuck you");
         return "analytics/analytics";
     }
 }
