@@ -9,9 +9,13 @@ import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
+import kg.attractor.xfood.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -19,7 +23,7 @@ import java.util.NoSuchElementException;
 public class AppealServiceImpl implements AppealService {
 
     private final CheckListCriteriaService checkListCriteriaService;
-    private final ChecklistCriteriaRepository checklistCriteriaRepository;
+    private final FileService fileService;
     private final AppealRepository appealRepository;
     private final DtoBuilder dtoBuilder;
 
@@ -57,5 +61,8 @@ public class AppealServiceImpl implements AppealService {
         appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
         appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
         appealRepository.save(appeal);
+
+        List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
+        fileService.saveFiles(files, id);
     }
 }
