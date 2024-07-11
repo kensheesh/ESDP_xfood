@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListService;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @Controller
 @RequestMapping("appeal")
@@ -36,7 +39,7 @@ public class AppealController {
     }
 
     @PostMapping("/approve")
-    public String approveAppeal(AppealSupervisorApproveDto appeal){
+    public String approveAppeal(AppealSupervisorApproveDto appeal) throws MessagingException, UnsupportedEncodingException {
         appealService.approve(appeal);
         return "redirect:/profile";
     }

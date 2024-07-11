@@ -13,6 +13,8 @@ import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
+    private static final Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
     private final JavaMailSender mailSender;
     private final UserRepository userRepository;
     private final AppealRepository appealRepository;
@@ -73,6 +76,6 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject(subject);
         helper.setText(content, true);
         mailSender.send(message);
-
+        log.info("sent email to " + user.getEmail());
     }
 }
