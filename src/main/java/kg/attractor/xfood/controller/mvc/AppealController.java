@@ -24,7 +24,7 @@ public class AppealController {
     private final CheckListService checkListService;
     private final AppealService appealService;
 
-    @GetMapping("{id}")
+    @GetMapping("{id}22")
     public String getFormAppeal(@PathVariable Long id, Model model) {
 	    model.addAttribute("appeal", appealService.findById(id));
 	    return "appeals/appeal";
