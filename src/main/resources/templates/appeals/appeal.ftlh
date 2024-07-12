@@ -2,16 +2,8 @@
 <@main.layout>
 
     <style>
-        .file-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
         .file-item span {
             flex-grow: 1;
-        }
-        .remove-file {
-            cursor: pointer;
         }
         .error-message {
             color: red;
@@ -19,13 +11,44 @@
             margin-top: 5px;
             display: none;
         }
+        .textarea-criteria {
+            resize: none;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+        }
+        .btn-warning {
+            background-color: #ff9900;
+            border-color: #ff9900;
+        }
+        .btn-green {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .file-upload input {
+            margin-top: 10px;
+        }
+        .modal-header, .modal-footer {
+            border: none;
+        }
     </style>
 
-    <div class="container mt-5">
+    <div class="container">
         <div class="row">
             <div class="col-md-10 offset-md-1">
                 <div class="card">
-                    <div class="card-header bg-warning text-white">
+                    <div class="card-header text-white">
                         Подать апелляцию
                     </div>
                     <div class="card-body">
@@ -44,7 +67,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="criterion" class="form-label">Критерий</label>
-                                <input type="text" class="form-control" disabled id="criterion" value="${appeal.checkListsCriteria.criteria.description}" required>
+                                <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.checkListsCriteria.criteria.description}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="photo-report" class="form-label">Email</label>
@@ -69,12 +92,29 @@
                                         <div class="error-message"></div>
                                     </div>
                                 </div>
-                                <button type="button" onclick="addFileInput()">Добавить файл</button>
+                                <button class="mt-2 btn btn-green" type="button" onclick="addFileInput()">Добавить файл</button>
                             </div>
 
                             <button type="submit" class="btn btn-warning text-white">Отправить</button>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Успех</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Апелляция успешно отправлена.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 </div>
             </div>
         </div>
@@ -138,7 +178,10 @@
                 body: formData
             }).then(response => {
                 if (response.ok) {
-                    window.location.href = '/checks/${appeal.checkListsCriteria.checklist.uuidLink}/result';
+                    $('#successModal').modal('show');
+                    setTimeout(function() {
+                        window.location.href = '/checks/${appeal.checkListsCriteria.checklist.uuidLink}/result';
+                    }, 3000);
                 } else {
                     alert('Ошибка при отправке формы. Попробуйте еще раз.');
                 }
@@ -149,6 +192,7 @@
         });
 
         initializeFileUploaders();
+
     </script>
 
 </@main.layout>
