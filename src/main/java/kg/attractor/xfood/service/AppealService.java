@@ -1,9 +1,14 @@
 package kg.attractor.xfood.service;
 
-import org.springframework.web.multipart.MultipartFile;
+import kg.attractor.xfood.dto.appeal.AppealDto;
+import kg.attractor.xfood.dto.appeal.CreateAppealDto;
+import kg.attractor.xfood.dto.appeal.DataAppealDto;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+@Service
 public interface AppealService {
-	void saveFiles(List<MultipartFile> files, Long appealId);
+    Long create(DataAppealDto data);
+    AppealDto findById(Long id);
+
+    void update(CreateAppealDto createAppealDto, Long id);
 }

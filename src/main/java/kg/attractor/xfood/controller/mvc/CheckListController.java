@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
+import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,7 +109,14 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
 
     @GetMapping ("/{id}/result")
     public String getResult (@PathVariable (name = "id") String checkListId, Model model) {
-        model.addAttribute("checkList", checkListService.getCheckListById(checkListId));
+        ChecklistShowDto checkList = checkListService.getCheckListById(checkListId);
+        if(checkList.getStatus().equals(Status.DONE)) {
+            model.addAttribute("checkList", checkList);
+        } else {
+            model.addAttribute("error",
+                    "Данный чеклист еще не опубликован или такого чеклиста не существует!");
+        }
+
         return "checklist/result";
     }
 

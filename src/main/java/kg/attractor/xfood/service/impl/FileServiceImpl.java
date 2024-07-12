@@ -92,8 +92,6 @@ public class FileServiceImpl implements FileService {
 				
 				videoCount++;
 				
-			} else {
-				throw new IllegalArgumentException("Неподдерживаемый формат файла: " + contentType);
 			}
 			validFiles.add(file);
 		}

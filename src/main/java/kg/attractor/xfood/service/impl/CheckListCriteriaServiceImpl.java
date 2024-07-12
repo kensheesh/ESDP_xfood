@@ -123,6 +123,11 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         return checkListCriteriaRepository.findAllByChecklistId(id);
     }
 
+    @Override
+    public CheckListsCriteria findByCriteriaIdAndChecklistId(Long criteriaId, Long checkListId) {
+        return checkListCriteriaRepository.findByCriteriaIdAndChecklistId(criteriaId, checkListId);
+    }
+
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {
         Optional<CheckListsCriteria> optional = checkListCriteriaRepository
                 .findByCheckListIdAndCriteriaId(checkListId, criteriaId);
