@@ -82,6 +82,10 @@
                                 <input type="url" class="form-control" name="tgLinkMessage" id="violation-link" required>
                             </div>
                             <div class="mb-3">
+                                <label for="violation-link" class="form-label">Ссылка на чек-лист</label>
+                                <input type="url" class="form-control" name="linkToExternalSrc" id="violation-link">
+                            </div>
+                            <div class="mb-3">
                                 <label for="comment" class="form-label">Комментарий</label>
                                 <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
                             </div>
@@ -166,6 +170,26 @@
 
         document.getElementById('form').addEventListener('submit', function(event) {
             event.preventDefault();
+
+            const fileUploaders = document.querySelectorAll('.fileUploader');
+            let allFilesValid = true;
+
+            fileUploaders.forEach(fileUploader => {
+                const file = fileUploader.files[0];
+                const errorMessageElement = fileUploader.nextElementSibling;
+                if (!file) {
+                    errorMessageElement.textContent = "Загрузите фотографию или видео в формате png, jpg, jpeg, mp4 или mov.";
+                    errorMessageElement.style.display = "block";
+                    allFilesValid = false;
+                } else {
+                    errorMessageElement.textContent = "";
+                    errorMessageElement.style.display = "none";
+                }
+            });
+
+            if (!allFilesValid) {
+                return;
+            }
 
             const form = event.target;
             const formData = new FormData(form);

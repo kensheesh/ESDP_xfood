@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.rest;
 
+import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.appeal.CreateAppealDto;
 import kg.attractor.xfood.dto.appeal.DataAppealDto;
 import kg.attractor.xfood.service.AppealService;
@@ -21,7 +22,7 @@ public class AppealController {
     }
 
     @PostMapping(value = "{id}", consumes = "multipart/form-data")
-    public HttpStatus updateAppeal(@PathVariable Long id, @ModelAttribute CreateAppealDto createAppealDto) {
+    public HttpStatus updateAppeal(@PathVariable Long id, @ModelAttribute @Valid CreateAppealDto createAppealDto) {
         appealService.update(createAppealDto, id);
         return HttpStatus.OK;
     }

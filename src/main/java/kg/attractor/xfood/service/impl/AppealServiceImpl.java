@@ -63,8 +63,6 @@ public class AppealServiceImpl implements AppealService {
         appealRepository.save(appeal);
 
         List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
-        if(files.size() != 1 && ! Objects.equals(files.get(0).getOriginalFilename(), "")) {
-            fileService.saveFiles(files, id);
-        }
+        fileService.saveFiles(files, id);
     }
 }
