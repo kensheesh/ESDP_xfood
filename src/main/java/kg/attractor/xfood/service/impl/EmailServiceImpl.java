@@ -76,6 +76,6 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject(subject);
         helper.setText(content, true);
         mailSender.send(message);
-        log.info("sent email to " + user.getEmail());
+	    log.info("sent email to {}", user.getEmail());
     }
 }
