@@ -85,12 +85,9 @@
                                 <label for="comment" class="form-label">Комментарий</label>
                                 <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
                             </div>
+
                             <div class="mb-3">
                                 <div id="file-upload-container">
-                                    <div class="file-upload">
-                                        <input type="file" accept="image/*, video/*" class="form-control fileUploader" name="files[]" multiple>
-                                        <div class="error-message"></div>
-                                    </div>
                                 </div>
                                 <button class="mt-2 btn btn-green" type="button" onclick="addFileInput()">Добавить файл</button>
                             </div>

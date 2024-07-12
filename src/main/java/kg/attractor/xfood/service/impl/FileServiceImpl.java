@@ -68,6 +68,7 @@ public class FileServiceImpl implements FileService {
 		final int MAX_VIDEO_COUNT = 4;
 		
 		int photoCount = 0, videoCount = 0;
+	
 		List<MultipartFile> validFiles = new ArrayList<>();
 		
 		for (MultipartFile file : files) {
@@ -85,13 +86,13 @@ public class FileServiceImpl implements FileService {
 				photoCount++;
 				
 			} else if (contentType.startsWith("video/")) {
+				
 				if (fileSize > MAX_VIDEO_SIZE)
 					throw new IllegalArgumentException("Видео превышает максимальный размер 25 МБ");
 				if (videoCount >= MAX_VIDEO_COUNT)
 					throw new IllegalArgumentException("Превышено максимальное количество видео (4)");
 				
 				videoCount++;
-				
 			}
 			validFiles.add(file);
 		}

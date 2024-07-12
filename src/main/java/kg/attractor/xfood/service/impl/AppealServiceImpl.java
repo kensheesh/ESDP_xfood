@@ -6,7 +6,6 @@ import kg.attractor.xfood.dto.appeal.DataAppealDto;
 import kg.attractor.xfood.model.Appeal;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.repository.AppealRepository;
-import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.FileService;
@@ -17,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -53,17 +53,17 @@ public class AppealServiceImpl implements AppealService {
     public void update(CreateAppealDto createAppealDto, Long id) {
         Appeal appeal = appealRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Аппеляция не найдена"));
-
+        
         appeal.setEmail(createAppealDto.getEmail());
         appeal.setComment(createAppealDto.getComment());
         appeal.setFullName(createAppealDto.getFullName());
-        appeal.setIsAccepted(false);
         appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
         appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
+        
         appealRepository.save(appeal);
 
         List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
-        if(files.size() != 1 && !files.get(0).getOriginalFilename().equals("")) {
+        if(files.size() != 1 && ! Objects.equals(files.get(0).getOriginalFilename(), "")) {
             fileService.saveFiles(files, id);
         }
     }
