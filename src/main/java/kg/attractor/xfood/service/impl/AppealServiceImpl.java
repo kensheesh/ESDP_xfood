@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.appeal.AppealDto;
 import kg.attractor.xfood.dto.appeal.CreateAppealDto;
 import kg.attractor.xfood.dto.appeal.DataAppealDto;
+import kg.attractor.xfood.exception.AppealNotFoundException;
 import kg.attractor.xfood.model.Appeal;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.repository.AppealRepository;
@@ -15,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -45,14 +44,14 @@ public class AppealServiceImpl implements AppealService {
     @Override
     public AppealDto findById(Long id) {
         Appeal appeal = appealRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Аппеляция не найдена"));
+                .orElseThrow(() -> new AppealNotFoundException("Аппеляция не найдена"));
         return dtoBuilder.buildAppealDto(appeal);
     }
 
     @Override
     public void update(CreateAppealDto createAppealDto, Long id) {
         Appeal appeal = appealRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Аппеляция не найдена"));
+                .orElseThrow(() -> new AppealNotFoundException("Аппеляция не найдена"));
         
         appeal.setEmail(createAppealDto.getEmail());
         appeal.setComment(createAppealDto.getComment());
