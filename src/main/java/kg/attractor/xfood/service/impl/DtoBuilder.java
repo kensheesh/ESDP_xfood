@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
+import kg.attractor.xfood.dto.appeal.AppealDto;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
@@ -18,6 +19,7 @@ import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.dto.shift.ShiftTimeShowDto;
+import kg.attractor.xfood.dto.shift.ShiftDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
@@ -313,9 +315,18 @@ public class DtoBuilder {
 	public OpportunityDto buildOpportunityDto (Opportunity model) {
 		return OpportunityDto.builder()
 				.id(model.getId())
-				.date(model.getDate())
-//				.startTime(model.getStartTime())
-//				.endTime((model.getEndTime()))
+				.isDayOff(model.getIsDayOff())
+				.shifts(model.getShifts().stream()
+						.map(this::buildShiftDto)
+						.toList())
+				.build();
+	}
+
+	public ShiftDto buildShiftDto (Shift model) {
+		return ShiftDto.builder()
+				.id(model.getId())
+				.startTime(model.getStartTime())
+				.endTime(model.getEndTime())
 				.build();
 	}
 
@@ -328,4 +339,15 @@ public class DtoBuilder {
 				.build();
 	}
 
+    public AppealDto buildAppealDto(Appeal model) {
+		return AppealDto.builder()
+				.linkToExternalSrc(model.getLinkToExternalSrc())
+				.tgLinkMessage(model.getTgLinkMessage())
+				.fullName(model.getFullName())
+				.checkListsCriteria(model.getCheckListsCriteria())
+				.comment(model.getComment())
+				.id(model.getId())
+				.email(model.getEmail())
+				.build();
+    }
 }

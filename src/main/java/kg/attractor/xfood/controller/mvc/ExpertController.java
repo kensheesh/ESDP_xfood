@@ -1,10 +1,9 @@
 package kg.attractor.xfood.controller.mvc;
 
 import jakarta.validation.Valid;
-import kg.attractor.xfood.dto.opportunity.OpportunityCreateWrapper;
+import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +32,8 @@ public class ExpertController {
     }
 
     @PostMapping("/opportunities/change")
-    public String changeOpportunities (@Valid OpportunityCreateWrapper opportunities, Authentication auth) {
-        opportunityService.changeExpertOpportunities(opportunities, auth);
+    public String changeOpportunities (@Valid OpportunityCreateDto opportunity) {
+        opportunityService.changeExpertOpportunities(opportunity);
         return "redirect:/expert/opportunities";
     }
 

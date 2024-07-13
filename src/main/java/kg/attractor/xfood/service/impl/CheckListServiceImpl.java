@@ -41,14 +41,16 @@ public class CheckListServiceImpl implements CheckListService {
     private final CriteriaPizzeriaService criteriaPizzeriaService;
     private final OpportunityService opportunityService;
     private final CheckListRepository checkListRepository;
+    // private final CheckListCriteriaService checkListCriteriaService;
     private final ManagerService managerService;
+    private CheckListCriteriaServiceImpl checkListCriteriaService;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
     private final CheckListDao checkListDao;
 
     @Autowired
-    @Lazy
-    private CheckListCriteriaServiceImpl checkListCriteriaService;
-
+    public void setCheckListCriteriaService(@Lazy CheckListCriteriaServiceImpl checkListCriteriaService) {
+        this.checkListCriteriaService = checkListCriteriaService;
+    }
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
@@ -65,18 +67,18 @@ public class CheckListServiceImpl implements CheckListService {
             throw new IncorrectDateException("Чек лист не содержит критериев");
         }
         if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
-            throw new IncorrectDateException("Время начала не может быть позже времени конца смены");
+            throw new IncorrectDateException("Время начала не может быть позже время конца смены");
         }
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
-        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())) {
+        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())){
             throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
         }
         //TODO уточнить надо ли делать проверку по work_schedule, opportunity and type и если необходимо добавить
-        List<CriteriaMaxValueDto> criteriaList = new ArrayList<>(createDto.getCriteriaMaxValueDtoList());
-        criteriaList.removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
-        criteriaList.sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
+        createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
+        createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
+
         LocalDate date;
         if (workSchedule.getStartTime().toLocalDate().isBefore(workSchedule.getEndTime().toLocalDate())) {
             date = workSchedule.getEndTime().toLocalDate();
@@ -92,7 +94,7 @@ public class CheckListServiceImpl implements CheckListService {
 
         Long id = opportunityService.save(opportunity);
         checkListRepository.saveChecklist(id, workSchedule.getId(), Status.NEW.getStatus());
-
+        checkListRepository.flush();
         return CheckListMiniSupervisorCreateDto.builder().opportunityId(id).workScheduleId(workSchedule.getId()).criteriaMaxValueDtoList(createDto.getCriteriaMaxValueDtoList()).pizzeria(workSchedule.getPizzeria()).build();
     }
 
@@ -104,12 +106,12 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public CheckList getModelCheckListById(String id) {
-        return checkListRepository.findByUuidLink(id).orElseThrow(() -> new NoSuchElementException("Can't find checklist by uuid " + id));
+        return checkListRepository.findByUuidLink(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by uuid "+id));
     }
 
     @Override
     public CheckList getModelCheckListById(Long id) {
-        return checkListRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Can't find checklist by ID " + id));
+        return checkListRepository.findById(id).orElseThrow(()->new NoSuchElementException("Can't find checklist by ID "+id));
     }
 
     @Override
@@ -130,7 +132,7 @@ public class CheckListServiceImpl implements CheckListService {
     public CheckListResultDto getResult(String checkListId) {
         CheckList checkList = getModelCheckListById(checkListId);
 
-        if (checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
+        if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
             return dtoBuilder.buildCheckListResultDto(
                     checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
                             .orElseThrow(() -> new NotFoundException("Check list not found"))
@@ -144,7 +146,7 @@ public class CheckListServiceImpl implements CheckListService {
     public CheckListResultDto getResult(Long checkListId) {
         CheckList checkList = getModelCheckListById(checkListId);
 
-        if (checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
+        if(checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
             return dtoBuilder.buildCheckListResultDto(
                     checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
                             .orElseThrow(() -> new NotFoundException("Check list not found"))
@@ -163,7 +165,6 @@ public class CheckListServiceImpl implements CheckListService {
         } else {
             checkLists = checkListRepository.findByStatus(Status.DONE);
         }
-
 
         if (!"default".equals(pizzeriaId)) {
             checkLists = checkLists.stream()
@@ -229,7 +230,7 @@ public class CheckListServiceImpl implements CheckListService {
         OpportunityEditDto opportunityEditDto = OpportunityEditDto.builder()
                 .id(checkList.getOpportunity().getId())
                 .date(checkList.getOpportunity().getDate())
-//                .startTime(checkList.getOpportunity().getStartTime())
+//                .startTime(checkList.getOpportunity() //.getStartTime())
 //                .endTime(checkList.getOpportunity().getEndTime())
                 .user(expert)
                 .build();
@@ -243,7 +244,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .build();
 
         List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
-        List<CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>();
+        List <CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>() ;
         for (CheckListsCriteria criteria : checkListsCriteria) {
             criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                     .id(criteria.getCriteria().getId())
@@ -253,7 +254,6 @@ public class CheckListServiceImpl implements CheckListService {
                     .section(criteria.getCriteria().getSection().getName())
                     .build());
         }
-
         criterionWithMaxValue.removeIf(criteria -> !criteria.getSection().equals(""));
         return CheckListSupervisorEditDto.builder()
                 .id(checkList.getUuidLink())
@@ -277,10 +277,10 @@ public class CheckListServiceImpl implements CheckListService {
         if (checkListDto.getOpportunity().getStartTime().isAfter(checkListDto.getOpportunity().getEndTime())) {
             throw new IncorrectDateException("Время начала смены эксперта не может быть позже времени конца смены");
         }
-        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getEndTime())) {
+        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getEndTime())){
             throw new IncorrectDateException("Время конца смены эксперта не может быть раньше времени конца смены менеджера");
         }
-        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getStartTime())) {
+        if (checkListDto.getOpportunity().getDate().atTime(checkListDto.getOpportunity().getEndTime()).isBefore(checkListDto.getWorkSchedule().getStartTime())){
             throw new IncorrectDateException("Время конца смены эксперта не может быть раньше времени начала смены менеджера");
         }
 
@@ -347,18 +347,48 @@ public class CheckListServiceImpl implements CheckListService {
                 checkListsCriteria.setMaxValue(1);
             }
             log.info("чеклист {} связан с критерием {}", checkList, criteriaMaxValueDto.getCriteriaId());
-
+            checkListCriteriaService.save(checkListsCriteria);
 
             CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
                     .pizzeria(checklistDto.getPizzeria())
                     .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
                     .build();
             criteriaPizzeriaService.save(criteriaPizzeria);
-            checkListCriteriaService.save(checkListsCriteria);
+
             log.info("Чек лист и все необходимые связи созданы");
 
         }
     }
 
+    @Override
+    public Integer getPercentageById(Long id) {
+        List<CheckListsCriteria> criteriaList = checklistCriteriaRepository.findCriteriaByCheckListId(id);
+        Double normalMaxSum = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
+                .sum();
 
+        Double normalValue = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double wowValue = criteriaList.stream()
+                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double percentage = (normalValue / normalMaxSum) * 100;
+
+        if (percentage < 100) {
+            Double totalValue = normalValue + wowValue;
+            percentage = (totalValue / normalMaxSum) * 100;
+
+            if (percentage > 100) {
+                percentage = 100.0;
+            }
+        }
+
+        return (int) Math.ceil(percentage);
+    }
 }

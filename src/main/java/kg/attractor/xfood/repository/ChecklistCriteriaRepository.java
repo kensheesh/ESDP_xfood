@@ -20,4 +20,7 @@ public interface ChecklistCriteriaRepository extends JpaRepository<CheckListsCri
 
     @Query("select clc from CheckListsCriteria clc where clc.checklist.id = :checkListId")
     List<CheckListsCriteria> findCriteriaByCheckListId(Long checkListId);
+    @Query("select clc from CheckListsCriteria clc " +
+            "where clc.criteria.id = :criteriaId and clc.checklist.id = :checklistId")
+    CheckListsCriteria findByCriteriaIdAndChecklistId(Long criteriaId, Long checklistId);
 }

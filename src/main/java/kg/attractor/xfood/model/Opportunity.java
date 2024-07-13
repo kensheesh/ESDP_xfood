@@ -30,6 +30,13 @@ public class Opportunity {
     @NotNull
     @Column(name = "date", nullable = false)
     private LocalDate date;
+
+    @NotNull
+    @Column(name = "is_weekend")
+    private Boolean isDayOff;
+
+    @OneToMany(mappedBy = "opportunity")
+    private List<Shift> shifts;
     
 //    @Column(name = "start_time")
 //    private LocalTime startTime;
