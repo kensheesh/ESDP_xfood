@@ -39,7 +39,8 @@ public class AppealServiceImpl implements AppealService {
                 .orElseThrow(() -> new AppealNotFoundException("Аппеляция не найдена"));
         
         appeal.setEmail(createAppealDto.getEmail());
-        appeal.setComment(createAppealDto.getComment());
+//        appeal.setComment(createAppealDto.getComment());
+        //todo appealc
         appeal.setFullName(createAppealDto.getFullName());
         appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
         appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
@@ -61,7 +62,7 @@ public class AppealServiceImpl implements AppealService {
                 .id(appeal.getId())
                 .email(appeal.getEmail())
                 .fullName(appeal.getFullName())
-                .comment(appeal.getComment())
+//                .comment(appeal.getComment())
                 .files(appeal.getFiles())
                 .status(appeal.getIsAccepted())
                 .checkListsCriteria(CheckListCriteriaSupervisorReviewDto.builder()
@@ -74,7 +75,7 @@ public class AppealServiceImpl implements AppealService {
                                 .maxValue(appeal.getCheckListsCriteria().getMaxValue())
                                 .value(appeal.getCheckListsCriteria().getValue())
                                 .build())
-                        .localDate(appeal.getCheckListsCriteria().getChecklist().getOpportunity().getDate())
+//                        .localDate(appeal.getCheckListsCriteria().getChecklist().getOpportunity().getDate())
                         .pizzeria(pizzeria.getName())
                         .build())
                 .build();
@@ -87,7 +88,7 @@ public class AppealServiceImpl implements AppealService {
         
         Appeal appeal = Appeal.builder()
                 .checkListsCriteria(checkListsCriteria)
-                .comment("")
+//                .comment("")
                 .email("")
                 .fullName("")
                 .build();

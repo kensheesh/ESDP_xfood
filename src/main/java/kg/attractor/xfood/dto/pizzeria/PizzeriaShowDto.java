@@ -1,6 +1,5 @@
 package kg.attractor.xfood.dto.pizzeria;
 
-import kg.attractor.xfood.model.CriteriaPizzeria;
 import kg.attractor.xfood.model.Location;
 import kg.attractor.xfood.model.WorkSchedule;
 import lombok.AllArgsConstructor;
@@ -18,6 +17,6 @@ public class PizzeriaShowDto {
     private Long id;
     private String name;
     private Location location;
-    private List<CriteriaPizzeria> criteriaPizzerias;
+    //    private List<CriteriaPizzeria> criteriaPizzerias;
     private List<WorkSchedule> workSchedules;
 }

@@ -65,6 +65,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Opportunity> opportunities;
     
+    @OneToMany(mappedBy = "expert")
+    private List<CheckList> checkLists;
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();

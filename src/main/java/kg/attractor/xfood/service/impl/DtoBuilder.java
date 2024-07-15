@@ -18,8 +18,8 @@ import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
-import kg.attractor.xfood.dto.shift.ShiftTimeShowDto;
 import kg.attractor.xfood.dto.shift.ShiftDto;
+import kg.attractor.xfood.dto.shift.ShiftTimeShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
@@ -142,7 +142,7 @@ public class DtoBuilder {
         checkListAnalyticsDto.setId(model.getId());
         checkListAnalyticsDto.setPizzeria(model.getWorkSchedule().getPizzeria());
         checkListAnalyticsDto.setManager(model.getWorkSchedule().getManager());
-        checkListAnalyticsDto.setExpert(model.getOpportunity().getUser());
+//        checkListAnalyticsDto.setExpert(model.getOpportunity().getUser());
         checkListAnalyticsDto.setDate(model.getWorkSchedule().getStartTime().toLocalDate());
 
         List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(model.getId());
@@ -262,7 +262,7 @@ public class DtoBuilder {
 				.id(pizzeria.getId())
 				.name(pizzeria.getName())
 				.location(pizzeria.getLocation())
-				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
+//				.criteriaPizzerias(pizzeria.getCriteriaPizzerias())
 				.workSchedules(pizzeria.getWorkSchedules()).build();
 	}
 
@@ -345,7 +345,7 @@ public class DtoBuilder {
 				.tgLinkMessage(model.getTgLinkMessage())
 				.fullName(model.getFullName())
 				.checkListsCriteria(model.getCheckListsCriteria())
-				.comment(model.getComment())
+//				.comment(model.getComment())
 				.id(model.getId())
 				.email(model.getEmail())
 				.build();

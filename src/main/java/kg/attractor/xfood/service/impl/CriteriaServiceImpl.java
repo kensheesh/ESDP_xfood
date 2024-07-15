@@ -4,8 +4,6 @@ import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.repository.CriteriaRepository;
-import kg.attractor.xfood.repository.SectionRepository;
-import kg.attractor.xfood.repository.ZoneRepository;
 import kg.attractor.xfood.service.CriteriaService;
 import kg.attractor.xfood.service.SectionService;
 import kg.attractor.xfood.service.ZoneService;
@@ -71,12 +69,13 @@ public class CriteriaServiceImpl implements CriteriaService {
 
     @Override
     public List<CriteriaSupervisorShowDto> getByCheckTypeAndPizzeria(Long checkTypeId, Long pizzeriaId) {
-        List<CriteriaSupervisorShowDto> criterion =  criteriaRepository.findCriteriaByCriteriaTypeAndCriteriaPizzeria(checkTypeId, pizzeriaId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
-        if (criterion.isEmpty()) {
-            criterion = criteriaRepository.findCriteriaByCriteriaType(checkTypeId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
-            return criterion;
-        }
-        return criterion;
+//        List<CriteriaSupervisorShowDto> criterion =  criteriaRepository.findCriteriaByCriteriaTypeAndCriteriaPizzeria(checkTypeId, pizzeriaId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+//        if (criterion.isEmpty()) {
+//            criterion = criteriaRepository.findCriteriaByCriteriaType(checkTypeId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+//            return criterion;
+//        }
+//        return criterion;
+        return null;
     }
 
     @Override

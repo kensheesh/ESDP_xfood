@@ -31,9 +31,8 @@ public class Appeal {
 	@Column(name = "full_name", nullable = false)
 	private String fullName;
 
-	@NotNull
-	@Column(name = "comment", nullable = false, length = Integer.MAX_VALUE)
-	private String comment;
+
+	private String comment_supervisor, comment_expert;
 	
 	@Column(name = "tg_link_message", length = Integer.MAX_VALUE)
 	private String tgLinkMessage;

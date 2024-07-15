@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 
@@ -44,7 +43,7 @@ public class Opportunity {
 //    @Column(name = "end_time")
 //    private LocalTime endTime;
 
-    @OneToMany(mappedBy = "opportunity")
-    private List<CheckList> checkLists ;
+//    @OneToMany(mappedBy = "opportunity")
+//    private List<CheckList> checkLists ;
 
 }

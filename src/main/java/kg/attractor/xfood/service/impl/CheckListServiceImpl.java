@@ -1,14 +1,11 @@
 package kg.attractor.xfood.service.impl;
 
-import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
-import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
-import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.exception.IncorrectDateException;
 import kg.attractor.xfood.exception.NotFoundException;
@@ -26,8 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -38,7 +37,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final DtoBuilder dtoBuilder;
     private final UserService userService;
     private final CriteriaService criteriaService;
-    private final CriteriaPizzeriaService criteriaPizzeriaService;
+    //    private final CriteriaPizzeriaService criteriaPizzeriaService;
     private final OpportunityService opportunityService;
     private final CheckListRepository checkListRepository;
     // private final CheckListCriteriaService checkListCriteriaService;
@@ -54,10 +53,11 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
-        return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
-                .stream()
-                .map(dtoBuilder::buildChecklistDto)
-                .toList();
+        return null;
+//        return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
+//                .stream()
+//                .map(dtoBuilder::buildChecklistDto)
+//                .toList();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .build();
 
         Long id = opportunityService.save(opportunity);
-        checkListRepository.saveChecklist(id, workSchedule.getId(), Status.NEW.getStatus());
+//        checkListRepository.saveChecklist(id, workSchedule.getId(), Status.NEW.getStatus());
         checkListRepository.flush();
         return CheckListMiniSupervisorCreateDto.builder().opportunityId(id).workScheduleId(workSchedule.getId()).criteriaMaxValueDtoList(createDto.getCriteriaMaxValueDtoList()).pizzeria(workSchedule.getPizzeria()).build();
     }
@@ -121,10 +121,12 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status) {
-        return checkListRepository.findCheckListByStatus(status)
-                .stream()
-                .map(dtoBuilder::buildChecklistDto)
-                .toList();
+        return null;
+        //
+//        return checkListRepository.findCheckListByStatus(status)
+//                .stream()
+//                .map(dtoBuilder::buildChecklistDto)
+//                .toList();
     }
 
 
@@ -158,43 +160,44 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<CheckListAnalyticsDto> getAnalytics(String pizzeriaId, String managerId, String expertId, LocalDate startDate, LocalDate endDate) {
-        User user = userRepository.findByEmail(AuthParams.getPrincipal().getUsername()).orElseThrow(() -> new NotFoundException("User not found"));
-        List<CheckList> checkLists;
-        if (user.getRole().equals(Role.EXPERT)) {
-            checkLists = checkListRepository.findCheckListByExpertEmailAndStatus(user.getEmail(), Status.DONE);
-        } else {
-            checkLists = checkListRepository.findByStatus(Status.DONE);
-        }
-
-        if (!"default".equals(pizzeriaId)) {
-            checkLists = checkLists.stream()
-                    .filter(checkList -> checkList.getWorkSchedule().getPizzeria().getId().equals(Long.parseLong(pizzeriaId)))
-                    .collect(Collectors.toList());
-
-        }
-        if (!"default".equals(managerId)) {
-            checkLists = checkLists.stream()
-                    .filter(checkList -> checkList.getWorkSchedule().getManager().getId().equals(Long.parseLong(managerId)))
-                    .collect(Collectors.toList());
-        }
-        if (!"default".equals(expertId)) {
-            checkLists = checkLists.stream()
-                    .filter(checkList -> checkList.getOpportunity().getUser().getId().equals(Long.parseLong(expertId)))
-                    .collect(Collectors.toList());
-        }
-        if (startDate != null && endDate != null) {
-            checkLists = checkLists.stream()
-                    .filter(checkList -> {
-                        LocalDate startTime = checkList.getWorkSchedule().getStartTime().toLocalDate();
-                        LocalDate endTime = checkList.getWorkSchedule().getEndTime().toLocalDate();
-                        return (startTime.isEqual(startDate) || startTime.isAfter(startDate)) &&
-                                (endTime.isEqual(endDate) || endTime.isBefore(endDate));
-                    })
-                    .collect(Collectors.toList());
-        }
-        return checkLists.stream()
-                .map(dtoBuilder::buildCheckListAnalyticsDto)
-                .collect(Collectors.toList());
+//        User user = userRepository.findByEmail(AuthParams.getPrincipal().getUsername()).orElseThrow(() -> new NotFoundException("User not found"));
+//        List<CheckList> checkLists;
+//        if (user.getRole().equals(Role.EXPERT)) {
+////            checkLists = checkListRepository.findCheckListByExpertEmailAndStatus(user.getEmail(), Status.DONE);
+//        } else {
+//            checkLists = checkListRepository.findByStatus(Status.DONE);
+//        }
+//
+//        if (!"default".equals(pizzeriaId)) {
+//            checkLists = checkLists.stream()
+//                    .filter(checkList -> checkList.getWorkSchedule().getPizzeria().getId().equals(Long.parseLong(pizzeriaId)))
+//                    .collect(Collectors.toList());
+//
+//        }
+//        if (!"default".equals(managerId)) {
+//            checkLists = checkLists.stream()
+//                    .filter(checkList -> checkList.getWorkSchedule().getManager().getId().equals(Long.parseLong(managerId)))
+//                    .collect(Collectors.toList());
+//        }
+//        if (!"default".equals(expertId)) {
+////            checkLists = checkLists.stream()
+//////                    .filter(checkList -> checkList.getOpportunity().getUser().getId().equals(Long.parseLong(expertId)))
+////                    .collect(Collectors.toList());
+//        }
+//        if (startDate != null && endDate != null) {
+//            checkLists = checkLists.stream()
+//                    .filter(checkList -> {
+//                        LocalDate startTime = checkList.getWorkSchedule().getStartTime().toLocalDate();
+//                        LocalDate endTime = checkList.getWorkSchedule().getEndTime().toLocalDate();
+//                        return (startTime.isEqual(startDate) || startTime.isAfter(startDate)) &&
+//                                (endTime.isEqual(endDate) || endTime.isBefore(endDate));
+//                    })
+//                    .collect(Collectors.toList());
+//        }
+        return null;
+//        checkLists.stream()
+//                .map(dtoBuilder::buildCheckListAnalyticsDto)
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -225,14 +228,14 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     public CheckListSupervisorEditDto getChecklistByUuid(String uuid) {
         CheckList checkList = checkListRepository.findByUuidLink(uuid).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + uuid));
-        ExpertShowDto expert = dtoBuilder.buildExpertShowDto(checkList.getOpportunity().getUser());
+//        ExpertShowDto expert = dtoBuilder.buildExpertShowDto(checkList.getOpportunity().getUser());
 
         OpportunityEditDto opportunityEditDto = OpportunityEditDto.builder()
-                .id(checkList.getOpportunity().getId())
-                .date(checkList.getOpportunity().getDate())
+//                .id(checkList.getOpportunity().getId())
+//                .date(checkList.getOpportunity().getDate())
 //                .startTime(checkList.getOpportunity() //.getStartTime())
 //                .endTime(checkList.getOpportunity().getEndTime())
-                .user(expert)
+//                .user(expert)
                 .build();
 
         WorkScheduleSupervisorEditDto workScheduleDto = WorkScheduleSupervisorEditDto.builder()
@@ -293,7 +296,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .build();
         workScheduleService.save(workSchedule);
         Opportunity opportunity = Opportunity.builder()
-                .id(checkList.getOpportunity().getId())
+//                .id(checkList.getOpportunity().getId())
                 .date(checkListDto.getOpportunity().getDate())
 //                .startTime(checkListDto.getOpportunity().getStartTime())
 //                .endTime(checkListDto.getOpportunity().getEndTime())
@@ -315,7 +318,7 @@ public class CheckListServiceImpl implements CheckListService {
 
 
         checkList.setWorkSchedule(workSchedule);
-        checkList.setOpportunity(opportunity);
+//        checkList.setOpportunity(opportunity);
         checkListRepository.save(checkList);
     }
 
@@ -325,70 +328,74 @@ public class CheckListServiceImpl implements CheckListService {
         return (int) criteriaList.stream()
                 .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
                 .sum();
-
+        
     }
-
-
+    
+    @Override
+    public Integer getPercentageById(Long id) {
+        return 0;
+    }
+    
+    
     @Override
     public void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto) {
-        CheckList checkList = checkListRepository.findCheckListByWorkSchedule_IdAndAndOpportunity_Id(checklistDto.getWorkScheduleId(), checklistDto.getOpportunityId());
-        log.info(checkList.toString());
-        String uuid = UUID.randomUUID().toString();
-        checkList.setUuidLink(uuid);
-        checkListRepository.save(checkList);
-        for (CriteriaMaxValueDto criteriaMaxValueDto : checklistDto.getCriteriaMaxValueDtoList()) {
-            CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
-                    .checklist(checkList)
-                    .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
-                    .maxValue(criteriaMaxValueDto.getMaxValue())
-                    .value(0)
-                    .build();
-            if (!Objects.equals(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()).getSection().getName(), "")) {
-                checkListsCriteria.setMaxValue(1);
-            }
-            log.info("чеклист {} связан с критерием {}", checkList, criteriaMaxValueDto.getCriteriaId());
-            checkListCriteriaService.save(checkListsCriteria);
+//        CheckList checkList = checkListRepository.findCheckListByWorkSchedule_IdAndAndOpportunity_Id(checklistDto.getWorkScheduleId(), checklistDto.getOpportunityId());
+//        log.info(checkList.toString());
+//        String uuid = UUID.randomUUID().toString();
+//        checkList.setUuidLink(uuid);
+//        checkListRepository.save(checkList);
+//        for (CriteriaMaxValueDto criteriaMaxValueDto : checklistDto.getCriteriaMaxValueDtoList()) {
+//            CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+//                    .checklist(checkList)
+//                    .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
+//                    .maxValue(criteriaMaxValueDto.getMaxValue())
+//                    .value(0)
+//                    .build();
+//            if (!Objects.equals(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()).getSection().getName(), "")) {
+//                checkListsCriteria.setMaxValue(1);
+//            }
+//            log.info("чеклист {} связан с критерием {}", checkList, criteriaMaxValueDto.getCriteriaId());
+//            checkListCriteriaService.save(checkListsCriteria);
 
-            CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
-                    .pizzeria(checklistDto.getPizzeria())
-                    .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
-                    .build();
-            criteriaPizzeriaService.save(criteriaPizzeria);
+//            CriteriaPizzeria criteriaPizzeria = CriteriaPizzeria.builder()
+//                    .pizzeria(checklistDto.getPizzeria())
+//                    .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
+//                    .build();
+//            criteriaPizzeriaService.save(criteriaPizzeria);
 
             log.info("Чек лист и все необходимые связи созданы");
 
         }
     }
 
-    @Override
-    public Integer getPercentageById(Long id) {
-        List<CheckListsCriteria> criteriaList = checklistCriteriaRepository.findCriteriaByCheckListId(id);
-        Double normalMaxSum = criteriaList.stream()
-                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
-                .sum();
+//    @Override
+//    public Integer getPercentageById(Long id) {
+//        List<CheckListsCriteria> criteriaList = checklistCriteriaRepository.findCriteriaByCheckListId(id);
+//        Double normalMaxSum = criteriaList.stream()
+//                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+//                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
+//                .sum();
+//
+//        Double normalValue = criteriaList.stream()
+//                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+//                .mapToDouble(CheckListsCriteria::getValue)
+//                .sum();
+//
+//        Double wowValue = criteriaList.stream()
+//                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+//                .mapToDouble(CheckListsCriteria::getValue)
+//                .sum();
+//
+//        Double percentage = (normalValue / normalMaxSum) * 100;
+//
+//        if (percentage < 100) {
+//            Double totalValue = normalValue + wowValue;
+//            percentage = (totalValue / normalMaxSum) * 100;
+//
+//            if (percentage > 100) {
+//                percentage = 100.0;
+//            }
+//        }
+//return null;
+//        return (int) Math.ceil(percentage);
 
-        Double normalValue = criteriaList.stream()
-                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(CheckListsCriteria::getValue)
-                .sum();
-
-        Double wowValue = criteriaList.stream()
-                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
-                .mapToDouble(CheckListsCriteria::getValue)
-                .sum();
-
-        Double percentage = (normalValue / normalMaxSum) * 100;
-
-        if (percentage < 100) {
-            Double totalValue = normalValue + wowValue;
-            percentage = (totalValue / normalMaxSum) * 100;
-
-            if (percentage > 100) {
-                percentage = 100.0;
-            }
-        }
-
-        return (int) Math.ceil(percentage);
-    }
-}

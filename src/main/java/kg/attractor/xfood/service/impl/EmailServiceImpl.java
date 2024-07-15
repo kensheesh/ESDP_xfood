@@ -55,14 +55,14 @@ public class EmailServiceImpl implements EmailService {
             decision = "Отклонена";
         }
 
-        String date = checkList.getOpportunity().getDate().toString();
+//        String date = checkList.getOpportunity().getDate().toString();
         String manager = appeal.getFullName();
 
         String subject = "Решение по апелляции";
-        String content = "<p>Дата проверки: " + date + "<br>"
+        String content = "<p>Дата проверки: " + "<br>"
                 + "Менеджер: " + manager + "<br>"
                 + "Критерий: " + appeal.getCheckListsCriteria().getValue() + " " + appeal.getCheckListsCriteria().getCriteria().getDescription() + "<br>"
-                + "Апелляция: " + appeal.getComment() + "</p>"
+//                + "Апелляция: " + appeal.getComment() + "</p>"
 
                 + "<p>Решение по апелляции: " + decision + "<br>"
                 + "Комментарий: " + supervisorsMessage + " </p>"

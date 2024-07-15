@@ -27,8 +27,8 @@ public class CheckTypeServiceImpl implements CheckTypeService {
        return checkTypeRepository.findById(checkTypeId).orElseThrow(() -> new NoSuchElementException("No such checkTypeId: " + checkTypeId));
     }
 
-    @Override
-    public Integer getTypeById(Long checkTypeId) {
-        return getById(checkTypeId).getTotalMaxValue();
-    }
+//    @Override
+//    public Integer getTypeById(Long checkTypeId) {
+////        return getById(checkTypeId).getTotalMaxValue();
+////    }
 }

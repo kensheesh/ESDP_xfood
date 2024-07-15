@@ -30,8 +30,8 @@ public class Pizzeria {
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
-    @OneToMany(mappedBy = "pizzeria")
-    private List<CriteriaPizzeria> criteriaPizzerias;
+//    @OneToMany(mappedBy = "pizzeria")
+//    private List<CriteriaPizzeria> criteriaPizzerias;
 
     @OneToMany(mappedBy = "pizzeria")
     private List<WorkSchedule> workSchedules;
