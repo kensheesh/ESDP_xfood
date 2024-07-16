@@ -1,16 +1,18 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.appeal.AppealDto;
+import kg.attractor.xfood.dto.appeal.AppealListDto;
 import kg.attractor.xfood.dto.appeal.CreateAppealDto;
 import kg.attractor.xfood.dto.appeal.DataAppealDto;
 import kg.attractor.xfood.model.Appeal;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.repository.AppealRepository;
-import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,5 +66,16 @@ public class AppealServiceImpl implements AppealService {
 
         List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
         fileService.saveFiles(files, id);
+    }
+
+    @Override
+    public Integer getAmountOfNewAppeals() {
+        return appealRepository.countAllByIsAcceptedNull();
+    }
+
+    @Override
+    public Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page) {
+        Page<Appeal> appeals = appealRepository.findAllByIsAccepted(isAccepted, PageRequest.of(page - 1, 6));
+        return appeals.map(dtoBuilder::buildAppealsListDto);
     }
 }

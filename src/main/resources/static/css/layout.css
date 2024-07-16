@@ -91,3 +91,8 @@ a.btn.disabled.btn-dodo-light  {
     background-color: #FF6900;
     color: #FFA566
 }
+
+.bg-dodo {
+    background-color: #FF6900;
+    color: #fff;
+}

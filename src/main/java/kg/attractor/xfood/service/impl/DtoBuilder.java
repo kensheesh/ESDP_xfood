@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.appeal.AppealDto;
+import kg.attractor.xfood.dto.appeal.AppealListDto;
 import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
 import kg.attractor.xfood.dto.checklist.CheckListResultDto;
 import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
@@ -324,4 +325,15 @@ public class DtoBuilder {
 				.email(model.getEmail())
 				.build();
     }
+
+	public AppealListDto buildAppealsListDto (Appeal model) {
+		return AppealListDto.builder()
+				.id(model.getId())
+				.fullName(model.getFullName())
+				.pizzeriaName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getName())
+				.locationName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getLocation().getName())
+				.expertFullName(model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getName() + " "
+						+ model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getSurname() )
+				.build();
+	}
 }
