@@ -52,8 +52,8 @@
                         <div class="col align-self-end d-none d-md-block">
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
-                                        <section class="d-flex flex-column row-gap-2 text-center times">
-                                        </section>
+                                            <section class="d-flex flex-column row-gap-2 text-center times">
+                                            </section>
                                 </div>
                             </div>
                         </div>
