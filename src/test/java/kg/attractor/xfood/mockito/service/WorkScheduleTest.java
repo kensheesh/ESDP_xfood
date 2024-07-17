@@ -1,19 +1,26 @@
 package kg.attractor.xfood.mockito.service;
 
 import kg.attractor.xfood.dto.WorkScheduleSupervisorShowDto;
+import kg.attractor.xfood.dto.manager.ManagerShowDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.workSchedule.WeekDto;
+import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
+import kg.attractor.xfood.model.CheckList;
+import kg.attractor.xfood.model.Manager;
+import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.repository.WorkScheduleRepository;
 import kg.attractor.xfood.service.impl.DtoBuilder;
 import kg.attractor.xfood.service.impl.WorkScheduleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,6 +39,87 @@ public class WorkScheduleTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
+
+    @Test
+    void testGetWeekInfo_week0() {
+        long week = 0L;
+        LocalDateTime mockCurrentTime = LocalDateTime.of(2024, 7, 17, 12, 0);
+        LocalDateTime monday = mockCurrentTime.with(DayOfWeek.MONDAY);
+        LocalDateTime chosenMonday = monday.plusDays(7 * week);
+        LocalDateTime sunday = chosenMonday.plusDays(6);
+
+        try (MockedStatic<LocalDateTime> mocked = Mockito.mockStatic(LocalDateTime.class)) {
+            mocked.when(LocalDateTime::now).thenReturn(mockCurrentTime);
+
+            WeekDto expectation = WeekDto.builder()
+                    .weekOrder(week)
+                    .monday(chosenMonday.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+                    .sunday(sunday.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+                    .build();
+
+            WeekDto result = workScheduleService.getWeekInfo(week);
+
+            assertNotNull(result);
+            assertEquals(expectation, result);
+        }
+    }
+
+    @Test
+    void testGetWeeklySchedulesByPizzeriaId() {
+        long pizzeriaId = 1L;
+        long week = 0L;
+        LocalDateTime mockCurrentTime = LocalDateTime.of(2024, 7, 17, 12, 0);
+        LocalDateTime monday = mockCurrentTime.with(DayOfWeek.MONDAY);
+        LocalDateTime chosenMonday = monday.plusDays(7 * week);
+        LocalDateTime sunday = chosenMonday.plusDays(6);
+        Manager manager = new Manager();
+        manager.setId(1L);
+        WorkSchedule workSchedule = WorkSchedule.builder().build();
+
+
+        try (MockedStatic<LocalDateTime> mocked = Mockito.mockStatic(LocalDateTime.class)) {
+            mocked.when(LocalDateTime::now).thenReturn(mockCurrentTime);
+
+            List<CheckList> checkLists = new ArrayList<>();
+            List<WorkSchedule> schedulesOfWeek = new ArrayList<>();
+            schedulesOfWeek.add(new WorkSchedule(
+                    1L,
+                    manager,
+                    new Pizzeria(),
+                    monday,
+                    monday.plusHours(8),
+                    checkLists));
+            schedulesOfWeek.add(new WorkSchedule(
+                    2L,
+                    manager,
+                    new Pizzeria(),
+                    monday.plusDays(1),
+                    monday.plusHours(32),
+                    checkLists));
+            when(workScheduleRepository.findByPizzeria_IdAndStartTimeBetweenOrderByManager_SurnameAsc(pizzeriaId, chosenMonday.toLocalDate(), chosenMonday.plusDays(6).toLocalDate()))
+                    .thenReturn(schedulesOfWeek);
+
+            List<WeeklyScheduleShowDto> expectation = new ArrayList<>();
+            expectation.add(new WeeklyScheduleShowDto());
+            expectation.add(new WeeklyScheduleShowDto());
+
+            //ToDo Здесь происходит использование метода createWeeklySchedule(), писать под него отдельный тест я не стал
+            when(workScheduleRepository.findByManager_IdAndPizzeria_IdAndStartTime(manager.getId(), pizzeriaId, any()))
+                    .thenReturn(Optional.of(workSchedule));
+            when(dtoBuilder.buildManagerShowDto(manager)).thenReturn(new ManagerShowDto());
+
+            when(dtoBuilder.buildPizzeriaDto(any())).thenReturn(new PizzeriaDto());
+
+            List<WeeklyScheduleShowDto> result = workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId, week);
+
+            assertEquals(expectation.size(), result.size());
+        }
+    }
+
+//    @Test
+//    void testCreateWeeklySchedule() {
+//
+//    }
 
     @Test
     void testFindWorkScheduleByManagerAndDate() {
