@@ -194,7 +194,7 @@
                 })
 
                 let data = await response.json()
-                window.location.href = '/appeal/'+data
+                window.location.href = '/appeals/'+data
             }
 
             function buildData(criteria) {

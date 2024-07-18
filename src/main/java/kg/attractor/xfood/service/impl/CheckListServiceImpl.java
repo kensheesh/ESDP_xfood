@@ -362,7 +362,34 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public Integer getPercentageById(Long id) {
-        return 0;
+        List<CheckListsCriteria> criteriaList = checklistCriteriaRepository.findCriteriaByCheckListId(id);
+        Double normalMaxSum = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(criteria -> criteria.getMaxValue() != null ? criteria.getMaxValue() : 0.0)
+                .sum();
+
+        Double normalValue = criteriaList.stream()
+                .filter(criteria -> !criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double wowValue = criteriaList.stream()
+                .filter(criteria -> criteria.getCriteria().getSection().getName().equalsIgnoreCase("WOW фактор"))
+                .mapToDouble(CheckListsCriteria::getValue)
+                .sum();
+
+        Double percentage = (normalValue / normalMaxSum) * 100;
+
+        if (percentage < 100) {
+            Double totalValue = normalValue + wowValue;
+            percentage = (totalValue / normalMaxSum) * 100;
+
+            if (percentage > 100) {
+                percentage = 100.0;
+            }
+        }
+
+        return (int) Math.ceil(percentage);
     }
 
 
