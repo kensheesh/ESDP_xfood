@@ -56,10 +56,11 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         weeklyDtos.forEach(e->e.setPizzeriaDto(
                 dtoBuilder.buildPizzeriaDto(pizzeriaService.getPizzeriaById(pizzeriaId))
         ));
-        
+
+        weeklyDtos.sort(Comparator.comparing(e -> e.getManager().getName()));
+
         return weeklyDtos;
     }
-
 
     @Override
     public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date) {
