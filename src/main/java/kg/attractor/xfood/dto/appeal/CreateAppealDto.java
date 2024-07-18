@@ -1,6 +1,7 @@
 package kg.attractor.xfood.dto.appeal;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +13,21 @@ import java.util.Date;
 @Builder
 public class CreateAppealDto {
 
-    @NotNull
+    @NotNull(message = "Фамилия и имя не могут быть null")
+    @NotEmpty(message = "Фамилия и имя не могут быть пусты")
     private String fullName;
-    @NotNull
+
+    @NotNull(message = "Комментарий не может быть null")
+    @NotEmpty(message = "Комментарий не может быть пустым")
     private String comment;
-    @NotNull
-    @Email
+
+    @NotNull(message = "Почта не может быть null")
+    @NotEmpty(message = "Почта не может быть пустой")
+    @Email(message = "Неправильный формат почты")
     private String email;
-    @NotNull
+
+    @NotNull(message = "Ссылка на телеграм сообщение не может быть null")
+    @NotEmpty(message = "Ссылка на телеграм сообщение не может быть пустым")
     private String tgLinkMessage;
     private String linkToExternalSrc;
     private Long checkListCriteriaId;

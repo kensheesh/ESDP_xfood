@@ -70,24 +70,29 @@
                                 <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.checkListsCriteria.criteria.description}</textarea>
                             </div>
                             <div class="mb-3">
-                                <label for="photo-report" class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" id="photo-report" required>
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" required>
+                                <div class="error-message" id="email-error"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="photo-report" class="form-label">Имя и фамилия</label>
-                                <input type="text" class="form-control" name="fullName" id="photo-report" required>
+                                <label for="fullName" class="form-label">Имя и фамилия</label>
+                                <input type="text" class="form-control" name="fullName" id="fullName" required>
+                                <div class="error-message" id="fullName-error"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="violation-link" class="form-label">Ссылка на сообщение в тг</label>
-                                <input type="url" class="form-control" name="tgLinkMessage" id="violation-link" required>
+                                <label for="tgLinkMessage" class="form-label">Ссылка на сообщение в тг</label>
+                                <input type="url" class="form-control" name="tgLinkMessage" id="tgLinkMessage">
+                                <div class="error-message" id="tgLinkMessage-error"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="violation-link" class="form-label">Ссылка на чек-лист</label>
-                                <input type="url" class="form-control" name="linkToExternalSrc" id="violation-link">
+                                <label for="linkToExternalSrc" class="form-label">Ссылка на чек-лист</label>
+                                <input type="url" class="form-control" name="linkToExternalSrc" id="linkToExternalSrc" required>
+                                <div class="error-message" id="linkToExternalSrc-error"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="comment" class="form-label">Комментарий</label>
                                 <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
+                                <div class="error-message" id="comment-error"></div>
                             </div>
 
                             <div class="mb-3">
@@ -204,7 +209,11 @@
                         window.location.href = '/checks/${appeal.checkListsCriteria.checklist.uuidLink}/result';
                     }, 3000);
                 } else {
-                    alert('Ошибка при отправке формы. Попробуйте еще раз.');
+                    response.json().then(data => {
+                        handleValidationErrors(data.errors);
+                    }).catch(error => {
+                        alert('Ошибка при отправке формы. Попробуйте еще раз.');
+                    });
                 }
             }).catch(error => {
                 console.error('Error:', error);
@@ -212,8 +221,17 @@
             });
         });
 
-        initializeFileUploaders();
+        function handleValidationErrors(errors) {
+            errors.forEach(error => {
+                const errorMessageElement = document.getElementById(error.field+ `-error`);
+                if (errorMessageElement) {
+                    errorMessageElement.textContent = error.defaultMessage;
+                    errorMessageElement.style.display = "block";
+                }
+            });
+        }
 
+        initializeFileUploaders();
     </script>
 
 </@main.layout>

@@ -9,7 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController("restAppealController")
 @RequiredArgsConstructor
@@ -23,9 +27,15 @@ public class AppealController {
     }
 
     @PostMapping(value = "{id}", consumes = "multipart/form-data")
-    public HttpStatus updateAppeal(@PathVariable Long id, @ModelAttribute @Valid CreateAppealDto createAppealDto) {
+    public ResponseEntity<Object> updateAppeal(@PathVariable Long id, @ModelAttribute @Valid CreateAppealDto createAppealDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("errors", bindingResult.getFieldErrors());
+            response.put("appealDto", createAppealDto);
+            return ResponseEntity.badRequest().body(response);
+        }
         appealService.update(createAppealDto, id);
-        return HttpStatus.OK;
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("count")

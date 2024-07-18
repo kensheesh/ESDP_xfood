@@ -358,8 +358,8 @@ public class DtoBuilder {
 				.fullName(model.getFullName())
 				.pizzeriaName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getName())
 				.locationName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getLocation().getName())
-				.expertFullName(model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getName() + " "
-						+ model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getSurname() )
+//				.expertFullName(model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getName() + " "
+//						+ model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getSurname() )
 				.build();
 	}
 }
