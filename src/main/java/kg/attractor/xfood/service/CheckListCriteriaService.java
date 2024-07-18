@@ -22,4 +22,5 @@ public interface CheckListCriteriaService {
     List<CheckListsCriteria> findAllByChecklistId(Long id);
     CheckListsCriteria findByCriteriaIdAndChecklistId(Long criteriaId, Long checkListId);
 
+    void deleteCriterionByChecklist(Long id);
 }

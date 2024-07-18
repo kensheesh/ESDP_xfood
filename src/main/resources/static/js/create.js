@@ -1,6 +1,18 @@
 let totalSum = 0;
 let type = 0;
 
+let totalValueInput = document.getElementById('totalValue');
+totalValueInput.addEventListener('input', ()=>{
+    updateTotalValueInput();
+    updateTotalSum();
+})
+
+function updateTotalValueInput(){
+    type = totalValueInput.value;
+    console.log("value "+type);
+}
+updateTotalValueInput();
+
 let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
 let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
 for (let i = 0; i < criterias.length; i++) {
@@ -289,7 +301,6 @@ async function getCriterion(value, pizzeriaId) {
 }
 
 async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId) {
-    type = await getMaxTotalValue(value);
     let response = await fetch("/api/criteria/" + value + "/" + pizzeriaId);
     if (response.ok) {
         return await response.json();
@@ -314,6 +325,7 @@ function setupMaxValueInputs() {
     for (let input of maxValueInputs) {
         input.addEventListener('input', () => {
             updateTotalSum();
+
         });
     }
     updateTotalSum();
@@ -325,14 +337,17 @@ function countTotalSum(maxValueInputs) {
         totalSum += parseInt(maxValueInputs[i].value) || 0;
     }
     let sum = document.getElementById('totalSum');
+    type = document.getElementById('totalValue').value
     sum.innerHTML = totalSum+'/'+type;
     console.log(totalSum);
 }
 
 function updateTotalSum() {
+    totalSum = 0;
     let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
     countTotalSum(maxValueInputs);
 }
+
 
 let createForm = document.getElementById('create-form');
 createForm.addEventListener('submit', (event) => {
@@ -365,20 +380,14 @@ function putIndexesToListAndValidate() {
     createForm.submit();
 }
 
-async function getMaxTotalValue(value){
-    let response = await fetch("/api/check-type/" + value);
-    if (response.ok) {
-        type = await response.json();
-        return type;
-    } else {
-        console.log(response);
-        alert("Ошибка HTTP: " + response.status);
-    }
-}
-
 document.getElementById('checklistType').addEventListener('change', async function() {
+    let sum = document.getElementById('totalSum');
+    sum.innerHTML = " ";
+    updateTotalValueInput();
+    updateTotalSum();
     let value = this.value;
     let pizzeriaId = document.getElementById('pizzeriaId').value;
-    await getMaxTotalValue(value);
+    totalSum = 0;
     await getCriterion(value, pizzeriaId);
+    updateTotalSum();
 });

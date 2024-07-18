@@ -2,6 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
+import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
@@ -127,6 +128,13 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
     public CheckListsCriteria findByCriteriaIdAndChecklistId(Long criteriaId, Long checkListId) {
         return checkListCriteriaRepository.findByCriteriaIdAndChecklistId(criteriaId, checkListId);
     }
+
+    @Override
+    public void deleteCriterionByChecklist(Long id) {
+        List<CheckListsCriteria> checkListsCriteria = checkListCriteriaRepository.findAllByChecklistId(id);
+        checkListCriteriaRepository.deleteAll(checkListsCriteria);
+    }
+
 
     private CheckListsCriteria isPresentOptional(Long criteriaId, Long checkListId) {
         Optional<CheckListsCriteria> optional = checkListCriteriaRepository

@@ -2,6 +2,7 @@ package kg.attractor.xfood.dto.checklist;
 
 
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 
 public class CheckListSupervisorEditDto {
+    private ExpertShowDto expert;
     private String id;
     private WorkScheduleSupervisorEditDto workSchedule;
-    private OpportunityEditDto opportunity;
     List<CriteriaExpertShowDto> criterion;
 
 }

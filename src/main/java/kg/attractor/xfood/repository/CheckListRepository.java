@@ -1,8 +1,10 @@
 package kg.attractor.xfood.repository;
 
+import jakarta.transaction.Transactional;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -39,24 +41,24 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
             """)
     List<CheckList> findByStatus(Status status);
 
-//    @Query(value = """
-//            SELECT c
-//            FROM CheckList c
-//                    JOIN Opportunity o ON c.opportunity.id = o.id
-//                     JOIN User u ON o.user.id = u.id
-//            WHERE CAST(c.status as text) = :#{#status.getStatus()}
-//            """)
-//    List<CheckList> findCheckListByStatus(Status status);
+  /*  @Query(value = """
+            SELECT c
+            FROM CheckList c
+                    JOIN Opportunity o ON c.opportunity.id = o.id
+                     JOIN User u ON o.user.id = u.id
+            WHERE CAST(c.status as text) = :#{#status.getStatus()}
+            """)
+    List<CheckList> findCheckListByStatus(Status status);*/
 
-//    @Modifying
-//    @Transactional
-//    @Query(value = """
-//            		insert into check_lists(status, work_schedule_id, opportunity_id)
-//            			values(CAST(CAST(:#{#status} as text) as Status),:#{#workSchedule},:#{#opportunity}) ;
-//            """, nativeQuery = true)
-//    int saveChecklist(Long opportunity, Long workSchedule, String status);
+    @Modifying
+    @Transactional
+   @Query(value = """
+            		insert into check_lists(status, work_schedule_id, expert_id)
+            			values(CAST(CAST(:#{#status} as text) as Status),:#{#workSchedule}, :#{#expertId}) ;
+            """, nativeQuery = true)
+    int saveChecklist(Long workSchedule, String status, Long expertId);
 
-//    CheckList findCheckListByWorkSchedule_IdAndAndOpportunity_Id(Long workScheduleId, Long opportunityId);
+
 
     @Query(value = """
             SELECT c
@@ -67,4 +69,8 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<CheckList> findByUuidLinkAndStatus(String uuidLink, Status status);
 
     CheckList findByCheckListsCriteriaId(Long id);
+
+    Optional<CheckList> findCheckListByWorkSchedule_IdAndExpert_Id(Long workScheduleId, Long expertId);
+
+    boolean existsByWorkSchedule_IdAndExpert_Id(Long id, Long expertId);
 }

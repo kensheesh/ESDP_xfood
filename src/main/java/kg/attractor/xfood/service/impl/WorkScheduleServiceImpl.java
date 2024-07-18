@@ -63,9 +63,11 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
 
     @Override
     public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date) {
-        return workScheduleRepository.findByManager_IdAndStartTimeDate(
+        WorkSchedule workSchedule =  workScheduleRepository.findByManager_IdAndStartTimeDate(
                         managerId, date)
                 .orElseThrow(() -> new NoSuchElementException("No such work_schedule"));
+        log.error("work schedule: {}", workSchedule.getPizzeria().getId());
+        return workSchedule;
     }
 
     @Override

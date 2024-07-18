@@ -44,4 +44,5 @@ public interface CheckListService {
     Integer getMaxPoints(Long id);
     
     Integer getPercentageById(Long id);
+
 }
