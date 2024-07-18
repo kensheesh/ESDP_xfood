@@ -34,7 +34,7 @@ public class CheckListController {
 
 //    // ROLE: SUPERVISOR
 @GetMapping("/create")
-public String create (@RequestParam(name = "date", required = true) LocalDate date,  @RequestParam(name ="managerId", required = true) Long managerId, @RequestParam(name = "expertId", required = true)Long expertId, Model model) {
+public String create (@RequestParam(name = "date") LocalDate date,  @RequestParam(name ="managerId") Long managerId, @RequestParam(name = "expertId")Long expertId, Model model) {
     model.addAttribute("zones",zoneService.getZones() );
     model.addAttribute("sections", sectionService.getSections());
     model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId,date));
@@ -50,7 +50,7 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
     // ROLE: SUPERVISOR
     @PostMapping("/create")
     public String create (CheckListSupervisorCreateDto createDto) {
-       CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
+        CheckListMiniSupervisorCreateDto checklistDto =  checkListService.create(createDto);
         checkListService.bindChecklistWithCriterion(checklistDto );
         return "redirect:/supervisor/weekly";
     }
@@ -123,6 +123,8 @@ public String create (@RequestParam(name = "date", required = true) LocalDate da
     // ROLE: SUPERVISOR
     @GetMapping ("/{id}/update")
     public String edit (@PathVariable (name="id") String uuid, Model model) {
+            model.addAttribute("zones",zoneService.getZones() );
+            model.addAttribute("sections", sectionService.getSections());
             model.addAttribute("checklist", checkListService.getChecklistByUuid(uuid));
             model.addAttribute("experts", userService.getAllExperts());
             model.addAttribute("managers", managerService.getAllAvailable(uuid));

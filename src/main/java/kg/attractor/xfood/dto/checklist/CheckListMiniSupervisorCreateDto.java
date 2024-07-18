@@ -2,6 +2,7 @@ package kg.attractor.xfood.dto.checklist;
 
 import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
+import kg.attractor.xfood.model.CheckType;
 import kg.attractor.xfood.model.Pizzeria;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckListMiniSupervisorCreateDto {
-    private Long opportunityId;
+    private Long checkTypeId;
+    private Long expertId;
     private Pizzeria pizzeria;
     private Long workScheduleId;
     List< CriteriaMaxValueDto> criteriaMaxValueDtoList ;

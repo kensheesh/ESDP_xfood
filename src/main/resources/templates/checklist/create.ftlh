@@ -8,18 +8,19 @@
             outline: none;
         }
     </style>
-    <form action="/checks/create" method="post" id="create-form">
-    <div class="container mt-3">
-        <input type="hidden" name="date" value="${date}">
-        <input type="hidden" name="managerId" value="${managerId}">
-        <input type="hidden" name="expertId" value="${expertId}">
+<form action="/checks/create" method="post" id="create-form">
+        <div class="container mt-3">
+            <input type="hidden" name="date" value="${date}">
+            <input type="hidden" name="managerId" value="${managerId}">
+            <input type="hidden" name="expertId" value="${expertId}">
+            <input type="hidden" name="startTime" value="${workSchedule.startTime}" >
+            <input type="hidden" value="${workSchedule.endTime}" name="endTime" >
 
-        <div class="row bg-white rounded shadow-sm align-items-end">
-            <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
-                Сумма не соответствует требуемому значению.
-            </div>
-            <div class="col-md-3">
-                <div class="my-2">
+            <div class="row bg-white rounded shadow-sm d-flex align-items-end">
+                <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
+                    Сумма не соответствует требуемому значению.
+                </div>
+                <div class="col-md-3 my-2">
                     <select id="checklistType" class="form-select" aria-label="Default select example" onchange="getCriterion(this.value, ${workSchedule.pizzeriaId})" name="checkTypeId">
                         <option selected disabled>выберите тип чек листа</option>
                         <#list types as t>
@@ -27,24 +28,21 @@
                         </#list>
                     </select>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group my-2">
-                    <label for="startTime" class="form-label">Время начала смены:</label>
-                    <input type="time" id="startTime" class="form-control" name="startTime" value="${workSchedule.startTime}" required>
+                <div class="col-md-3 mt-2">
+                    <p>Смена менеджера: </p>
+                    <p class="form-control w-50">${workSchedule.startTime}-${workSchedule.endTime}</p>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group my-2">
-                    <label for="endTime" class="form-label">Время окончания смены:</label>
-                    <input type="time" id="endTime" class="form-control" value="${workSchedule.endTime}" name="endTime" required>
+                <div class="col-md-3 mt-2">
+                   <div class="form-group">
+                       <label for="totalValue" class="form-label">Введите максимальное кол-во баллов:</label>
+                       <input type="number" id="totalValue" class="form-control" name="totalSum" min="1"  required >
+                   </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100 disabled" >Создать чек-лист</button>
+                <div class="col-md-3">
+                    <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100 disabled">Создать чек-лист</button>
+                </div>
             </div>
         </div>
-    </div>
 <div class="mt-4 shadow-sm p-3 bg-white">
     <div>
             <div class="table-responsive" style="max-height: 400px;">
@@ -64,8 +62,8 @@
             </div>
     </div>
 </div>
-    </form>
-    <div class="row">
+</form>
+<div class="row">
         <div class="col">
             <div class="input-group my-4">
                 <button type="button" class="search_btn btn btn-white shadow-sm border w-100 disabled" id="findCriteria"  data-bs-toggle="modal" data-bs-target="#searchModal">
