@@ -30,13 +30,13 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
     private final DtoBuilder dtoBuilder;
     private final PizzeriaServiceImpl pizzeriaService;
 
-
     public WeekDto getWeekInfo(long week) {
         LocalDateTime monday = LocalDateTime.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDateTime chosenMonday = monday.plusDays(7 * week);
         LocalDateTime sunday = chosenMonday.plusDays(6);
         return dtoBuilder.buildWeekDto(week, chosenMonday.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), sunday.toLocalDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
     }
+
     @Override
     public List<WeeklyScheduleShowDto> getWeeklySchedulesByPizzeriaId(long pizzeriaId, long week) {
         LocalDateTime today = LocalDateTime.now();
@@ -59,7 +59,6 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         
         return weeklyDtos;
     }
-
 
     @Override
     public WorkSchedule findWorkScheduleByManagerAndDate(Long managerId, LocalDate date) {

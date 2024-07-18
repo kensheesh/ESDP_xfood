@@ -27,11 +27,11 @@ public class OpportunityServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void testGetOppotunitiesByDate() {
-        LocalDate date = LocalDate.of(2024, 7, 17);
-        when(opportunityRepository.findByDateOrderByUser_SurnameAsc(date))
-        opportunityRepository.findByDateOrderByUser_SurnameAsc(date);
-
-    }
+//    @Test
+//    void testGetOppotunitiesByDate() {
+//        LocalDate date = LocalDate.of(2024, 7, 17);
+//        when(opportunityRepository.findByDateOrderByUser_SurnameAsc(date))
+//        opportunityRepository.findByDateOrderByUser_SurnameAsc(date);
+//
+//    }
 }
