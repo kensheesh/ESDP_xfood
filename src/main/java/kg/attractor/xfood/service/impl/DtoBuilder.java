@@ -120,6 +120,7 @@ public class DtoBuilder {
                 .id(manager.getId())
                 .name(manager.getName())
                 .surname(manager.getSurname())
+                .uuid(manager.getUuid())
                 .build();
     }
 
