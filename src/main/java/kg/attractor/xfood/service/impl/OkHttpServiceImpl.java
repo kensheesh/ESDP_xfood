@@ -136,7 +136,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 	
 	private void setBearerToken(String supervisorUsername) {
 		BearerToken b = bearerTokenRepository.
-				findLastTokenByUser(userService.getByEmail(supervisorUsername))
+				findLastTokenByUserId(userService.getByEmail(supervisorUsername).getId())
 				.orElseThrow(BearerTokenNotFound :: new);
 
 //		if(b==null){

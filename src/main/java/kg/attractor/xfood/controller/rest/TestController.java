@@ -1,8 +1,11 @@
 package kg.attractor.xfood.controller.rest;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import kg.attractor.xfood.service.OkHttpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +38,13 @@ public class TestController {
 		return ResponseEntity.ok(okHttpService.getPizzeriaStaff("ru",uuid));
 	}
 	
-	@PostMapping("/bbb")
-	public ResponseEntity<?> testNamePost() {
-		String bb="b2d05103bcfe3f35cd399f35e34fd07878f5b87f68daad2a3f4e768aa8b528bd";
-		okHttpService.setBearerForSupervisors(bb,500L);
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PostMapping("/bearer")
+	public ResponseEntity<?> setBearer(
+			@RequestParam @Valid @NotBlank String bearer,
+			@RequestParam(required = false) Long lifeTime) {
+		
+		okHttpService.setBearerForSupervisors(bearer, lifeTime);
 		return ResponseEntity.ok().build();
 	}
 	
