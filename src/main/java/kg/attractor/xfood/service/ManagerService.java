@@ -11,6 +11,7 @@ public interface ManagerService {
 
     List<PizzeriaStaffMemberDto> getAllAvailable(String uuid);
 
-    Manager findById(Long id);
+    Manager findById(String uuid);
+    Manager findById(Long uuid);
     ManagerDto getManagerDtoById(Long id);
 }

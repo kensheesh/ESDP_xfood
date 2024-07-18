@@ -289,7 +289,7 @@ public class CheckListServiceImpl implements CheckListService {
     public void edit(CheckListSupervisorEditDto checkListDto) {
         log.info(checkListDto.toString());
         CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
-        Manager manager = managerService.findById(checkListDto.getWorkSchedule().getManager().getId());
+        Manager manager = managerService.findById(checkListDto.getWorkSchedule().getManager().getUuid());
         if (checkListDto.getWorkSchedule().getStartTime().isAfter(checkListDto.getWorkSchedule().getEndTime())) {
             throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени конца смены");
         }
