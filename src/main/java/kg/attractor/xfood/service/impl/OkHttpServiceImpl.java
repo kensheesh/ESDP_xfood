@@ -5,13 +5,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
-import io.github.cdimascio.dotenv.Dotenv;
 import kg.attractor.xfood.dto.okhttp.PizzeriaManagerShiftDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriaStaffMemberDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriasShowDodoIsDto;
-import kg.attractor.xfood.model.Manager;
-import kg.attractor.xfood.model.Pizzeria;
-import kg.attractor.xfood.model.WorkSchedule;
+import kg.attractor.xfood.exception.BearerTokenNotFound;
+import kg.attractor.xfood.model.*;
+import kg.attractor.xfood.repository.BearerTokenRepository;
 import kg.attractor.xfood.service.OkHttpService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,31 +38,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OkHttpServiceImpl implements OkHttpService {
 	
-	private static final Dotenv dotenv = Dotenv.load();
 	private static final String PIZZERIA_CACHE_KEY = "pizzerias";
 	private static final MediaType JSON = MediaType.APPLICATION_JSON;
-	private static final String API_URL =dotenv.get("API_URL");
-	private static final String BEARER = dotenv.get("BEARER");
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	private final OkHttpClient client = new OkHttpClient();
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	
+	private final UserServiceImpl userService;
+	private final BearerTokenRepository bearerTokenRepository;
+	private final WorkScheduleServiceImpl workScheduleService;
 	private final PizzeriaServiceImpl pizzeriaService;
 	private final ManagerServiceImpl managerService;
 	private final ModelBuilder modelBuilder;
-	private final WorkScheduleServiceImpl workScheduleService;
 	
+	private String API_URL = "";
+	private String BEARER = "";
 	
 	@Override
-	public List<PizzeriaManagerShiftDto> getWorksheetOfPizzeriaManagers(Long pizId) {
+	public void getWorksheetOfPizzeriaManagers(Long pizId, String supervisorUsername) {
+		setApiUrl(pizId);
+		setBearerToken(supervisorUsername);
+		
 		String pizzeriaUuid = pizzeriaService.getPizzeriaById(pizId).getUuid();
 		String countryCode = pizzeriaService.getPizzeriaById(pizId).getLocation().getCountryCode();
 		
 		List<PizzeriaManagerShiftDto> shifts = new ArrayList<>();
 		
 		try {
-			String json = authApiRunner(getPizzeriasWeeklyShiftsUrl(countryCode, pizzeriaUuid, getMonday(), getSunday()), BEARER);
+			String json = authApiRunner(getPizzeriasWeeklyShiftsUrl(countryCode, pizzeriaUuid, getMonday(), getSunday()));
 			if (json != null) {
 				JsonArray schedules = JsonParser.parseString(json).getAsJsonObject().getAsJsonArray("schedules");
 				for (JsonElement scheduleElement : schedules) {
@@ -86,7 +90,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 		
 		
 		try {
-			String json = authApiRunner(getPizzeriasStaffMembersUrl(countryCode, pizzeriaUuid), BEARER);
+			String json = authApiRunner(getPizzeriasStaffMembersUrl(countryCode, pizzeriaUuid));
 			if (json != null) {
 				JsonArray members = JsonParser.parseString(json).getAsJsonObject().getAsJsonArray("members");
 				shifts.forEach(e -> {
@@ -123,7 +127,23 @@ public class OkHttpServiceImpl implements OkHttpService {
 		});
 		
 		workSchedules.forEach(workScheduleService :: add);
-		return shifts;
+//		return shifts;
+	}
+	
+	private void setApiUrl(Long pizId) {
+		API_URL = pizzeriaService.getPizzeriaById(pizId).getLocation().getCountry().getApiUrl();
+	}
+	
+	private void setBearerToken(String supervisorUsername) {
+		BearerToken b = bearerTokenRepository.
+				findLastTokenByUser(userService.getByEmail(supervisorUsername))
+				.orElseThrow(BearerTokenNotFound :: new);
+
+//		if(b==null){
+////			authtorize?
+//		}else
+		BEARER = b.getToken();
+		//мб так
 	}
 	
 	@Override
@@ -165,7 +185,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 	@Override
 	public List<PizzeriaStaffMemberDto> getPizzeriaStaff(String countryCode, String pizzeriaUuid) {
 		try {
-			String json = authApiRunner(getPizzeriasStaffMembersUrl(countryCode, pizzeriaUuid), BEARER);
+			String json = authApiRunner(getPizzeriasStaffMembersUrl(countryCode, pizzeriaUuid));
 			if (json == null) return Collections.emptyList();
 			
 			JsonNode membersNode = objectMapper.readTree(json).path("members");
@@ -215,14 +235,13 @@ public class OkHttpServiceImpl implements OkHttpService {
 	}
 	
 	//Execute a GET request to a secured API.
-	private String authApiRunner(String url, String bearerToken) {
+	private String authApiRunner(String url) {
 		log.info("Making authorized GET request to URL: {}", url);
 		
 		Request request = new Request.Builder()
 				.url(url)
 				.get()
-				.addHeader("Accept", JSON.toString())
-				.addHeader("Authorization", "Bearer " + bearerToken)
+				.addHeader("Accept", JSON.toString()).addHeader("Authorization", "Bearer " + BEARER)
 				.build();
 		
 		try (Response response = client.newCall(request).execute()) {
@@ -236,6 +255,19 @@ public class OkHttpServiceImpl implements OkHttpService {
 			log.error("Error executing request to URL: {}: {}", url, e.getMessage());
 			return null;
 		}
+	}
+	
+	@Override
+	public void setBearerForSupervisors(String bearerToken, Long expirySeconds) {
+		List<User> supervisors = userService.findSupervisors();
+		supervisors.forEach(e -> bearerTokenRepository.saveAndFlush(
+				BearerToken
+						.builder()
+						.token(bearerToken)
+						.user(e)
+						.expirySeconds(expirySeconds)
+						.build()
+		));
 	}
 	
 	//public
@@ -276,6 +308,4 @@ public class OkHttpServiceImpl implements OkHttpService {
 	private String getSunday() {
 		return LocalDateTime.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).withHour(23).withMinute(59).withSecond(59).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
-	
-	
 }
