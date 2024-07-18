@@ -57,7 +57,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
                 dtoBuilder.buildPizzeriaDto(pizzeriaService.getPizzeriaById(pizzeriaId))
         ));
 
-        weeklyDtos.sort(Comparator.comparing(e -> e.getManager().getName()));
+        weeklyDtos.sort(Comparator.comparing(e -> e.getManager().getSurname()));
 
         return weeklyDtos;
     }
