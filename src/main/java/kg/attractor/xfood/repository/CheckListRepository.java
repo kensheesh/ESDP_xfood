@@ -53,10 +53,10 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     @Modifying
     @Transactional
    @Query(value = """
-            		insert into check_lists(status, work_schedule_id, expert_id)
-            			values(CAST(CAST(:#{#status} as text) as Status),:#{#workSchedule}, :#{#expertId}) ;
+            		insert into check_lists(status, work_schedule_id, expert_id, uuid_link)
+            			values(CAST(CAST(:#{#status} as text) as Status),:#{#workSchedule}, :#{#expertId}, :#{uuid}) ;
             """, nativeQuery = true)
-    int saveChecklist(Long workSchedule, String status, Long expertId);
+    int saveChecklist(Long workSchedule, String status, Long expertId, String uuid);
 
 
 

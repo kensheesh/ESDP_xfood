@@ -91,8 +91,8 @@ public class CheckListServiceImpl implements CheckListService {
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
 
-
-        checkListRepository.saveChecklist(workSchedule.getId(), Status.NEW.getStatus(), createDto.getExpertId());
+        String uuid = UUID.randomUUID().toString();
+        checkListRepository.saveChecklist(workSchedule.getId(), Status.NEW.getStatus(), createDto.getExpertId(), uuid);
         checkListRepository.flush();
         return CheckListMiniSupervisorCreateDto.builder().checkTypeId(createDto.getCheckTypeId()).expertId(createDto.getExpertId()).workScheduleId(workSchedule.getId()).criteriaMaxValueDtoList(createDto.getCriteriaMaxValueDtoList()).pizzeria(workSchedule.getPizzeria()).build();
     }
@@ -336,9 +336,6 @@ public class CheckListServiceImpl implements CheckListService {
     public void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto) {
         CheckList checkList = checkListRepository.findCheckListByWorkSchedule_IdAndExpert_Id(checklistDto.getWorkScheduleId(), checklistDto.getExpertId()).orElseThrow(()-> new NoSuchElementException("Чек-лист не найден "));
         log.info(checkList.toString());
-        String uuid = UUID.randomUUID().toString();
-        checkList.setUuidLink(uuid);
-        checkListRepository.save(checkList);
         CheckType checkType = checkTypeService.getById(checklistDto.getCheckTypeId());
         for (CriteriaMaxValueDto criteriaMaxValueDto : checklistDto.getCriteriaMaxValueDtoList()) {
             CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
