@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 @Component
 @RequiredArgsConstructor
@@ -16,12 +17,13 @@ public class CheckListDao {
     private final JdbcTemplate jdbcTemplate;
 
     public void updateStatusToDone(Status status, CheckList checkList) {
-        String sql = "update check_lists set status = ?, duration = ? where id = ?";
+        String sql = "update check_lists set status = ?, duration = ?, end_time = ? where id = ?";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setObject(1, status, java.sql.Types.OTHER);
             ps.setTime(2, Time.valueOf(checkList.getDuration()));
-            ps.setLong(3, checkList.getId());
+            ps.setTimestamp(3, Timestamp.from(checkList.getEndTime()));
+            ps.setLong(4, checkList.getId());
             return ps;
         });
     }

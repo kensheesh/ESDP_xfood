@@ -28,6 +28,7 @@ import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -341,12 +342,19 @@ public class DtoBuilder {
     }
 
     public AppealDto buildAppealDto(Appeal model) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                .withZone(ZoneId.systemDefault());
         return AppealDto.builder()
                 .linkToExternalSrc(model.getLinkToExternalSrc())
                 .tgLinkMessage(model.getTgLinkMessage())
                 .fullName(model.getFullName())
-                .checkListsCriteria(model.getCheckListsCriteria())
-//				.comment(model.getComment())
+                .criteriaDescription(model.getCheckListsCriteria().getCriteria().getDescription())
+                .managerName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getManager().getName())
+                .managerSurname(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getManager().getSurname())
+                .pizzeriaName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getName())
+                .date(formatter.format(model.getCheckListsCriteria().getChecklist().getEndTime()))
+                .comment(model.getComment_expert())
+                .checklistUuid(model.getCheckListsCriteria().getChecklist().getUuidLink())
                 .id(model.getId())
                 .email(model.getEmail())
                 .build();

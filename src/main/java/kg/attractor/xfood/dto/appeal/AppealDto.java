@@ -1,6 +1,5 @@
 package kg.attractor.xfood.dto.appeal;
 
-import kg.attractor.xfood.model.CheckListsCriteria;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,6 +13,11 @@ public class AppealDto {
     private String comment;
     private String tgLinkMessage;
     private String linkToExternalSrc;
-    private CheckListsCriteria checkListsCriteria;
+    private String criteriaDescription;
+    private String managerName;
+    private String managerSurname;
+    private String pizzeriaName;
+    private String checklistUuid;
+    private String date;
 
 }

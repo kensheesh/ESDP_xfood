@@ -41,16 +41,16 @@ public class AppealServiceImpl implements AppealService {
                 .orElseThrow(() -> new AppealNotFoundException("Аппеляция не найдена"));
 
         appeal.setEmail(createAppealDto.getEmail());
-//        appeal.setComment(createAppealDto.getComment());
-        //todo appeals
+        appeal.setComment_expert(createAppealDto.getComment());
         appeal.setFullName(createAppealDto.getFullName());
         appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
         appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
 
         appealRepository.save(appeal);
-
-        List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
-        fileService.saveFiles(files, id);
+        if(createAppealDto.getFiles() != null) {
+            List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
+            fileService.saveFiles(files, id);
+        }
     }
 
     @Override
