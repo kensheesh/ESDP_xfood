@@ -14,4 +14,5 @@ public class ManagerShowDto {
 	private String name;
 	private String surname;
 	private String uuid;
+	private String phoneNumber;
 }

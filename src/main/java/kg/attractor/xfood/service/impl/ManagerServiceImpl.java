@@ -55,8 +55,8 @@ public class ManagerServiceImpl implements ManagerService {
       return managerRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Manager not found by id: " + id));
     }
     @Override
-    public Manager findById(String id) {
-        return managerRepository.getByUuid(id).orElseThrow(() -> new NoSuchElementException("Manager not found by id: " + id));
+    public Manager findByPhoneNumber(String phoneNumber) {
+        return managerRepository.getByPhoneNumber(phoneNumber).orElseThrow(() -> new NoSuchElementException("Manager not found by phone number: " + phoneNumber));
     }
 
     @Override

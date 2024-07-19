@@ -92,7 +92,7 @@ public class CheckListServiceImpl implements CheckListService {
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
 
         String uuid = UUID.randomUUID().toString();
-        checkListRepository.saveChecklist(workSchedule.getId(), Status.NEW.getStatus(), createDto.getExpertId(), uuid);
+        checkListRepository.saveCheckList(workSchedule.getId(), Status.NEW.getStatus(), createDto.getExpertId(), uuid);
         checkListRepository.flush();
         return CheckListMiniSupervisorCreateDto.builder().checkTypeId(createDto.getCheckTypeId()).expertId(createDto.getExpertId()).workScheduleId(workSchedule.getId()).criteriaMaxValueDtoList(createDto.getCriteriaMaxValueDtoList()).pizzeria(workSchedule.getPizzeria()).build();
     }
@@ -264,7 +264,9 @@ public class CheckListServiceImpl implements CheckListService {
 
         List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
         List<CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>();
+        int sum = 0 ;
         for (CheckListsCriteria criteria : checkListsCriteria) {
+            sum +=criteria.getMaxValue();
             criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                     .id(criteria.getCriteria().getId())
                     .maxValue(criteria.getMaxValue())
@@ -278,6 +280,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .id(checkList.getUuidLink())
                 .workSchedule(workScheduleDto)
                 .expert(expert)
+                .totalValue(sum)
                 .criterion(criterionWithMaxValue.stream()
                         .sorted(Comparator.comparing(CriteriaExpertShowDto::getSection)
                                 .thenComparing(CriteriaExpertShowDto::getZone)).toList())
@@ -289,7 +292,7 @@ public class CheckListServiceImpl implements CheckListService {
     public void edit(CheckListSupervisorEditDto checkListDto) {
         log.info(checkListDto.toString());
         CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
-        Manager manager = managerService.findById(checkListDto.getWorkSchedule().getManager().getUuid());
+        Manager manager = managerService.findByPhoneNumber(checkListDto.getWorkSchedule().getManager().getPhoneNumber());
         if (checkListDto.getWorkSchedule().getStartTime().isAfter(checkListDto.getWorkSchedule().getEndTime())) {
             throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени конца смены");
         }

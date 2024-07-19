@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTotalSum();
         });
     });
-
 });
 
 let search = document.getElementById('searchbar');
@@ -290,10 +289,31 @@ function countTotalSum(maxValueInputs) {
     for (let i = 0; i < maxValueInputs.length; i++) {
         totalSum += parseInt(maxValueInputs[i].value) || 0;
     }
-    let sum = document.getElementById('totalSum');
-    type = document.getElementById('totalValue').value
-    sum.innerHTML = totalSum;
+    let sum = document.getElementById('sum');
+    type = document.getElementById('totalSum').value
+    sum.innerHTML = `${totalSum}/${type}`;
     console.log(totalSum);
 }
+
 updateTotalSum();
 setupMaxValueInputs();
+
+let edit = document.getElementById('edit');
+edit.addEventListener("submit", ev => {
+    checkSum(ev);
+});
+
+function checkSum(ev){
+   let total = document.getElementById('totalSum').value;
+    let maxValueInputs = document.querySelectorAll('[id^="value-"]');
+    let sum = 0;
+    for (let i = 0; i < maxValueInputs.length; i++) {
+        sum += parseInt(maxValueInputs[i].value) || 0;
+    }
+   console.log("total "+total +" sum "+sum)
+   if (sum < total || sum>total){
+       ev.preventDefault();
+       let error = document.getElementById('error').style.display = 'block';
+   }
+}
+

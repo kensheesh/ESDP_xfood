@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface ManagerRepository extends JpaRepository<Manager, Long> {
 	Manager findByUuid(String staffId);
 
-	Optional<Manager> getByUuid(String staffId);
+	Optional<Manager> getByPhoneNumber(String staffId);
 }
