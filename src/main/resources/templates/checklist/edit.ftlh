@@ -16,11 +16,11 @@
                             <h4>График менеджера: </h4>
                             <div class="row">
                                 <div class="col">
-                                    <select  name="workSchedule.manager.id" class="form-select" aria-label="Default select example">
-                                        <option selected  value="${checklist.workSchedule.manager.id}">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname}</option>
+                                    <select  name="workSchedule.manager.uuid" class="form-select" aria-label="Default select example">
+                                        <option selected  value="${checklist.workSchedule.manager.uuid}">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname} </option>
                                         <#list managers as m>
-                                            <#if m.id != checklist.workSchedule.manager.id>
-                                                <option value="${m.uuid}">${m.firstName} ${m.patronymicName}</option>
+                                            <#if m.uuid != checklist.workSchedule.manager.uuid>
+                                                <option value="${m.uuid}">${m.firstName} ${m.lastName}</option>
                                             </#if>
                                         </#list>
                                     </select>

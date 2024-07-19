@@ -46,4 +46,9 @@ public class AnalyticsController {
 
         return "analytics/analytics";
     }
+
+  /*  @GetMapping("/statistics")
+    private String statistics(Model model){
+
+    }*/
 }
