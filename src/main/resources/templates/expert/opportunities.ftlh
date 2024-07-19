@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-            <div class="col-md-8 col-xl-9">
+        <div class="col-md-8 col-xl-9">
             <div class="card border-0 rounded-4 shadow-sm">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -446,7 +446,7 @@
                 </div>
                 <div class="modal-footer">
                     <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
-                    <button type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
+                    <button id="saveOpportunity" type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
                 </div>
             </form>
         </div>
@@ -592,7 +592,7 @@
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control" type="number" min="0" max="60" name="shifts[` + window.lastInput + `].startTimeMinute"
+                                <input class="form-control" type="number" min="0" max="59" name="shifts[` + window.lastInput + `].startTimeMinute"
                                      oninput="validate(event)" required>
                                 <div class="col-auto input-group-text">
                                     —
@@ -602,7 +602,7 @@
                                 <div class="input-group-text">
                                     :
                                 </div>
-                                <input class="form-control rounded-end-4" type="number" min="0" max="60" name="shifts[` + window.lastInput + `].endTimeMinute"
+                                <input class="form-control rounded-end-4" type="number" min="0" max="59" name="shifts[` + window.lastInput + `].endTimeMinute"
                                      oninput="validate(event)" required>
                             </div>
                         </div>
@@ -623,14 +623,55 @@
 
         function validate(event) {
             let inputName = event.target.name;
+            let indexStr = inputName.match(/\[(.*?)\]/)[1];
+            let index = Number(indexStr);
 
-            let indexStr = inputName.match(/\[(.*?)\]/)[1]
-            let index = Number(indexStr)
+            let startTimeHour = document.getElementsByName('shifts[' + index + '].startTimeHour')[0];
+            let startTimeMinute = document.getElementsByName('shifts[' + index + '].startTimeMinute')[0];
+            let endTimeHour = document.getElementsByName('shifts[' + index + '].endTimeHour')[0];
+            let endTimeMinute = document.getElementsByName('shifts[' + index + '].endTimeMinute')[0];
 
-            let param = inputName.split('.')[1]
-            console.log(param)
+            let startHour = parseInt(startTimeHour.value);
+            let startMinute = parseInt(startTimeMinute.value);
 
+            startTimeHour.setAttribute('min', '0');
+            startTimeHour.setAttribute('max', '23');
 
+            if (startHour === 23) {
+                startTimeMinute.setAttribute('max', '58');
+            } else {
+                startTimeMinute.setAttribute('max', '59');
+            }
+            startTimeMinute.setAttribute('min', '0');
+
+            if (!isNaN(startHour) && !isNaN(startMinute)) {
+                if (startMinute === 59) {
+                    endTimeHour.setAttribute('min', startHour + 1);
+                    endTimeMinute.setAttribute('min', '0');
+                } else {
+                    endTimeHour.setAttribute('min', startHour);
+                    endTimeMinute.setAttribute('min', startMinute + 1);
+                }
+
+                endTimeHour.setAttribute('max', '23');
+                endTimeMinute.setAttribute('max', '59');
+            }
+
+            // Проверка, чтобы min не превышал max
+            let endMinHour = parseInt(endTimeHour.getAttribute('min'));
+            let endMaxHour = parseInt(endTimeHour.getAttribute('max'));
+            if (endMinHour > endMaxHour) {
+                endTimeHour.setAttribute('min', '0');
+                endTimeHour.setAttribute('max', '23');
+            }
+
+            let endMinMinute = parseInt(endTimeMinute.getAttribute('min'));
+            let endMaxMinute = parseInt(endTimeMinute.getAttribute('max'));
+            if (endMinMinute > endMaxMinute) {
+                endTimeMinute.setAttribute('min', '0');
+                endTimeMinute.setAttribute('max', '59');
+            }
         }
+
     </script>
 </@main.layout>

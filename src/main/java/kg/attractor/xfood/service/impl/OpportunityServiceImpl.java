@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
@@ -15,6 +16,7 @@ import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -134,13 +136,21 @@ public class OpportunityServiceImpl implements OpportunityService {
                         .toList();
 
                 List<Shift> filteredShifts = dto.getShifts().stream()
-                        .filter(shiftDto -> !existingIds.contains(shiftDto.getId()))
+                        .filter(shiftDto -> !existingIds.contains(shiftDto.getId()) &&
+                                shiftDto.getStartTimeHour() != null &&
+                                shiftDto.getEndTimeHour() != null)
                         .map(shiftCreateDto -> modelBuilder.buildNewShift(shiftCreateDto, savedOpportunity))
                         .sorted(Comparator.comparing(Shift::getStartTime))
                         .toList();
 
+                if (filteredShifts.size() > 5) {
+                    throw new IllegalArgumentException("Максимальное кол-во смен: 5");
+                }
+
                 for (int i = 0; i < filteredShifts.size(); i++) {
-                    if (filteredShifts.get(i).getStartTime().isAfter(filteredShifts.get(i).getEndTime())) {
+
+                    if (filteredShifts.get(i).getStartTime().isAfter(filteredShifts.get(i).getEndTime())
+                    || filteredShifts.get(i).getStartTime().equals(filteredShifts.get(i).getEndTime())) {
                         throw new IllegalArgumentException("Некорректное время");
                     }
 

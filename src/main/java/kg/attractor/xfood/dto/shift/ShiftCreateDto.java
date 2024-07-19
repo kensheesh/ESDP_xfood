@@ -14,16 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ShiftCreateDto {
     private Long id;
-    @NotNull
     @Min(0) @Max(23)
     private Integer startTimeHour;
-    @NotNull
     @Min(0) @Max(59)
     private Integer startTimeMinute;
-    @NotNull
     @Min(0) @Max(23)
     private Integer endTimeHour;
-    @NotNull
     @Min(0) @Max(59)
     private Integer endTimeMinute;
 }

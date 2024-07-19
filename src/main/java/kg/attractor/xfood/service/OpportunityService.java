@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service;
 
+import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
 import kg.attractor.xfood.model.Opportunity;

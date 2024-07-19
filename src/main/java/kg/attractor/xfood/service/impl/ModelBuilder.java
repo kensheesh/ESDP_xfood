@@ -51,13 +51,13 @@ public class ModelBuilder {
                 .startTime(
                         LocalTime.of(
                                 dto.getStartTimeHour(),
-                                dto.getStartTimeMinute()
+                                dto.getStartTimeMinute() != null ? dto.getStartTimeMinute() : 0
                         )
                 )
                 .endTime(
                         LocalTime.of(
                                 dto.getEndTimeHour(),
-                                dto.getEndTimeMinute()
+                                dto.getEndTimeMinute() != null ? dto.getEndTimeMinute() : 0
                         )
                 )
                 .opportunity(opportunity)
