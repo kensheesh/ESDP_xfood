@@ -41,7 +41,7 @@ public class AppealServiceImpl implements AppealService {
                 .orElseThrow(() -> new AppealNotFoundException("Аппеляция не найдена"));
 
         appeal.setEmail(createAppealDto.getEmail());
-//        appeal.setComment(createAppealDto.getComment());
+        appeal.setComment_expert(createAppealDto.getComment());
         //todo appeals
         appeal.setFullName(createAppealDto.getFullName());
         appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
