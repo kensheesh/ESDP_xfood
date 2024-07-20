@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class CheckList {
 	private User expert;
 	
 	@Column(name = "end_time")
-	private Instant endTime;
+	private LocalDateTime endTime;
 	@OneToMany(mappedBy = "checklist")
 	private Set<CheckListsCriteria> checkListsCriteria = new LinkedHashSet<>();
 	
