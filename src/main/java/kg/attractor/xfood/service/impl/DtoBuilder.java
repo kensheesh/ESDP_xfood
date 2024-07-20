@@ -122,6 +122,7 @@ public class DtoBuilder {
                 .name(manager.getName())
                 .surname(manager.getSurname())
                 .uuid(manager.getUuid())
+                .phoneNumber(manager.getPhoneNumber())
                 .build();
     }
 

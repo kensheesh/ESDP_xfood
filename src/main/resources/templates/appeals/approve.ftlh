@@ -29,9 +29,10 @@
 
 
             <h5 class="card-title">${appeal.checkListsCriteria.pizzeria}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Период: ${appeal.checkListsCriteria.localDate}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Период: <#if appeal.localDate??> ${appeal.localDate} </#if></h6>
             <p class="card-text">Email: ${appeal.email}</p>
             <p class="card-text">ФИО: ${appeal.fullName}</p>
+            <a class="btn btn-success" href="/checks/${appeal.checkListUuid}/result" role="button">Чек-лист</a>
             <p class="card-text">Критерий: </p>
             <table class="table  table-bordered  table-warning my-2  border-warning border-opacity-25  rounded-border">
                 <thead>
@@ -57,10 +58,20 @@
                 </tr>
                 </tbody>
             </table>
-            <p class="card-text">Комментарий: </p>
-            <div class="alert alert-warning" role="alert">
-                ${appeal.comment}
-            </div>
+            <p class="card-text">Комментарий эксперта: </p>
+            <#if appeal.comment??>
+                <div class="alert alert-warning" role="alert">
+                    ${appeal.comment}
+                </div>
+            </#if>
+            <#if appeal.status??>
+                <#if appeal.respond??>
+                    <p class="card-text">Ответ: </p>
+                    <div class="alert alert-warning" role="alert">
+                        ${appeal.respond}
+                    </div>
+                </#if>
+            </#if>
         </div>
     </div>
     <div class="card my-3">
@@ -69,7 +80,7 @@
         </div>
     </div>
     <#if !appeal.status??>
-        <form action="/appeal/approve" method="post"  id="appealForm">
+        <form action="/appeals/approve" method="post"  id="appealForm">
             <div class="card my-3">
                 <div class="card-body">
                     <input  type="hidden" name="appealId"  value="${appeal.id}">

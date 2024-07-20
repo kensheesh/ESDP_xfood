@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppealSupervisorReviewDto {
+    private String checkListUuid;
     private Long id;
     private String email;
     private String fullName;
@@ -26,6 +29,7 @@ public class AppealSupervisorReviewDto {
     private String linkToExternalSrc;
     private String respond;
     private Boolean status;
+    private LocalDateTime localDate;
     private List<CommentDto> comments;
     private CheckListCriteriaSupervisorReviewDto checkListsCriteria;
     private Set<File> files = new LinkedHashSet<>();

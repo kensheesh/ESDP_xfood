@@ -18,5 +18,5 @@ import java.time.LocalDate;
 public class CheckListCriteriaSupervisorReviewDto {
     private CriteriaSupervisorShowDto criteria;
     private String pizzeria;
-    private LocalDate localDate;
+
 }

@@ -1,7 +1,10 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
-    <form action="/checks/${checklist.id}/update" method="post">
+    <form action="/checks/${checklist.id}/update" method="post" id="edit">
         <div class="container mt-4">
+            <div class="alert alert-danger" role="alert" style="display: none;" id="error">
+                Сумма баллов не соответствует требумой сумме!
+            </div>
             <div class="row mb-4">
                 <div class="col text-center">
                     <p class="">${checklist.workSchedule.pizzeria.name}</p>
@@ -16,11 +19,11 @@
                             <h4>График менеджера: </h4>
                             <div class="row">
                                 <div class="col">
-                                    <select  name="workSchedule.manager.uuid" class="form-select" aria-label="Default select example">
-                                        <option selected  value="${checklist.workSchedule.manager.uuid}">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname} </option>
+                                    <select  name="workSchedule.manager.phoneNumber" class="form-select" aria-label="Default select example">
+                                        <option selected  value="${checklist.workSchedule.manager.phoneNumber}">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname} </option>
                                         <#list managers as m>
-                                            <#if m.uuid != checklist.workSchedule.manager.uuid>
-                                                <option value="${m.uuid}">${m.firstName} ${m.lastName}</option>
+                                            <#if m.phoneNumber != checklist.workSchedule.manager.phoneNumber>
+                                                <option value="${m.phoneNumber}">${m.firstName} ${m.lastName}</option>
                                             </#if>
                                         </#list>
                                     </select>
@@ -56,12 +59,6 @@
                         </div>
                     </div>
                 </div>
-               <#-- <div class="col-md-3 mt-2">
-                    <div class="form-group">
-                        <label for="totalValue" class="form-label">Введите максимальное кол-во баллов:</label>
-                        <input type="number" id="totalValue" class="form-control" name="totalSum" min="1"  required >
-                    </div>
-                </div>-->
                 <div class="row">
                     <div class="col">
                         <div class="input-group my-4">
@@ -86,7 +83,7 @@
                         <th scope="col">Зона</th>
                         <th scope="col">Что проверить</th>
                         <th scope="col" >Максимальный балл</th>
-                        <th scope="col" id="totalSum"></th>
+                        <th scope="col" id="sum"></th>
                     </tr>
                     </thead>
                     <tbody  class="criterion-list">
@@ -189,6 +186,7 @@
             </form>
         </div>
     </div>
+    <input type="hidden" value="${checklist.totalValue}" id="totalSum" >
     <script src="/js/edit.js">
     </script>
 </@main.layout>

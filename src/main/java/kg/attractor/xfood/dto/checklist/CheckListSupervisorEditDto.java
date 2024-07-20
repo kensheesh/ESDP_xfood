@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 
 public class CheckListSupervisorEditDto {
+    private Integer totalValue;
     private ExpertShowDto expert;
     private String id;
     private WorkScheduleSupervisorEditDto workSchedule;

@@ -26,6 +26,9 @@ public class GlobalExceptionHandler implements ErrorController {
 	@RequestMapping("/error")
 	public String defaultErrorHandler(Model model, HttpServletRequest request) {
 		var status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+		if (status==null){
+			status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+		}
 		int statusCode = Integer.parseInt(status.toString());
 		String reason = HttpStatus.valueOf(statusCode).getReasonPhrase();
 
