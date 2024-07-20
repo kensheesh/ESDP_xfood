@@ -115,18 +115,19 @@
                     </#if>
                 </#list>
 
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
-                wow-фактор
-            </button>
-            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
-                фактор
-            </button>
-            <button id="calculateButton" class="btn btn-warning">Сохранить</button>
-
             <#if checkList.status == 'IN_PROGRESS'>
                 <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Опубликовать
+                </button>
+            </#if>
+
+            <#if checkList.status == "IN_PROGRESS" || checkList.status == "NEW">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
+                    wow-фактор
+                </button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
+                    фактор
                 </button>
             </#if>
 
@@ -210,6 +211,8 @@
             const wowSelect = document.getElementById('wowFactorDescription');
             const maxPoint = document.getElementById('maxPoint')
             let initialInputValue;
+            let countWowFactors = 0;
+            let countCriticalFactors = 0;
 
             await updatePercentage()
             await showCriticalFactors()
@@ -277,6 +280,7 @@
 
                             const inputGroup = createInputGroup('8', criteria.value, criteria.id);
                             inputCell.appendChild(inputGroup);
+                            countCriticalFactors += 1;
                         } else if (criteria.section === 'WOW фактор') {
                             sectionCell = createTableCell('td', 'text-center bg-success', criteria.section);
                             descriptionCell = createTableCell('td', 'bg-success', criteria.description);
@@ -287,6 +291,7 @@
 
                             const inputGroup = createInputGroup('0', criteria.value, criteria.id);
                             inputCell.appendChild(inputGroup);
+                            countWowFactors += 1;
                         }
 
                         row.appendChild(sectionCell);
@@ -532,10 +537,10 @@
                     `Пиццерия: ${checkList.pizzeria.name}\n` +
                     `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
                     `Результат проверки в %: `+ await updatePercentage() +``+
-                    `Положительная обратная связь: \n` +
-                    `Критический фактор: \n` +
-                    `WOW фактор: \n` +
-                    `Поделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
+                    `\nПоложительная обратная связь: \n` +
+                    `Критический фактор: ` + countCriticalFactors +
+                    `\nWOW фактор: ` + countWowFactors +
+                    `\nПоделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
                     a.href;
 
                 await navigator.clipboard.writeText(message);

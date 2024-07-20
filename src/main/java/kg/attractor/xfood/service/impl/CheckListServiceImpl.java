@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -240,6 +242,7 @@ public class CheckListServiceImpl implements CheckListService {
         }
 
         checkList.setStatus(Status.DONE);
+        checkList.setEndTime(LocalDateTime.from(Instant.now()));
         if (duration == null) {
             throw new IncorrectDateException("Введите время,затраченное на проверку чек-листа!");
         }

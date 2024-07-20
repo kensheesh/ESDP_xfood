@@ -55,19 +55,19 @@
                         <form action="/api/appeal/${appeal.id}" id="form" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Менеджер</label>
-                                <input type="text" class="form-control" disabled id="name" value="${appeal.checkListsCriteria.checklist.workSchedule.manager.getName()} ${appeal.checkListsCriteria.checklist.workSchedule.manager.getSurname()}" required>
+                                <input type="text" class="form-control" disabled id="name" value="${appeal.managerName} ${appeal.managerSurname}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="pizzeria" class="form-label">Пиццерия</label>
-                                <input type="text" class="form-control" disabled id="pizzeria" value="${appeal.checkListsCriteria.checklist.workSchedule.pizzeria.getName()}" required>
+                                <input type="text" class="form-control" disabled id="pizzeria" value="${appeal.pizzeriaName}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="period" class="form-label">Дата</label>
-                                <input type="text" class="form-control" disabled id="period" value="${appeal.checkListsCriteria.checklist.opportunity.date}" required>
+                                <input type="text" class="form-control" disabled id="period" value="${appeal.date}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="criterion" class="form-label">Критерий</label>
-                                <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.checkListsCriteria.criteria.description}</textarea>
+                                <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.criteriaDescription}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
@@ -81,12 +81,12 @@
                             </div>
                             <div class="mb-3">
                                 <label for="tgLinkMessage" class="form-label">Ссылка на сообщение в тг</label>
-                                <input type="url" class="form-control" name="tgLinkMessage" id="tgLinkMessage">
+                                <input type="url" class="form-control" name="tgLinkMessage" id="tgLinkMessage" required>
                                 <div class="error-message" id="tgLinkMessage-error"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="linkToExternalSrc" class="form-label">Ссылка на чек-лист</label>
-                                <input type="url" class="form-control" name="linkToExternalSrc" id="linkToExternalSrc" required>
+                                <input type="url" class="form-control" name="linkToExternalSrc" id="linkToExternalSrc">
                                 <div class="error-message" id="linkToExternalSrc-error"></div>
                             </div>
                             <div class="mb-3">
@@ -206,7 +206,7 @@
                 if (response.ok) {
                     $('#successModal').modal('show');
                     setTimeout(function() {
-                        window.location.href = '/checks/${appeal.checkListsCriteria.checklist.uuidLink}/result';
+                        window.location.href = '/checks/${appeal.checklistUuid}/result';
                     }, 3000);
                 } else {
                     response.json().then(data => {

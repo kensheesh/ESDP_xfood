@@ -46,15 +46,15 @@ public class AppealServiceImpl implements AppealService {
 
         appeal.setEmail(createAppealDto.getEmail());
         appeal.setComment_expert(createAppealDto.getComment());
-        //todo appeals
         appeal.setFullName(createAppealDto.getFullName());
         appeal.setLinkToExternalSrc(createAppealDto.getLinkToExternalSrc());
         appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
 
         appealRepository.save(appeal);
-
-        List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
-        fileService.saveFiles(files, id);
+        if(createAppealDto.getFiles() != null) {
+            List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
+            fileService.saveFiles(files, id);
+        }
     }
 
     @Override
