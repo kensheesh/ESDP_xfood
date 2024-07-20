@@ -3,8 +3,7 @@ package kg.attractor.xfood.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import kg.attractor.xfood.enums.Status;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -17,6 +16,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "check_lists")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CheckList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
