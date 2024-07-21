@@ -242,7 +242,7 @@ public class CheckListServiceImpl implements CheckListService {
         }
 
         checkList.setStatus(Status.DONE);
-        checkList.setEndTime(LocalDateTime.from(Instant.now()));
+        checkList.setEndTime(LocalDateTime.now());
         if (duration == null) {
             throw new IncorrectDateException("Введите время,затраченное на проверку чек-листа!");
         }
