@@ -24,6 +24,7 @@ import kg.attractor.xfood.dto.shift.ShiftTimeShowDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
+import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class DtoBuilder {
     private final ChecklistCriteriaRepository checkListsCriteriaRepository;
+    private final AppealRepository appealRepository;
 
 
     public ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
@@ -85,11 +87,23 @@ public class DtoBuilder {
 
     public ChecklistShowDto buildChecklistShowDto(CheckList model) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        List<CriteriaExpertShowDto> criteriaDtos = model.getCheckListsCriteria().stream()
-                .map(this::buildCriteriaShowDto)
+        List<CriteriaExpertShowDto> criteriaDtos = new ArrayList<>();
+        for(var checklistCriteria : model.getCheckListsCriteria()) {
+            CriteriaExpertShowDto criteriaExpertShowDto = buildCriteriaShowDto(checklistCriteria);
+            List<Appeal> appeals = appealRepository.findByCheckListsCriteria(checklistCriteria);
+            for(var appeal : appeals) {
+                if(appeal != null && appeal.getIsAccepted() == null) {
+                    criteriaExpertShowDto.setIsAccepted(true);
+                }
+            }
+            criteriaDtos.add(criteriaExpertShowDto);
+        }
+
+        List<CriteriaExpertShowDto> sortedCriteriaDtos = criteriaDtos.stream()
                 .sorted(Comparator.comparing(CriteriaExpertShowDto::getZone))
                 .sorted(Comparator.comparing(CriteriaExpertShowDto::getSection))
                 .collect(toList());
+
         ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
         PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
 
@@ -101,7 +115,7 @@ public class DtoBuilder {
                 .status(model.getStatus())
                 .managerWorkStartDate(model.getWorkSchedule().getStartTime().format(formatter))
                 .managerWorkEndDate(model.getWorkSchedule().getEndTime().format(formatter))
-                .criteria(criteriaDtos)
+                .criteria(sortedCriteriaDtos)
                 .build();
     }
 
