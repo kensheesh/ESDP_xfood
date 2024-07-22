@@ -47,8 +47,11 @@ public class AnalyticsController {
         return "analytics/analytics";
     }
 
-  /*  @GetMapping("/statistics")
-    private String statistics(Model model){
-
-    }*/
+    @GetMapping("/statistics")
+    private String statistics(@RequestParam(name = "from", required = false)LocalDate from, @RequestParam(name = "to", required = false)LocalDate to,  Model model){
+        if (from != null && to != null) {
+            model.addAttribute("statistics", checkListService.getStatistics(from, to));
+        }
+        return "analytics/statistics";
+    }
 }

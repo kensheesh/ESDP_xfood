@@ -2,6 +2,7 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
+import kg.attractor.xfood.dto.statistics.CheckListRowInfoDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 
@@ -45,4 +46,5 @@ public interface CheckListService {
     
     Integer getPercentageById(Long id);
 
+    CheckListRowInfoDto getStatistics(LocalDate from, LocalDate to);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,4 +74,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<CheckList> findCheckListByWorkSchedule_IdAndExpert_Id(Long workScheduleId, Long expertId);
 
     boolean existsByWorkSchedule_IdAndExpert_Id(Long id, Long expertId);
+
+    @Query("select c from CheckList  c where c.endTime between :startDate and :endDate ")
+    List<CheckList> findAllByEndTimeBetween(LocalDate startDate, LocalDate endDate);
 }

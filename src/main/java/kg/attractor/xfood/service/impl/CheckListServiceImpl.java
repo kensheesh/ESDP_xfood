@@ -7,6 +7,7 @@ import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
+import kg.attractor.xfood.dto.statistics.CheckListRowInfoDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
@@ -361,6 +362,13 @@ public class CheckListServiceImpl implements CheckListService {
             }
         }
         return (int) Math.ceil(percentage);
+    }
+
+    @Override
+    public CheckListRowInfoDto getStatistics(LocalDate from, LocalDate to) {
+        List<CheckList> checkLists = checkListRepository.findAllByEndTimeBetween(from, to);
+
+        return new CheckListRowInfoDto();
     }
 
 
