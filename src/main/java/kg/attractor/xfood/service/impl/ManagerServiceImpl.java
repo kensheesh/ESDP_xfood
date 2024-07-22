@@ -2,12 +2,9 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.manager.ManagerDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriaStaffMemberDto;
-import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.Manager;
-import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.model.Pizzeria;
-import kg.attractor.xfood.repository.CheckListRepository;
 import kg.attractor.xfood.repository.ManagerRepository;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.ManagerService;
@@ -47,7 +44,7 @@ public class ManagerServiceImpl implements ManagerService {
     public List<PizzeriaStaffMemberDto> getAllAvailable(String uuid) {
         CheckList checkList = checkListService.getModelCheckListById(uuid);
         Pizzeria pizzeria = checkList.getWorkSchedule().getPizzeria();
-        return  okHttpService.getPizzeriaStaff(pizzeria.getLocation().getCountryCode(), pizzeria.getUuid());
+        return okHttpService.getPizzeriaStaff(pizzeria.getLocation().getCountry().getCountryCode(), pizzeria.getUuid());
     }
 
     @Override
