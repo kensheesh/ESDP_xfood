@@ -5,11 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
+import kg.attractor.xfood.controller.mvc.OAuthController;
 import kg.attractor.xfood.dto.okhttp.PizzeriaManagerShiftDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriaStaffMemberDto;
 import kg.attractor.xfood.dto.okhttp.PizzeriasShowDodoIsDto;
 import kg.attractor.xfood.exception.BearerTokenNotFound;
-import kg.attractor.xfood.model.*;
+import kg.attractor.xfood.model.Manager;
+import kg.attractor.xfood.model.Pizzeria;
+import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.repository.BearerTokenRepository;
 import kg.attractor.xfood.service.OkHttpService;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +55,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 	private final PizzeriaServiceImpl pizzeriaService;
 	private final ManagerServiceImpl managerService;
 	private final ModelBuilder modelBuilder;
+	private final OAuthController oAuthController;
 	
 	private String API_URL = "";
 	private String BEARER = "";
@@ -135,15 +139,10 @@ public class OkHttpServiceImpl implements OkHttpService {
 	}
 	
 	private void setBearerToken(String supervisorUsername) {
-		BearerToken b = bearerTokenRepository.
+		BEARER = bearerTokenRepository.
 				findLastTokenByUserId(userService.getByEmail(supervisorUsername).getId())
-				.orElseThrow(BearerTokenNotFound :: new);
-
-//		if(b==null){
-////			authtorize?
-//		}else
-		BEARER = b.getToken();
-		//мб так
+				.orElseThrow(BearerTokenNotFound :: new)
+				.getToken();
 	}
 	
 	@Override
@@ -255,19 +254,6 @@ public class OkHttpServiceImpl implements OkHttpService {
 			log.error("Error executing request to URL: {}: {}", url, e.getMessage());
 			return null;
 		}
-	}
-	
-	@Override
-	public void setBearerForSupervisors(String bearerToken, Long expirySeconds) {
-		List<User> supervisors = userService.findSupervisors();
-		supervisors.forEach(e -> bearerTokenRepository.saveAndFlush(
-				BearerToken
-						.builder()
-						.token(bearerToken)
-						.user(e)
-						.expirySeconds(expirySeconds)
-						.build()
-		));
 	}
 	
 	//public

@@ -15,5 +15,4 @@ public interface OkHttpService {
 	
 	List<PizzeriaStaffMemberDto> getPizzeriaStaff(String countryCode, String pizzeriaUuid);
 	
-	void setBearerForSupervisors(String bearerToken, Long expirySeconds);
 }
