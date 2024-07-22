@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: add type_id to check_lists
+      author: Dastan
+      changes:
+        - addColumn:
+            tableName: check_lists
+            columns:
+              - column:
+                  name: type_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: check_lists_type_id_fk
+                    references: check_types(id)
+
+
+  - changeSet:
+      id: delete column country from locations
+      author: Dastan
+      changes:
+        - dropColumn:
+            tableName: locations
+            columnName: country

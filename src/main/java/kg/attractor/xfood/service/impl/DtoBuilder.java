@@ -193,7 +193,6 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .timezone(model.getTimezone())
-                .countryCode(model.getCountryCode())
                 .build();
     }
 

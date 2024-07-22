@@ -66,7 +66,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 		setBearerToken(supervisorUsername);
 		
 		String pizzeriaUuid = pizzeriaService.getPizzeriaById(pizId).getUuid();
-		String countryCode = pizzeriaService.getPizzeriaById(pizId).getLocation().getCountryCode();
+		String countryCode = pizzeriaService.getPizzeriaById(pizId).getLocation().getCountry().getCountryCode();
 		
 		List<PizzeriaManagerShiftDto> shifts = new ArrayList<>();
 		
