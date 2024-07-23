@@ -91,7 +91,8 @@
             <div class="error-message">${error}</div>
         <#else>
             <div class="notification">
-                ✔ - Данная галочка рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не рассмотрели
+                ✔ - Данная галочка рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
+                рассмотрели
             </div>
             <div class="table-responsive rounded p-3">
                 <table id="mainTable" class="table rounded-3">
@@ -113,7 +114,9 @@
                         <tr>
                             <#if criteria.maxValue?? && criteria.maxValue gt 0>
                                 <td class="text-center">${criteria.zone}</td>
-                                <td>${criteria.description}</td>
+                                <td class="criteria-description-${criteria.id}">
+                                    ${criteria.description}
+                                </td>
                                 <td class="text-center border">${criteria.maxValue}</td>
                                 <td class="text-center">
                                     <input aria-label="" type="number" disabled
@@ -133,7 +136,29 @@
                             <#else>
                                 <#if criteria.section == 'Критический фактор'>
                                     <td class="text-center bg-danger">${criteria.section}</td>
-                                    <td class="bg-danger">${criteria.description}</td>
+                                    <td class="bg-danger">
+                                        <div class="accordion" id="accordion-${criteria.id}">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="heading-${criteria.id}">
+                                                    <button class="accordion-button" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse-${criteria.id}"
+                                                            aria-expanded="true"
+                                                            aria-controls="#collapse-${criteria.id}">
+                                                        ${criteria.description}
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse-${criteria.id}"
+                                                     class="accordion-collapse collapse show"
+                                                     aria-labelledby="heading-${criteria.id}"
+                                                     data-bs-parent="#accordion-${criteria.id}">
+                                                    <div class="accordion-body">
+                                                        <strong>${criteria.description}.</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td class="bg-danger"></td>
                                     <td class="text-center bg-danger">
                                         <input aria-label="" type="number" disabled
@@ -159,9 +184,6 @@
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-warning btn-sm appeal-button"
-                                                data-criteria-id="${criteria.id}">Подать апелляцию
-                                        </button>
                                         <#if criteria.isAccepted?? && true>
                                             <span class="appeal-submitted">✔</span>
                                         </#if>
@@ -212,11 +234,17 @@
             await showMaxPoint()
 
             const appealButtons = document.querySelectorAll('.appeal-button');
+
             appealButtons.forEach(button => {
                 button.addEventListener('click', async () => {
                     const criteria = button.getAttribute('data-criteria-id');
                     await fetchToAppeal(criteria)
                 });
+            });
+
+            appealButtons.forEach(button => {
+                const criteria = button.getAttribute('data-criteria-id');
+                addDynamicContent(criteria);
             });
 
             async function fetchToAppeal(criteria) {
@@ -238,6 +266,45 @@
                 return {
                     criteriaId: criteria,
                     checkListId: ${checkList.id}
+                }
+            }
+
+            async function getAppeals(criteriaId){
+                if(criteriaId !== null) {
+                    let response = await fetch('/api/appeal/accepted/${checkList.id}/'+criteriaId)
+                    return await response.json();
+                }
+                return []
+            }
+            async function addDynamicContent(criteriaId) {
+                let appeals = await getAppeals(criteriaId)
+                console.log(appeals);
+                const description = document.getElementById(`criteria-description-` + criteriaId);
+                if(appeals.length === 0) {
+                    description.innerText = `
+                   Нет принятых аппеляций
+                `;
+                } else {
+                    for (let i = 0; i < appeals.length; i++) {
+                        let id = appeals[i].id
+                        description.innerHTML = `
+                        <div class="accordion" id="accordion-`+ criteriaId +`">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading-`+ criteriaId +`">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapse-`+ criteriaId +`" aria-expanded="true"
+                                                        aria-controls="#collapse-`+ criteriaId +`">`+ appeals[i].criteriaDescription +`</button>
+                                            </h2>
+                                            <div id="collapse-`+ criteriaId +`" class="accordion-collapse collapse"
+                                                 aria-labelledby="heading-`+ criteriaId +`"
+                                                <div class="accordion-body">
+                                                    <a href="/appeals/`+ appeals[i].id +`/approve">Аппеляция</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        `
+                    }
                 }
             }
 
