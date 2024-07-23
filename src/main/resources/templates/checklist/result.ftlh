@@ -91,7 +91,7 @@
             <div class="error-message">${error}</div>
         <#else>
             <div class="notification">
-                ✔ - Данная галочка рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
+                ! - Данная знак рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
                 рассмотрели
             </div>
             <div class="table-responsive rounded p-3">
@@ -114,7 +114,7 @@
                         <tr>
                             <#if criteria.maxValue?? && criteria.maxValue gt 0>
                                 <td class="text-center">${criteria.zone}</td>
-                                <td class="criteria-description-${criteria.id}">
+                                <td id="criteria-description-${criteria.id}">
                                     ${criteria.description}
                                 </td>
                                 <td class="text-center border">${criteria.maxValue}</td>
@@ -130,34 +130,14 @@
                                             data-criteria-id="${criteria.id}">Подать апелляцию
                                     </button>
                                     <#if criteria.isAccepted?? && true>
-                                        <span class="appeal-submitted">✔</span>
+                                        <span class="appeal-submitted">!</span>
                                     </#if>
                                 </td>
                             <#else>
                                 <#if criteria.section == 'Критический фактор'>
                                     <td class="text-center bg-danger">${criteria.section}</td>
-                                    <td class="bg-danger">
-                                        <div class="accordion" id="accordion-${criteria.id}">
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading-${criteria.id}">
-                                                    <button class="accordion-button" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse-${criteria.id}"
-                                                            aria-expanded="true"
-                                                            aria-controls="#collapse-${criteria.id}">
-                                                        ${criteria.description}
-                                                    </button>
-                                                </h2>
-                                                <div id="collapse-${criteria.id}"
-                                                     class="accordion-collapse collapse show"
-                                                     aria-labelledby="heading-${criteria.id}"
-                                                     data-bs-parent="#accordion-${criteria.id}">
-                                                    <div class="accordion-body">
-                                                        <strong>${criteria.description}.</strong>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <td class="bg-danger" id="criteria-description-${criteria.id}">
+                                        ${criteria.description}
                                     </td>
                                     <td class="bg-danger"></td>
                                     <td class="text-center bg-danger">
@@ -170,7 +150,7 @@
                                                 data-criteria-id="${criteria.id}">Подать апелляцию
                                         </button>
                                         <#if criteria.isAccepted?? && true>
-                                            <span class="appeal-submitted">✔</span>
+                                            <span class="appeal-submitted">!</span>
                                         </#if>
                                     </td>
                                 <#elseif criteria.section == 'WOW фактор'>
@@ -184,9 +164,7 @@
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
                                     <td class="text-center">
-                                        <#if criteria.isAccepted?? && true>
-                                            <span class="appeal-submitted">✔</span>
-                                        </#if>
+                                        
                                     </td>
                                 </#if>
                             </#if>
@@ -244,7 +222,9 @@
 
             appealButtons.forEach(button => {
                 const criteria = button.getAttribute('data-criteria-id');
-                addDynamicContent(criteria);
+                if (criteria !== null) {
+                    addDynamicContent(criteria);
+                }
             });
 
             async function fetchToAppeal(criteria) {
@@ -269,45 +249,50 @@
                 }
             }
 
-            async function getAppeals(criteriaId){
-                if(criteriaId !== null) {
-                    let response = await fetch('/api/appeal/accepted/${checkList.id}/'+criteriaId)
+            async function getAppeals(criteriaId) {
+                if (criteriaId !== null) {
+                    let response = await fetch('/api/appeal/accepted/${checkList.id}/' + criteriaId)
                     return await response.json();
                 }
                 return []
             }
+
             async function addDynamicContent(criteriaId) {
                 let appeals = await getAppeals(criteriaId)
                 console.log(appeals);
                 const description = document.getElementById(`criteria-description-` + criteriaId);
-                if(appeals.length === 0) {
-                    description.innerText = `
-                   Нет принятых аппеляций
-                `;
-                } else {
-                    for (let i = 0; i < appeals.length; i++) {
-                        let id = appeals[i].id
-                        description.innerHTML = `
-                        <div class="accordion" id="accordion-`+ criteriaId +`">
+                console.log(description)
+                if (appeals.length > 0) {
+                    description.innerHTML = `
+                        <div class="accordion" id="accordion-` + criteriaId + `">
                                         <div class="accordion-item">
-                                            <h2 class="accordion-header" id="heading-`+ criteriaId +`">
+                                            <h2 class="accordion-header" id="heading-` + criteriaId + `">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                        data-bs-target="#collapse-`+ criteriaId +`" aria-expanded="true"
-                                                        aria-controls="#collapse-`+ criteriaId +`">`+ appeals[i].criteriaDescription +`</button>
+                                                        data-bs-target="#collapse-` + criteriaId + `" aria-expanded="true"
+                                                        aria-controls="#collapse-` + criteriaId + `">` + appeals[0].criteriaDescription + `</button>
                                             </h2>
-                                            <div id="collapse-`+ criteriaId +`" class="accordion-collapse collapse"
-                                                 aria-labelledby="heading-`+ criteriaId +`"
-                                                <div class="accordion-body">
-                                                    <a href="/appeals/`+ appeals[i].id +`/approve">Аппеляция</a>
+                                            <div id="collapse-` + criteriaId + `" class="accordion-collapse collapse"
+                                                 aria-labelledby="heading-` + criteriaId + `"
+                                                 data-bs-parent="#accordion-` + criteriaId + `">
+                                                <div class="accordion-body-`+criteriaId+`">
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                         `
+
+                    let accordionBody = document.querySelector('.accordion-body-'+criteriaId)
+                    let ol = document.createElement('ol')
+                    for (let i = 0; i < appeals.length; i++) {
+                        let li = document.createElement('li')
+                        li.className = 'm-1'
+                        li.innerHTML = `<a class="link-offset-2 link-underline link-underline-opacity-0" href="/appeals/`+ appeals[i].id +`/approve">Аппеляция</a>`
+                        ol.appendChild(li)
                     }
+                    accordionBody.appendChild(ol)
                 }
             }
-
         })
     </script>
 
