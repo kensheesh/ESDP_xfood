@@ -37,6 +37,10 @@ spring:
   data:
     jdbc:
       dialect: postgresql
+    redis:
+      host: localhost
+      port: ${REDIS_SERVER_PORT}
+
   servlet:
     multipart:
       max-file-size: 25MB
@@ -61,9 +65,8 @@ logging:
     rollingpolicy:
       max-file-size: 5MB
       max-history: 5
-
 #okta:
 #  oauth2:
-#    issuer: https://${}/
-#    client-id: {yourClientId}
-#    client-secret: YOUR_CLIENT_SECRET
+#    issuer: https://${}/${}
+#    client-id: ${ClientId}
+#    client-secret: ${YOUR_CLIENT_SECRET}
