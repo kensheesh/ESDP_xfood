@@ -7,14 +7,12 @@ RUN mvn dependency:go-offline
 
 COPY src ./src
 
-# skipp tests
 RUN mvn clean package -Dmaven.test.skip=true
 
 FROM openjdk:17-jdk
 
 VOLUME /data
 VOLUME /var/log/app
-VOLUME /config
 
 EXPOSE 5051
 

@@ -1,7 +1,6 @@
 server:
   port: ${SERVER_PORT}
 
-
 spring:
   datasource:
     url: ${DB_URL}
@@ -65,8 +64,11 @@ logging:
     rollingpolicy:
       max-file-size: 5MB
       max-history: 5
+
 #okta:
 #  oauth2:
-#    issuer: https://${}/${}
-#    client-id: ${ClientId}
-#    client-secret: ${YOUR_CLIENT_SECRET}
+#    client-id: ${CLIENT_ID}
+#    client-secret: ${SECRET}
+#    scopes: ${AUTH_SCOPE}
+#    redirect-uri: ${REDIRECT_URI}
+#    post-logout-redirect-uri: /

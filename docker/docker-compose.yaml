@@ -11,12 +11,12 @@ services:
     volumes:
       - /data
       - /var/log/app
-      - /config
     env_file:
       - ../.env
     depends_on:
       - db
       - redis
+
 
   db:
     container_name: xfood_psql
@@ -33,6 +33,5 @@ services:
     image: redis:latest
     ports:
       - "6379:6379"
-
 volumes:
   app-config:
