@@ -9,6 +9,7 @@ import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -108,8 +109,11 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
     }
 
     @GetMapping ("/{id}/result")
-    public String getResult (@PathVariable (name = "id") String checkListId, Model model) {
+    public String getResult (@PathVariable (name = "id") String checkListId, Model model, Authentication auth) {
         ChecklistShowDto checkList = checkListService.getCheckListById(checkListId);
+        if(auth == null) {
+            model.addAttribute("guess", true);
+        }
         if(checkList.getStatus().equals(Status.DONE)) {
             model.addAttribute("checkList", checkList);
         } else {

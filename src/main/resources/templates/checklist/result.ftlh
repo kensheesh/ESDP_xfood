@@ -91,8 +91,8 @@
             <div class="error-message">${error}</div>
         <#else>
             <div class="notification">
-                ! - Данная знак рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
-                рассмотрели
+                ! - Данный знак рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
+                рассмотрели.
             </div>
             <div class="table-responsive rounded p-3">
                 <table id="mainTable" class="table rounded-3">
@@ -125,13 +125,19 @@
                                            max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
                                            aria-valuemax="${criteria.maxValue}">
                                 </td>
+                                <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
                                 <td class="text-center">
-                                    <button class="btn btn-warning btn-sm appeal-button"
-                                            data-criteria-id="${criteria.id}">Подать апелляцию
-                                    </button>
-                                    <#if criteria.isAccepted?? && true>
-                                        <span class="appeal-submitted">!</span>
-                                    </#if>
+                                    <#if guess??>
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <button class="btn btn-warning btn-sm appeal-button"
+                                                data-criteria-id="${criteria.id}">Подать апелляцию
+                                        </button>
+                                        </#if>
+                                        <#if criteria.isAccepted?? && true>
+                                            <span class="appeal-submitted">!</span>
+                                        </#if>
+                                    </div>
+
                                 </td>
                             <#else>
                                 <#if criteria.section == 'Критический фактор'>
@@ -145,13 +151,18 @@
                                                class="text-center form-control score-input"
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-warning btn-sm appeal-button"
-                                                data-criteria-id="${criteria.id}">Подать апелляцию
-                                        </button>
-                                        <#if criteria.isAccepted?? && true>
-                                            <span class="appeal-submitted">!</span>
-                                        </#if>
+                                    <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
+                                    <td class="text-center bg-danger">
+                                        <#if guess??>
+                                        <div class="d-flex justify-content-end align-items-center">
+                                            <button class="btn btn-warning btn-sm appeal-button"
+                                                    data-criteria-id="${criteria.id}">Подать апелляцию
+                                            </button>
+                                            </#if>
+                                            <#if criteria.isAccepted?? && true>
+                                                <span class="appeal-submitted">!</span>
+                                            </#if>
+                                        </div>
                                     </td>
                                 <#elseif criteria.section == 'WOW фактор'>
                                     <td class="text-center bg-success">${criteria.section}</td>
@@ -163,8 +174,7 @@
                                                min="0"
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
-                                    <td class="text-center">
-                                        
+                                    <td class="text-center bg-success">
                                     </td>
                                 </#if>
                             </#if>
@@ -220,7 +230,8 @@
                 });
             });
 
-            appealButtons.forEach(button => {
+            const historyAppeals = document.querySelectorAll('.appeals');
+            historyAppeals.forEach(button => {
                 const criteria = button.getAttribute('data-criteria-id');
                 if (criteria !== null) {
                     addDynamicContent(criteria);
@@ -274,7 +285,7 @@
                                             <div id="collapse-` + criteriaId + `" class="accordion-collapse collapse"
                                                  aria-labelledby="heading-` + criteriaId + `"
                                                  data-bs-parent="#accordion-` + criteriaId + `">
-                                                <div class="accordion-body-`+criteriaId+`">
+                                                <div class="accordion-body-` + criteriaId + `">
 
                                                 </div>
                                             </div>
@@ -282,12 +293,12 @@
                                     </div>
                         `
 
-                    let accordionBody = document.querySelector('.accordion-body-'+criteriaId)
+                    let accordionBody = document.querySelector('.accordion-body-' + criteriaId)
                     let ol = document.createElement('ol')
                     for (let i = 0; i < appeals.length; i++) {
                         let li = document.createElement('li')
                         li.className = 'm-1'
-                        li.innerHTML = `<a class="link-offset-2 link-underline link-underline-opacity-0" href="/appeals/`+ appeals[i].id +`/approve">Аппеляция</a>`
+                        li.innerHTML = `<a class="link-offset-2 link-underline link-underline-opacity-0" href="/appeals/` + appeals[i].id + `/approve">Аппеляция</a>`
                         ol.appendChild(li)
                     }
                     accordionBody.appendChild(ol)
