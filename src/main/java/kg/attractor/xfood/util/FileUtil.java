@@ -67,7 +67,8 @@ public class FileUtil {
 	
 	@Scheduled(cron = "0 0 0 * * ?")
 	public void deleteOldAppealFiles() {
-		try (Stream<Path> files = Files.walk(Paths.get(UPLOAD_DIR + "appealFiles/"))) {
+		Path appealFilesDir = Paths.get(UPLOAD_DIR, "appealFiles");
+		try (Stream<Path> files = Files.walk(appealFilesDir)) {
 			files.filter(Files :: isRegularFile)
 					.forEach(file -> {
 						try {

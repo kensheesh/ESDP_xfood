@@ -1,0 +1,100 @@
+databaseChangeLog:
+  - changeSet:
+      id: add table countries
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: countries
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: country_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_code
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: api_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: auth_url
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: insert countries (data)
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              INSERT INTO countries (country_name, country_code, api_url, auth_url)
+              VALUES ('Russia', 'ru', 'https://api.dodois.io', 'https://auth.dodois.io');
+              INSERT INTO countries (country_name, country_code, api_url, auth_url)
+              VALUES ('Belarus', 'by', 'https://api.dodois.io', 'https://auth.dodois.io');
+
+
+  - changeSet:
+      id: add column country_id to location table
+      author: Dastan
+      changes:
+        - addColumn:
+            tableName: locations
+            columns:
+              - column:
+                  name: country_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: locations_country_id_fk
+                    references: countries(id)
+
+
+
+  - changeSet:
+      id: add table bearer_tokens
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: bearer_tokens
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_seconds
+                  type: bigint
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: bearer_tokens_user_id_fk
+                    references: users(id)
+
+  #  - changeSet:
+  #      id: remove countryCode from locations
+  #      author: Dastan
+  #      changes:
+  #        - dropColumn:
+  #            columnName: country
+  #            tableName: locations
