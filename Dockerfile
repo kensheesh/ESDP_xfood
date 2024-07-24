@@ -1,4 +1,15 @@
-FROM openjdk:17
+FROM maven:3.6.3-openjdk-17-slim AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
+
+RUN mvn clean package -Dmaven.test.skip=true
+
+FROM openjdk:17-jdk
 
 VOLUME /data
 VOLUME /var/log/app
@@ -9,8 +20,8 @@ WORKDIR /app
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
-ARG JAR_FILE=target/xfood-1.0.0-SNAPSHOT.jar
+COPY --from=build /app/target/xfood-1.0.0-SNAPSHOT.jar app.jar
 
-ADD ${JAR_FILE} app.jar
+COPY .env /app/.env
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
