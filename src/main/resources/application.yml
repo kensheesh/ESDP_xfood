@@ -36,9 +36,9 @@ spring:
   data:
     jdbc:
       dialect: postgresql
-    redis:
-      host: localhost
-      port: ${REDIS_SERVER_PORT}
+    #redis:
+    #  host: localhost
+    #  port: ${REDIS_SERVER_PORT}
 
   servlet:
     multipart:
