@@ -28,8 +28,9 @@ public class Location {
 
     @OneToMany(mappedBy = "location")
     private List<Pizzeria> pizzerias;
-    
-    @Column(name="country")
-    private String countryCode;
-
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "country_id")
+	private Country country;
+	
 }

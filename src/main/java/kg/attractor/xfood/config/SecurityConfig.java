@@ -30,7 +30,9 @@ public class SecurityConfig {
 			"/auth/**",
 			"/css/layout.css",
 			"/appeal/**",
-			"/checks/**"
+			"/checks/**",
+			"/api/oauth/**",
+			"/"
 			
 	};
 	
@@ -43,7 +45,7 @@ public class SecurityConfig {
 				.formLogin(form -> form
 						.loginPage("/auth/login")
 						.loginProcessingUrl("/auth/login")
-						.defaultSuccessUrl("/analytics")
+						.defaultSuccessUrl("/expert/checks")
 						.failureUrl("/auth/login?error=true")
 						.permitAll())
 				.logout(logout -> logout

@@ -1,7 +1,6 @@
 server:
   port: ${SERVER_PORT}
 
-
 spring:
   datasource:
     url: ${DB_URL}
@@ -37,6 +36,10 @@ spring:
   data:
     jdbc:
       dialect: postgresql
+    redis:
+      host: localhost
+      port: ${REDIS_SERVER_PORT}
+
   servlet:
     multipart:
       max-file-size: 25MB
@@ -61,3 +64,11 @@ logging:
     rollingpolicy:
       max-file-size: 5MB
       max-history: 5
+
+#okta:
+#  oauth2:
+#    client-id: ${CLIENT_ID}
+#    client-secret: ${SECRET}
+#    scopes: ${AUTH_SCOPE}
+#    redirect-uri: ${REDIRECT_URI}
+#    post-logout-redirect-uri: /

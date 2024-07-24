@@ -66,88 +66,125 @@
             font-weight: bold;
             text-align: center;
         }
+
+        .appeal-submitted {
+            float: right;
+            margin-left: 5px;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        .notification {
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1rem;
+        }
     </style>
 
     <main class="container mt-4">
         <#if error??>
             <div class="error-message">${error}</div>
-            <#else>
-                <div class="table-responsive rounded p-3">
-                    <table id="mainTable" class="table rounded-3">
-                        <thead>
+        <#else>
+            <div class="notification">
+                ✔ - Данная галочка рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не рассмотрели
+            </div>
+            <div class="table-responsive rounded p-3">
+                <table id="mainTable" class="table rounded-3">
+                    <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
+                        <th colspan="2" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Раздел</th>
+                        <th class="text-center">Что проверить</th>
+                        <th class="text-center">Оценка</th>
+                        <th class="text-center">${checkList.managerWorkStartDate}</th>
+                        <th class="text-center">Действия</th>
+                    </tr>
+                    </thead>
+                    <tbody id="mainTableBody">
+                    <#list checkList.criteria as criteria>
                         <tr>
-                            <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
-                            <th colspan="2" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
-                        </tr>
-                        <tr>
-                            <th class="text-center">Раздел</th>
-                            <th class="text-center">Что проверить</th>
-                            <th class="text-center">Оценка</th>
-                            <th class="text-center">${checkList.managerWorkStartDate}</th>
-                            <th class="text-center">Действия</th>
-                        </tr>
-                        </thead>
-                        <tbody id="mainTableBody">
-                        <#list checkList.criteria as criteria>
-                            <tr>
-                                <#if criteria.maxValue?? && criteria.maxValue gt 0>
-                                    <td class="text-center">${criteria.zone}</td>
-                                    <td>${criteria.description}</td>
-                                    <td class="text-center border">${criteria.maxValue}</td>
-                                    <td class="text-center">
-                                        <input aria-label="" type="number" disabled class="text-center form-control score-input"
-                                               min="0"
-                                               max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
-                                               aria-valuemax="${criteria.maxValue}">
+                            <#if criteria.maxValue?? && criteria.maxValue gt 0>
+                                <td class="text-center">${criteria.zone}</td>
+                                <td>${criteria.description}</td>
+                                <td class="text-center border">${criteria.maxValue}</td>
+                                <td class="text-center">
+                                    <input aria-label="" type="number" disabled
+                                           class="text-center form-control score-input"
+                                           min="0"
+                                           max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
+                                           aria-valuemax="${criteria.maxValue}">
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-warning btn-sm appeal-button"
+                                            data-criteria-id="${criteria.id}">Подать апелляцию
+                                    </button>
+                                    <#if criteria.isAccepted?? && true>
+                                        <span class="appeal-submitted">✔</span>
+                                    </#if>
+                                </td>
+                            <#else>
+                                <#if criteria.section == 'Критический фактор'>
+                                    <td class="text-center bg-danger">${criteria.section}</td>
+                                    <td class="bg-danger">${criteria.description}</td>
+                                    <td class="bg-danger"></td>
+                                    <td class="text-center bg-danger">
+                                        <input aria-label="" type="number" disabled
+                                               class="text-center form-control score-input"
+                                               value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
                                     <td class="text-center">
                                         <button class="btn btn-warning btn-sm appeal-button"
                                                 data-criteria-id="${criteria.id}">Подать апелляцию
                                         </button>
+                                        <#if criteria.isAccepted?? && true>
+                                            <span class="appeal-submitted">✔</span>
+                                        </#if>
                                     </td>
-                                <#else>
-                                    <#if criteria.section == 'Критический фактор'>
-                                        <td class="text-center bg-danger">${criteria.section}</td>
-                                        <td class="bg-danger">${criteria.description}</td>
-                                        <td class="bg-danger"></td>
-                                        <td class="text-center bg-danger">
-                                            <input aria-label="" type="number" disabled
-                                                   class="text-center form-control score-input"
-                                                   value="${criteria.value}" id="${criteria.id}"/>
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-warning btn-sm appeal-button"
-                                                    data-criteria-id="${criteria.id}">Подать апелляцию
-                                            </button>
-                                        </td>
-                                    <#elseif criteria.section == 'WOW фактор'>
-                                        <td class="text-center bg-success">${criteria.section}</td>
-                                        <td class="bg-success">${criteria.description}</td>
-                                        <td class="bg-success"></td>
-                                        <td class="text-center bg-success">
-                                            <input aria-label="" type="number" disabled
-                                                   class="text-center form-control score-wow-input"
-                                                   min="0"
-                                                   value="${criteria.value}" id="${criteria.id}"/>
-                                        </td>
-                                    </#if>
+                                <#elseif criteria.section == 'WOW фактор'>
+                                    <td class="text-center bg-success">${criteria.section}</td>
+                                    <td class="bg-success">${criteria.description}</td>
+                                    <td class="bg-success"></td>
+                                    <td class="text-center bg-success">
+                                        <input aria-label="" type="number" disabled
+                                               class="text-center form-control score-wow-input"
+                                               min="0"
+                                               value="${criteria.value}" id="${criteria.id}"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-warning btn-sm appeal-button"
+                                                data-criteria-id="${criteria.id}">Подать апелляцию
+                                        </button>
+                                        <#if criteria.isAccepted?? && true>
+                                            <span class="appeal-submitted">✔</span>
+                                        </#if>
+                                    </td>
                                 </#if>
-                            </tr>
-                        </#list>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
-                            <td colspan="2"  class="text-center"><strong id="maxPoint"></strong></td>
+                            </#if>
                         </tr>
-                        <tr>
-                            <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
-                                    x 100%</strong></td>
-                            <td colspan="2" class="text-center" id="percentageResult"></td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    </#list>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
+                        <td colspan="2" class="text-center"><strong id="maxPoint"></strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество
+                                баллов)
+                                x 100%</strong></td>
+                        <td colspan="2" class="text-center" id="percentageResult"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
         </#if>
     </main>
 
@@ -156,7 +193,7 @@
             const maxPoint = document.getElementById('maxPoint')
             const percentageDisplay = document.getElementById('percentageResult');
 
-            async function updatePercentage() {
+            async function showResultPercentage() {
                 let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
                 let data = await response.json()
                 percentageDisplay.textContent = data + '%';
@@ -171,7 +208,7 @@
                 maxPoint.innerText = data
             }
 
-            await updatePercentage()
+            await showResultPercentage()
             await showMaxPoint()
 
             const appealButtons = document.querySelectorAll('.appeal-button');
@@ -194,7 +231,7 @@
                 })
 
                 let data = await response.json()
-                window.location.href = '/appeals/'+data
+                window.location.href = '/appeals/' + data
             }
 
             function buildData(criteria) {

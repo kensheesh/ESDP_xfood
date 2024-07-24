@@ -1,0 +1,50 @@
+
+.file-item span {
+    flex-grow: 1;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none;
+}
+
+.textarea-criteria {
+    resize: none;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: linear-gradient(90deg, #ffcc00, #ff9900);
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+}
+
+.btn-warning {
+    background-color: #ff9900;
+    border-color: #ff9900;
+}
+
+.btn-green {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.file-upload input {
+    margin-top: 10px;
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}

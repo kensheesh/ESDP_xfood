@@ -23,7 +23,7 @@ public class CheckListDao {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setObject(1, status, java.sql.Types.OTHER);
             ps.setTime(2, Time.valueOf(checkList.getDuration()));
-            ps.setTimestamp(3, Timestamp.from(Instant.from(checkList.getEndTime())));
+            ps.setTimestamp(3, Timestamp.valueOf(checkList.getEndTime()));
             ps.setLong(4, checkList.getId());
             return ps;
         });

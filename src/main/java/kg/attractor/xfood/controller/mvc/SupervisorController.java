@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.service.OkHttpService;
 import kg.attractor.xfood.service.impl.LocationServiceImpl;
 import kg.attractor.xfood.service.impl.PizzeriaServiceImpl;
@@ -21,8 +22,9 @@ public class SupervisorController {
     private final PizzeriaServiceImpl pizzeriaService;
     private final WorkScheduleServiceImpl workScheduleService;
     private final OkHttpService okHttpService;
-
-
+    private final AuthParams authParams;
+    
+    
     @GetMapping("/opportunity-map")
     public String getOpportunityMap (Model model) {
         /* TODO
@@ -46,8 +48,9 @@ public class SupervisorController {
             @RequestParam(name = "pizzId", defaultValue = "0") long pizzeriaId,
             @RequestParam(name = "week", defaultValue = "0") long week,
             Model model) {
+        
         if (pizzeriaId != 0) {
-            okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId);
+            okHttpService.getWorksheetOfPizzeriaManagers(pizzeriaId,AuthParams.getPrincipal().getUsername());
         }
 
         model.addAttribute("locationId", locationId);
