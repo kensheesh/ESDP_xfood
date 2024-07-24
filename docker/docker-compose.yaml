@@ -4,8 +4,8 @@ services:
   app:
     container_name: xfood-app
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: ../Dockerfile
     ports:
       - "5001:5001"
     volumes:
@@ -13,7 +13,7 @@ services:
       - /var/log/app
       - /config
     env_file:
-      - .env
+      - ../.env
     depends_on:
       - db
       - redis
