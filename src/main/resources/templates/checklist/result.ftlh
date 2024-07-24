@@ -94,6 +94,9 @@
                 ! - Данный знак рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
                 рассмотрели.
             </div>
+
+
+
             <div class="table-responsive rounded p-3">
                 <table id="mainTable" class="table rounded-3">
                     <thead>
@@ -111,6 +114,21 @@
                     </thead>
                     <tbody id="mainTableBody">
                     <#list checkList.criteria as criteria>
+                        <#assign
+                        known = SPRING_SECURITY_CONTEXT??
+                        >
+                        <#if known>
+                            <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+                            <#assign name = user.getUsername()>
+                            <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+
+                                <#list authorities as authority>
+                                    <#if authority.authority == 'ROLE_SUPERVISOR'>
+                                        <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
+                                    </#if>
+                                </#list>
+                            
+                        </#if>
                         <tr>
                             <#if criteria.maxValue?? && criteria.maxValue gt 0>
                                 <td class="text-center">${criteria.zone}</td>
@@ -125,7 +143,6 @@
                                            max="${criteria.maxValue}" value="${criteria.value}" id="${criteria.id}"
                                            aria-valuemax="${criteria.maxValue}">
                                 </td>
-                                <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
                                 <td class="text-center">
                                     <#if guess??>
                                     <div class="d-flex justify-content-end align-items-center">
@@ -151,7 +168,6 @@
                                                class="text-center form-control score-input"
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
-                                    <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
                                     <td class="text-center bg-danger">
                                         <#if guess??>
                                         <div class="d-flex justify-content-end align-items-center">
