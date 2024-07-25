@@ -21,5 +21,5 @@ public interface OpportunityService {
 
     OpportunityDto getByExpertAndDate(LocalDate date);
 
-    void changeExpertOpportunities(OpportunityCreateDto dto);
+    void changeExpertOpportunity(OpportunityCreateDto dto);
 }
