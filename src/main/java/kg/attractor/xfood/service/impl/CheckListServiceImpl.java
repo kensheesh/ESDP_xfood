@@ -2,10 +2,17 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dao.CheckListDao;
+import kg.attractor.xfood.dto.LocationDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
+import kg.attractor.xfood.dto.manager.ManagerDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.statistics.CellDto;
+import kg.attractor.xfood.dto.statistics.RowDto;
+import kg.attractor.xfood.dto.statistics.StatisticsDto;
+import kg.attractor.xfood.dto.statistics.TableDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
@@ -41,6 +48,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
     private final UserRepository userRepository;
     private final CriteriaTypeService criteriaTypeService;
+    private final PizzeriaService pizzeriaService;
     private final CheckListDao checkListDao;
 
     private final DtoBuilder dtoBuilder;
@@ -362,11 +370,92 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public CheckListRowInfoDto getStatistics(LocalDate from, LocalDate to) {
-        List<CheckList> checkLists = checkListRepository.findAllByEndTimeBetween(from, to);
+    public StatisticsDto getStatistics(LocalDate from, LocalDate to) {
+        StatisticsDto statisticsDto = new StatisticsDto();
+        List<CheckList> checkLists = checkListRepository.findAll();
+        List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
+        log.info("all checklists {}", checkLists);
+        checkLists.removeIf(checkList -> checkList.getEndTime()==null&& !Objects.equals(checkList.getStatus().getStatus(), "DONE"));
+        List<RowDto> rowDtos = new ArrayList<>();
+        log.info("after removing checklists {}", checkLists);
+        for (CheckList checkList : checkLists) {
+            Manager manager = checkList.getWorkSchedule().getManager();
+            Pizzeria pizzeria = checkList.getWorkSchedule().getPizzeria();
+            User expert = checkList.getExpert();
+            Integer points = checkListCriteriaService.findAllByChecklistId(checkList.getId())
+                    .stream().mapToInt(CheckListsCriteria::getValue).sum();
+            CellDto cellDto = CellDto.builder()
+                    .date(checkList.getEndTime().toLocalDate())
+                    .points(points)
+                    .build();
 
-        return new CheckListRowInfoDto();
+            boolean found = false;
+            for (RowDto rowDto : rowDtos) {
+                if (rowDto.getPizzeria().equals(pizzeria) && rowDto.getExpert().equals(expert) && rowDto.getManager().equals(manager)) {
+                    rowDto.getCells().add(cellDto);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                rowDtos.add(RowDto.builder()
+                        .manager(ManagerDto.builder()
+                                .name(manager.getName())
+                                .surname(manager.getSurname())
+                                .id(manager.getId())
+                                .phoneNumber(manager.getPhoneNumber())
+                                .build())
+                        .expert(ExpertShowDto.builder()
+                                .name(expert.getName())
+                                .surname(expert.getSurname())
+                                .id(expert.getId())
+                                .build())
+                        .pizzeria(PizzeriaDto.builder()
+                                .name(pizzeria.getName())
+                                .location(LocationDto.builder().countryCode(pizzeria.getLocation().getName()).build())
+                                .uuid(pizzeria.getUuid())
+                                .build())
+                        .cells(List.of(cellDto))
+                        .build());
+            }
+        }
+        for (RowDto rowDto : rowDtos) {
+            int sum = 0;
+            for (CellDto cellDto : rowDto.getCells()) {
+                sum += cellDto.getPoints();
+            }
+            rowDto.setAverageByRow(sum / rowDto.getCells().size());
+        }
+        log.info("rows {}", rowDtos);
+        List<TableDto> tableDtos = new ArrayList<>();
+        for (PizzeriaDto pizzeriaDto: pizzerias){
+            List<RowDto> rowsByPizzeria = new ArrayList<>();
+            for (RowDto rowDto : rowDtos) {
+                if (pizzeriaDto.getName().equals(rowDto.getPizzeria().getName())) {
+                    rowsByPizzeria.add(rowDto);
+                }
+            }
+            tableDtos.add(TableDto.builder()
+                            .rows(rowsByPizzeria)
+                    .build());
+        }
+        log.info("tables {}", tableDtos);
+        for(TableDto tableDto : tableDtos){
+            int sum = 0;
+            for (RowDto rowDto: tableDto.getRows()) {
+                sum +=rowDto.getAverageByRow();
+            }
+            tableDto.setAverageByTable(sum / tableDto.getRows().size());
+        }
+        statisticsDto.setTables(tableDtos);
+        int sum = 0;
+        for (TableDto tableDto : tableDtos) {
+           sum = tableDto.getAverageByTable();
+        }
+        statisticsDto.setAverage(sum / tableDtos.size());
+        return statisticsDto;
     }
+
 
 
     @Override

@@ -3,17 +3,29 @@
     <table id="myTable" class="display">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Surname</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
         </tr>
         </thead>
         <tbody>
-        <#list experts as e>
+
             <tr>
-                <td> ${e.name}</td>
-                <td> ${e.email}</td>
+                <td> Имя</td>
+                <td> Фамилия</td>
             </tr>
-        </#list>
+            <tr>
+                <td> Имя</td>
+                <td> Фамилия</td>
+            </tr>
+            <tr>
+                <td> Имя</td>
+                <td> Фамилия</td>
+            </tr>
+            <tr>
+                <td> Имя</td>
+                <td> Фамилия</td>
+            </tr>
+
         </tbody>
     </table>
 
