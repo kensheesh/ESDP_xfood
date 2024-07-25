@@ -110,8 +110,11 @@
              </#list>
         <div class="text-end mb-5 mt-2">
                 <#list authorities as authority>
+                    <#if authority.authority == 'ROLE_SUPERVISOR' || authority.authority == 'ROLE_ADMIN'>
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить проверку</button>
+                    </#if>
                     <#if authority.authority == 'ROLE_SUPERVISOR'>
-                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                        <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
                     </#if>
                 </#list>
 
@@ -198,6 +201,26 @@
                             <input type="text" class="form-control" id="otherDescription" name="otherDescription"/>
                         </div>
                         <button type="submit" id="addCritFactor" data-bs-dismiss="modal" class="btn btn-primary">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить проверку?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete" method="post">
+                        <button class="btn btn-danger">Удалить</button>
                     </form>
                 </div>
             </div>
