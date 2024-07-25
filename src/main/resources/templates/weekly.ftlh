@@ -51,7 +51,7 @@
                                     <#list schedules as schedule>
                                     <tr>
                                     <td class="align-middle">
-                                            <span>${schedule.manager.name}<br>${schedule.manager.surname}</span>
+                                            <span>${schedule.manager.surname}<br>${schedule.manager.name}</span>
                                             </td>
                                             <#list schedule.weeklySchedule as day>
                                                 <td>
