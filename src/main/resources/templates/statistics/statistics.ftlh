@@ -3,8 +3,8 @@
     <table id="myTable" class="display">
         <thead>
         <tr>
-            <th>Имя</th>
-            <th>Фамилия</th>
+            <th>Date</th>
+            <th>Day of week</th>
         </tr>
         </thead>
         <tbody>
