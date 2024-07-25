@@ -81,7 +81,7 @@
             $('#myTable').DataTable({
                 responsive: true,
                 language: {
-                    url: '//cdn.datatables.net/plug-ins/2.1.2/i18n/ru.json',
+                    url: '/DataTables/ru.json',
                 }
             });
         });
