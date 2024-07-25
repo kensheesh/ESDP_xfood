@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import kg.attractor.xfood.enums.Status;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SoftDelete;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "check_lists")
 @Builder
+@SoftDelete
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckList {
