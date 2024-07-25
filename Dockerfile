@@ -1,27 +1,7 @@
-FROM maven:3.6.3-openjdk-17-slim AS build
+FROM maven:3.8.5-openjdk-17
 
-WORKDIR /app
+WORKDIR /ESDP_xfood
+COPY . .
+RUN mvn clean install -DskipTests
 
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
-COPY src ./src
-
-RUN mvn clean package -Dmaven.test.skip=true
-
-FROM openjdk:17-jdk
-
-VOLUME /data
-VOLUME /var/log/app
-
-EXPOSE 5051
-
-WORKDIR /app
-
-ENV SPRING_PROFILES_ACTIVE=prod
-
-COPY --from=build /app/target/xfood-1.0.0-SNAPSHOT.jar app.jar
-
-COPY .env /app/.env
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD mvn spring-boot:run
