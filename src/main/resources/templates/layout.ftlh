@@ -79,7 +79,10 @@
     <script>
         $(document).ready(function() {
             $('#myTable').DataTable({
-                responsive: true
+                responsive: true,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.1.2/i18n/ru.json',
+                }
             });
         });
     </script>

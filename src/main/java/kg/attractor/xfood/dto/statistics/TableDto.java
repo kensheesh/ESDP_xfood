@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
+
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CheckListStatisticsDto {
-    private Integer averagePoints;
-    List<CheckListStatisticsDto> checkListStatistics;
+@AllArgsConstructor
+public class TableDto {
+    private Integer averageByTable;
     private String type;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private List<RowDto> rows;
 }

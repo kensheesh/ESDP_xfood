@@ -22,11 +22,7 @@ public class StatisticsController {
 
     @GetMapping
     private String statistics(@RequestParam(name = "from", required = false) LocalDate from, @RequestParam(name = "to", required = false)LocalDate to, Model model){
-      /*  if (from != null && to != null) {
-            log.info("from: {}, to: {}", from, to);
-            model.addAttribute("statistics", checkListService.getStatistics(from, to));
-        }*/
-        model.addAttribute("experts", userService.getAllExperts());
-        return "analytics/statistics";
+
+        return "statistics/statistics";
     }
 }
