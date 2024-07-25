@@ -73,4 +73,8 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<CheckList> findCheckListByWorkSchedule_IdAndExpert_Id(Long workScheduleId, Long expertId);
 
     boolean existsByWorkSchedule_IdAndExpert_Id(Long id, Long expertId);
+    
+    void deleteByUuidLinkAndStatusIsNot(String uuid, Status status);
+
+    void deleteByUuidLink(String uuid);
 }

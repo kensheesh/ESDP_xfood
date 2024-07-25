@@ -142,4 +142,10 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
         return "redirect:/checks/"+uuid+"/check";
     }
 
+    @PostMapping("{uuid}/delete")
+    public String delete (@PathVariable String uuid) {
+        checkListService.delete(uuid);
+        return "redirect:/expert/checks";
+    }
+
 }

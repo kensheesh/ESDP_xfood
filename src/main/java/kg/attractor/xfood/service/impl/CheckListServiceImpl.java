@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -361,6 +362,21 @@ public class CheckListServiceImpl implements CheckListService {
             }
         }
         return (int) Math.ceil(percentage);
+    }
+
+    @Override
+    @Transactional
+    public void delete(String uuid) {
+        for (var authority : AuthParams.getPrincipal().getAuthorities()) {
+            if (Objects.equals(authority.getAuthority(), "ROLE_SUPERVISOR")) {
+                  checkListRepository.deleteByUuidLinkAndStatusIsNot(uuid, Status.DONE);
+                  break;
+            }
+            if (Objects.equals(authority.getAuthority(), "ROLE_ADMIN")) {
+                checkListRepository.deleteByUuidLink(uuid);
+                break;
+            }
+        }
     }
 
 
