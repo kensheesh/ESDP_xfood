@@ -1,6 +1,7 @@
 package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.AuthParams;
+import kg.attractor.xfood.exception.BearerTokenNotFound;
 import kg.attractor.xfood.service.OkHttpService;
 import kg.attractor.xfood.service.impl.LocationServiceImpl;
 import kg.attractor.xfood.service.impl.PizzeriaServiceImpl;

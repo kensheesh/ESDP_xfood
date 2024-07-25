@@ -63,8 +63,12 @@ public class OkHttpServiceImpl implements OkHttpService {
 	@Override
 	public void getWorksheetOfPizzeriaManagers(Long pizId, String supervisorUsername) {
 		setApiUrl(pizId);
-		setBearerToken(supervisorUsername);
-		
+		try {
+			setBearerToken(supervisorUsername);
+		} catch (Exception e) {
+			log.error("Не удалось загрузить графики менеджеров: BearerToken не найден");
+		}
+
 		String pizzeriaUuid = pizzeriaService.getPizzeriaById(pizId).getUuid();
 		String countryCode = pizzeriaService.getPizzeriaById(pizId).getLocation().getCountry().getCountryCode();
 		
