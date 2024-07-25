@@ -107,4 +107,5 @@ public class OAuthServiceImpl implements OAuthService {
 		byte[] digest = messageDigest.digest();
 		return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
 	}
+	
 }

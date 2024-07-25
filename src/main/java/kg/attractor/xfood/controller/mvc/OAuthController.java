@@ -13,12 +13,13 @@ import org.yaml.snakeyaml.util.UriEncoder;
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class OAuthController {
+	
 	private final OAuthService oAuthService;
 	
 	@GetMapping("/login")
 	public String login() {
 		String authorizationUrl = oAuthService.getAuthorizationUrl();
-		System.out.println(authorizationUrl);
+		System.out.println(UriEncoder.encode(authorizationUrl));
 		return "redirect:" + UriEncoder.encode(authorizationUrl);
 	}
 	
