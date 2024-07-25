@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -44,6 +45,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final UserRepository userRepository;
     private final CriteriaTypeService criteriaTypeService;
     private final CheckListDao checkListDao;
+    private final CheckTypeFeeService checkTypeFeeService;
 
     private final DtoBuilder dtoBuilder;
 
@@ -361,6 +363,25 @@ public class CheckListServiceImpl implements CheckListService {
             }
         }
         return (int) Math.ceil(percentage);
+    }
+
+    @Override
+    public List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        List<CheckList> checkLists = checkListRepository.findChecklistsDoneByExpertId(expertEmail, Status.DONE);
+        List<CheckListRewardDto> rewardDtoList = new ArrayList<>();
+        checkLists.forEach(c -> {
+            rewardDtoList.add(
+                    CheckListRewardDto.builder()
+                            .checklistUUID(c.getUuidLink())
+                            .endDate(formatter.format(c.getEndTime()))
+                            .expertName(c.getExpert().getName() + " " + c.getExpert().getSurname())
+                            .pizzeriaName(c.getWorkSchedule().getPizzeria().getName())
+                            .sumRewards(checkTypeFeeService.getFeesByCheckTypeId(c.getCheckType().getId()).doubleValue())
+                            .build()
+            );
+        });
+        return rewardDtoList;
     }
 
 

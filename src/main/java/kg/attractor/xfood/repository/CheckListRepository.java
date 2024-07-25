@@ -73,4 +73,9 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<CheckList> findCheckListByWorkSchedule_IdAndExpert_Id(Long workScheduleId, Long expertId);
 
     boolean existsByWorkSchedule_IdAndExpert_Id(Long id, Long expertId);
+
+    @Query(value = """
+                select c from CheckList  c where c.expert.email like :expertEmail and CAST(c.status as text) = :#{#status.getStatus()}
+            """)
+    List<CheckList> findChecklistsDoneByExpertId(String expertEmail, Status status);
 }

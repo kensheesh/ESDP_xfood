@@ -3,6 +3,8 @@ package kg.attractor.xfood.dto.checklist;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 public class CheckListRewardDto {
@@ -12,5 +14,5 @@ public class CheckListRewardDto {
     private String expertName;
     private String pizzeriaName;
     private Double sumRewards;
-    
+
 }

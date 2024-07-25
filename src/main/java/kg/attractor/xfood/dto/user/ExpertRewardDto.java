@@ -1,14 +1,17 @@
 package kg.attractor.xfood.dto.user;
 
+import kg.attractor.xfood.dto.checklist.CheckListRewardDto;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
 public class ExpertRewardDto {
 
-    private Long expertId;
     private Long countChecks;
-    private Long sumRewards;
+    private Double sumRewards;
+    List<CheckListRewardDto> checkListRewards;
 
 }

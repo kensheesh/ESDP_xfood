@@ -42,6 +42,10 @@ public class CheckList {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "expert_id")
 	private User expert;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "type_id")
+	private CheckType checkType;
 	
 	@Column(name = "end_time")
 	private LocalDateTime endTime;

@@ -26,4 +26,7 @@ public class CheckType {
     @OneToMany(mappedBy = "type")
     private List<CriteriaType> criteriaTypes;
 
+    @OneToMany(mappedBy = "checkType")
+    private List<CheckList> checkLists;
+
 }
