@@ -421,7 +421,7 @@ public class CheckListServiceImpl implements CheckListService {
                                 .location(LocationDto.builder().name(pizzeria.getLocation().getName()).build())
                                 .uuid(pizzeria.getUuid())
                                 .build())
-                        .cells(List.of(cellDto))
+                        .cells(new ArrayList<>(List.of(cellDto)))
                         .build());
             }
         }
