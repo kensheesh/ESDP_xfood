@@ -38,11 +38,11 @@ public class GlobalExceptionHandler implements ErrorController {
 
 		return "/error/error";
 	}
-	
+
 	@ExceptionHandler(NoSuchElementException.class)
 	private String notFound(HttpServletRequest request, Model model, NoSuchElementException ex) {
 		log.error(ex.getMessage());
-		
+
 		model.addAttribute("status", HttpStatus.NOT_FOUND.value());
 		model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
 		model.addAttribute("details", request);

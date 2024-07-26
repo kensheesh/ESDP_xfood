@@ -1,10 +1,16 @@
 <#import '../layout.ftlh' as main>
 <@main.layout>
+    <#assign known = SPRING_SECURITY_CONTEXT??>
+    <#if known>
+        <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
+    </#if>
+
     <link rel="stylesheet" href="/css/profile.css">
 
     <div class="row row-cols-md-2 row-gap-3">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
+                <#assign userRole = authorizedUser.authorities[0].authority>
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
                         <div class="col">

@@ -11,4 +11,6 @@ public interface PizzeriaService {
     List<PizzeriaWeeklyDto> getPizzeriasByLocationId(long locationId);
     PizzeriaDto getPizzeriaDtoById(long id);
     List<PizzeriaDto> getAllPizzerias();
+
+    List<PizzeriaShowDto> getPizzeriasByPartOfName(String searchQuery);
 }

@@ -24,6 +24,8 @@ import java.util.NoSuchElementException;
 public class ManagerServiceImpl implements ManagerService {
     private final DtoBuilder dtoBuilder;
     private final ManagerRepository managerRepository;
+    @Lazy
+    @Autowired
     private final CheckListService checkListService;
     private  OkHttpService okHttpService;
 
@@ -35,6 +37,14 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public List<ManagerDto> getAllManagers() {
         return managerRepository.findAll()
+                .stream()
+                .map(dtoBuilder::buildManagerDto)
+                .toList();
+    }
+
+    @Override
+    public List<ManagerDto> getAllManagersAscBySurname() {
+        return managerRepository.findByOrderBySurnameAsc()
                 .stream()
                 .map(dtoBuilder::buildManagerDto)
                 .toList();
