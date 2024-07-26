@@ -1,10 +1,11 @@
     <#import "../layout.ftlh" as main>
     <@main.layout ; spring>
-        <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="fa fa-calendar"></i>&nbsp;
-            <span></span> <i class="fa fa-caret-down"></i>
-        </div>
-
+        <form action="/statistics" method="get">
+            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
+        </form>
         <#if from?? && to??>
             <#assign size = (days?size) + 3>
             <#assign size1 = (days?size) + 4>
