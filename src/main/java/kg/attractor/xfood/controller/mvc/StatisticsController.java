@@ -26,6 +26,8 @@ public class StatisticsController {
            model.addAttribute("statistics", checkListService.getStatistics(from, to));
            model.addAttribute("days", checkListService.getDays(from, to));
        }
+       model.addAttribute("from", from);
+       model.addAttribute("to", to);
         return "statistics/statistics";
     }
 }

@@ -374,9 +374,12 @@ public class CheckListServiceImpl implements CheckListService {
         List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
         log.info("all checklists {}", checkLists);
 
-
         checkLists.removeIf(checkList -> checkList.getEndTime() == null &&
                 !Objects.equals(checkList.getStatus().getStatus(), "DONE"));
+
+        checkLists.removeIf(checkList ->
+                checkList.getEndTime().toLocalDate().isBefore(from) ||
+                checkList.getEndTime().toLocalDate().isAfter(to));
         List<RowDto> rowDtos = new ArrayList<>();
         log.info("after removing checklists {}", checkLists);
 
