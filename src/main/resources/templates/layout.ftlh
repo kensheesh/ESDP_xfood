@@ -77,6 +77,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="/DataTables/datatables.min.js"></script>
     <script>
+
         $(document).ready(function() {
             $('#myTable').DataTable({
                 responsive: true,
@@ -87,7 +88,17 @@
                     dataSrc: 2,
                     endRender: function(rows) {
                         let totalColumns = rows.columns().header().length;
-                        let lastColumnIndex = totalColumns - 1;
+                        let lastColumnIndex = totalColumns - 2;
+
+                        let averageColumnIndex = rows.columns().indexes().filter(index => {
+                            return $(rows.column(index).header()).text().includes('Среднее за пиццерию');
+                        })[0];
+
+
+                        if (averageColumnIndex !== undefined) {
+                            $('#myTable').DataTable().column(averageColumnIndex).visible(false);
+                        }
+
                         let avg = rows
                             .data()
                             .pluck(lastColumnIndex)
@@ -99,8 +110,6 @@
                             .append('<td colspan="' + (rows.columns().header().length - 4) + '">' + avg.toFixed(2) + '</td>');
                     }
                 }
-
-
         });})
     </script>
     </body>
