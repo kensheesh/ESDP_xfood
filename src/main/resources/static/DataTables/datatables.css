@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#dt/jq-3.7.0/dt-2.1.0/af-2.7.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/cr-2.0.3/date-1.5.2/fc-5.0.1/fh-4.0.1/r-3.0.2/rg-1.5.0/rr-1.5.0/sc-2.4.3/sb-1.7.1/sp-2.3.1/sl-2.0.3/sr-1.4.1
+ *   https://datatables.net/download/#dt/jq-3.7.0/jszip-3.10.1/dt-2.1.2/af-2.7.0/b-3.1.0/b-colvis-3.1.0/b-html5-3.1.0/b-print-3.1.0/cr-2.0.3/date-1.5.3/fc-5.0.1/fh-4.0.1/kt-2.12.1/r-3.0.2/rg-1.5.0/rr-1.5.0/sc-2.4.3/sb-1.7.1/sp-2.3.1/sl-2.0.3/sr-1.4.1
  *
  * Included libraries:
- *   jQuery 3 3.7.0, DataTables 2.1.0, AutoFill 2.7.0, Buttons 3.1.0, Column visibility 3.1.0, HTML5 export 3.1.0, ColReorder 2.0.3, DateTime 1.5.2, FixedColumns 5.0.1, FixedHeader 4.0.1, Responsive 3.0.2, RowGroup 1.5.0, RowReorder 1.5.0, Scroller 2.4.3, SearchBuilder 1.7.1, SearchPanes 2.3.1, Select 2.0.3, StateRestore 1.4.1
+ *   jQuery 3 3.7.0, JSZip 3.10.1, DataTables 2.1.2, AutoFill 2.7.0, Buttons 3.1.0, Column visibility 3.1.0, HTML5 export 3.1.0, Print view 3.1.0, ColReorder 2.0.3, DateTime 1.5.3, FixedColumns 5.0.1, FixedHeader 4.0.1, KeyTable 2.12.1, Responsive 3.0.2, RowGroup 1.5.0, RowReorder 1.5.0, Scroller 2.4.3, SearchBuilder 1.7.1, SearchPanes 2.3.1, Select 2.0.3, StateRestore 1.4.1
  */
 
 @charset "UTF-8";
@@ -1766,6 +1766,36 @@ table.fixedHeader-locked {
   table.fixedHeader-floating {
     display: none;
   }
+}
+
+
+table.dataTable tbody th.focus,
+table.dataTable tbody td.focus {
+  outline: 2px solid #3366ff;
+  outline-offset: -2px;
+}
+table.dataTable tbody tr.selected th.focus,
+table.dataTable tbody tr.selected td.focus {
+  outline-color: #0033cc;
+}
+
+div.dtk-focus-alt table.dataTable tbody th.focus,
+div.dtk-focus-alt table.dataTable tbody td.focus {
+  outline: 2px solid #ff8b33;
+  outline-offset: -2px;
+}
+
+html.dark table.dataTable tbody th.focus,
+html.dark table.dataTable tbody td.focus {
+  outline-color: rgb(13, 110, 253);
+}
+html.dark table.dataTable tbody tr.selected th.focus,
+html.dark table.dataTable tbody tr.selected td.focus {
+  outline-color: #0143a3;
+}
+html.dark div.dtk-focus-alt table.dataTable tbody th.focus,
+html.dark div.dtk-focus-alt table.dataTable tbody td.focus {
+  outline-color: #ff8b33;
 }
 
 

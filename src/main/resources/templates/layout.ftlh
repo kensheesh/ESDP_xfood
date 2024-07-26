@@ -82,9 +82,14 @@
                 responsive: true,
                 language: {
                     url: '/DataTables/ru.json',
+                },
+                rowGroup: {
+                    dataSrc: 'group'
                 }
             });
         });
+
+
     </script>
     </body>
 

@@ -1,5 +1,7 @@
 <#import "../layout.ftlh" as main>
 <@main.layout ; spring>
+    <#assign size = (days?size) + 4>
+    <#assign size1 = (days?size) + 5>
     <table id="myTable" class="display">
         <thead>
         <tr>
@@ -10,6 +12,7 @@
                 <th>${d.day}</th>
             </#list>
             <th>Среднее</th>
+            <th>Среднее за пиццерию</th>
         </tr>
         </thead>
         <tbody>
@@ -33,10 +36,19 @@
                         </#if>
                     </#list>
                     <td>${row.averageByRow}</td>
+                    <td> </td>
                 </tr>
             </#list>
+
         </#list>
         </tbody>
+
+       <tfoot>
+       <tr>
+           <th colspan="${size}" style="text-align:right">Среднее:</th>
+           <th style="text-align:right" colspan="${size1}">${statistics.average}</th>
+       </tr>
+        </tfoot>
     </table>
 
 </@main.layout>
