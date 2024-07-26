@@ -46,4 +46,6 @@ public interface CheckListService {
     Integer getPercentageById(Long id);
 
     void delete(String uuid);
+
+    List<ChecklistMiniExpertShowDto> getDeletedChecklists();
 }

@@ -41,14 +41,19 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
             """)
     List<CheckList> findByStatus(Status status);
 
-  /*  @Query(value = """
+   @Query(value = """
             SELECT c
             FROM CheckList c
-                    JOIN Opportunity o ON c.opportunity.id = o.id
-                     JOIN User u ON o.user.id = u.id
             WHERE CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    List<CheckList> findCheckListByStatus(Status status);*/
+    List<CheckList> findCheckListByStatus(Status status);
+
+    @Query(value = """
+            SELECT *
+            FROM check_lists
+            WHERE deleted = TRUE
+            """, nativeQuery = true)
+    List<CheckList> findDeletedChecklists();
 
     @Modifying
     @Transactional

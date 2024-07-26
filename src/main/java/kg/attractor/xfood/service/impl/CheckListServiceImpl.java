@@ -21,11 +21,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -123,12 +121,10 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status) {
-        return null;
-        //
-//        return checkListRepository.findCheckListByStatus(status)
-//                .stream()
-//                .map(dtoBuilder::buildChecklistDto)
-//                .toList();
+        return checkListRepository.findCheckListByStatus(status)
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
     }
 
 
@@ -377,6 +373,14 @@ public class CheckListServiceImpl implements CheckListService {
                 break;
             }
         }
+    }
+
+    @Override
+    public List<ChecklistMiniExpertShowDto> getDeletedChecklists() {
+        return checkListRepository.findDeletedChecklists()
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
     }
 
 

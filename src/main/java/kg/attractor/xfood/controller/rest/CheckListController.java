@@ -1,6 +1,7 @@
 package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.dao.CheckListDao;
+import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.service.CheckListService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @RestController("checkListControllerRest")
 @RequiredArgsConstructor
@@ -51,6 +53,8 @@ public class CheckListController {
         return ResponseEntity.ok(checkListService.getMaxPoints(id));
     }
 
-
-
+    @GetMapping("deleted")
+    public ResponseEntity<List<ChecklistMiniExpertShowDto>> getDeletedChecklists () {
+        return ResponseEntity.ok(checkListService.getDeletedChecklists());
+    }
 }
