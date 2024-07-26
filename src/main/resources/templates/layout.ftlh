@@ -125,7 +125,7 @@
         $('input[name="dates"]').daterangepicker();
 
         $(function() {
-
+            moment.locale('ru');
             var start = moment().subtract(29, 'days');
             var end = moment();
 
