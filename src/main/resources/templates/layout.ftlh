@@ -84,12 +84,24 @@
                     url: '/DataTables/ru.json',
                 },
                 rowGroup: {
-                    dataSrc: 'group'
+                    dataSrc: 2,
+                    endRender: function(rows) {
+                        let totalColumns = rows.columns().header().length;
+                        let lastColumnIndex = totalColumns - 1;
+                        let avg = rows
+                            .data()
+                            .pluck(lastColumnIndex)
+                            .reduce(function(a, b) {
+                                return a + parseFloat(b);
+                            }, 0) / rows.count();
+                        return $('<tr/>')
+                            .append('<td colspan="3">Среднее за пиццерию</td>')
+                            .append('<td colspan="' + (rows.columns().header().length - 4) + '">' + avg.toFixed(2) + '</td>');
+                    }
                 }
-            });
-        });
 
 
+        });})
     </script>
     </body>
 
