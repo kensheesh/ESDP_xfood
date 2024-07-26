@@ -77,6 +77,9 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+
     <script src="/DataTables/datatables.min.js"></script>
     <script>
 
@@ -115,23 +118,22 @@
         });})
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-ui/ui/i18n/datepicker-ru.js"></script>
 
 
     <script>
-        $('input[name="dates"]').daterangepicker();
-
         $(function() {
-            moment.locale('ru');
+           moment.locale('ru');
             var start = moment().subtract(29, 'days');
             var end = moment();
 
             function cb(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                $('#from').val(start.format('YYYY-MM-DD'));
+                $('#to').val(end.format('YYYY-MM-DD'));
             }
+
             $('#reportrange').daterangepicker({
                 startDate: start,
                 endDate: end,
@@ -157,11 +159,17 @@
                 }
             }, cb);
 
-
             cb(start, end);
 
+            $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+                start = picker.startDate;
+                end = picker.endDate;
+                $('#from').val(start.format('YYYY-MM-DD'));
+                $('#to').val(end.format('YYYY-MM-DD'));
+            });
         });
     </script>
+
     </body>
     </html>
 </#macro>

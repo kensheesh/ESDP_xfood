@@ -1,10 +1,13 @@
     <#import "../layout.ftlh" as main>
     <@main.layout ; spring>
-        <form action="/statistics" method="get">
+        <form action="/statistics" method="get" id="daterange">
+            <input type="hidden" name="from" id="from" value="">
+            <input type="hidden" name="to" id="to" value="">
             <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
                 <i class="fa fa-calendar"></i>&nbsp;
                 <span></span> <i class="fa fa-caret-down"></i>
             </div>
+            <button type="submit" id="date-range-button">применить</button>
         </form>
         <#if from?? && to??>
             <#assign size = (days?size) + 3>
