@@ -37,7 +37,6 @@ import java.util.*;
 public class CheckListServiceImpl implements CheckListService {
     private final WorkScheduleService workScheduleService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
-    private final UserService userService;
     private ManagerService managerService;
     private final CriteriaService criteriaService;
     private final CheckListRepository checkListRepository;
@@ -228,6 +227,18 @@ public class CheckListServiceImpl implements CheckListService {
         return checkLists;
     }
 
+    private List<CheckList> filterByDateRewards(List<CheckList> checkLists, LocalDate startDate, LocalDate endDate) {
+        if (startDate != null && endDate != null) {
+            return checkLists.stream()
+                    .filter(checkList -> {
+                        LocalDate date = checkList.getEndTime().toLocalDate();
+                        return (date.isEqual(startDate) || date.isAfter(startDate) || date.isBefore(endDate));
+                    })
+                    .toList();
+        }
+        return checkLists;
+    }
+
     @Override
     public CheckListResultDto getResultByUuidLink(String uuidLink) {
         return dtoBuilder.buildCheckListResultDto(
@@ -366,10 +377,15 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        List<CheckList> checkLists = checkListRepository.findChecklistsDoneByExpertId(expertEmail, Status.DONE);
+    public List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail, LocalDate startDate, LocalDate endDate) {
+        List<CheckList> checkLists = new ArrayList<>();
+        if(startDate != null && endDate != null) {
+            checkLists = checkListRepository.findChecklistsDoneByExpertIdEndTimeBetween(expertEmail, Status.DONE, startDate.atStartOfDay(), endDate.atStartOfDay());
+        } else {
+            checkLists = checkListRepository.findChecklistsDoneByExpertId(expertEmail, Status.DONE);
+        }
         List<CheckListRewardDto> rewardDtoList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         checkLists.forEach(c -> {
             rewardDtoList.add(
                     CheckListRewardDto.builder()

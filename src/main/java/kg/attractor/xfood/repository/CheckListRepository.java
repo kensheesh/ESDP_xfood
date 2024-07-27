@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,4 +80,12 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
                 select c from CheckList  c where c.expert.email like :expertEmail and CAST(c.status as text) = :#{#status.getStatus()}
             """)
     List<CheckList> findChecklistsDoneByExpertId(String expertEmail, Status status);
+
+    @Query(value = """
+        select c from CheckList c 
+        where c.expert.email like :expertEmail 
+        and CAST(c.status as text) = :#{#status.getStatus()}
+        and c.endTime between :startDate and :endDate
+""")
+    List<CheckList> findChecklistsDoneByExpertIdEndTimeBetween(String expertEmail, Status status, LocalDateTime startDate, LocalDateTime endDate);
 }

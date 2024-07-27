@@ -44,6 +44,6 @@ public interface CheckListService {
     Integer getMaxPoints(Long id);
     
     Integer getPercentageById(Long id);
-    List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail);
+    List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail, LocalDate startDate, LocalDate endDate);
 
 }

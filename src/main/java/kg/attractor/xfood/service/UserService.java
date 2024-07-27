@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.user.ExpertRewardDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.model.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserService {
@@ -15,5 +16,7 @@ public interface UserService {
     List<ExpertShowDto> fetchAllExperts();
 
     User findById(Long expertId);
-    ExpertRewardDto getExpertReward(String expertEmail);
+    ExpertRewardDto getExpertReward(LocalDate startDate, LocalDate endDate);
+
+    Object getRewards(String pizzeria, String expert, LocalDate startDate, LocalDate endDate);
 }
