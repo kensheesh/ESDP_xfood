@@ -8,18 +8,21 @@ import kg.attractor.xfood.dto.user.ExpertRewardDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.exception.NotFoundException;
-import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
+import kg.attractor.xfood.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,39 +84,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long expertId) {
         return userRepository.findById(expertId).orElseThrow(() -> new NotFoundException("Expert not found"));
-    }
-
-    @Override
-    public ExpertRewardDto getExpertReward(LocalDate startDate, LocalDate endDate) {
-        String expertEmail = AuthParams.getPrincipal().getUsername();
-        List<CheckListRewardDto> rewardDtoList = checkListService.getChecklistRewardsByExpert(expertEmail, startDate, endDate);
-        Double sumRewards = rewardDtoList.stream()
-                .mapToDouble(CheckListRewardDto::getSumRewards)
-                .sum();
-
-       return ExpertRewardDto.builder()
-               .checkListRewards(rewardDtoList)
-               .sumRewards(sumRewards)
-               .countChecks((long) rewardDtoList.size())
-               .build();
-    }
-
-    private List<CheckListRewardDto> filterByDateRewards(List<CheckListRewardDto> checkLists, LocalDate startDate, LocalDate endDate) {
-        if (startDate != null && endDate != null) {
-            return checkLists.stream()
-                    .filter(checkList -> {
-                        LocalDate date = LocalDate.parse(checkList.getEndDate());
-                        return (date.isEqual(startDate) || date.isAfter(startDate) || date.isBefore(endDate));
-                    })
-                    .toList();
-        }
-        return checkLists;
-    }
-
-
-    @Override
-    public Object getRewards(String pizzeria, String expert, LocalDate startDate, LocalDate endDate) {
-        return null;
     }
 
     public List<User> findSupervisors() {

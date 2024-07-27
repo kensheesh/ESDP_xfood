@@ -6,6 +6,7 @@ import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -44,6 +45,6 @@ public interface CheckListService {
     Integer getMaxPoints(Long id);
     
     Integer getPercentageById(Long id);
-    List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail, LocalDate startDate, LocalDate endDate);
+    List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail, LocalDateTime startDate, LocalDateTime endDate, String pizzeriaName);
 
 }

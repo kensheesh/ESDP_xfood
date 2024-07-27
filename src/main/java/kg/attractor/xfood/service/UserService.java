@@ -16,7 +16,4 @@ public interface UserService {
     List<ExpertShowDto> fetchAllExperts();
 
     User findById(Long expertId);
-    ExpertRewardDto getExpertReward(LocalDate startDate, LocalDate endDate);
-
-    Object getRewards(String pizzeria, String expert, LocalDate startDate, LocalDate endDate);
 }

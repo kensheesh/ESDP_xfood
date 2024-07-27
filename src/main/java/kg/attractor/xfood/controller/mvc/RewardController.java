@@ -1,6 +1,7 @@
 package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.enums.Role;
+import kg.attractor.xfood.service.RewardService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class RewardController {
 
+    private final RewardService rewardService;
     @Lazy
     private final UserService userService;
 
@@ -28,10 +30,11 @@ public class RewardController {
                           @RequestParam(name = "endDate", required = false) LocalDate endDate) {
         Role role = userService.getUserDto().getRole();
         if (role.equals(Role.SUPERVISOR)) {
-            model.addAttribute("experts", userService.getRewards(pizzeria, expert, startDate, endDate));
+            model.addAttribute("experts", rewardService.getRewards(pizzeria, expert, startDate, endDate));
         }
         if(role.equals(Role.EXPERT)) {
-            model.addAttribute("expert", userService.getExpertReward(startDate, endDate));
+            String expertEmail = userService.getUserDto().getEmail();
+            model.addAttribute("expert", rewardService.getExpertReward(expertEmail, null, startDate, endDate));
         }
         return "rewards/rewards";
     }

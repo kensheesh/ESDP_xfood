@@ -1,9 +1,5 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
-    <#assign known = SPRING_SECURITY_CONTEXT??>
-    <#if known>
-        <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
-    </#if>
 
     <div class="row">
         <div class="card col-lg-8">
@@ -11,9 +7,10 @@
                 <h3>Вознаграждение</h3>
                 <div class="d-flex flex-wrap mb-3">
                     <div class="p-2 text-white me-2" style="background-color: #20b2aa;">Количество
-                        проверок: ${expert.getCountChecks()}</div>
+                        проверок:
+                    </div>
                     <div class="p-2 text-white" style="background-color: #ff6347;">Сумма
-                        вознаграждение: ${expert.getSumRewards()} Р
+                        вознаграждение: Р
                     </div>
                 </div>
 
@@ -22,21 +19,38 @@
                     <tr>
                         <th>Дата</th>
                         <th>Пиццерия</th>
-                        <th>Эксперт</th>
+                        <#if experts??>
+                            <th>Эксперт</th>
+                        </#if>
                         <th>Вознаграждение</th>
                         <th>Чек лист</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <#list expert.getCheckListRewards() as reward>
-                        <tr>
-                            <td>${reward.getEndDate()}</td>
-                            <td>${reward.getPizzeriaName()}</td>
-                            <td>${reward.getExpertName()}</td>
-                            <td>${reward.getSumRewards()} Р</td>
-                            <td><a href="/checks/${reward.checklistUUID}/result">Перейти</a></td>
-                        </tr>
-                    </#list>
+                    <#if expert??>
+                        <#list expert.getCheckListRewards() as reward>
+                            <tr>
+                                <td>${reward.getEndDate()}</td>
+                                <td>${reward.getPizzeriaName()}</td>
+                                <td>${reward.getSumRewards()} Р</td>
+                                <td><a href="/checks/${reward.checklistUUID}/result">Перейти</a></td>
+                            </tr>
+                        </#list>
+                    </#if>
+                    <#if experts??>
+                        <#list experts as expert>
+                            <#list expert.getCheckListRewards() as reward>
+                                <tr>
+                                    <td>${reward.getEndDate()}</td>
+                                    <td>${reward.getPizzeriaName()}</td>
+                                    <td>${reward.getExpertName()}</td>
+                                    <td>${reward.getSumRewards()} Р</td>
+                                    <td><a href="/checks/${reward.checklistUUID}/result">Перейти</a></td>
+                                </tr>
+                            </#list>
+                        </#list>
+                    </#if>
+
                     </tbody>
                 </table>
 
@@ -60,13 +74,13 @@
             </div>
         </div>
 
-        <#assign userRole = authorizedUser.authorities[0].authority>
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
                     <h6>Фильтры</h6>
                     <form action="/reward" method="GET">
-                        <#if userRole == "SUPERVISOR">
+
+                        <#if experts??>
                             <div class="mb-3">
                                 <label for="pizzeria-select" class="form-label">Пиццерия</label>
                                 <select class="form-select" id="pizzeria-select" name="pizzeria">
@@ -80,6 +94,7 @@
                                 </select>
                             </div>
                         </#if>
+
                         <div class="mb-3">
                             <label for="date-from" class="form-label">От</label>
                             <input type="date" class="form-control" id="date-from" name="startDate">
