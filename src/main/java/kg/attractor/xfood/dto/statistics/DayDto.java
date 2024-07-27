@@ -13,5 +13,5 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class DayDto {
     private String dayOfWeek;
-    private LocalDate day;
+    private String day;
 }

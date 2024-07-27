@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -369,6 +370,7 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public StatisticsDto getStatistics(LocalDate from, LocalDate to) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         StatisticsDto statisticsDto = new StatisticsDto();
         List<CheckList> checkLists = checkListRepository.findAll();
         List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
@@ -391,7 +393,7 @@ public class CheckListServiceImpl implements CheckListService {
             Integer points = checkListCriteriaService.findAllByChecklistId(checkList.getId())
                     .stream().mapToInt(CheckListsCriteria::getValue).sum();
             CellDto cellDto = CellDto.builder()
-                    .date(checkList.getEndTime().toLocalDate())
+                    .date(checkList.getEndTime().toLocalDate().format(formatter))
                     .points(points)
                     .build();
 
@@ -460,6 +462,7 @@ public class CheckListServiceImpl implements CheckListService {
         int totalSum = tableDtos.stream().mapToInt(TableDto::getAverageByTable).sum();
         int tableCount = tableDtos.size();
         statisticsDto.setAverage(tableCount > 0 ? totalSum / tableCount : 0);
+        statisticsDto.setDays(getDays(from, to));
         log.info("statistics average {}", statisticsDto.getAverage());
         statisticsDto.setTables(tableDtos);
         log.info("statistics {}", statisticsDto);
@@ -469,6 +472,7 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<DayDto> getDays(LocalDate from, LocalDate to) {
+
         List<LocalDate> localDates = new ArrayList<>();
         LocalDate currentDate = from;
 
@@ -476,11 +480,12 @@ public class CheckListServiceImpl implements CheckListService {
             localDates.add(currentDate);
             currentDate = currentDate.plusDays(1);
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         List<DayDto> dayDtos = new ArrayList<>();
         for (LocalDate localDate : localDates) {
             dayDtos.add(DayDto.builder()
-                            .day(localDate)
+                            .day(localDate.format(formatter))
                             .dayOfWeek(localDate.getDayOfWeek().name().toLowerCase())
                     .build());
         }

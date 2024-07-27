@@ -10,17 +10,20 @@
             <button type="submit" id="date-range-button">применить</button>
         </form>
         <#if from?? && to??>
-            <#assign size = (days?size) + 3>
-            <#assign size1 = (days?size) + 4>
+            <#assign size = (statistics.days?size) + 3>
+            <#assign size1 = (statistics.days?size) + 4>
+
             <table id="myTable" class="display cell-border">
                 <thead class="fs-6">
                 <tr>
                     <th>Менеджер</th>
                     <th>Эксперт</th>
                     <th>Пиццерия</th>
-                    <#list days as d>
-                        <th colspan="fs-6">${d.day}</th>
-                    </#list>
+                    <#if statistics.days??>
+                        <#list statistics.days as d>
+                            <th colspan="fs-6">${d.day}</th>
+                        </#list>
+                    </#if>
                     <th>Среднее</th>
                     <th>Среднее за пиццерию</th>
                 </tr>
@@ -32,7 +35,7 @@
                             <td>${row.manager.name} ${row.manager.surname}</td>
                             <td>${row.expert.name} ${row.expert.surname}</td>
                             <td>${row.pizzeria.name}</td>
-                            <#list days as d>
+                            <#list statistics.days as d>
                                 <#assign cellFound = false>
                                 <#list row.cells as cell>
                                     <#if d.day == cell.date>

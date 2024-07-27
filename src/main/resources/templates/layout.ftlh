@@ -77,15 +77,13 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-
-
     <script src="/DataTables/datatables.min.js"></script>
     <script>
 
         $(document).ready(function() {
             $('#myTable').DataTable({
                 responsive: true,
+                columnDefs: [{ width: '20%', targets: 0 }],
                 language: {
                     url: '/DataTables/ru.json',
                 },
@@ -121,7 +119,11 @@
                             {
                                 extend: 'excelHtml5',
                                 autoFilter: true,
-                                sheetName: 'Exported data'
+                                sheetName: 'Статистика',
+                                filename: 'Статистика',
+                                header: true,
+                                footer: true,
+
                             }
                         ]
                     }
@@ -132,7 +134,7 @@
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.js"></script>
-
+    <script src="https://cdn.datatables.net/buttons/3.1.0/js/buttons.html5.min.js"></script>
     <script>
         $(function() {
            moment.locale('ru');

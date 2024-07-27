@@ -12,6 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CellDto {
-    private LocalDate date;
+    private String date;
     private Integer points;
 }
