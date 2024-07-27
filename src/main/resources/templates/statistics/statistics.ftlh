@@ -12,14 +12,14 @@
         <#if from?? && to??>
             <#assign size = (days?size) + 3>
             <#assign size1 = (days?size) + 4>
-            <table id="myTable" class="display">
-                <thead>
+            <table id="myTable" class="display cell-border">
+                <thead class="fs-6">
                 <tr>
                     <th>Менеджер</th>
                     <th>Эксперт</th>
                     <th>Пиццерия</th>
                     <#list days as d>
-                        <th>${d.day}</th>
+                        <th colspan="fs-6">${d.day}</th>
                     </#list>
                     <th>Среднее</th>
                     <th>Среднее за пиццерию</th>

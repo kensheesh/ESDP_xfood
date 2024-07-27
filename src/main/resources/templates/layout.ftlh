@@ -114,13 +114,24 @@
                             .append('<td colspan="3">Среднее за пиццерию</td>')
                             .append('<td colspan="' + (rows.columns().header().length - 4) + '">' + avg.toFixed(2) + '</td>');
                     }
+                },
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                extend: 'excelHtml5',
+                                autoFilter: true,
+                                sheetName: 'Exported data'
+                            }
+                        ]
+                    }
                 }
         });})
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-
+    <script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.js"></script>
 
     <script>
         $(function() {
