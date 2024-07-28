@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -51,7 +52,7 @@ public class AppealServiceImpl implements AppealService {
         appeal.setTgLinkMessage(createAppealDto.getTgLinkMessage());
 
         appealRepository.save(appeal);
-        if(createAppealDto.getFiles() != null) {
+        if (createAppealDto.getFiles() != null) {
             List<MultipartFile> files = Arrays.asList(createAppealDto.getFiles());
             fileService.saveFiles(files, id);
         }
@@ -59,33 +60,33 @@ public class AppealServiceImpl implements AppealService {
 
     @Override
     public AppealSupervisorReviewDto getAppealById(Long id) {
-          Appeal appeal = appealRepository.findAppealById(id).orElseThrow(() -> new NoSuchElementException("Апелляция с айди " + id + "не найденно"));
-          Criteria criteria = appeal.getCheckListsCriteria().getCriteria();
-          Pizzeria pizzeria = appeal.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria();
-          //  List<CheckListsCriteriaComment> commentList = commentService.findAllByCriteriaIdAndCheckListId(criteria.getId(), appeal.getCheckListsCriteria().getChecklist().getId());
-          return AppealSupervisorReviewDto.builder()
-                  .checkListUuid(appeal.getCheckListsCriteria().getChecklist().getUuidLink())
-                  .id(appeal.getId())
-                  .email(appeal.getEmail())
-                  .fullName(appeal.getFullName())
-                  .comment(appeal.getComment_expert())
-                  .files(appeal.getFiles())
-                  .status(appeal.getIsAccepted())
-                  .localDate(appeal.getCheckListsCriteria().getChecklist().getEndTime())
-                  .respond(appeal.getComment_supervisor())
-                  .checkListsCriteria(CheckListCriteriaSupervisorReviewDto.builder()
-                          .criteria(CriteriaSupervisorShowDto.builder()
-                                  .section(criteria.getSection().getName())
-                                  .zone(criteria.getZone().getName())
-                                  .id(criteria.getId())
-                                  .coefficient(criteria.getCoefficient())
-                                  .description(criteria.getDescription())
-                                  .maxValue(appeal.getCheckListsCriteria().getMaxValue())
-                                  .value(appeal.getCheckListsCriteria().getValue())
-                                  .build())
-                          .pizzeria(pizzeria.getName())
-                          .build())
-                  .build();
+        Appeal appeal = appealRepository.findAppealById(id).orElseThrow(() -> new NoSuchElementException("Апелляция с айди " + id + "не найденно"));
+        Criteria criteria = appeal.getCheckListsCriteria().getCriteria();
+        Pizzeria pizzeria = appeal.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria();
+        //  List<CheckListsCriteriaComment> commentList = commentService.findAllByCriteriaIdAndCheckListId(criteria.getId(), appeal.getCheckListsCriteria().getChecklist().getId());
+        return AppealSupervisorReviewDto.builder()
+                .checkListUuid(appeal.getCheckListsCriteria().getChecklist().getUuidLink())
+                .id(appeal.getId())
+                .email(appeal.getEmail())
+                .fullName(appeal.getFullName())
+                .comment(appeal.getComment_expert())
+                .files(appeal.getFiles())
+                .status(appeal.getIsAccepted())
+                .localDate(appeal.getCheckListsCriteria().getChecklist().getEndTime())
+                .respond(appeal.getComment_supervisor())
+                .checkListsCriteria(CheckListCriteriaSupervisorReviewDto.builder()
+                        .criteria(CriteriaSupervisorShowDto.builder()
+                                .section(criteria.getSection().getName())
+                                .zone(criteria.getZone().getName())
+                                .id(criteria.getId())
+                                .coefficient(criteria.getCoefficient())
+                                .description(criteria.getDescription())
+                                .maxValue(appeal.getCheckListsCriteria().getMaxValue())
+                                .value(appeal.getCheckListsCriteria().getValue())
+                                .build())
+                        .pizzeria(pizzeria.getName())
+                        .build())
+                .build();
     }
 
     @Override
@@ -122,12 +123,22 @@ public class AppealServiceImpl implements AppealService {
                 criteria.setValue(criteria.getValue() + c.getCoefficient());
                 criteria.setMaxValue(0);
             } else {
-                criteria.setValue(criteria.getValue()+ criteria.getMaxValue());
+                criteria.setValue(criteria.getValue() + criteria.getMaxValue());
             }
             checkListCriteriaServiceImpl.save(criteria);
         }
         appealRepository.save(appeal);
         emailService.sendEmail(appeal.getId(), appealDto.getRespond());
+    }
+
+    @Override
+    public List<AppealDto> getAcceptedAppeals(Long checklistId, Long criteriaId) {
+        List<Appeal> appeals = appealRepository.findAcceptedAppeals(checklistId, criteriaId);
+        List<AppealDto> dtoList = new ArrayList<>();
+        appeals.forEach(a -> {
+            dtoList.add(dtoBuilder.buildAppealDto(a));
+        });
+        return dtoList;
     }
 
     @Override

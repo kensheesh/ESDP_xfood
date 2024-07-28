@@ -1,6 +1,7 @@
 package kg.attractor.xfood.controller.rest;
 
 import jakarta.validation.Valid;
+import kg.attractor.xfood.dto.appeal.AppealDto;
 import kg.attractor.xfood.dto.appeal.AppealListDto;
 import kg.attractor.xfood.dto.appeal.CreateAppealDto;
 import kg.attractor.xfood.dto.appeal.DataAppealDto;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController("restAppealController")
@@ -49,5 +51,12 @@ public class AppealController {
                                                                   @RequestParam(name = "s", required = false) Boolean isAccepted) {
         Page<AppealListDto> appeals = appealService.getAllByStatus(isAccepted, page);
         return ResponseEntity.ok(appeals);
+    }
+
+    @GetMapping("accepted/{checklistId}/{criteriaId}")
+    public ResponseEntity<List<AppealDto>> getHistoryAcceptedAppeals(@PathVariable Long checklistId,
+                                                                     @PathVariable Long criteriaId)
+    {
+        return ResponseEntity.ok(appealService.getAcceptedAppeals(checklistId, criteriaId));
     }
 }

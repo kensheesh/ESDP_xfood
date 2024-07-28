@@ -22,4 +22,6 @@ public interface OpportunityService {
     OpportunityDto getByExpertAndDate(LocalDate date);
 
     void changeExpertOpportunities(OpportunityCreateDto dto);
+
+    Object getWeeklyOpportunities(long week, String search);
 }

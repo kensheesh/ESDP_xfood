@@ -30,6 +30,9 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Query("select o from Opportunity o where o.user.id = ?1 and o.date = ?2")
     Optional<Opportunity> findByUser_IdAndDate(Long id, LocalDate date);
+
+    @Query("select o from Opportunity o where o.user.id = ?1 and FUNCTION('DATE', o.date) = ?2")
+    Optional<Opportunity> findByUser_IdAndLocalDate(Long id, LocalDate date);
     @Modifying
     void deleteAllByIdNotIn(List<Long> ids);
 
@@ -38,4 +41,7 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Query("SELECT o.id from Opportunity o WHERE o.date = ?2 and o.user.email = ?1")
     List<Long> findAllIdsByUserEmailAndDate(String userEmail, LocalDate date);
+
+    @Query("select o from Opportunity o where o.date between ?1 and ?2 order by o.user.surname")
+    List<Opportunity> findByDateBetweenOrderByUser_SurnameAsc(LocalDate dateStart, LocalDate dateEnd);
 }

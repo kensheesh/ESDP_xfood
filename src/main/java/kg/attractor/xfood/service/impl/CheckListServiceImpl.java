@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,6 +39,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CheckListServiceImpl implements CheckListService {
+    @Lazy
+    @Autowired
     private final WorkScheduleService workScheduleService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
     private final UserService userService;
@@ -532,6 +535,10 @@ public class CheckListServiceImpl implements CheckListService {
             log.info("Чек лист и все необходимые связи созданы");
 
         }
+    }
+
+    public Manager getManagerById(long id) {
+        return managerService.findById(id);
     }
 
 }

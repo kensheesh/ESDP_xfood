@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ManagerService {
     List<ManagerDto> getAllManagers();
+    List<ManagerDto> getAllManagersAscBySurname();
 
     List<PizzeriaStaffMemberDto> getAllAvailable(String uuid);
 

@@ -12,8 +12,8 @@
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 shadow-sm border-0">
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
+                        <#assign userRole = authorizedUser.authorities[0].authority>
                         <div class="col">
-                            <#assign userRole = authorizedUser.authorities[0].authority>
                             <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                 <div class="col">
                                     <a href="
@@ -26,6 +26,13 @@
                                         График
                                     </a>
                                 </div>
+                                <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
+                                    <div class="col">
+                                        <a href="/supervisor/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            Возможности
+                                        </a>
+                                    </div>
+                                </#if>
                                 <div class="col">
                                     <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Проверки
@@ -52,8 +59,8 @@
                         <div class="col align-self-end d-none d-md-block">
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
-                                            <section class="d-flex flex-column row-gap-2 text-center times">
-                                            </section>
+                                    <section class="d-flex flex-column row-gap-2 text-center times">
+                                    </section>
                                 </div>
                             </div>
                         </div>

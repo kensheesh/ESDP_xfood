@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.appeal.*;
 import org.springframework.data.domain.Page;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public interface AppealService {
     AppealSupervisorReviewDto getAppealById(Long id);
@@ -20,4 +21,6 @@ public interface AppealService {
     Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page);
 
     void approve(AppealSupervisorApproveDto appeal) throws MessagingException, UnsupportedEncodingException;
+
+    List<AppealDto> getAcceptedAppeals(Long checklistId, Long criteriaId);
 }

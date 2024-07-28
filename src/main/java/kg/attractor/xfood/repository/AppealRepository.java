@@ -20,6 +20,11 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
 
     Integer countAllByIsAcceptedNull();
 
-
     List<Appeal> findByCheckListsCriteria(CheckListsCriteria checkListsCriteria);
+
+    @Query("select a from Appeal a " +
+            "where a.checkListsCriteria.criteria.id = :criteriaId " +
+            "and a.checkListsCriteria.checklist.id = :checklistId " +
+            "and a.isAccepted = true")
+    List<Appeal> findAcceptedAppeals(Long checklistId, Long criteriaId);
 }

@@ -2,6 +2,7 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.WorkScheduleSupervisorShowDto;
 import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
+import kg.attractor.xfood.dto.workSchedule.WorkScheduleCreateDto;
 import kg.attractor.xfood.model.WorkSchedule;
 
 import java.time.LocalDate;
@@ -17,4 +18,6 @@ public interface WorkScheduleService {
     WorkScheduleSupervisorShowDto getWorkSchedule(Long managerId, LocalDate date);
 
     void save(WorkSchedule workSchedule);
+
+    void prepareScheduleForCheck(WorkScheduleCreateDto schedule);
 }

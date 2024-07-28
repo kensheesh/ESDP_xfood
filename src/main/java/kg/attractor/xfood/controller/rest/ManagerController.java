@@ -25,5 +25,12 @@ public class ManagerController {
         List<ManagerDto> managers = managerService.getAllManagers();
         return ResponseEntity.ok(managers);
     }
-    
+
+    @GetMapping("/asc")
+    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
+    public ResponseEntity<List<ManagerDto>> getManagersAscBySurname() {
+        List<ManagerDto> managers = managerService.getAllManagersAscBySurname();
+        return ResponseEntity.ok(managers);
+    }
+
 }

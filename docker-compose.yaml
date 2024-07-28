@@ -4,15 +4,15 @@ services:
   app:
     container_name: xfood-app
     build:
-      context: ..
-      dockerfile: ../Dockerfile
+      context: /
+      dockerfile: /Dockerfile
     ports:
-      - "5001:5001"
+      - "5005:5005"
     volumes:
       - /data
       - /var/log/app
     env_file:
-      - ../../xfood_drafts/feature/add_modal_types]/ESDP_xfood/.env
+      - /.env
     depends_on:
       - db
       - redis

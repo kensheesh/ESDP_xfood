@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
 import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.repository.PizzeriaRepository;
@@ -32,6 +33,15 @@ public class PizzeriaServiceImpl implements PizzeriaService {
                 .stream()
                 .map(dtoBuilder::buildPizzeriaDto)
                 .toList();
+    }
+
+    @Override
+    public List<PizzeriaShowDto> getPizzeriasByPartOfName(String query) {
+        if (query == null || query.isEmpty()) {
+            List<Pizzeria> list = pizzeriaRepository.findAll();
+            return dtoBuilder.buildPizzeriaShowDtos(list);
+        }
+        return pizzeriaRepository.findByNameContainingIgnoreCase(query);
     }
 
     @Override
