@@ -15,4 +15,5 @@ public class StatisticsDto {
     private List<TableDto> tables;
     private Integer average;
     private List<DayDto> days;
+    List<String> pizzerias;
 }

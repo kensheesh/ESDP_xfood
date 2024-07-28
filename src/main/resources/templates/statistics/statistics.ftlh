@@ -24,7 +24,7 @@
                             <th colspan="fs-6">${d.day}</th>
                         </#list>
                     </#if>
-                    <th>Среднее</th>
+                    <th>Среднее за менеджера и эксперта</th>
                     <th>Среднее за пиццерию</th>
                 </tr>
                 </thead>
@@ -49,7 +49,7 @@
                                 </#if>
                             </#list>
                             <td>${row.averageByRow}</td>
-                            <td>${table.averageByTable}</td>
+                            <td class="average-by-pizzeria">${table.averageByTable}</td>
                         </tr>
                     </#list>
                 </#list>
@@ -57,12 +57,12 @@
 
                 <tfoot>
                 <tr>
-                    <th colspan="${size}" style="text-align:right">Среднее:</th>
+                    <th colspan="${size}" style="text-align:right">Общий средний балл по всем пиццериям:</th>
                     <th style="text-align:right" colspan="${size1}">${statistics.average}</th>
                 </tr>
                 </tfoot>
             </table>
-            <#else>
+        <#else>
             Выберите период для отображения статистики
         </#if>
     </@main.layout>

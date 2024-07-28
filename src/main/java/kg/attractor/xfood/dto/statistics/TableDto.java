@@ -14,5 +14,6 @@ import java.util.List;
 public class TableDto {
     private Integer averageByTable;
     private String type;
+    private String pizzeria;
     private List<RowDto> rows;
 }

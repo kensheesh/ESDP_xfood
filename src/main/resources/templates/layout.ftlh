@@ -79,11 +79,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="/DataTables/datatables.min.js"></script>
     <script>
-
         $(document).ready(function() {
-            $('#myTable').DataTable({
+           $('#myTable').DataTable({
                 responsive: true,
-                columnDefs: [{ width: '20%', targets: 0 }],
                 language: {
                     url: '/DataTables/ru.json',
                 },
@@ -123,12 +121,18 @@
                                 filename: 'Статистика',
                                 header: true,
                                 footer: true,
-
+                                exportOptions: {
+                                    modifier: {
+                                        search: 'applied',
+                                    }}
                             }
                         ]
                     }
                 }
-        });})
+
+        });
+
+        })
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment-with-locales.min.js"></script>

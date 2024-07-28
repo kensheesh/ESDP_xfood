@@ -438,8 +438,10 @@ public class CheckListServiceImpl implements CheckListService {
         }
         log.info("rows {}", rowDtos);
 
+        List<String> allPizzeriaNames = new ArrayList<>();
         List<TableDto> tableDtos = new ArrayList<>();
         for (PizzeriaDto pizzeriaDto: pizzerias){
+            allPizzeriaNames.add(pizzeriaDto.getName());
             List<RowDto> rowsByPizzeria = new ArrayList<>();
             for (RowDto rowDto : rowDtos) {
                 if (pizzeriaDto.getName().equals(rowDto.getPizzeria().getName())) {
@@ -448,11 +450,21 @@ public class CheckListServiceImpl implements CheckListService {
             }
             if (!rowsByPizzeria.isEmpty()){
                 tableDtos.add(TableDto.builder()
+                                .pizzeria(pizzeriaDto.getName())
                                 .rows(rowsByPizzeria)
                         .build());
             }
         }
         log.info("tables {}", tableDtos);
+        List<String> pizzeriaNames = new ArrayList<>();
+
+        for (String p : allPizzeriaNames) {
+            for (RowDto rowDto : rowDtos) {
+                if (p.equals(rowDto.getPizzeria().getName())) {
+                    pizzeriaNames.add(rowDto.getPizzeria().getName());
+                }
+            }
+        }
 
         for (TableDto tableDto : tableDtos) {
             int sum = tableDto.getRows().stream().mapToInt(RowDto::getAverageByRow).sum();
@@ -462,6 +474,7 @@ public class CheckListServiceImpl implements CheckListService {
         int totalSum = tableDtos.stream().mapToInt(TableDto::getAverageByTable).sum();
         int tableCount = tableDtos.size();
         statisticsDto.setAverage(tableCount > 0 ? totalSum / tableCount : 0);
+        statisticsDto.setPizzerias(pizzeriaNames.stream().distinct().toList());
         statisticsDto.setDays(getDays(from, to));
         log.info("statistics average {}", statisticsDto.getAverage());
         statisticsDto.setTables(tableDtos);

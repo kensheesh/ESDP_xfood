@@ -22,6 +22,6 @@ ENV SPRING_PROFILES_ACTIVE=prod
 
 COPY --from=build /app/target/xfood-1.0.0-SNAPSHOT.jar app.jar
 
-COPY .env /app/.env
+COPY ../xfood_drafts/feature/add_modal_types%5D/ESDP_xfood/.env /app/.env
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

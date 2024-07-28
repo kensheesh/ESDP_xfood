@@ -12,7 +12,7 @@ services:
       - /data
       - /var/log/app
     env_file:
-      - ../.env
+      - ../../xfood_drafts/feature/add_modal_types]/ESDP_xfood/.env
     depends_on:
       - db
       - redis
