@@ -37,10 +37,10 @@ public class ChecklistSpecification {
 
     public static Specification<CheckList> hasPizzeria(String pizzeriaName) {
         return(r, q, cb) -> {
-            if(pizzeriaName == null || pizzeriaName == "default") {
+            if(pizzeriaName == null || pizzeriaName.equals("default")) {
                 return cb.conjunction();
             }
-            return cb.equal(r.get("workSchedule").get("pizzeria").get("name"), pizzeriaName);
+            return cb.equal(r.get("workSchedule").get("pizzeria").get("id"), Long.parseLong(pizzeriaName));
         };
     }
 }

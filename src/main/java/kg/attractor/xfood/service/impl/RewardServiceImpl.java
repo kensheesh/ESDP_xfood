@@ -23,6 +23,7 @@ public class RewardServiceImpl implements RewardService {
 
     private final UserRepository userRepository;
     private final CheckListService checkListService;
+    private final UserServiceImpl userServiceImpl;
 
     @Override
     public ExpertRewardDto getExpertReward(String expertEmail, String pizzeriaName, LocalDate startDate, LocalDate endDate) {
@@ -41,7 +42,7 @@ public class RewardServiceImpl implements RewardService {
     @Override
     public List<ExpertRewardDto> getRewards(String pizzeria, String expert, LocalDate startDate, LocalDate endDate) {
         List<ExpertRewardDto> experts = new ArrayList<>();
-        if(expert.equals("default") || expert == null) {
+        if(expert.equals("default")) {
             Specification<User> spec = Specification
                     .where(UserSpecification.hasRole(Role.EXPERT));
             List<User> users = userRepository.findAll(spec);
@@ -50,7 +51,8 @@ public class RewardServiceImpl implements RewardService {
                 experts.add(expertRewardDto);
             }
         } else {
-            experts.add(getExpertReward(expert, pizzeria, startDate, endDate));
+            User user = userRepository.findById(Long.parseLong(expert)).get();
+            experts.add(getExpertReward(user.getEmail(), pizzeria, startDate, endDate));
         }
         return experts;
     }

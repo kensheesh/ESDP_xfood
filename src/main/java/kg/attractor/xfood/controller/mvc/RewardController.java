@@ -36,6 +36,11 @@ public class RewardController {
             String expertEmail = userService.getUserDto().getEmail();
             model.addAttribute("expert", rewardService.getExpertReward(expertEmail, null, startDate, endDate));
         }
+
+        model.addAttribute("currentExpert", expert);
+        model.addAttribute("currentPizzeria", pizzeria);
+        model.addAttribute("currentStartDate", startDate);
+        model.addAttribute("currentEndDate", endDate);
         return "rewards/rewards";
     }
 }
