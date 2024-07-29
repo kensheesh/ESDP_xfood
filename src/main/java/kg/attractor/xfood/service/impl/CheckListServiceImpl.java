@@ -412,6 +412,7 @@ public class CheckListServiceImpl implements CheckListService {
             }
             if (!found) {
                 rowDtos.add(RowDto.builder()
+                        .type(checkList.getCheckType().getName())
                         .manager(ManagerDto.builder()
                                 .name(manager.getName())
                                 .surname(manager.getSurname())
@@ -453,6 +454,7 @@ public class CheckListServiceImpl implements CheckListService {
             }
             if (!rowsByPizzeria.isEmpty()){
                 tableDtos.add(TableDto.builder()
+
                                 .pizzeria(pizzeriaDto.getName())
                                 .rows(rowsByPizzeria)
                         .build());

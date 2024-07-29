@@ -20,4 +20,5 @@ public class RowDto {
     private PizzeriaDto pizzeria;
     private ManagerDto manager;
     private ExpertShowDto expert;
+    private String type;
 }

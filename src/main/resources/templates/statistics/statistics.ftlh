@@ -19,6 +19,7 @@
                     <th>Менеджер</th>
                     <th>Эксперт</th>
                     <th>Пиццерия</th>
+                    <th>Тип</th>
                     <#if statistics.days??>
                         <#list statistics.days as d>
                             <th colspan="fs-6">${d.day}</th>
@@ -35,6 +36,7 @@
                             <td>${row.manager.name} ${row.manager.surname}</td>
                             <td>${row.expert.name} ${row.expert.surname}</td>
                             <td>${row.pizzeria.name}</td>
+                            <td>${row.type}</td>
                             <#list statistics.days as d>
                                 <#assign cellFound = false>
                                 <#list row.cells as cell>
