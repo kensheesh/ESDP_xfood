@@ -57,8 +57,4 @@ public class CheckList {
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "type_id")
-	private CheckType checkType;
-	
 }
