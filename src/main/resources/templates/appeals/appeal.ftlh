@@ -56,6 +56,11 @@
                                 <div id="file-upload-container">
                                 </div>
                                 <button class="mt-2 btn btn-green" type="button" onclick="addFileInput()">Добавить файл</button>
+                                <button class="mt-2 btn btn-secondary" type="button" onclick="toggleEditFiles()">Редактировать файлы</button>
+                                <div class="mt-2">
+                                    <p style="margin-top: 2px">Фото - не более 5 шт, каждый файл не более 3 мб.<br>
+                                    Видео - не более 4 шт, каждый файл не более 25 мб.</p>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-warning text-white">Отправить</button>

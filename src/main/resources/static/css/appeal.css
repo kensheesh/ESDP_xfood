@@ -1,3 +1,20 @@
+.file-upload {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.file-upload input[type="file"] {
+    display: inline-block;
+    width: calc(100% - 100px); /* 100px для кнопки удаления */
+}
+
+.delete-button {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    height: 2.38rem;
+    margin-left: 10px;
+}
 
 .file-item span {
     flex-grow: 1;
