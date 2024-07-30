@@ -186,7 +186,6 @@
             });
         });
     </script>
-
     </body>
     </html>
 </#macro>

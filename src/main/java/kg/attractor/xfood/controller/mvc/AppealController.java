@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @Controller
 @RequestMapping("appeals")
@@ -41,6 +42,7 @@ public class AppealController {
 	@GetMapping("{id}/approve")
     public String approveAppeal(@PathVariable Long id, Model model){
         model.addAttribute("appeal", appealService.getAppealById(id));
+        model.addAttribute("filenames", fileService.getPathsForAppealFiles(id));
         return "appeals/approve";
     }
 
