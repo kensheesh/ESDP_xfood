@@ -3,17 +3,20 @@ package kg.attractor.xfood.repository;
 import jakarta.transaction.Transactional;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CheckListRepository extends JpaRepository<CheckList, Long> {
-
+public interface CheckListRepository extends JpaRepository<CheckList, Long>, JpaSpecificationExecutor<CheckList> {
     List<CheckList> findCheckListByExpertEmailAndStatus(String email, Status status);
 
     Optional<CheckList> findByUuidLink(String uuid);
@@ -57,8 +60,6 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
             			values(CAST(CAST(:#{#status} as text) as Status),:#{#workSchedule}, :#{#expertId}, :#{#uuid_link}) ;
             """, nativeQuery = true)
     int saveCheckList(Long workSchedule, String status, Long expertId, String uuid_link);
-
-
 
     @Query(value = """
             SELECT c
