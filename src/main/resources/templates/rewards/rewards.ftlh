@@ -19,11 +19,15 @@
             <div class="card-body">
                 <h3>Вознаграждение</h3>
                 <div class="d-flex flex-wrap mb-3">
-                    <div class="p-2 text-white me-2 reward-info">Количество проверок: ${countChecks}</div>
-                    <div class="p-2 text-white reward-info">Сумма вознаграждения: ${sumRewards} Р</div>
+                    <div class="p-2 text-white me-2 reward-info">Количество проверок: <span
+                                id="countChecks">${countChecks}</span></div>
+                    <div class="p-2 text-white reward-info">Сумма вознаграждения: <span
+                                id="sumRewards">${sumRewards}</span>
+                        Р
+                    </div>
                 </div>
 
-                <table class="table mt-3 table-striped table-hover">
+                <table id="rewardTable" class="table mt-3 table-striped table-hover">
                     <thead>
                     <tr>
                         <th>Дата</th>
@@ -62,23 +66,6 @@
                     </tbody>
                 </table>
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center mt-4">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
 
@@ -104,13 +91,16 @@
 
                         <div class="mb-3">
                             <label for="date-from" class="form-label">От</label>
-                            <input type="date" value="<#if currentStartDate??>${currentStartDate}</#if>" class="form-control" id="date-from" name="startDate">
+                            <input type="date" value="<#if currentStartDate??>${currentStartDate}</#if>"
+                                   class="form-control" id="date-from" name="startDate">
                         </div>
                         <div class="mb-3">
                             <label for="date-to" class="form-label">До</label>
-                            <input type="date" value="<#if currentEndDate??>${currentEndDate}</#if>" class="form-control" id="date-to" name="endDate">
+                            <input type="date" value="<#if currentEndDate??>${currentEndDate}</#if>"
+                                   class="form-control"
+                                   id="date-to" name="endDate">
                         </div>
-                        <button class="btn btn-outline-success w-100" type="submit">Применить</button>
+                        <button class="btn btn-outline-success w-100" id="buttonFilter" type="submit">Применить</button>
                     </form>
                 </div>
             </div>
@@ -143,8 +133,14 @@
         }
     </style>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
+            <#if experts??>
             let pizzeriaSelect = document.getElementById('pizzeria-select');
             let expertSelect = document.getElementById('expert-select');
 
@@ -191,6 +187,63 @@
                     console.error('Ошибка при загрузке данных:', error);
                 }
             }
+            </#if>
+
+            let table = new DataTable();
+            table = new DataTable('#rewardTable', {
+                paging: true,
+                info: false,
+                lengthChange: false,
+                pageLength: 5,
+                searching: false,
+                language: {
+                    paginate: {
+                        previous: "&laquo;",
+                        next: "&raquo;"
+                    }
+                },
+                drawCallback: function (settings) {
+                    updateStatistics();
+                }
+            });
+
+            function updateStatistics() {
+                let pageInfo = table.page.info();
+                let data = table.rows({page: 'current'}).data();
+                let countChecks = data.length;
+                let sumRewards = 0;
+
+                console.log(data);
+                let reward = 0;
+                for (let i = 0; i < data.length; i++) {
+                    <#if experts??>
+                    reward = data[i][3].split(' ')
+                    sumRewards += parseFloat(reward[0]);
+                    </#if>
+                    <#if expert??>
+                    reward = data[i][2].split(' ')
+                    sumRewards += parseFloat(reward[0]);
+                    </#if>
+                }
+
+                $('#countChecks').text(countChecks);
+                $('#sumRewards').text(sumRewards);
+            }
+
+            const btn = document.getElementById('buttonFilter');
+            btn.addEventListener('click', function () {
+                let dateFrom = new Date($('#date-from').val());
+                let dateTo = new Date($('#date-to').val());
+
+                console.log(dateFrom)
+                console.log(dateTo)
+                if (dateFrom > dateTo) {
+                    alert('Дата "До" не может быть раньше даты "От".');
+                    $('#date-to').val('');
+                }
+            });
+
+            updateStatistics();
         });
     </script>
 </@main.layout>
