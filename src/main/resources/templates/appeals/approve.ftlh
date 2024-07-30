@@ -1,5 +1,6 @@
 <#import "../layout.ftlh" as main>
 <link rel="stylesheet" href="/css/profile.css">
+<link rel="stylesheet" href="/css/appeal_approve.css">
 <style>
     .rounded-border {
         border-radius: 10px;
@@ -76,7 +77,13 @@
     </div>
     <div class="card my-3">
         <div class="card-body">
-         <#-- для фотографий-->
+           <h3>Файлы:</h3>
+
+            <div class="gallery_functionality">
+                <div class="grid">
+
+                </div>
+            </div>
         </div>
     </div>
     <#if !appeal.status??>
@@ -107,7 +114,7 @@
 
 
 </div>
-
+    <script src="/js/fslightbox.js"></script>
     <script>
         document.getElementById('appealForm').addEventListener('submit', function(event) {
             let radio1 = document.getElementById('inlineRadio1');
@@ -117,6 +124,43 @@
                 let error = document.getElementById('error').style.display = 'block';
                 event.preventDefault();
             }
+        });
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+            const appealId = "${appeal.id}";
+            const galleryElement = document.querySelector('.gallery_functionality .grid');
+
+            // Получаем пути файлов через REST API
+            fetch(`/api/file/download_paths?appealId=`+ appealId + `+`)
+            .then(response => response.json())
+            .then(paths => {
+            paths.forEach(path => {
+            const fileExtension = path.split('.').pop().toLowerCase();
+            let html = '';
+
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+            html = `
+                            <div class="grid-item">
+                                <a data-fslightbox="gal" href="/api/file/download?path=` + path + `">
+                                    <img src="/api/file/download?path=` + path + `" alt="image">
+                                </a>
+                            </div>
+                        `;
+        } else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
+            html = `
+                            <div class="grid-item video-container">
+                                <a data-fslightbox="gal" href="/api/file/download?path=` + path + `">
+                                    <video src="/api/file/download?path=` + path + `"></video>
+                                </a>
+                            </div>
+                        `;
+        }
+
+            galleryElement.innerHTML += html;
+        });
+        })
+            .catch(error => console.error('Error fetching file paths:', error));
         });
     </script>
 </@main.layout>

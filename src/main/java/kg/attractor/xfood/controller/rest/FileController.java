@@ -23,12 +23,12 @@ public class FileController {
 	}
 	
 	@GetMapping("download")
-	public ResponseEntity<InputStreamResource> show(String path) {
-		return fileService.downloadFile(path);
+	public ResponseEntity<InputStreamResource> getFIle(String path) {
+		return fileService.getFile(path);
 	}
 	
 	@GetMapping("download_paths")
-	public ResponseEntity<?> show(Long appealId) {
+	public ResponseEntity<List<String>> getPathsForAppealId(Long appealId) {
 		return ResponseEntity.ok(fileService.getPathsForAppealFiles(appealId));
 	}
 }

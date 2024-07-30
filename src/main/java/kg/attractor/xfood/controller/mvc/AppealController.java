@@ -3,6 +3,8 @@ package kg.attractor.xfood.controller.mvc;
 import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
+import kg.attractor.xfood.service.FileService;
+import kg.attractor.xfood.service.impl.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 public class AppealController {
 
     private final AppealService appealService;
+    private final FileService fileService;
 
     @GetMapping
     public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
@@ -34,7 +37,7 @@ public class AppealController {
 	    model.addAttribute("appeal", appealService.findById(id));
 	    return "appeals/appeal";
     }
-    
+
 	@GetMapping("{id}/approve")
     public String approveAppeal(@PathVariable Long id, Model model){
         model.addAttribute("appeal", appealService.getAppealById(id));
