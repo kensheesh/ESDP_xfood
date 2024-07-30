@@ -44,10 +44,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CheckListServiceImpl implements CheckListService {
     @Lazy
-    @Autowired
+
     private final WorkScheduleService workScheduleService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
-    private final UserService userService;
     private ManagerService managerService;
     private final CriteriaService criteriaService;
     private final CheckListRepository checkListRepository;
