@@ -46,7 +46,7 @@ public class FileUtil {
 	}
 	
 	@SneakyThrows
-	public ResponseEntity<InputStreamResource> downloadFile(String path) {
+	public ResponseEntity<InputStreamResource> getFIle(String path) {
 		try {
 			Path filePath = Paths.get(path);
 			if (! Files.exists(filePath)) {

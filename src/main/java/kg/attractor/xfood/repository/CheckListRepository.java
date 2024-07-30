@@ -61,6 +61,8 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
             """, nativeQuery = true)
     int saveCheckList(Long workSchedule, String status, Long expertId, String uuid_link);
 
+
+
     @Query(value = """
             SELECT c
             FROM CheckList c
@@ -74,4 +76,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
     Optional<CheckList> findCheckListByWorkSchedule_IdAndExpert_Id(Long workScheduleId, Long expertId);
 
     boolean existsByWorkSchedule_IdAndExpert_Id(Long id, Long expertId);
+
+    @Query("select c from CheckList  c where c.endTime between :startDate and :endDate ")
+    List<CheckList> findAllByEndTimeBetween(LocalDate startDate, LocalDate endDate);
 }

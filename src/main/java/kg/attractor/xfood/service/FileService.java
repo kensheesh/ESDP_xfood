@@ -12,5 +12,5 @@ public interface FileService {
 	
 	List<String> getPathsForAppealFiles(Long appealId);
 	
-	ResponseEntity<InputStreamResource> downloadFile(String path);
+	ResponseEntity<InputStreamResource> getFile(String path);
 }

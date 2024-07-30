@@ -2,10 +2,14 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dao.CheckListDao;
+import kg.attractor.xfood.dto.LocationDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
+import kg.attractor.xfood.dto.manager.ManagerDto;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
+import kg.attractor.xfood.dto.statistics.*;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
@@ -27,11 +31,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,12 +47,14 @@ public class CheckListServiceImpl implements CheckListService {
     @Autowired
     private final WorkScheduleService workScheduleService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
+    private final UserService userService;
     private ManagerService managerService;
     private final CriteriaService criteriaService;
     private final CheckListRepository checkListRepository;
     private final ChecklistCriteriaRepository checklistCriteriaRepository;
     private final UserRepository userRepository;
     private final CriteriaTypeService criteriaTypeService;
+    private final PizzeriaService pizzeriaService;
     private final CheckListDao checkListDao;
     private final CheckTypeFeeService checkTypeFeeService;
 
@@ -230,7 +238,6 @@ public class CheckListServiceImpl implements CheckListService {
         }
         return checkLists;
     }
-
 
     @Override
     public CheckListResultDto getResultByUuidLink(String uuidLink) {

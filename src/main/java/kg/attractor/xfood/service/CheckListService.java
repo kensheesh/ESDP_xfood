@@ -2,6 +2,8 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
+import kg.attractor.xfood.dto.statistics.DayDto;
+import kg.attractor.xfood.dto.statistics.StatisticsDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 
@@ -47,4 +49,7 @@ public interface CheckListService {
     Integer getPercentageById(Long id);
     List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail, LocalDateTime startDate, LocalDateTime endDate, String pizzeriaName);
 
+    StatisticsDto getStatistics(LocalDate from, LocalDate to);
+
+    List<DayDto> getDays(LocalDate from, LocalDate to);
 }

@@ -57,8 +57,8 @@ public class FileServiceImpl implements FileService {
 	}
 	
 	@Override
-	public ResponseEntity<InputStreamResource> downloadFile(String path) {
-		return fileUtil.downloadFile(path);
+	public ResponseEntity<InputStreamResource> getFile(String path) {
+		return fileUtil.getFIle(path);
 	}
 	
 	private List<MultipartFile> validateAppealFiles(List<MultipartFile> files) {
