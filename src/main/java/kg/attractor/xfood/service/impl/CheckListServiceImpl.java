@@ -434,5 +434,142 @@ public class CheckListServiceImpl implements CheckListService {
     public Manager getManagerById(long id) {
         return managerService.findById(id);
     }
+    @Override
+    public StatisticsDto getStatistics(LocalDate from, LocalDate to) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        StatisticsDto statisticsDto = new StatisticsDto();
+        List<CheckList> checkLists = checkListRepository.findAll();
+        List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
+        log.info("all checklists {}", checkLists);
 
+        checkLists.removeIf(checkList -> checkList.getEndTime() == null &&
+                !Objects.equals(checkList.getStatus().getStatus(), "DONE"));
+
+        checkLists.removeIf(checkList ->
+                checkList.getEndTime().toLocalDate().isBefore(from) ||
+                        checkList.getEndTime().toLocalDate().isAfter(to));
+        List<RowDto> rowDtos = new ArrayList<>();
+        log.info("after removing checklists {}", checkLists);
+
+
+        for (CheckList checkList : checkLists) {
+            Manager manager = checkList.getWorkSchedule().getManager();
+            Pizzeria pizzeria = checkList.getWorkSchedule().getPizzeria();
+            User expert = checkList.getExpert();
+            Integer points = checkListCriteriaService.findAllByChecklistId(checkList.getId())
+                    .stream().mapToInt(CheckListsCriteria::getValue).sum();
+            CellDto cellDto = CellDto.builder()
+                    .date(checkList.getEndTime().toLocalDate().format(formatter))
+                    .points(points)
+                    .build();
+
+            boolean found = false;
+            for (RowDto rowDto : rowDtos) {
+                if (rowDto.getPizzeria().getId().equals(pizzeria.getId()) &&
+                        rowDto.getExpert().getId().equals(expert.getId()) &&
+                        rowDto.getManager().getId().equals(manager.getId())) {
+                    rowDto.getCells().add(cellDto);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                rowDtos.add(RowDto.builder()
+                        .type(checkList.getCheckType().getName())
+                        .manager(ManagerDto.builder()
+                                .name(manager.getName())
+                                .surname(manager.getSurname())
+                                .id(manager.getId())
+                                .phoneNumber(manager.getPhoneNumber())
+                                .build())
+                        .expert(ExpertShowDto.builder()
+                                .name(expert.getName())
+                                .surname(expert.getSurname())
+                                .id(expert.getId())
+                                .build())
+                        .pizzeria(PizzeriaDto.builder()
+                                .id(pizzeria.getId())
+                                .name(pizzeria.getName())
+                                .location(LocationDto.builder().name(pizzeria.getLocation().getName()).build())
+                                .uuid(pizzeria.getUuid())
+                                .build())
+                        .cells(new ArrayList<>(List.of(cellDto)))
+                        .build());
+            }
+        }
+
+        for (RowDto rowDto : rowDtos) {
+            int sum = rowDto.getCells().stream().mapToInt(CellDto::getPoints).sum();
+            int size = rowDto.getCells().size();
+            rowDto.setAverageByRow(size > 0 ? sum / size : 0);
+        }
+        log.info("rows {}", rowDtos);
+
+        List<String> allPizzeriaNames = new ArrayList<>();
+        List<TableDto> tableDtos = new ArrayList<>();
+        for (PizzeriaDto pizzeriaDto: pizzerias){
+            allPizzeriaNames.add(pizzeriaDto.getName());
+            List<RowDto> rowsByPizzeria = new ArrayList<>();
+            for (RowDto rowDto : rowDtos) {
+                if (pizzeriaDto.getName().equals(rowDto.getPizzeria().getName())) {
+                    rowsByPizzeria.add(rowDto);
+                }
+            }
+            if (!rowsByPizzeria.isEmpty()){
+                tableDtos.add(TableDto.builder()
+
+                        .pizzeria(pizzeriaDto.getName())
+                        .rows(rowsByPizzeria)
+                        .build());
+            }
+        }
+        log.info("tables {}", tableDtos);
+        List<String> pizzeriaNames = new ArrayList<>();
+
+        for (String p : allPizzeriaNames) {
+            for (RowDto rowDto : rowDtos) {
+                if (p.equals(rowDto.getPizzeria().getName())) {
+                    pizzeriaNames.add(rowDto.getPizzeria().getName());
+                }
+            }
+        }
+
+        for (TableDto tableDto : tableDtos) {
+            int sum = tableDto.getRows().stream().mapToInt(RowDto::getAverageByRow).sum();
+            int size = tableDto.getRows().size();
+            tableDto.setAverageByTable(size > 0 ? sum / size : 0);
+        }
+        int totalSum = tableDtos.stream().mapToInt(TableDto::getAverageByTable).sum();
+        int tableCount = tableDtos.size();
+        statisticsDto.setAverage(tableCount > 0 ? totalSum / tableCount : 0);
+        statisticsDto.setPizzerias(pizzeriaNames.stream().distinct().toList());
+        statisticsDto.setDays(getDays(from, to));
+        log.info("statistics average {}", statisticsDto.getAverage());
+        statisticsDto.setTables(tableDtos);
+        log.info("statistics {}", statisticsDto);
+        return statisticsDto;
+    }
+
+
+    @Override
+    public List<DayDto> getDays(LocalDate from, LocalDate to) {
+
+        List<LocalDate> localDates = new ArrayList<>();
+        LocalDate currentDate = from;
+
+        while (!currentDate.isAfter(to)) {
+            localDates.add(currentDate);
+            currentDate = currentDate.plusDays(1);
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        List<DayDto> dayDtos = new ArrayList<>();
+        for (LocalDate localDate : localDates) {
+            dayDtos.add(DayDto.builder()
+                    .day(localDate.format(formatter))
+                    .dayOfWeek(localDate.getDayOfWeek().name().toLowerCase())
+                    .build());
+        }
+        return dayDtos;
+    }
 }
