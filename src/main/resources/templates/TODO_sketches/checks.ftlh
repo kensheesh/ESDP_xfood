@@ -25,6 +25,13 @@
                                         График
                                     </a>
                                 </div>
+                                <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
+                                    <div class="col">
+                                        <a href="/supervisor/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            Возможности
+                                        </a>
+                                    </div>
+                                </#if>
                                 <div class="col">
                                     <a href="#" class="btn rounded-4 w-100 h-100 disabled btn-dodo-light">
                                         Проверки

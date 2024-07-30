@@ -1,12 +1,41 @@
 <#import "layout.ftlh" as main>
 <@main.layout>
+    <#assign known = SPRING_SECURITY_CONTEXT??>
+    <#if known>
+        <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
+    </#if>
 
     <div class="row row-cols-md-2 row-gap-3">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
+                        <#assign userRole = authorizedUser.authorities[0].authority>
                         <div class="col">
+                            <div class="row row-cols-4 row-cols-md-1 row-gap-2">
+                                <div class="col">
+                                    <a href="/supervisor/weekly" class="btn rounded-4 w-100 h-100 disabled btn-dodo-light">
+                                        График
+                                    </a>
+                                </div>
+                                <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
+                                    <div class="col">
+                                        <a href="/supervisor/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            Возможности
+                                        </a>
+                                    </div>
+                                </#if>
+                                <div class="col">
+                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Проверки
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Аналитика
+                                    </a>
+                                </div>
+                            </div>
                             <div class="py-3 px-3 text-center">
                                 <h6>Фильтры</h6>
                                 <select class="form-select mb-2" onchange="handleSelectChange(this.value)">
@@ -28,6 +57,25 @@
                                 <#else>
                                     <span class="text-secondary">Список пуст</span>
                                 </#if>
+                            </div>
+                            <div class="col align-self-end d-none d-md-block">
+                                <div class="col">
+                                    <div class="dropdown d-md-none h-100">
+                                        <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-clock"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <section class="times_second"></section>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card rounded-4 border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <section class="d-flex flex-column row-gap-2 text-center times">
+                                        </section>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

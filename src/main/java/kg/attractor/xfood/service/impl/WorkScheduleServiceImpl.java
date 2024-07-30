@@ -1,12 +1,15 @@
 package kg.attractor.xfood.service.impl;
 
+import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.WorkScheduleSupervisorShowDto;
 import kg.attractor.xfood.dto.workSchedule.DailyWorkScheduleShowDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
-import kg.attractor.xfood.exception.NotFoundException;
+import kg.attractor.xfood.dto.workSchedule.WorkScheduleCreateDto;
 import kg.attractor.xfood.model.Manager;
+import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.model.WorkSchedule;
+import kg.attractor.xfood.repository.ManagerRepository;
 import kg.attractor.xfood.repository.WorkScheduleRepository;
 import kg.attractor.xfood.service.WorkScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -25,11 +29,11 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class WorkScheduleServiceImpl implements WorkScheduleService {
-   
+    private final ManagerRepository managerRepository;
+
     private final WorkScheduleRepository workScheduleRepository;
     private final DtoBuilder dtoBuilder;
     private final PizzeriaServiceImpl pizzeriaService;
-
 
     public WeekDto getWeekInfo(long week) {
         LocalDateTime monday = LocalDateTime.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -80,7 +84,23 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
         workScheduleRepository.save(workSchedule);
     }
 
+    @Override
+    public void prepareScheduleForCheck(@Valid WorkScheduleCreateDto schedule){
+        Manager manager = managerRepository.findById(schedule.getManagerId()).orElseThrow(() -> new NoSuchElementException("Manager not found by id"));
+        Pizzeria pizzeria = pizzeriaService.getPizzeriaById(schedule.getPizzeriaId());
+        LocalDateTime startTime = LocalDateTime.of(schedule.getCurrentDate(), LocalTime.of(schedule.getStartTimeHour(), schedule.getStartTimeMinute()));
+        LocalDateTime endTime = LocalDateTime.of(schedule.getCurrentDate(), LocalTime.of(schedule.getEndTimeHour(), schedule.getEndTimeMinute()));
+        WorkSchedule workSchedule = WorkSchedule.builder()
+                .manager(manager)
+                .pizzeria(pizzeria)
+                .startTime(startTime)
+                .endTime(endTime).build();
+        save(workSchedule);
+    }
+
     public WeeklyScheduleShowDto createWeeklySchedule(Manager manager, Long pizzeriaId, LocalDateTime monday) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         WeeklyScheduleShowDto dto = new WeeklyScheduleShowDto();
         List<DailyWorkScheduleShowDto> managerSchedules = new ArrayList<>();
 
@@ -91,13 +111,12 @@ public class WorkScheduleServiceImpl implements WorkScheduleService {
             if (schedule.isPresent()){
                 shift.setId(schedule.get().getId());
                 shift.setWorkDay(true);
-                //ToDo добавить форматтеры дат, но тогда вопрос как передавать дату, для выборки возможностей экспертов, при нажатии на дату графика менеджера
-                shift.setDate(schedule.get().getStartTime().toLocalDate().toString());
-                shift.setStartTime(schedule.get().getStartTime().toLocalTime().toString());
-                shift.setEndTime(schedule.get().getEndTime().toLocalTime().toString());
+                shift.setDate(schedule.get().getStartTime().toLocalDate().format(dateFormatter));
+                shift.setStartTime(schedule.get().getStartTime().toLocalTime().format(timeFormatter));
+                shift.setEndTime(schedule.get().getEndTime().toLocalTime().format(timeFormatter));
                 log.info("Shift: " + shift);
             } else {
-                shift.setDate(dayOfWeek.toLocalDate().toString());
+                shift.setDate(dayOfWeek.toLocalDate().format(dateFormatter));
                 shift.setWorkDay(false);
                 log.info("Shift: " + shift);
             }

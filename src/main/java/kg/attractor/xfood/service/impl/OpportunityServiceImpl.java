@@ -3,15 +3,21 @@ package kg.attractor.xfood.service.impl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import kg.attractor.xfood.AuthParams;
+import kg.attractor.xfood.dto.opportunity.DailyOpportunityShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
+import kg.attractor.xfood.dto.opportunity.WeeklyOpportunityShowDto;
 import kg.attractor.xfood.dto.shift.ShiftCreateDto;
+import kg.attractor.xfood.dto.workSchedule.DailyWorkScheduleShowDto;
+import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
+import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.model.Opportunity;
 import kg.attractor.xfood.model.Shift;
 import kg.attractor.xfood.model.User;
+import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +25,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Slf4j
@@ -171,5 +180,58 @@ public class OpportunityServiceImpl implements OpportunityService {
 
             shiftService.deleteAllByIds(idsToDelete);
         }
+    }
+
+    @Override
+    public List<WeeklyOpportunityShowDto> getWeeklyOpportunities(long week, String search) {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime chosenMonday = monday.plusDays(7 * week);
+
+        List<Opportunity> opportunitiesOfWeek =
+                opportunityRepository.findByDateBetweenOrderByUser_SurnameAsc(chosenMonday.toLocalDate(), chosenMonday.plusDays(6).toLocalDate());
+
+        Set<User> uniqueExperts = new HashSet<>();
+        opportunitiesOfWeek.forEach(e -> uniqueExperts.add(e.getUser()));
+
+        List<WeeklyOpportunityShowDto> weeklyDtos = new ArrayList<>();
+
+        uniqueExperts.forEach(e -> weeklyDtos.add(createWeeklyOpportunity(e, chosenMonday)));
+
+        return weeklyDtos;
+    }
+
+    private WeeklyOpportunityShowDto createWeeklyOpportunity(User e, LocalDateTime monday) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        WeeklyOpportunityShowDto dto = new WeeklyOpportunityShowDto();
+        List<DailyOpportunityShowDto> expertOpportunities = new ArrayList<>();
+
+        for (LocalDateTime dayOfWeek = monday; dayOfWeek.isBefore(monday.plusDays(7)); dayOfWeek = dayOfWeek.plusDays(1)) {
+            DailyOpportunityShowDto opportunityDto = new DailyOpportunityShowDto();
+            Optional<Opportunity> opportunity = opportunityRepository.findByUser_IdAndLocalDate(e.getId(), dayOfWeek.toLocalDate());
+            log.info("Optional opportunity: " + opportunity.toString());
+            if (opportunity.isPresent()){
+                opportunityDto.setId(opportunity.get().getId());
+                opportunityDto.setDate(dayOfWeek.toLocalDate());
+                opportunityDto.setStrDate(dayOfWeek.toLocalDate().format(dateFormatter));
+                if (opportunity.get().getIsDayOff()) {
+                    opportunityDto.setDayOff(true);
+                } else {
+                    opportunityDto.setDayOff(false);
+                    opportunityDto.setShifts(
+                            dtoBuilder.buildShiftTimeShowDtos(
+                                    shiftService.getShiftsByOpportunityId(
+                                            opportunity.get().getId())));
+                }
+            } else {
+                opportunityDto.setDate(dayOfWeek.toLocalDate());
+                opportunityDto.setStrDate(dayOfWeek.toLocalDate().format(dateFormatter));
+                opportunityDto.setEmpty(true);
+            }
+            expertOpportunities.add(opportunityDto);
+        }
+        dto.setExpert(dtoBuilder.buildExpertShowDto(e));
+        dto.setWeeklyOpportunity(expertOpportunities);
+        return dto;
     }
 }
