@@ -1,21 +1,27 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
+import kg.attractor.xfood.dto.user.UserDto;
+import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Controller
 @RequiredArgsConstructor
@@ -71,8 +77,21 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
     // ROLE: EXPERT
     @GetMapping ("/{id}/check")
     public String check (@PathVariable (name="id") String checkListId, Model model) {
+        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder
+                .getContext().getAuthentication().getAuthorities();
         ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
-        model.addAttribute("checkList", checkListDto);
+        String role = authorities.stream().toList().get(0).getAuthority();
+        if(role.equalsIgnoreCase("role_expert")) {
+            String authExpertEmail = AuthParams.getPrincipal().getUsername();
+            if(authExpertEmail.equals(checkListDto.getExpertEmail())) {
+                model.addAttribute("checkList", checkListDto);
+            } else {
+                model.addAttribute("error", "Эта проверка не назначена на вас!");
+            }
+        } else {
+            model.addAttribute("checkList", checkListDto);
+        }
+
         return "checklist/check_list";
     }
 
