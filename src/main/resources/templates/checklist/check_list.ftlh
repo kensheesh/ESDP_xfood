@@ -90,9 +90,6 @@
                 </tfoot>
             </table>
         </div>
-        <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
-            Введите длительность проверки !
-        </div>
         <#assign
         known = SPRING_SECURITY_CONTEXT??
         >
@@ -100,14 +97,6 @@
         <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
         <#assign name = user.getUsername()>
         <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
-             <#list authorities as authority>
-              <#if authority.authority == 'ROLE_EXPERT' && checkList.status = 'IN_PROGRESS'>
-                  <div class="form-group m-3 shadow-sm">
-                      <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
-                      <input type="time" id="duration" class="form-control" name="duration"  required>
-                  </div>
-              </#if>
-             </#list>
         <div class="text-end mb-5 mt-2">
                 <#list authorities as authority>
                     <#if authority.authority == 'ROLE_SUPERVISOR'>
@@ -551,15 +540,9 @@
             document.getElementById('post').addEventListener('click', fetchToResult);
 
             async function fetchToResult() {
-                let duration = document.getElementById('duration').value
-                if (duration==null || duration ===""){
-                    document.getElementById('error-message').style.display = 'block';
-                    return;
-                }
-                let uuid = `${checkList.uuidLink}`
-                console.log(duration)
+
                 try {
-                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}/` + duration, {method: 'POST'});
+                    let response = await fetch(`/api/checks/post/${checkList.uuidLink}/`, {method: 'POST'});
                     if (!response.ok) {
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
@@ -567,7 +550,7 @@
                     await getUrl();
                     await navigator.clipboard.writeText(url + uuidLink + '/result');
                     console.log("Скопировано в буфер обмена!");
-                    window.location.href = 'http://localhost:2345/analytics';
+                    window.location.href = '/analytics';
                 } catch (error) {
                     alert(error.message);
                 }

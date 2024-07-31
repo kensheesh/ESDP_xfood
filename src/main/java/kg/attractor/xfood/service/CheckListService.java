@@ -2,6 +2,7 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
+import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.dto.statistics.DayDto;
 import kg.attractor.xfood.dto.statistics.StatisticsDto;
 import kg.attractor.xfood.enums.Status;
@@ -38,7 +39,7 @@ public interface CheckListService {
 
     CheckListResultDto getResultByUuidLink(String uuidLink);
     
-    CheckList updateCheckStatusCheckList(String id, LocalTime localTime);
+    CheckList updateCheckStatusCheckList(String id);
 
     CheckListSupervisorEditDto getChecklistByUuid(String uuid);
 
@@ -52,4 +53,6 @@ public interface CheckListService {
     StatisticsDto getStatistics(LocalDate from, LocalDate to);
 
     List<DayDto> getDays(LocalDate from, LocalDate to);
+
+    void comment(String uuid, Long criteriaId, CommentDto commentDto);
 }

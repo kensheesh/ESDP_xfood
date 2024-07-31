@@ -4,6 +4,7 @@ import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dao.CheckListDao;
 import kg.attractor.xfood.dto.LocationDto;
 import kg.attractor.xfood.dto.checklist.*;
+import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
@@ -44,7 +45,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CheckListServiceImpl implements CheckListService {
     @Lazy
-
+    private final CommentService commentService;
     private final WorkScheduleService workScheduleService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
     private ManagerService managerService;
@@ -56,6 +57,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final PizzeriaService pizzeriaService;
     private final CheckListDao checkListDao;
     private final CheckTypeFeeService checkTypeFeeService;
+    private final CheckListCriteriaCommentService checkListCriteriaCommentService;
 
     private final DtoBuilder dtoBuilder;
 
@@ -247,7 +249,7 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public CheckList updateCheckStatusCheckList(String id, LocalTime duration) {
+    public CheckList updateCheckStatusCheckList(String id) {
         CheckList checkList = getModelCheckListById(id);
         if (checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Данный чеклист уже опубликован");
@@ -255,11 +257,6 @@ public class CheckListServiceImpl implements CheckListService {
 
         checkList.setStatus(Status.DONE);
         checkList.setEndTime(LocalDateTime.now());
-        if (duration == null) {
-            throw new IncorrectDateException("Введите время,затраченное на проверку чек-листа!");
-        }
-        checkList.setDuration(duration);
-        log.info(duration + "Duration for checklist with id " + checkList.getId());
         checkListDao.updateStatusToDone(Status.DONE, checkList);
         return checkList;
     }
@@ -570,5 +567,23 @@ public class CheckListServiceImpl implements CheckListService {
                     .build());
         }
         return dayDtos;
+    }
+
+    @Override
+    public void comment(String uuid, Long criteriaId, CommentDto commentDto) {
+        CheckList checkList = checkListRepository.findByUuidLink(uuid).orElseThrow(()-> new NoSuchElementException("Чеклист с uuid " + uuid + " не найден"));
+        CheckListsCriteria checkListsCriteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkList.getId());
+        Comment comment = new Comment();
+        if (commentDto.getCommentId()!= null){
+            comment = commentService.findById(commentDto.getCommentId());
+        }else {
+            comment.setComment(commentDto.getComment());
+        }
+
+        CheckListsCriteriaComment commentCriteria = CheckListsCriteriaComment.builder()
+                .comment(comment)
+                .checklistCriteria(checkListsCriteria)
+                .build();
+        checkListCriteriaCommentService.save(commentCriteria);
     }
 }
