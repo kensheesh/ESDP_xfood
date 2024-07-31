@@ -86,7 +86,8 @@ public class DtoBuilder {
     }
 
     public ChecklistShowDto buildChecklistShowDto(CheckList model) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         List<CriteriaExpertShowDto> criteriaDtos = new ArrayList<>();
         for(var checklistCriteria : model.getCheckListsCriteria()) {
             CriteriaExpertShowDto criteriaExpertShowDto = buildCriteriaShowDto(checklistCriteria);
@@ -114,8 +115,10 @@ public class DtoBuilder {
                 .manager(managerDto)
                 .status(model.getStatus())
                 .expertEmail(model.getExpert().getEmail())
-                .managerWorkStartDate(model.getWorkSchedule().getStartTime().format(formatter))
-                .managerWorkEndDate(model.getWorkSchedule().getEndTime().format(formatter))
+                .managerWorkStartDate(model.getWorkSchedule().getStartTime().format(dateTimeFormatter))
+                .managerWorkEndDate(model.getWorkSchedule().getEndTime().format(dateTimeFormatter))
+                .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(timeFormatter))
+                .managerWorkEndTime(model.getWorkSchedule().getEndTime().format(timeFormatter))
                 .criteria(sortedCriteriaDtos)
                 .build();
     }
