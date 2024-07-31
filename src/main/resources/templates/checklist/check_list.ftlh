@@ -84,7 +84,7 @@
                          <th class="text-center">Раздел</th>
                          <th class="text-center">Что проверить</th>
                          <th class="text-center">Оценка</th>
-                         <th class="text-center">${checkList.managerWorkStartDate}</th>
+                         <th class="text-center">${checkList.managerWorkDate} ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
                      </tr>
                      </thead>
                      <tbody id="mainTableBody">
@@ -558,7 +558,7 @@
             a.href = url + uuidLink + '/result';
 
             document.getElementById('getTemplate').addEventListener('click', async () => {
-                const message = `Дата: ${checkList.managerWorkStartDate}\n` +
+                const message = `Дата: ${checkList.managerWorkDate}\n` +
                     `Пиццерия: ${checkList.pizzeria.name}\n` +
                     `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
                     `Результат проверки в %: `+ await updatePercentage() +``+
