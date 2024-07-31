@@ -86,6 +86,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(expertId).orElseThrow(() -> new NotFoundException("Expert not found"));
     }
 
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(dtoBuilder::buildUserDto)
+                .toList();
+    }
+
     public List<User> findSupervisors() {
         return userRepository.findByRole(Role.SUPERVISOR.toString());
     }

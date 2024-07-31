@@ -16,4 +16,5 @@ public interface UserService {
     List<ExpertShowDto> fetchAllExperts();
 
     User findById(Long expertId);
+    List<UserDto> getAllUsers();
 }
