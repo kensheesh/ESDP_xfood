@@ -66,10 +66,9 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .surname(model.getSurname())
-                .phoneNumber(model.getPhoneNumber())
+                .tgLink(model.getTgLink())
                 .email(model.getEmail())
                 .password(model.getPassword())
-                .avatar(model.getAvatar())
                 .enabled(model.getEnabled())
                 .role(model.getRole())
                 .build();

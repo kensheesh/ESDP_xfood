@@ -16,10 +16,9 @@ public class UserDto {
     private Long id;
     private String name;
     private String surname;
-    private String phoneNumber;
+    private String tgLink;
     private String email;
     private String password;
-    private String avatar;
     private Boolean enabled = true;
     private Role role;
 }
