@@ -24,11 +24,7 @@ public class CheckTypeFeeServiceImpl implements CheckTypeFeeService {
     }
 
     public BigDecimal getEnabledFeeByCheckTypeId(Long checkTypeID) {
-        Optional<CheckTypeFee> template = checkTypeFeeRepository.findByCheckType_IdAndEnabledTrue(checkTypeID);
-        if (template.isPresent()) {
-            return template.get().getFees();
-        } else {
-            throw new NoSuchElementException("Для данной проверки вознаграждение не найдено");
-        }
+        return checkTypeFeeRepository.findByCheckType_IdAndEnabledTrue(checkTypeID)
+                .orElseThrow(() -> new NoSuchElementException("Для данной проверки вознаграждение не найдено")).getFees();
     }
 }
