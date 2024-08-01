@@ -30,7 +30,7 @@ public class CheckListController {
         }
     }
 
-    @PostMapping("post/{id}/")
+    @PostMapping("post/{id}")
     public HttpStatus postCheck(@PathVariable(name = "id") String id) {
         try{
             checkListService.updateCheckStatusCheckList(id);
