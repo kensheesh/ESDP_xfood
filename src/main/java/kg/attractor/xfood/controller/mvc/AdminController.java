@@ -25,13 +25,17 @@ public class AdminController {
     @GetMapping("users")
     public String getUsers(Model model,
                            @RequestParam(name = "role", defaultValue = "default", required = false) String role,
-                           @RequestParam(name = "page", defaultValue = "0") String page) {
-        Pageable pageable = PageRequest.of(Integer.parseInt(page), 3);
+                           @RequestParam(name = "page", defaultValue = "0") String page,
+                           @RequestParam(name = "size", defaultValue = "4") String size,
+                           @RequestParam(name = "search", defaultValue = "", required = false) String search) {
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
         Page<UserDto> userPage = userService.getAllUsers(role, pageable);
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("totalPages", userPage.getTotalPages());
         model.addAttribute("currentRole", role);
+        model.addAttribute("searchWord", search);
         model.addAttribute("currentPage", Integer.parseInt(page));
+        model.addAttribute("currentSize", Integer.parseInt(size));
         return "users/users";
     }
 }

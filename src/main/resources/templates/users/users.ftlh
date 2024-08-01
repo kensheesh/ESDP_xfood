@@ -2,7 +2,6 @@
 <@main.layout>
 
     <style>
-
         .user-info {
             flex-grow: 1;
         }
@@ -23,9 +22,9 @@
 
     <div class="container">
         <div class="row">
-            <div class="card-container col-lg-8">
+            <div class="card-container col-lg-8" id="user-list">
                 <#list users as user>
-                    <div class="card mb-2">
+                    <div class="card mb-2 user-card">
                         <div class="card-body d-flex">
                             <div class="user-info">
                                 <h5 class="card-title">ФИО: ${user.getName()} ${user.getSurname()}</h5>
@@ -46,7 +45,7 @@
                     <ul class="pagination">
                         <#if currentPage gt 0>
                             <li class="page-item">
-                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}" aria-label="Previous">
+                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
@@ -62,13 +61,13 @@
 
                         <#list 0..(totalPages-1) as page>
                             <li class="page-item <#if page == currentPage>active</#if>">
-                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${page}">${page + 1}</a>
+                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
                             </li>
                         </#list>
 
                         <#if currentPage lt totalPages - 1>
                             <li class="page-item">
-                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}" aria-label="Next">
+                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
@@ -85,7 +84,6 @@
                 </nav>
             </div>
 
-
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
@@ -98,10 +96,7 @@
                                 </select>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Поиск" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button">Найти</button>
-                                </div>
+                                <input type="text" name="search" value="<#if searchWord??>${searchWord}</#if>" class="form-control" id="search-input" placeholder="Поиск" aria-label="Recipient's username" aria-describedby="basic-addon2">
                             </div>
                             <button class="btn btn-outline-success w-100" id="buttonFilter" type="submit">Применить</button>
                         </form>
@@ -112,31 +107,43 @@
     </div>
 
     <script>
-
         document.addEventListener('DOMContentLoaded', async () => {
-            const roleSelect = document.getElementById('role-select')
+            const roleSelect = document.getElementById('role-select');
+            const searchInput = document.getElementById('search-input');
+            const userCards = document.querySelectorAll('.user-card');
+
             async function getRoles() {
                 const response = await fetch('/api/role');
                 const data = await response.json();
-                console.log(data);
-                data.forEach(function (role) {
+                data.forEach(function(role) {
                     let option = document.createElement('option');
                     option.value = role;
                     option.textContent = role;
-
-                    console.log(role)
                     if ('${currentRole}' === role) {
                         option.selected = true;
                     }
-
-
                     roleSelect.appendChild(option);
                 });
             }
 
-            await getRoles();
-        })
+            function filterUsers(query) {
+                userCards.forEach(card => {
+                    const userInfo = card.querySelector('.user-info').textContent.toLowerCase();
+                    if (userInfo.includes(query.toLowerCase())) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
 
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value;
+                filterUsers(query);
+            });
+
+            await getRoles();
+        });
     </script>
 
 </@main.layout>
