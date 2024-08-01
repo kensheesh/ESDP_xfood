@@ -101,14 +101,14 @@
                 <table id="mainTable" class="table rounded-3">
                     <thead>
                     <tr>
-                        <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
+                        <th colspan="1" class="text-center">${checkList.pizzeria.name}</th>
                         <th colspan="2" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
+                        <th colspan="1" class="text-center">${checkList.managerWorkDate} ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
                     </tr>
                     <tr>
                         <th class="text-center">Раздел</th>
                         <th class="text-center">Что проверить</th>
                         <th class="text-center">Оценка</th>
-                        <th class="text-center">${checkList.managerWorkStartDate}</th>
                         <th class="text-center">Действия</th>
                     </tr>
                     </thead>
