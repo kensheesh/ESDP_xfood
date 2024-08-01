@@ -44,21 +44,43 @@
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="/admin/users?role=${currentRole}&page=0">1</a></li>
-                        <li class="page-item"><a class="page-link" href="/admin/users?role=${currentRole}&page=1">2</a></li>
-                        <li class="page-item"><a class="page-link" href="/admin/users?role=${currentRole}&page=2">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
+                        <#if currentPage gt 0>
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        <#else>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        </#if>
+
+                        <#list 0..(totalPages-1) as page>
+                            <li class="page-item <#if page == currentPage>active</#if>">
+                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${page}">${page + 1}</a>
+                            </li>
+                        </#list>
+
+                        <#if currentPage lt totalPages - 1>
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        <#else>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </#if>
                     </ul>
                 </nav>
             </div>
