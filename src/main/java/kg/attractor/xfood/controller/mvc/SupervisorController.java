@@ -5,11 +5,7 @@ import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.workSchedule.WorkScheduleCreateDto;
 import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.service.OkHttpService;
-import kg.attractor.xfood.service.impl.LocationServiceImpl;
-import kg.attractor.xfood.service.impl.ManagerServiceImpl;
-import kg.attractor.xfood.service.impl.OpportunityServiceImpl;
-import kg.attractor.xfood.service.impl.PizzeriaServiceImpl;
-import kg.attractor.xfood.service.impl.WorkScheduleServiceImpl;
+import kg.attractor.xfood.service.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -31,6 +27,7 @@ public class SupervisorController {
     private final ManagerServiceImpl managerService;
     private final WorkScheduleServiceImpl workScheduleService;
     private final OpportunityServiceImpl opportunityService;
+    private final CheckTypeServiceImpl checkTypeService;
     private final OkHttpService okHttpService;
     private final AuthParams authParams;
     
@@ -82,4 +79,12 @@ public class SupervisorController {
         model.addAttribute("schedules", workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId, week));
         return "weekly_schedules";
     }
+
+    @GetMapping("/templates")
+//    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
+    public String getTemplates (Model model) {
+        model.addAttribute("templates", checkTypeService.getCheckTypes());
+        return "templates";
+    }
+
 }
