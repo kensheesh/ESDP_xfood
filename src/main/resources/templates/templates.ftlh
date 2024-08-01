@@ -36,7 +36,7 @@
         </div>
         <div class="col-md-8 col-xl-9">
             <#list templates as template>
-                <div class="card my-2">
+                <a href="https://xfood.youtrack.cloud/issue/XFOODCRM-72" class="card my-2 text-decoration-none">
                     <div class="card-body py-1 mb-0">
                         <span><b>${template.name?capitalize}</b></span>
                         <p class="row">
@@ -45,7 +45,7 @@
                             <span class="col-4">Вознаграждение: <b>${template.fee}₽</b></span>
                         </p>
                     </div>
-                </div>
+                </a>
             </#list>
         </div>
     </div>
