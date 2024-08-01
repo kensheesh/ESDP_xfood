@@ -30,10 +30,10 @@ public class CheckListController {
         }
     }
 
-    @PostMapping("post/{id}/{duration}")
-    public HttpStatus postCheck(@PathVariable(name = "id") String id, @PathVariable LocalTime duration) {
+    @PostMapping("post/{id}")
+    public HttpStatus postCheck(@PathVariable(name = "id") String id) {
         try{
-            checkListService.updateCheckStatusCheckList(id,duration);
+            checkListService.updateCheckStatusCheckList(id);
             return HttpStatus.OK;
         } catch (IllegalArgumentException e) {
             return HttpStatus.INTERNAL_SERVER_ERROR;

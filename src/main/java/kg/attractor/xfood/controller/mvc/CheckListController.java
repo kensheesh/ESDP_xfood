@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.enums.Role;
@@ -161,4 +162,10 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
         return "redirect:/checks/"+uuid+"/check";
     }
 
+
+    @PostMapping("/{uuid}/{criteriaId}")
+    public String comment(@PathVariable(name = "uuid")String uuid, @PathVariable (name = "criteriaId") Long criteriaId, CommentDto commentDto, Model model) {
+        checkListService.comment(uuid, criteriaId, commentDto);
+        return "redirect:/checks/"+criteriaId+"/check";
+    }
 }

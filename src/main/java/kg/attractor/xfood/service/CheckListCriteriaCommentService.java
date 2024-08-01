@@ -5,5 +5,5 @@ import kg.attractor.xfood.model.CheckListsCriteriaComment;
 import java.util.List;
 
 public interface CheckListCriteriaCommentService {
-    List<CheckListsCriteriaComment> findAllByCriteriaIdAndCheckListId(Long id, Long id1);
+    void save(CheckListsCriteriaComment commentCriteria);
 }
