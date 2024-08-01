@@ -28,6 +28,7 @@ public class SupervisorController {
     private final WorkScheduleServiceImpl workScheduleService;
     private final OpportunityServiceImpl opportunityService;
     private final CheckTypeServiceImpl checkTypeService;
+    private final AppealServiceImpl appealService;
     private final OkHttpService okHttpService;
     private final AuthParams authParams;
     
@@ -42,6 +43,7 @@ public class SupervisorController {
         model.addAttribute("opportunities", opportunityService.getWeeklyOpportunities(week, search));
         model.addAttribute("pizzerias", pizzeriaService.getAllPizzerias());
         model.addAttribute("managers", managerService.getAllManagers());
+        model.addAttribute("appealsCount", appealService.getAmountOfNewAppeals());
         return "weekly_opportunities";
     }
 
@@ -62,9 +64,9 @@ public class SupervisorController {
     @GetMapping("/weekly")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public String getWeeklySchedule (
+            @RequestParam(name = "week", defaultValue = "0") long week,
             @RequestParam(name = "locId", defaultValue = "0") long locationId,
             @RequestParam(name = "pizzId", defaultValue = "0") long pizzeriaId,
-            @RequestParam(name = "week", defaultValue = "0") long week,
             Model model) {
         
         if (pizzeriaId != 0) {
@@ -77,6 +79,7 @@ public class SupervisorController {
         model.addAttribute("locations", locationService.getLocations());
         model.addAttribute("pizzerias", pizzeriaService.getPizzeriasByLocationId(locationId));
         model.addAttribute("schedules", workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId, week));
+        model.addAttribute("appealsCount", appealService.getAmountOfNewAppeals());
         return "weekly_schedules";
     }
 
