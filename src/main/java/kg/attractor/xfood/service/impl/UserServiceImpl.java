@@ -16,6 +16,8 @@ import kg.attractor.xfood.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -87,9 +89,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
+    public List<UserDto> getAllUsers(String role, Pageable pageable) {
+        Page<User> users;
+        if(!role.equals("default")) {
+            Specification<User> spec = UserSpecification.hasRole(Role.valueOf(role));
+            users = userRepository.findAll(spec, pageable);
+        } else {
+            users = userRepository.findAll(pageable);
+        }
+
+        return users.getContent().stream()
                 .map(dtoBuilder::buildUserDto)
                 .toList();
     }
