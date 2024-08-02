@@ -6,7 +6,6 @@ import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
 import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
-import kg.attractor.xfood.dto.opportunity.OpportunityEditDto;
 import kg.attractor.xfood.dto.work_schedule.WorkScheduleSupervisorEditDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
@@ -100,8 +99,21 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public ChecklistShowDto getCheckListById(String id) {
+        for (var authority : AuthParams.getAuth().getAuthorities()) {
+            if (!authority.getAuthority().equals("ROLE_EXPERT") && authority.getAuthority() != null) {
+                Optional<CheckList> deletedCheckList = findDeletedCheckList(id);
+                if (deletedCheckList.isPresent()) {
+                    return dtoBuilder.buildChecklistShowDto(deletedCheckList.get(), Boolean.TRUE);
+                }
+            }
+        }
+
         CheckList checkList = getModelCheckListById(id);
         return dtoBuilder.buildChecklistShowDto(checkList);
+    }
+
+    private Optional<CheckList> findDeletedCheckList(String uuid) {
+        return checkListRepository.findDeleted(uuid);
     }
 
     @Override
@@ -410,6 +422,18 @@ public class CheckListServiceImpl implements CheckListService {
             log.info("Чек лист и все необходимые связи созданы");
 
         }
+    }
+
+    @Override
+    @Transactional
+    public void restore (String uuid) {
+        checkListRepository.restore (uuid);
+    }
+
+    @Override
+    public ChecklistShowDto getCheckListByIdIncludeDeleted(String checkListId) {
+        return dtoBuilder.buildChecklistShowDto(checkListRepository.findDeleted(checkListId)
+                .orElseThrow(() -> new NotFoundException("CheckList not found")));
     }
 
 }

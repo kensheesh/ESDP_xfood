@@ -48,4 +48,8 @@ public interface CheckListService {
     void delete(String uuid);
 
     List<ChecklistMiniExpertShowDto> getDeletedChecklists();
+
+    void restore(String uuid);
+
+    ChecklistShowDto getCheckListByIdIncludeDeleted(String checkListId);
 }

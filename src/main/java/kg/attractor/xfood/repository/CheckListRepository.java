@@ -82,4 +82,12 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     void deleteByUuidLinkAndStatusIsNot(String uuid, Status status);
 
     void deleteByUuidLink(String uuid);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE check_lists SET deleted = false WHERE uuid = ?1", nativeQuery = true)
+    void restore(String uuid);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM check_lists WHERE uuid_link = ?1 and deleted = true")
+    Optional<CheckList> findDeleted(String checkListId);
 }

@@ -24,4 +24,5 @@ public class ChecklistShowDto {
 	private String managerWorkEndDate;
 	private String uuidLink;
 	private List<CriteriaExpertShowDto> criteria;
+	private Boolean isDeleted;
 }

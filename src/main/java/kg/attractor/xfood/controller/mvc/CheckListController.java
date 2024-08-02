@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.checklist.CheckListMiniSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorCreateDto;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
@@ -146,6 +147,12 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
     public String delete (@PathVariable String uuid) {
         checkListService.delete(uuid);
         return "redirect:/expert/checks";
+    }
+
+    @PostMapping("{uuid}/restore")
+    public String restore (@PathVariable String uuid) {
+        checkListService.restore(uuid);
+        return "redirect:/checks";
     }
 
 }

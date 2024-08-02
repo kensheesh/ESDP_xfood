@@ -100,59 +100,66 @@
         <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
         <#assign name = user.getUsername()>
         <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
-             <#list authorities as authority>
-              <#if authority.authority == 'ROLE_EXPERT' && checkList.status = 'IN_PROGRESS'>
-                  <div class="form-group m-3 shadow-sm">
-                      <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
-                      <input type="time" id="duration" class="form-control" name="duration"  required>
-                  </div>
-              </#if>
-             </#list>
-        <div class="text-end mb-5 mt-2">
+            <#if checkList.isDeleted == false>
                 <#list authorities as authority>
-                    <#if authority.authority == 'ROLE_SUPERVISOR' || authority.authority == 'ROLE_ADMIN'>
-                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить проверку</button>
-                    </#if>
-                    <#if authority.authority == 'ROLE_SUPERVISOR'>
-                        <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                    <#if authority.authority == 'ROLE_EXPERT' && checkList.status = 'IN_PROGRESS'>
+                        <div class="form-group m-3 shadow-sm">
+                            <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
+                            <input type="time" id="duration" class="form-control" name="duration"  required>
+                        </div>
                     </#if>
                 </#list>
+                <div class="text-end mb-5 mt-2">
+                    <#list authorities as authority>
+                        <#if authority.authority == 'ROLE_SUPERVISOR' || authority.authority == 'ROLE_ADMIN'>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить проверку</button>
+                        </#if>
+                        <#if authority.authority == 'ROLE_SUPERVISOR'>
+                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                        </#if>
+                    </#list>
 
-            <#if checkList.status == 'IN_PROGRESS'>
-                <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Опубликовать
-                </button>
-            </#if>
+                    <#if checkList.status == 'IN_PROGRESS'>
+                        <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Опубликовать
+                        </button>
+                    </#if>
 
-            <#if checkList.status == "IN_PROGRESS" || checkList.status == "NEW">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
-                    wow-фактор
-                </button>
-                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
-                    фактор
-                </button>
-            </#if>
+                    <#if checkList.status == "IN_PROGRESS" || checkList.status == "NEW">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
+                            wow-фактор
+                        </button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
+                            фактор
+                        </button>
+                    </#if>
 
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Закрыть"></button>
-                        </div>
-                        <div class="modal-body">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
-                                публиковать
-                            </button>
-                            <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
+                                        публиковать
+                                    </button>
+                                    <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            <#else>
+                <#if authorities[0].authority == "ROLE_ADMIN">
+                    <button type="button" class="btn btn-primary">Восстановить проверку</button>
+                </#if>
+            </#if>
+
         </#if>
     </main>
 
@@ -191,7 +198,7 @@
                 <div class="modal-body">
                     <form id="critFactorForm">
                         <div class="mb-3">
-                            <label for="critFactorDescription" class="form-label">Описание</label>
+                               <label for="critFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="critFactorDescription"
                                     aria-label=".form-select-sm example">
                             </select>
