@@ -34,8 +34,8 @@
                                 <p class="card-text">Enabled: <#if user.getEnabled() == true>Да<#else>Нет</#if></p>
                             </div>
                             <div class="card-icons">
-                                <i class="fas fa-edit"></i>
-                                <i class="fas fa-trash-alt"></i>
+                                <button class="btn-edit" data-user-id="${user.getId()}"><i class="fas fa-edit"></i></button>
+                                <button class="btn-delete" data-user-id="${user.getId()}"><i class="fas fa-trash-alt"></i></button>
                             </div>
                         </div>
                     </div>
@@ -106,24 +106,111 @@
         </div>
     </div>
 
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Редактировать пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="editName" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editSurname" class="form-label">Фамилия</label>
+                            <input type="text" class="form-control" id="editSurname" name="surname">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRole" class="form-label">Роль</label>
+                            <select class="form-select" id="editRole" name="role">
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Почта</label>
+                            <input type="email" disabled class="form-control" id="editEmail" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhoneNumber" class="form-label">Телефон</label>
+                            <input type="text" disabled class="form-control" id="editPhoneNumber" name="phoneNumber">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEnabled" class="form-label">Enabled</label>
+                            <select class="form-select" id="editEnabled" name="enabled">
+                                <option value="true">Да</option>
+                                <option value="false">Нет</option>
+                            </select>
+                        </div>
+                        <input type="hidden" id="editUserId">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="saveChanges">Сохранить изменения</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const roleSelect = document.getElementById('role-select');
             const searchInput = document.getElementById('search-input');
             const userCards = document.querySelectorAll('.user-card');
+            const btnEdit = document.getElementById('btn-edit');
+            const btnDelete = document.getElementById('btn-delete');
+            const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
 
-            async function getRoles() {
+            async function getRoles(select, currentRole) {
                 const response = await fetch('/api/role');
                 const data = await response.json();
                 data.forEach(function(role) {
                     let option = document.createElement('option');
                     option.value = role;
                     option.textContent = role;
-                    if ('${currentRole}' === role) {
+                    if (currentRole === role) {
                         option.selected = true;
                     }
-                    roleSelect.appendChild(option);
+                    select.appendChild(option);
                 });
+            }
+
+            document.addEventListener('click', async (event) => {
+                if (event.target.closest('.btn-delete')) {
+                    const btnDelete = event.target.closest('.btn-delete');
+                    const userId = btnDelete.getAttribute('data-user-id');
+                    await deleteUser(userId);
+                }
+
+                if (event.target.closest('.btn-edit')) {
+                    editUserModal.show()
+                    const btnEdit = event.target.closest('.btn-edit');
+                    const userId = btnEdit.getAttribute('data-user-id');
+                    editUser(userId);
+                }
+            });
+            async function deleteUser(userId){
+                await fetch('/api/admin/user/'+userId, {
+                    method: 'DELETE'
+                })
+            }
+
+            async function editUser(userId) {
+                const response = await fetch('/api/admin/user/' + userId);
+                const user = await response.json();
+                document.getElementById('editUserId').value = userId;
+                document.getElementById('editName').value = user.name;
+                document.getElementById('editSurname').value = user.surname;
+                await getRoles(document.getElementById('editRole'), user.role);
+                document.getElementById('editEmail').value = user.email;
+                document.getElementById('editPhoneNumber').value = user.phoneNumber;
+                document.getElementById('editEnabled').value = user.enabled;
+                editUserModal.show();
             }
 
             function filterUsers(query) {
@@ -142,7 +229,7 @@
                 filterUsers(query);
             });
 
-            await getRoles();
+            await getRoles(roleSelect, '${currentRole}');
         });
     </script>
 
