@@ -1,6 +1,7 @@
 package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.dto.user.UserDto;
+import kg.attractor.xfood.dto.user.UserEditDto;
 import kg.attractor.xfood.service.AdminService;
 import kg.attractor.xfood.service.UserService;
 import kg.attractor.xfood.service.impl.DtoBuilder;
@@ -27,5 +28,11 @@ public class AdminController {
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(dtoBuilder.buildUserDto(userService.findById(id)));
+    }
+
+    @PutMapping("/user")
+    public HttpStatus editUser(@RequestBody UserEditDto userEditDto) {
+        adminService.editUser(userEditDto);
+        return HttpStatus.OK;
     }
 }

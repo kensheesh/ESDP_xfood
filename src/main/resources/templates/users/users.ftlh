@@ -146,11 +146,11 @@
                             </select>
                         </div>
                         <input type="hidden" id="editUserId">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-primary" id="saveChanges">Сохранить изменения</button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary" id="saveChanges">Сохранить изменения</button>
                 </div>
             </div>
         </div>
@@ -194,6 +194,7 @@
                     editUser(userId);
                 }
             });
+
             async function deleteUser(userId){
                 await fetch('/api/admin/user/'+userId, {
                     method: 'DELETE'
@@ -223,6 +224,28 @@
                     }
                 });
             }
+
+            document.getElementById('editUserForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const userId = document.getElementById('editUserId').value;
+                const userEditDto = {
+                    id: userId,
+                    name: document.getElementById('editName').value,
+                    surname: document.getElementById('editSurname').value,
+                    enabled: document.getElementById('editEnabled').value === 'true',
+                    role: document.getElementById('editRole').value
+                };
+
+                await fetch('/api/admin/user', {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userEditDto)
+                });
+                editUserModal.hide();
+               location.reload();
+            });
 
             searchInput.addEventListener('input', () => {
                 const query = searchInput.value;
