@@ -2,9 +2,7 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.auth.RegisterUserDto;
-import kg.attractor.xfood.dto.checklist.CheckListRewardDto;
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
-import kg.attractor.xfood.dto.user.ExpertRewardDto;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.exception.NotFoundException;
@@ -16,13 +14,13 @@ import kg.attractor.xfood.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +82,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long expertId) {
         return userRepository.findById(expertId).orElseThrow(() -> new NotFoundException("Expert not found"));
+    }
+
+    @Override
+    public Page<UserDto> getAllUsers(String role, Pageable pageable) {
+        Page<User> users;
+        if(!role.equals("default")) {
+            Specification<User> spec = UserSpecification.hasRole(Role.valueOf(role));
+            users = userRepository.findAll(spec, pageable);
+        } else {
+            users = userRepository.findAll(pageable);
+        }
+
+        return new PageImpl<>(users.getContent().stream()
+                .map(dtoBuilder::buildUserDto)
+                .toList(), pageable, users.getTotalElements());
     }
 
     public List<User> findSupervisors() {

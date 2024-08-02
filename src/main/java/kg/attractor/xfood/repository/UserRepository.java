@@ -2,6 +2,8 @@ package kg.attractor.xfood.repository;
 
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
                     """
     )
     List<User> findByRole(String role);
+    @Query("select distinct u.role from User u")
+    List<Role> findRoles();
 
 }
