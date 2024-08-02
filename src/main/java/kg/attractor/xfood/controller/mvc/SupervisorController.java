@@ -5,11 +5,7 @@ import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.workSchedule.WorkScheduleCreateDto;
 import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.service.OkHttpService;
-import kg.attractor.xfood.service.impl.LocationServiceImpl;
-import kg.attractor.xfood.service.impl.ManagerServiceImpl;
-import kg.attractor.xfood.service.impl.OpportunityServiceImpl;
-import kg.attractor.xfood.service.impl.PizzeriaServiceImpl;
-import kg.attractor.xfood.service.impl.WorkScheduleServiceImpl;
+import kg.attractor.xfood.service.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -31,6 +27,8 @@ public class SupervisorController {
     private final ManagerServiceImpl managerService;
     private final WorkScheduleServiceImpl workScheduleService;
     private final OpportunityServiceImpl opportunityService;
+    private final CheckTypeServiceImpl checkTypeService;
+    private final AppealServiceImpl appealService;
     private final OkHttpService okHttpService;
     private final AuthParams authParams;
     
@@ -45,6 +43,7 @@ public class SupervisorController {
         model.addAttribute("opportunities", opportunityService.getWeeklyOpportunities(week, search));
         model.addAttribute("pizzerias", pizzeriaService.getAllPizzerias());
         model.addAttribute("managers", managerService.getAllManagers());
+        model.addAttribute("appealsCount", appealService.getAmountOfNewAppeals());
         return "weekly_opportunities";
     }
 
@@ -65,9 +64,9 @@ public class SupervisorController {
     @GetMapping("/weekly")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public String getWeeklySchedule (
+            @RequestParam(name = "week", defaultValue = "0") long week,
             @RequestParam(name = "locId", defaultValue = "0") long locationId,
             @RequestParam(name = "pizzId", defaultValue = "0") long pizzeriaId,
-            @RequestParam(name = "week", defaultValue = "0") long week,
             Model model) {
         
         if (pizzeriaId != 0) {
@@ -80,6 +79,15 @@ public class SupervisorController {
         model.addAttribute("locations", locationService.getLocations());
         model.addAttribute("pizzerias", pizzeriaService.getPizzeriasByLocationId(locationId));
         model.addAttribute("schedules", workScheduleService.getWeeklySchedulesByPizzeriaId(pizzeriaId, week));
+        model.addAttribute("appealsCount", appealService.getAmountOfNewAppeals());
         return "weekly_schedules";
     }
+
+    @GetMapping("/templates")
+//    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
+    public String getTemplates (Model model) {
+        model.addAttribute("templates", checkTypeService.getCheckTypes());
+        return "templates";
+    }
+
 }

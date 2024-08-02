@@ -27,4 +27,8 @@ public class CriteriaType {
     @JoinColumn(name = "type_id", nullable = false)
     private CheckType type;
 
+    @NotNull
+    @JoinColumn(name = "max_value", nullable = false)
+    private Integer maxValue;
+
 }
