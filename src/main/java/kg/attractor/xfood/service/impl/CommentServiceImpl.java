@@ -33,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
                             .commentId(comment.getId())
                     .build());
         }
+        log.info("comments : {}", commentDtos);
         return commentDtos;
     }
 }

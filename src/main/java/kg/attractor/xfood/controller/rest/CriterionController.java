@@ -26,8 +26,8 @@ public class CriterionController {
     @GetMapping("/{checkTypeId}/{pizzeriaId}")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public ResponseEntity<List<CriteriaSupervisorShowDto>> getAllByPizzeriaAndCheckType (
-            @PathVariable (name = "checkTypeId") Long checkTypeId
-    ) {
+            @PathVariable (name = "checkTypeId") Long checkTypeId,
+            @PathVariable String pizzeriaId) {
         return ResponseEntity.ok(criteriaService.getByCheckTypeAndPizzeria(checkTypeId));
     }
 

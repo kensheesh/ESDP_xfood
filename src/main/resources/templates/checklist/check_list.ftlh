@@ -237,7 +237,7 @@
 
                 let response = await fetch('/api/checklist/criteria/${checkList.uuidLink}')
                 let data = await response.json()
-                data.forEach(criteria => {
+                for (const criteria of data) {
                     const row = document.createElement('tr');
 
                     if (criteria.maxValue && criteria.maxValue > 0) {
@@ -280,7 +280,7 @@
                             inputCell = document.createElement('td');
                             inputCell.classList.add('text-center', 'bg-danger');
 
-                            const inputGroup = createInputGroup('8', criteria.value, criteria.id);
+                            const inputGroup = await createInputGroup('8', criteria.value, criteria.id);
                             inputCell.appendChild(inputGroup);
                             countCriticalFactors += 1;
                         } else if (criteria.section === 'WOW фактор') {
@@ -291,7 +291,7 @@
                             inputCell = document.createElement('td');
                             inputCell.classList.add('text-center', 'bg-success');
 
-                            const inputGroup = createInputGroup('0', criteria.value, criteria.id);
+                            const inputGroup = await createInputGroup('0', criteria.value, criteria.id);
                             inputCell.appendChild(inputGroup);
                             countWowFactors += 1;
                         }
@@ -303,7 +303,7 @@
                     }
 
                     mainTableBody.appendChild(row);
-                });
+                }
                 await updatePercentage()
             }
 
@@ -314,7 +314,7 @@
                 return cell;
             }
 
-            function createInputGroup(step, value, id) {
+             async function createInputGroup(step, value, id) {
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
 
@@ -334,6 +334,54 @@
                 deleteButton.textContent = '×';
                 deleteButton.addEventListener('click', deleteFactor);
 
+                let comments = await getComments();
+                console.log(comments);
+
+                const commentButton = document.createElement('button');
+                commentButton.classList.add('btn', 'btn-success');
+                commentButton.setAttribute('data-bs-toggle', 'modal');
+                commentButton.setAttribute('data-bs-target', '#commentModal-' + id);
+                commentButton.innerHTML = `<i class="bi bi-pencil-square"></i>`;
+
+                 let commentsHtml = '';
+                 if (Array.isArray(comments) && comments.length > 0) {
+                     commentsHtml =
+                         '<select class="form-select" aria-label="Выберите комментарий">' +
+                         '<option selected>Выбрать комментарий</option>' +
+                         comments.map(comment =>
+                             '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
+                         ).join('') +
+                         '</select>';
+                 } else {
+                     commentsHtml = '<p>  </p>';
+                 }
+                console.log(commentsHtml)
+                 const modal = document.createElement('div');
+                    modal.classList.add('modal', 'fade');
+                    modal.id = 'commentModal-' + id;
+                    modal.setAttribute('tabindex', '-1');
+                    modal.setAttribute('aria-labelledby', 'commentModal-' + id);
+                    modal.setAttribute('aria-hidden', 'true');
+                    modal.innerHTML =
+                        '<div class="modal-dialog">'+
+                        '<div class="modal-content">'+
+                        '<div class="modal-header">'+
+                        '<h1 class="modal-title fs-5" id="exampleModalLabel">Добавьте пояснение за снятый балл</h1>'+
+                        '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>'+
+                        '</div>'+
+                        '<div class="modal-body">'+
+                        commentsHtml+
+                        '</div>'+
+                        '<div class="modal-footer">'+
+                        '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>'+
+                        '<button type="button" class="btn btn-primary">Сохранить</button>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>';
+
+
+                document.body.appendChild(modal);
+                inputGroupAppend.appendChild(commentButton);
                 inputGroupAppend.appendChild(deleteButton);
                 inputGroup.appendChild(scoreInput);
                 inputGroup.appendChild(inputGroupAppend);
@@ -587,6 +635,13 @@
                 console.log(data)
                 maxPoint.innerText = data
             }
+            async function getComments() {
+                let response = await fetch('/api/comments');
+                let data = await response.json();
+                console.log(data.type)
+                return data;
+            }
+
         });
 
     </script>
