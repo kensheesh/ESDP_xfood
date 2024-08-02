@@ -18,6 +18,30 @@
         .card-container {
             margin-bottom: 20px;
         }
+
+        .btn-edit, .btn-delete {
+            border: none;
+            background: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0 5px;
+        }
+
+        .btn-edit:hover, .btn-delete:hover {
+            color: #0056b3;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .modal-header, .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 
     <div class="container">
@@ -34,18 +58,23 @@
                                 <p class="card-text">Enabled: <#if user.getEnabled() == true>Да<#else>Нет</#if></p>
                             </div>
                             <div class="card-icons">
-                                <button class="btn-edit" data-user-id="${user.getId()}"><i class="fas fa-edit"></i></button>
-                                <button class="btn-delete" data-user-id="${user.getId()}"><i class="fas fa-trash-alt"></i></button>
+                                <button class="btn-edit" data-user-id="${user.getId()}"><i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-delete" data-user-id="${user.getId()}"><i
+                                            class="fas fa-trash-alt"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </#list>
 
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center">
                         <#if currentPage gt 0>
                             <li class="page-item">
-                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}" aria-label="Previous">
+                                <a class="page-link"
+                                   href="/admin/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}"
+                                   aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
@@ -61,13 +90,16 @@
 
                         <#list 0..(totalPages-1) as page>
                             <li class="page-item <#if page == currentPage>active</#if>">
-                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
+                                <a class="page-link"
+                                   href="/admin/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
                             </li>
                         </#list>
 
                         <#if currentPage lt totalPages - 1>
                             <li class="page-item">
-                                <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}" aria-label="Next">
+                                <a class="page-link"
+                                   href="/admin/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}"
+                                   aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
@@ -96,9 +128,11 @@
                                 </select>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="text" name="search" value="<#if searchWord??>${searchWord}</#if>" class="form-control" id="search-input" placeholder="Поиск" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <input type="text" name="search" value="<#if searchWord??>${searchWord}</#if>"
+                                       class="form-control" id="search-input" placeholder="Поиск">
                             </div>
-                            <button class="btn btn-outline-success w-100" id="buttonFilter" type="submit">Применить</button>
+                            <button class="btn btn-outline-success w-100" id="buttonFilter" type="submit">Применить
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -169,7 +203,7 @@
             async function getRoles(select, currentRole) {
                 const response = await fetch('/api/role');
                 const data = await response.json();
-                data.forEach(function(role) {
+                data.forEach(function (role) {
                     let option = document.createElement('option');
                     option.value = role;
                     option.textContent = role;
@@ -195,8 +229,8 @@
                 }
             });
 
-            async function deleteUser(userId){
-                await fetch('/api/admin/user/'+userId, {
+            async function deleteUser(userId) {
+                await fetch('/api/admin/user/' + userId, {
                     method: 'DELETE'
                 })
             }
@@ -244,7 +278,7 @@
                     body: JSON.stringify(userEditDto)
                 });
                 editUserModal.hide();
-               location.reload();
+                location.reload();
             });
 
             searchInput.addEventListener('input', () => {
@@ -255,5 +289,4 @@
             await getRoles(roleSelect, '${currentRole}');
         });
     </script>
-
 </@main.layout>
