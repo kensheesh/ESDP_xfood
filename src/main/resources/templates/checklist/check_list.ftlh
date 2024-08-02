@@ -71,88 +71,88 @@
 
     <#if error??>
         <div class="error-message">${error}</div>
-     <#else>
-         <main class="container mt-4">
-             <div class="table-responsive rounded p-3">
-                 <table id="mainTable" class="table rounded-3">
-                     <thead>
-                     <tr>
-                         <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
-                         <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
-                     </tr>
-                     <tr>
-                         <th class="text-center">Раздел</th>
-                         <th class="text-center">Что проверить</th>
-                         <th class="text-center">Оценка</th>
-                         <th class="text-center">${checkList.managerWorkStartDate}</th>
-                     </tr>
-                     </thead>
-                     <tbody id="mainTableBody">
-                     </tbody>
-                     <tfoot>
-                     <tr>
-                         <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
-                         <td colspan="2" class="text-center" id="maxPoint"><strong></strong></td>
-                     </tr>
-                     <tr>
-                         <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
-                                 x 100%</strong></td>
-                         <td colspan="2" class="text-center" id="percentageResult"></td>
-                     </tr>
-                     </tfoot>
-                 </table>
-             </div>
-             <#assign
-             known = SPRING_SECURITY_CONTEXT??
-             >
-             <#if known>
-                 <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
-                 <#assign name = user.getUsername()>
-                 <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
-                 <div class="text-end mb-5 mt-2">
-                     <#list authorities as authority>
-                         <#if authority.authority == 'ROLE_SUPERVISOR'>
-                             <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
-                         </#if>
-                     </#list>
+    <#else>
+        <main class="container mt-4">
+            <div class="table-responsive rounded p-3">
+                <table id="mainTable" class="table rounded-3">
+                    <thead>
+                    <tr>
+                        <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
+                        <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Раздел</th>
+                        <th class="text-center">Что проверить</th>
+                        <th class="text-center">Оценка</th>
+                        <th class="text-center">${checkList.managerWorkStartDate}</th>
+                    </tr>
+                    </thead>
+                    <tbody id="mainTableBody">
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
+                        <td colspan="2" class="text-center" id="maxPoint"><strong></strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
+                                x 100%</strong></td>
+                        <td colspan="2" class="text-center" id="percentageResult"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <#assign
+            known = SPRING_SECURITY_CONTEXT??
+            >
+            <#if known>
+                <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+                <#assign name = user.getUsername()>
+                <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+                <div class="text-end mb-5 mt-2">
+                    <#list authorities as authority>
+                        <#if authority.authority == 'ROLE_SUPERVISOR'>
+                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                        </#if>
+                    </#list>
 
-                     <#if checkList.status == 'IN_PROGRESS'>
-                         <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
-                         <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                             Опубликовать
-                         </button>
-                     </#if>
+                    <#if checkList.status == 'IN_PROGRESS'>
+                        <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Опубликовать
+                        </button>
+                    </#if>
 
-                     <#if checkList.status == "IN_PROGRESS" || checkList.status == "NEW">
-                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
-                             wow-фактор
-                         </button>
-                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
-                             фактор
-                         </button>
-                     </#if>
+                    <#if checkList.status == "IN_PROGRESS" || checkList.status == "NEW">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
+                            wow-фактор
+                        </button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#critFactorModal">Добавить критический
+                            фактор
+                        </button>
+                    </#if>
 
-                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                          aria-hidden="true">
-                         <div class="modal-dialog">
-                             <div class="modal-content">
-                                 <div class="modal-header">
-                                     <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
-                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                             aria-label="Закрыть"></button>
-                                 </div>
-                                 <div class="modal-body">
-                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
-                                         публиковать
-                                     </button>
-                                     <button type="button" id="post" class="btn btn-primary">Уверен!</button>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </#if>
-         </main>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите опубликовать?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
+                                        публиковать
+                                    </button>
+                                    <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </#if>
+        </main>
     </#if>
 
     <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel" aria-hidden="true">
