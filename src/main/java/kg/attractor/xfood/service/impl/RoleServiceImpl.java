@@ -1,7 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.enums.Role;
-import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,10 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
-    private final UserRepository userRepository;
-
     @Override
     public List<Role> getRoles() {
-        return userRepository.findRoles();
+        return List.of(Role.values());
     }
 }
