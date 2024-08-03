@@ -36,4 +36,9 @@ public class CommentServiceImpl implements CommentService {
         log.info("comments : {}", commentDtos);
         return commentDtos;
     }
+
+    @Override
+    public void save(Comment comment) {
+        commentRepository.save(comment);
+    }
 }

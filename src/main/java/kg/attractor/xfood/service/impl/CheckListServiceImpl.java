@@ -571,6 +571,11 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public void comment(String uuid, Long criteriaId, CommentDto commentDto) {
+        log.info(uuid);
+        log.info(criteriaId.toString());
+        if (commentDto.getComment() != null) {
+            log.info("comment {}", commentDto);
+        }
         CheckList checkList = checkListRepository.findByUuidLink(uuid).orElseThrow(()-> new NoSuchElementException("Чеклист с uuid " + uuid + " не найден"));
         CheckListsCriteria checkListsCriteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkList.getId());
         Comment comment = new Comment();
@@ -578,6 +583,7 @@ public class CheckListServiceImpl implements CheckListService {
             comment = commentService.findById(commentDto.getCommentId());
         }else {
             comment.setComment(commentDto.getComment());
+            commentService.save(comment);
         }
 
         CheckListsCriteriaComment commentCriteria = CheckListsCriteriaComment.builder()
@@ -585,5 +591,6 @@ public class CheckListServiceImpl implements CheckListService {
                 .checklistCriteria(checkListsCriteria)
                 .build();
         checkListCriteriaCommentService.save(commentCriteria);
+        log.info("commentCriteria {}",commentCriteria);
     }
 }

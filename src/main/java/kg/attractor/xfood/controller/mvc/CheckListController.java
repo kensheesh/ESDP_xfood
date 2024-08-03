@@ -166,6 +166,6 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
     @PostMapping("/{uuid}/{criteriaId}")
     public String comment(@PathVariable(name = "uuid")String uuid, @PathVariable (name = "criteriaId") Long criteriaId, CommentDto commentDto, Model model) {
         checkListService.comment(uuid, criteriaId, commentDto);
-        return "redirect:/checks/"+criteriaId+"/check";
+        return "redirect:/checks/"+uuid+"/check";
     }
 }

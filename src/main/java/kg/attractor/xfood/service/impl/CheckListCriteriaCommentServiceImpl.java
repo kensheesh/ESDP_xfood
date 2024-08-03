@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCommentService {
-    private ChecklistCriteriaCommentRepository criteriaCommentRepository;
+    private final ChecklistCriteriaCommentRepository criteriaCommentRepository;
 
     @Override
     public void save(CheckListsCriteriaComment commentCriteria) {

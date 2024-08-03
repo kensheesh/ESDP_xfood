@@ -10,4 +10,6 @@ public interface CommentService {
     Comment findById(Long commentId);
 
     List<CommentDto> getAll();
+
+    void save(Comment comment);
 }

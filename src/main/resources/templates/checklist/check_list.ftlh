@@ -204,7 +204,7 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" value="${checkList.uuidLink}" id="uuid">
+        <input type="text" value="${checkList.uuidLink}" id="uuid">
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
@@ -370,28 +370,56 @@
                         '<h1 class="modal-title fs-5" id="exampleModalLabel">Добавьте пояснение за снятый балл</h1>'+
                         '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>'+
                         '</div>'+
-                        '<div class="modal-body">'+
                         '<form action="/checks/'+uuid+'/'+id+'" method="post">'+
+                        '<div class="modal-body" id="modalBody'+id+'">'+
                         commentsHtml+
-                        '<button type="button" class="btn btn-white border shadow-sm" id="writeButton">'+
+                        '<button type="button" class="btn btn-white border shadow-sm my-2" id="writeButton'+id+'">'+
                         'Написать другой комментарий'+
                         '</button>'+
                         '</div>'+
                         '<div class="modal-footer">'+
-                        '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>'+
-                        '<button type="submit" class="btn btn-primary">Сохранить</button>'+
-                        '</form>'+
+                        '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>'+
+                        '<button type="submit" class="btn btn-dodo">Сохранить</button>'+
                         '</div>'+
+                        '</form>'+
                         '</div>'+
                         '</div>';
 
-                document.body.appendChild(modal);
+                 document.body.appendChild(modal);
+                 document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
 
-                 let writeButton = document.getElementById('writeButton');
+                     let select = document.getElementById('select-' + id);
+                     let textarea = document.getElementById('textarea'+id);
+                     if (!select) {
+                         const form = this.querySelector('form');
+                         writeButton.style.display = "block";
+                         if (textarea){
+                             textarea.remove();
+                         }
+                         form.insertAdjacentHTML('afterbegin', commentsHtml);
+                     }
+                 });
+
+                 let writeButton = document.getElementById('writeButton'+id);
+                 console.log(writeButton)
                  writeButton.addEventListener('click', ()=>{
                      let select = document.getElementById('select-'+id);
+                     console.log(select)
                      if (select) {
                          select.remove();
+                         writeButton.style.display = "none"
+                         let modalBody = document.getElementById('modalBody'+id);
+                         let inputBox = document.createElement('div');
+                         inputBox.id = 'inputBox'+id;
+                         inputBox.classList.add('input-group', 'mb-3');
+                         let input = document.createElement('textarea');
+                         input.name = 'comment';
+                         input.id = 'textarea'+id;
+                         input.rows = 3;
+                         input.classList.add('form-control')
+                         input.required = true;
+                         inputBox.appendChild(input)
+                         modalBody.appendChild(inputBox);
                      }
                  });
 
@@ -658,7 +686,9 @@
                 return data;
             }
 
+
         });
+
 
     </script>
 
