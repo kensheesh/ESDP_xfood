@@ -206,6 +206,7 @@
         </div>
         <input type="text" value="${checkList.uuidLink}" id="uuid">
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
             const mainTableBody = document.getElementById('mainTableBody');
@@ -347,8 +348,7 @@
                  let commentsHtml = '';
                  if (Array.isArray(comments) && comments.length > 0) {
                      commentsHtml =
-                         '<select class="form-select" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
-                         '<option selected>Выбрать комментарий</option>' +
+                         '<select class="js-selectize" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
                          comments.map(comment =>
                              '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
                          ).join('') +
@@ -386,6 +386,7 @@
                         '</div>';
 
                  document.body.appendChild(modal);
+                 $('#select-' + id).selectize();
                  document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
 
                      let select = document.getElementById('select-' + id);
@@ -397,6 +398,7 @@
                              textarea.remove();
                          }
                          form.insertAdjacentHTML('afterbegin', commentsHtml);
+                         $('#select-' + id).selectize();
                      }
                  });
 
@@ -691,5 +693,7 @@
 
 
     </script>
+
+
 
 </@main.layout>
