@@ -204,6 +204,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" value="${checkList.uuidLink}" id="uuid">
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
@@ -317,7 +318,7 @@
              async function createInputGroup(step, value, id) {
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
-
+                let uuid = document.getElementById('uuid').value;
                 const scoreInput = document.createElement('input');
                 scoreInput.type = 'number';
                 scoreInput.step = step;
@@ -346,7 +347,7 @@
                  let commentsHtml = '';
                  if (Array.isArray(comments) && comments.length > 0) {
                      commentsHtml =
-                         '<select class="form-select" aria-label="Выберите комментарий">' +
+                         '<select class="form-select" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
                          '<option selected>Выбрать комментарий</option>' +
                          comments.map(comment =>
                              '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
@@ -370,23 +371,38 @@
                         '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>'+
                         '</div>'+
                         '<div class="modal-body">'+
+                        '<form action="/checks/'+uuid+'/'+id+'" method="post">'+
                         commentsHtml+
+                        '<button type="button" class="btn btn-white border shadow-sm" id="writeButton">'+
+                        'Написать другой комментарий'+
+                        '</button>'+
                         '</div>'+
                         '<div class="modal-footer">'+
                         '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>'+
-                        '<button type="button" class="btn btn-primary">Сохранить</button>'+
+                        '<button type="submit" class="btn btn-primary">Сохранить</button>'+
+                        '</form>'+
                         '</div>'+
                         '</div>'+
                         '</div>';
 
-
                 document.body.appendChild(modal);
+
+                 let writeButton = document.getElementById('writeButton');
+                 writeButton.addEventListener('click', ()=>{
+                     let select = document.getElementById('select-'+id);
+                     if (select) {
+                         select.remove();
+                     }
+                 });
+
                 inputGroupAppend.appendChild(commentButton);
                 inputGroupAppend.appendChild(deleteButton);
                 inputGroup.appendChild(scoreInput);
                 inputGroup.appendChild(inputGroupAppend);
 
                 return inputGroup;
+
+
             }
 
             async function showCriticalFactors() {
