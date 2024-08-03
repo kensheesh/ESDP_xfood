@@ -8,6 +8,7 @@ import kg.attractor.xfood.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -53,6 +54,7 @@ public class CheckListController {
         return ResponseEntity.ok(checkListService.getMaxPoints(id));
     }
 
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @GetMapping("deleted")
     public ResponseEntity<List<ChecklistMiniExpertShowDto>> getDeletedChecklists () {
         return ResponseEntity.ok(checkListService.getDeletedChecklists());

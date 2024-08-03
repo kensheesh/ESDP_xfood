@@ -85,7 +85,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE check_lists SET deleted = false WHERE uuid = ?1", nativeQuery = true)
+    @Query(value = "UPDATE check_lists SET deleted = false WHERE uuid_link = ?1", nativeQuery = true)
     void restore(String uuid);
 
     @Query(nativeQuery = true, value = "SELECT * FROM check_lists WHERE uuid_link = ?1 and deleted = true")

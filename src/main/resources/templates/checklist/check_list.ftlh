@@ -156,7 +156,11 @@
                 </div>
             <#else>
                 <#if authorities[0].authority == "ROLE_ADMIN">
-                    <button type="button" class="btn btn-primary">Восстановить проверку</button>
+                    <div class="text-end mb-5 mt-2">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#restoreModal">
+                            Восстановить проверку
+                        </button>
+                    </div>
                 </#if>
             </#if>
 
@@ -228,6 +232,25 @@
                     <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
                     <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete" method="post">
                         <button class="btn btn-danger">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="restoreModalLabel">Восстановление проверки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите восстановить проверку?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/restore" method="post">
+                        <button class="btn btn-primary">Восстановить</button>
                     </form>
                 </div>
             </div>
