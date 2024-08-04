@@ -24,4 +24,5 @@ public interface OpportunityService {
     void changeExpertOpportunities(OpportunityCreateDto dto);
 
     Object getWeeklyOpportunities(long week, String search);
+    void changeExpertOpportunity(OpportunityCreateDto dto);
 }
