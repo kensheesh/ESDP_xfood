@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: Add column 'deleted' in table 'check_lists'
+      id: Add column if not exists 'deleted' in table 'check_lists'
       author: dkoooh
       changes:
         - addColumn:

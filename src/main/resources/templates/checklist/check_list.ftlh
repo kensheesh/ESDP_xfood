@@ -83,7 +83,7 @@
                     <th class="text-center">Раздел</th>
                     <th class="text-center">Что проверить</th>
                     <th class="text-center">Оценка</th>
-                    <th class="text-center">${checkList.managerWorkDate} ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
+                    <th class="text-center"><#if checkList.managerWorkDate??>${checkList.managerWorkDate}</#if> ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
                 </tr>
                 </thead>
                 <tbody id="mainTableBody">

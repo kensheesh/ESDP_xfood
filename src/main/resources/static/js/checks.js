@@ -50,10 +50,7 @@ function displayChecks(checks, status) {
                             <div class="col-4 d-flex align-items-center">
                                 <span>${c.manager.name} ${c.manager.surname}</span>
                             </div>
-                            <div class="col-3 d-flex align-items-center">
-                                <span>${c.managerWorkDate}</span></span>
-                            </div>
-                            <div class="col-2 d-flex align-items-center">
+                            <div class="col-5 d-flex align-items-center column-gap-1">
                                 <span>${c.managerWorkStartTime}</span>-<span>${c.managerWorkEndTime}</span>
                             </div>
                         </div>

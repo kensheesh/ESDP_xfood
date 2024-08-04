@@ -47,7 +47,6 @@ public class CheckListServiceImpl implements CheckListService {
     private final CommentService commentService;
     private final WorkScheduleService workScheduleService;
     private CheckListCriteriaServiceImpl checkListCriteriaService;
-    private final UserService userService;
     private ManagerService managerService;
     private final CriteriaService criteriaService;
     private final CheckListRepository checkListRepository;
