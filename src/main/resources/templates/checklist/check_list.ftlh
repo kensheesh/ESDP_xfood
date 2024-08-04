@@ -67,6 +67,9 @@
             font-weight: bold;
             text-align: center;
         }
+        .select2-container {
+            z-index: 2000;
+        }
     </style>
 
     <#if error??>
@@ -317,16 +320,14 @@
                 return cell;
             }
 
-             async function createInputGroup(step, value, id) {
+            async function createInputGroup(step, value, id) {
                 let checkId = document.getElementById('checkId').value;
                 let commentByCriteria = await getCommentsByCriteria(checkId, id);
-                 if (commentByCriteria.length === 0) {
-                     console.log('No comments to display');
-
-                 } else {
-                     console.log('Comments:', commentByCriteria);
-
-                 }
+                if (commentByCriteria.length === 0) {
+                    console.log('No comments to display');
+                } else {
+                    console.log('Comments:', commentByCriteria);
+                }
 
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
@@ -339,7 +340,6 @@
                 scoreInput.value = value;
                 scoreInput.id = id;
                 scoreInput.max = max;
-
 
                 const inputGroupAppend = document.createElement('div');
                 inputGroupAppend.classList.add('input-group-append');
@@ -359,84 +359,97 @@
                 commentButton.setAttribute('data-bs-target', '#commentModal-' + id);
                 commentButton.innerHTML = `<i class="bi bi-pencil-square"></i>`;
 
-                 let commentsHtml = '';
-                 if (Array.isArray(comments) && comments.length > 0) {
-                     commentsHtml =
-                         '<select class="form-select" placeholder="Выберите город" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
-                         comments.map(comment =>
-                             '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
-                         ).join('') +
-                         '</select>';
-                 } else {
-                     commentsHtml = '<p>  </p>';
-                 }
-                console.log(commentsHtml)
-                 const modal = document.createElement('div');
-                    modal.classList.add('modal', 'fade');
-                    modal.id = 'commentModal-' + id;
-                    modal.setAttribute('tabindex', '-1');
-                    modal.setAttribute('aria-labelledby', 'commentModal-' + id);
-                    modal.setAttribute('aria-hidden', 'true');
-                    modal.innerHTML =
-                        '<div class="modal-dialog">'+
-                        '<div class="modal-content">'+
-                        '<div class="modal-header">'+
-                        '<h1 class="modal-title fs-5" id="exampleModalLabel">Добавьте пояснение за снятый балл</h1>'+
-                        '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>'+
-                        '</div>'+
-                        '<form action="/checks/'+uuid+'/'+id+'" method="post">'+
-                        '<div class="modal-body" id="modalBody'+id+'">'+
-                        commentsHtml+
-                        '<button type="button" class="btn btn-white border shadow-sm my-2" id="writeButton'+id+'">'+
-                        'Написать другой комментарий'+
-                        '</button>'+
-                        '</div>'+
-                        '<div class="modal-footer">'+
-                        '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>'+
-                        '<button type="submit" class="btn btn-dodo">Сохранить</button>'+
-                        '</div>'+
-                        '</form>'+
-                        '</div>'+
-                        '</div>';
+                let commentsHtml = '';
+                if (Array.isArray(comments) && comments.length > 0) {
+                    commentsHtml =
+                        '<select class="form-select select2" placeholder="Выберите город" name="commentId" aria-label="Выберите комментарий" id="select-' + id + '">' +
+                        comments.map(comment =>
+                            '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
+                        ).join('') +
+                        '</select>';
+                } else {
+                    commentsHtml = '<p>  </p>';
+                }
+                console.log(commentsHtml);
+                const modal = document.createElement('div');
+                modal.classList.add('modal', 'fade');
+                modal.id = 'commentModal-' + id;
+                modal.setAttribute('tabindex', '-1');
+                modal.setAttribute('aria-labelledby', 'commentModal-' + id);
+                modal.setAttribute('aria-hidden', 'true');
+                modal.innerHTML =
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Добавьте пояснение за снятый балл</h1>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>' +
+                    '</div>' +
+                    '<form action="/checks/' + uuid + '/' + id + '" method="post">' +
+                    '<div class="modal-body" id="modalBody' + id + '">' +
+                    commentsHtml +
+                    '<button type="button" class="btn btn-white border shadow-sm my-2" id="writeButton' + id + '">' +
+                    'Написать другой комментарий' +
+                    '</button>' +
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>' +
+                    '<button type="submit" class="btn btn-dodo">Сохранить</button>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '</div>';
 
-                 document.body.appendChild(modal);
-                 document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
+                document.body.appendChild(modal);
 
-                     let select = document.getElementById('select-' + id);
-                     let textarea = document.getElementById('textarea'+id);
-                     if (!select) {
-                         const form = this.querySelector('form');
-                         writeButton.style.display = "block";
+                $('#select-' + id).select2({
+                    placeholder: 'Выберите комментарий',
+                    width: '100%',
+                    dropdownParent: $('#commentModal-' + id)
+                });
 
-                         if (textarea){
-                             textarea.remove();
-                         }
-                         form.insertAdjacentHTML('afterbegin', commentsHtml);
-                     }
-                 });
+                document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
+                    let select = document.getElementById('select-' + id);
+                    let textarea = document.getElementById('textarea' + id);
+                    if (!select) {
+                        const form = this.querySelector('form');
+                        writeButton.style.display = "block";
 
-                 let writeButton = document.getElementById('writeButton'+id);
-                 console.log(writeButton)
-                 writeButton.addEventListener('click', ()=>{
-                     let select = document.getElementById('select-'+id);
-                     console.log(select)
-                     if (select) {
-                         select.remove();
-                         writeButton.style.display = "none"
-                         let modalBody = document.getElementById('modalBody'+id);
-                         let inputBox = document.createElement('div');
-                         inputBox.id = 'inputBox'+id;
-                         inputBox.classList.add('input-group', 'mb-3');
-                         let input = document.createElement('textarea');
-                         input.name = 'comment';
-                         input.id = 'textarea'+id;
-                         input.rows = 3;
-                         input.classList.add('form-control')
-                         input.required = true;
-                         inputBox.appendChild(input)
-                         modalBody.appendChild(inputBox);
-                     }
-                 });
+                        if (textarea) {
+                            textarea.remove();
+                        }
+                        form.insertAdjacentHTML('afterbegin', commentsHtml);
+                        $('#select-' + id).select2({
+                            placeholder: 'Выберите комментарий',
+                            width: '100%',
+                            dropdownParent: $('#commentModal-' + id)
+                        });
+                    }
+                });
+
+                let writeButton = document.getElementById('writeButton' + id);
+                console.log(writeButton);
+                writeButton.addEventListener('click', () => {
+                    let select = document.getElementById('select-' + id);
+                    console.log(select);
+                    if (select) {
+
+                        $('#select-' + id).select2('destroy');
+                        select.remove();
+                        writeButton.style.display = "none";
+                        let modalBody = document.getElementById('modalBody' + id);
+                        let inputBox = document.createElement('div');
+                        inputBox.id = 'inputBox' + id;
+                        inputBox.classList.add('input-group', 'mb-3');
+                        let input = document.createElement('textarea');
+                        input.name = 'comment';
+                        input.id = 'textarea' + id;
+                        input.rows = 3;
+                        input.classList.add('form-control');
+                        input.required = true;
+                        inputBox.appendChild(input);
+                        modalBody.appendChild(inputBox);
+                    }
+                });
 
                 inputGroupAppend.appendChild(commentButton);
                 inputGroupAppend.appendChild(deleteButton);
@@ -444,9 +457,8 @@
                 inputGroup.appendChild(inputGroupAppend);
 
                 return inputGroup;
-
-
             }
+
 
             async function showCriticalFactors() {
                 try {
