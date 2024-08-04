@@ -60,11 +60,11 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
-        return null;
-//        return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
-//                .stream()
-//                .map(dtoBuilder::buildChecklistDto)
-//                .toList();
+//        return null;
+        return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
     }
 
     @Override
