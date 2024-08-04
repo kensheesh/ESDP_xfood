@@ -404,6 +404,7 @@
                 $('#select-' + id).select2({
                     placeholder: 'Выберите комментарий',
                     width: '100%',
+                    language: 'ru',
                     dropdownParent: $('#commentModal-' + id)
                 });
 
@@ -421,6 +422,7 @@
                         $('#select-' + id).select2({
                             placeholder: 'Выберите комментарий',
                             width: '100%',
+                            language: 'ru',
                             dropdownParent: $('#commentModal-' + id)
                         });
                     }
