@@ -57,7 +57,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final PizzeriaService pizzeriaService;
     private final CheckListDao checkListDao;
     private final CheckTypeFeeService checkTypeFeeService;
-    private final CheckListCriteriaCommentService checkListCriteriaCommentService;
+    private  CheckListCriteriaCommentService checkListCriteriaCommentService;
 
     private final DtoBuilder dtoBuilder;
 
@@ -72,6 +72,11 @@ public class CheckListServiceImpl implements CheckListService {
     @Autowired
     public void setManagerService(@Lazy ManagerService managerService) {
         this.managerService = managerService;
+    }
+
+    @Autowired
+    public void setCheckListCriteriaCommentService(@Lazy CheckListCriteriaCommentService checkListCriteriaCommentService) {
+        this.checkListCriteriaCommentService = checkListCriteriaCommentService;
     }
 
     @Override

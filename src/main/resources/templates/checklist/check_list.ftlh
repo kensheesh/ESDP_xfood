@@ -205,6 +205,7 @@
             </div>
         </div>
         <input type="text" value="${checkList.uuidLink}" id="uuid">
+        <input type="text" value="${checkList.id}" id="checkId">
     </div>
 
     <script>
@@ -317,8 +318,15 @@
             }
 
              async function createInputGroup(step, value, id) {
-                let commentByCriteria = await getCommentsByCriteria(${checkList.id}, id);
-                 console.log(commentByCriteria);
+                let checkId = document.getElementById('checkId').value;
+                let commentByCriteria = await getCommentsByCriteria(checkId, id);
+                 if (commentByCriteria.length === 0) {
+                     console.log('No comments to display');
+
+                 } else {
+                     console.log('Comments:', commentByCriteria);
+
+                 }
 
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
@@ -351,7 +359,7 @@
                  let commentsHtml = '';
                  if (Array.isArray(comments) && comments.length > 0) {
                      commentsHtml =
-                         '<select class="js-selectize" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
+                         '<select class="js-select2" placeholder="Выберите город" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
                          comments.map(comment =>
                              '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
                          ).join('') +
@@ -389,7 +397,6 @@
                         '</div>';
 
                  document.body.appendChild(modal);
-                 $('#select-' + id).selectize();
                  document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
 
                      let select = document.getElementById('select-' + id);
@@ -397,11 +404,11 @@
                      if (!select) {
                          const form = this.querySelector('form');
                          writeButton.style.display = "block";
+
                          if (textarea){
                              textarea.remove();
                          }
                          form.insertAdjacentHTML('afterbegin', commentsHtml);
-                         $('#select-' + id).selectize();
                      }
                  });
 
@@ -703,7 +710,6 @@
 
 
     </script>
-
 
 
 </@main.layout>

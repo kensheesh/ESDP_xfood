@@ -25,7 +25,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <link rel="stylesheet" href="/css/selectize.default.css">
         <link rel="stylesheet" href="/css/layout.css">
 
     </head>
@@ -188,9 +187,6 @@
             });
         });
     </script>
-    <script src="/js/microplugin.js"></script>
-    <script src="/js/sifter.min.js"></script>
-    <script src="/js/selectize.min.js"></script>
     </body>
     </html>
 </#macro>

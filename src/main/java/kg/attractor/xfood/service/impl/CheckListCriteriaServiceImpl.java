@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -126,7 +127,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
 
     @Override
     public CheckListsCriteria findByCriteriaIdAndChecklistId(Long criteriaId, Long checkListId) {
-        return checkListCriteriaRepository.findByCriteriaIdAndChecklistId(criteriaId, checkListId);
+        return checkListCriteriaRepository.findByCriteria_IdAndAndChecklist_Id(criteriaId, checkListId).orElseThrow(()->new NoSuchElementException("Связи между чек-листом с айди "+checkListId+" и критерии с айди "+criteriaId+" не найдена!"));
     }
 
     @Override

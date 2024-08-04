@@ -27,8 +27,8 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
 
     @Override
     public List<CommentDto> getAllByCheckListAndCriteria(Long checkId, Long criteriaId) {
-        CheckListsCriteria checkListsCriteria = criteriaService.findByCriteriaIdAndChecklistId(checkId, criteriaId);
-        List<CheckListsCriteriaComment> comments =  criteriaCommentRepository.getAllByChecklistCriteria_Id(criteriaId);
+        CheckListsCriteria checkListsCriteria = criteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkId);
+        List<CheckListsCriteriaComment> comments =  criteriaCommentRepository.getAllByChecklistCriteria_Id(checkListsCriteria.getId());
         List<CommentDto> commentDtos = new ArrayList<>();
         for (CheckListsCriteriaComment comment : comments) {
             commentDtos.add(CommentDto.builder()
@@ -36,6 +36,7 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
                             .comment(comment.getComment().getComment())
                     .build());
         }
+        log.info("comments {}", commentDtos);
         return commentDtos;
     }
 

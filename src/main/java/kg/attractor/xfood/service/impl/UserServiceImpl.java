@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final DtoBuilder dtoBuilder;
-    @Lazy
-    private final CheckListService checkListService;
+
 
     public void register(RegisterUserDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
