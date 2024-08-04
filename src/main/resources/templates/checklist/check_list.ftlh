@@ -317,6 +317,9 @@
             }
 
              async function createInputGroup(step, value, id) {
+                let commentByCriteria = await getCommentsByCriteria(${checkList.id}, id);
+                 console.log(commentByCriteria);
+
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
                 let uuid = document.getElementById('uuid').value;
@@ -683,6 +686,13 @@
             }
             async function getComments() {
                 let response = await fetch('/api/comments');
+                let data = await response.json();
+                console.log(data.type)
+                return data;
+            }
+
+            async function getCommentsByCriteria(checkId, criteriaId) {
+                let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
                 let data = await response.json();
                 console.log(data.type)
                 return data;
