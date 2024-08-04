@@ -204,10 +204,10 @@
                 </div>
             </div>
         </div>
-        <input type="text" value="${checkList.uuidLink}" id="uuid">
-        <input type="text" value="${checkList.id}" id="checkId">
-    </div>
 
+    </div>
+    <input type="hidden" value="${checkList.uuidLink}" id="uuid">
+    <input type="hidden" value="${checkList.id}" id="checkId">
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
             const mainTableBody = document.getElementById('mainTableBody');
@@ -331,12 +331,15 @@
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
                 let uuid = document.getElementById('uuid').value;
+                let max = -step;
                 const scoreInput = document.createElement('input');
                 scoreInput.type = 'number';
                 scoreInput.step = step;
                 scoreInput.classList.add('text-center', 'form-control', 'score-input');
                 scoreInput.value = value;
                 scoreInput.id = id;
+                scoreInput.max = max;
+
 
                 const inputGroupAppend = document.createElement('div');
                 inputGroupAppend.classList.add('input-group-append');
@@ -359,7 +362,7 @@
                  let commentsHtml = '';
                  if (Array.isArray(comments) && comments.length > 0) {
                      commentsHtml =
-                         '<select class="js-select2" placeholder="Выберите город" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
+                         '<select class="form-select" placeholder="Выберите город" name="commentId" aria-label="Выберите комментарий" id="select-'+id+'">' +
                          comments.map(comment =>
                              '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
                          ).join('') +
