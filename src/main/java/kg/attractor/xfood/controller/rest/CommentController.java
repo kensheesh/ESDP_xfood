@@ -25,4 +25,13 @@ public class CommentController {
     ResponseEntity<List<CommentDto>> getCommentsOfCriteria(@PathVariable Long checkId , @PathVariable Long criteriaId) {
         return ResponseEntity.ok(checkListCriteriaCommentService.getAllByCheckListAndCriteria(checkId, criteriaId));
     }
+
+    @DeleteMapping("{id}/delete")
+    ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+        if (commentService.delete(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }

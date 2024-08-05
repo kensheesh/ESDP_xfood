@@ -42,4 +42,10 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
+    @Override
+    public boolean delete(Long id) {
+        commentRepository.deleteById(id);
+        return true;
+    }
+
 }

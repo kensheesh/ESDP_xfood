@@ -213,6 +213,7 @@
     <input type="hidden" value="${checkList.id}" id="checkId">
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
+
             const mainTableBody = document.getElementById('mainTableBody');
             const percentageDisplay = document.getElementById('percentageResult');
             const criticalSelect = document.getElementById('critFactorDescription');
@@ -323,12 +324,74 @@
             async function createInputGroup(step, value, id) {
                 let checkId = document.getElementById('checkId').value;
                 let commentByCriteria = await getCommentsByCriteria(checkId, id);
+                let shouldShowButton = false;
+
                 if (commentByCriteria.length === 0) {
-                    console.log('No comments to display');
+                    console.log('Комментариев нет');
+                    let commentQuantity = Math.abs( value/step);
+                    let commentsRealQuantity = 0;
+                    console.log("comment should be : "+commentQuantity);
+                    console.log("comments are : "+commentsRealQuantity);
+                    if (commentsRealQuantity<commentQuantity){
+                        shouldShowButton = true;
+                    }
+
                 } else {
                     console.log('Comments:', commentByCriteria);
+                    let commentQuantity = Math.abs( value/step);
+                    let commentsRealQuantity = commentByCriteria.length;
+                    console.log("comment should be : "+commentQuantity);
+                    console.log("comments are : "+commentsRealQuantity);
+                    if (commentsRealQuantity<commentQuantity){
+                        shouldShowButton = true;
+                    }
                 }
 
+                let commentsList = '';
+                if (Array.isArray(commentByCriteria) && commentByCriteria.length > 0) {
+                    commentsList = commentByCriteria.map(comment =>
+                        '<ul class="list-group">' +
+                        '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">' +
+                        '<span>' + '-' + step + ' ' + comment.comment + '</span>' +
+                        '<div>' +
+                        '<button type="button" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="right"' +
+                        ' id="comment-' + comment.commentId + '">' +
+                        '<i class="bi bi-trash"></i>' +
+                        '</button>' +
+                        '<button type="button" class="btn btn-warning" id="appeal' + comment.commentId + '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">' +
+                        '<i class="bi bi-hammer"></i>' +
+                        '</button>' +
+                        '</div>' +
+                        '</li>' +
+                        '</ul>'
+                    ).join('');
+
+
+                } else {
+                    commentsList = '<p>Комментариев нет</p>';
+                }
+                let commentsModal = document.createElement('div') ;
+                commentsModal.classList.add('modal', 'fade');
+                commentsModal.id = 'commentsModal-' + id;
+                commentsModal.setAttribute('tabindex', '-1');
+                commentsModal.setAttribute('aria-labelledby', 'commentsModal-' + id);
+                commentsModal.setAttribute('aria-hidden', 'true');
+                commentsModal.innerHTML =
+                    '<div class="modal-dialog">'+
+                    '<div class="modal-content">'+
+                    '<div class="modal-header">'+
+                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Комментарии</h1>'+
+                    '</div>'+
+                    '<div class="modal-body">'+
+                    commentsList +
+                    '</div>'+
+                    '<div class="modal-footer">'+
+                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>';
+
+                document.body.appendChild(commentsModal);
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
                 let uuid = document.getElementById('uuid').value;
@@ -343,6 +406,12 @@
 
                 const inputGroupAppend = document.createElement('div');
                 inputGroupAppend.classList.add('input-group-append');
+
+                let commentsButton = document.createElement('button');
+                commentsButton.classList.add('btn', 'btn-success');
+                commentsButton.setAttribute('data-bs-toggle', 'modal');
+                commentsButton.setAttribute('data-bs-target', '#commentsModal-' + id);
+                commentsButton.innerHTML = `<i class="bi bi-card-list"></i>`;
 
                 const deleteButton = document.createElement('button');
                 deleteButton.classList.add('delete-factor', 'btn', 'btn-outline-danger');
@@ -362,7 +431,7 @@
                 let commentsHtml = '';
                 if (Array.isArray(comments) && comments.length > 0) {
                     commentsHtml =
-                        '<select class="form-select select2" placeholder="Выберите город" name="commentId" aria-label="Выберите комментарий" id="select-' + id + '">' +
+                        '<select class="form-select select2" placeholder="Выберите комментарий" name="commentId" aria-label="Выберите комментарий" id="select-' + id + '">' +
                         comments.map(comment =>
                             '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
                         ).join('') +
@@ -452,11 +521,16 @@
                         modalBody.appendChild(inputBox);
                     }
                 });
+                if (shouldShowButton){
+                    inputGroupAppend.appendChild(commentButton);
 
-                inputGroupAppend.appendChild(commentButton);
+                }
+                inputGroupAppend.appendChild(commentsButton)
                 inputGroupAppend.appendChild(deleteButton);
                 inputGroup.appendChild(scoreInput);
                 inputGroup.appendChild(inputGroupAppend);
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
                 return inputGroup;
             }

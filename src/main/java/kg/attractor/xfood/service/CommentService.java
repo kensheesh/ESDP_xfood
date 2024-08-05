@@ -12,4 +12,6 @@ public interface CommentService {
     List<CommentDto> getAll();
 
     void save(Comment comment);
+
+    boolean delete(Long id);
 }
