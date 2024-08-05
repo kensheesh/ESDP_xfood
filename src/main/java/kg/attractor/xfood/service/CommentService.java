@@ -13,5 +13,4 @@ public interface CommentService {
 
     void save(Comment comment);
 
-    boolean delete(Long id);
 }

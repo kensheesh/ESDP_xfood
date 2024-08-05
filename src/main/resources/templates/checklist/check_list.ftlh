@@ -350,7 +350,7 @@
                 let commentsList = '';
                 if (Array.isArray(commentByCriteria) && commentByCriteria.length > 0) {
                     commentsList = commentByCriteria.map(comment =>
-                        '<ul class="list-group">' +
+                        '<ul class="list-group" id="list-group'+id+'">' +
                         '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">' +
                         '<span>' + '-' + step + ' ' + comment.comment + '</span>' +
                         '<div>' +
@@ -784,6 +784,13 @@
             }
             async function getComments() {
                 let response = await fetch('/api/comments');
+                let data = await response.json();
+                console.log(data.type)
+                return data;
+            }
+
+            async function deleteComment(id) {
+                let response = await fetch('/api/comments/'+id+'/delete');
                 let data = await response.json();
                 console.log(data.type)
                 return data;

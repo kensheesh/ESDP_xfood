@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -38,6 +39,14 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
         }
         log.info("comments {}", commentDtos);
         return commentDtos;
+    }
+
+    @Override
+    public boolean delete(Long checkId, Long criteriaId, Long commentId) {
+        CheckListsCriteria checkListsCriteria = criteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkId);
+        CheckListsCriteriaComment comment = criteriaCommentRepository.findByChecklistCriteria_IdAAndComment_Id(checkListsCriteria.getId(), commentId).orElseThrow(()->new NoSuchElementException("Не найденая связь между чеклистом с айди "+checkId+" критерием "+criteriaId +" и комментарием "+commentId));
+        criteriaCommentRepository.delete(comment);
+        return true;
     }
 
 

@@ -26,9 +26,9 @@ public class CommentController {
         return ResponseEntity.ok(checkListCriteriaCommentService.getAllByCheckListAndCriteria(checkId, criteriaId));
     }
 
-    @DeleteMapping("{id}/delete")
-    ResponseEntity<Void> deleteComment(@PathVariable Long id) {
-        if (commentService.delete(id)) {
+    @DeleteMapping("{checkId}/{criteriaId}/{commentId}/delete")
+    ResponseEntity<Void> deleteComment(@PathVariable Long checkId, @PathVariable Long criteriaId, @PathVariable Long commentId) {
+        if (checkListCriteriaCommentService.delete(checkId, criteriaId, commentId)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
