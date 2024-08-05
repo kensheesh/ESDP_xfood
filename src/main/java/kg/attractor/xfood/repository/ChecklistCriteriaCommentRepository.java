@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface ChecklistCriteriaCommentRepository extends JpaRepository<CheckListsCriteriaComment, Long> {
     List<CheckListsCriteriaComment> getAllByChecklistCriteria_Id(Long checklistCriteriaId);
 
-    Optional<CheckListsCriteriaComment> findByChecklistCriteria_IdAAndComment_Id(Long checklistCriteriaId, Long commentId);
+    Optional<CheckListsCriteriaComment> findFirstByChecklistCriteria_IdAndComment_Id(Long checklistCriteriaId, Long commentId);
+
+    boolean existsByChecklistCriteria_IdAndComment_Id(Long checklistCriteriaId, Long commentId);
 }

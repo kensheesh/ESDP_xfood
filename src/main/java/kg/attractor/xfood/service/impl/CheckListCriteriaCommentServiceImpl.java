@@ -33,7 +33,8 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
         List<CommentDto> commentDtos = new ArrayList<>();
         for (CheckListsCriteriaComment comment : comments) {
             commentDtos.add(CommentDto.builder()
-                            .commentId(comment.getId())
+                            .checkCritCommId(comment.getId())
+                            .commentId(comment.getComment().getId())
                             .comment(comment.getComment().getComment())
                     .build());
         }
@@ -42,11 +43,14 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
     }
 
     @Override
-    public boolean delete(Long checkId, Long criteriaId, Long commentId) {
-        CheckListsCriteria checkListsCriteria = criteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkId);
-        CheckListsCriteriaComment comment = criteriaCommentRepository.findByChecklistCriteria_IdAAndComment_Id(checkListsCriteria.getId(), commentId).orElseThrow(()->new NoSuchElementException("Не найденая связь между чеклистом с айди "+checkId+" критерием "+criteriaId +" и комментарием "+commentId));
-        criteriaCommentRepository.delete(comment);
+    public boolean delete( Long commentId) {
+        criteriaCommentRepository.deleteById(commentId);
         return true;
+    }
+
+    @Override
+    public boolean ifExists(Long id, Long commentId) {
+        return criteriaCommentRepository.existsByChecklistCriteria_IdAndComment_Id(id, commentId);
     }
 
 

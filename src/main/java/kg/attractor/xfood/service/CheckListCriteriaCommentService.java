@@ -10,5 +10,7 @@ public interface CheckListCriteriaCommentService {
 
     List<CommentDto> getAllByCheckListAndCriteria(Long checkId, Long criteriaId);
 
-    boolean delete(Long checkId, Long criteriaId, Long commentId);
+    boolean delete(Long commentId);
+
+    boolean ifExists(Long id, Long commentId);
 }

@@ -4,6 +4,7 @@ import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.service.CheckListCriteriaCommentService;
 import kg.attractor.xfood.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +27,11 @@ public class CommentController {
         return ResponseEntity.ok(checkListCriteriaCommentService.getAllByCheckListAndCriteria(checkId, criteriaId));
     }
 
-    @DeleteMapping("{checkId}/{criteriaId}/{commentId}/delete")
-    ResponseEntity<Void> deleteComment(@PathVariable Long checkId, @PathVariable Long criteriaId, @PathVariable Long commentId) {
-        if (checkListCriteriaCommentService.delete(checkId, criteriaId, commentId)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @DeleteMapping("/{commentId}/delete")
+    HttpStatus deleteCommen(@PathVariable Long commentId) {
+        checkListCriteriaCommentService.delete(commentId);
+        return HttpStatus.OK;
+
     }
 
 }

@@ -350,21 +350,26 @@
                 let commentsList = '';
                 if (Array.isArray(commentByCriteria) && commentByCriteria.length > 0) {
                     commentsList = commentByCriteria.map(comment =>
-                        '<ul class="list-group" id="list-group'+id+'">' +
-                        '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">' +
+                        '<ul class="list-group">' +
+                        '<li class="list-group-item my-2 d-flex justify-content-between align-items-center" id="list'+comment.checkCritCommId+'">' +
                         '<span>' + '-' + step + ' ' + comment.comment + '</span>' +
                         '<div>' +
-                        '<button type="button" class="btn btn-danger me-2" data-bs-toggle="tooltip" data-bs-placement="right"' +
-                        ' id="comment-' + comment.commentId + '">' +
+                        '<button type="button" class="btn btn-danger me-2" id="del'+comment.checkCritCommId+'" ' +
+                        '-bs-toggle="tooltip" data-bs-placement="right" ' +
+                        'data-bs-title="Удалить комментарий" ' +
+                        'data-comment-id="' + comment.checkCritCommId + '" >' +
                         '<i class="bi bi-trash"></i>' +
                         '</button>' +
-                        '<button type="button" class="btn btn-warning" id="appeal' + comment.commentId + '" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">' +
+                        '<button type="button" class="btn btn-warning" ' +
+                        'data-bs-toggle="tooltip" data-bs-placement="right" ' +
+                        'data-bs-title="Подать апелляцию">' +
                         '<i class="bi bi-hammer"></i>' +
                         '</button>' +
                         '</div>' +
                         '</li>' +
                         '</ul>'
                     ).join('');
+
 
 
                 } else {
@@ -392,6 +397,9 @@
                     '</div>';
 
                 document.body.appendChild(commentsModal);
+                if (commentByCriteria.length >0){
+                    addListenersToDeleteButtons(commentByCriteria);
+                }
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
                 let uuid = document.getElementById('uuid').value;
@@ -789,30 +797,44 @@
                 return data;
             }
 
-            async function deleteComment(checkId, criteriaId, commentId) {
-                try {
-                    let response = await fetch(`/api/comments/${checkId}/${criteriaId}/${commentId}/delete`, {
-                        method: 'DELETE'
-                    });
-                    if (response.ok) {
-                        return { type: 'success' };
-                    } else if (response.status === 404) {
-                        return { type: 'error', message: 'Комментарий не найден' };
-                    } else {
-                        return { type: 'error', message: 'Ошибка при удалении комментария' };
-                    }
-                } catch (error) {
-                    console.error('Ошибка при удалении комментария:', error);
-                    return { type: 'error', message: 'Ошибка сети' };
-                }
-            }
-
 
             async function getCommentsByCriteria(checkId, criteriaId) {
                 let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
                 let data = await response.json();
                 console.log(data.type)
                 return data;
+            }
+
+
+            async function addListenersToDeleteButtons(comments) {
+                comments.forEach(comment => {
+                    const deleteButton = document.getElementById('del' + comment.checkCritCommId);
+                    if (deleteButton) {
+                        deleteButton.addEventListener('click', async function() {
+                            const commentId = deleteButton.getAttribute('data-comment-id');
+
+                            try {
+                                const response = await fetch('/api/comments/'+commentId+'/delete', {
+                                    method: 'DELETE',
+                                });
+
+                                if (response.ok) {
+
+                                    const listItem = document.getElementById('list' + commentId);
+                                    if (listItem) {
+                                        listItem.remove();
+                                    }
+                                } else {
+                                    alert('Ошибка при удалении комментария. Статус: ' + response.status);
+                                }
+                            } catch (error) {
+                                console.error('Ошибка при удалении комментария:', error);
+                                alert('Произошла ошибка при удалении комментария.');
+                            }
+                        });
+
+                    }
+                });
             }
 
 
