@@ -789,12 +789,24 @@
                 return data;
             }
 
-            async function deleteComment(id) {
-                let response = await fetch('/api/comments/'+id+'/delete');
-                let data = await response.json();
-                console.log(data.type)
-                return data;
+            async function deleteComment(checkId, criteriaId, commentId) {
+                try {
+                    let response = await fetch(`/api/comments/${checkId}/${criteriaId}/${commentId}/delete`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        return { type: 'success' };
+                    } else if (response.status === 404) {
+                        return { type: 'error', message: 'Комментарий не найден' };
+                    } else {
+                        return { type: 'error', message: 'Ошибка при удалении комментария' };
+                    }
+                } catch (error) {
+                    console.error('Ошибка при удалении комментария:', error);
+                    return { type: 'error', message: 'Ошибка сети' };
+                }
             }
+
 
             async function getCommentsByCriteria(checkId, criteriaId) {
                 let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
