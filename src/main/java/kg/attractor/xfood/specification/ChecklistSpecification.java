@@ -43,4 +43,13 @@ public class ChecklistSpecification {
             return cb.equal(r.get("workSchedule").get("pizzeria").get("id"), Long.parseLong(pizzeriaName));
         };
     }
+
+    public static Specification<CheckList> isDeleted(Boolean bool) {
+        return(r, q, cb) -> {
+            if(bool == null) {
+                return cb.conjunction();
+            }
+            return cb.equal(r.get("deleted"), bool);
+        };
+    }
 }

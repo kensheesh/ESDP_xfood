@@ -18,8 +18,8 @@ public class ChecklistMiniExpertShowDto {
 	private Long id;
 	private Status status;
 	private ManagerShowDto manager;
-	private String managerWorkStartDate;
-	private String managerWorkEndDate;
+	private String managerWorkStartTime;
+	private String managerWorkEndTime;
 	private String pizzeria;
 	private String uuid;
 }

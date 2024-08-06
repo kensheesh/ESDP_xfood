@@ -24,7 +24,7 @@
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/analytics" class="btn rounded-4 w-100 h-100 disabled btn-dodo-light">
+                                    <a href="/analytics" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
                                         Шаблоны
                                     </a>
                                 </div>

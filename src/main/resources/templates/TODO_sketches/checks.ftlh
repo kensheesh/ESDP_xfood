@@ -74,14 +74,26 @@
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3">
                         <div class="col">
-                            <button id="newChecks"        type="button" class="btn btn-light-green rounded-4">Новые</button>
-                            <button id="inProgressChecks" type="button" class="btn btn-light-green rounded-4">Активные</button>
-                            <button id="doneChecks"       type="button" class="btn btn-light-green rounded-4">Завершенные</button>
+                            <div class="row row-gap-2">
+                                <div class="col-auto ps-3 pe-1">
+                                    <button id="newChecks" type="button" class="btn btn-light-green rounded-4">Новые</button>
+                                </div>
+                                <div class="col-auto px-1">
+                                    <button id="inProgressChecks" type="button" class="btn btn-light-green rounded-4">Активные</button>
+                                </div>
+                                <div class="col-auto px-1">
+                                    <button id="doneChecks"       type="button" class="btn btn-light-green rounded-4">Завершенные</button>
+                                </div>
+                                <#if userRole != "ROLE_EXPERT">
+                                    <div class="col-auto px-1">
+                                        <button id="deletedChecks" type="button" class="btn btn-light-green rounded-4">Удаленные</button>
+                                    </div>
+                                </#if>
+                            </div>
                         </div>
 
                         <div class="col">
-                            <div class="row row-cols-1 row-gap-2 mt-2 overflow-y-auto" style="height: 58vh;">
-                                <div id="checks-container"></div>
+                            <div id="checks-container" class="row row-cols-1 row-gap-2 mt-2 overflow-y-auto align-content-start" style="height: 58vh;">
                             </div>
                         </div>
                     </div>

@@ -18,4 +18,5 @@ public class CommentDto {
     private String comment;
 
     private Long commentId;
+    private Long checkCritCommId;
 }

@@ -48,14 +48,10 @@
         }
 
         .appeal-button {
-            display: none;
+            display: inline-block;
             margin-top: 0.5rem;
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
-        }
-
-        .table tbody tr:hover .appeal-button {
-            display: inline-block;
         }
 
         .error-message {
@@ -122,12 +118,12 @@
                             <#assign name = user.getUsername()>
                             <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
 
-                                <#list authorities as authority>
-                                    <#if authority.authority == 'ROLE_SUPERVISOR'>
-                                        <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
-                                    </#if>
-                                </#list>
-                            
+                            <#list authorities as authority>
+                                <#if authority.authority == 'ROLE_SUPERVISOR'>
+                                    <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
+                                </#if>
+                            </#list>
+
                         </#if>
                         <tr>
                             <#if criteria.maxValue?? && criteria.maxValue gt 0>
@@ -178,6 +174,9 @@
                                             <#if criteria.isAccepted?? && true>
                                                 <span class="appeal-submitted">!</span>
                                             </#if>
+                                            <button class="btn btn-info btn-sm comments-button"
+                                                    data-criteria-id="${criteria.id}">Комментарии
+                                            </button>
                                         </div>
                                     </td>
                                 <#elseif criteria.section == 'WOW фактор'>
@@ -212,8 +211,87 @@
                 </table>
             </div>
         </#if>
+        <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentsModalLabel">Комментарии</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="commentsModalBody">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="checkId" value="${checkList.id}">
+        <#assign known = SPRING_SECURITY_CONTEXT??>
+        <#if known>
+            <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+        </#if>
+
+        <#list authorities as authority>
+            <#if authority.authority == "ROLE_ADMIN">
+                <#if checkList.isDeleted>
+                    <div class="text-end mb-5">
+                        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#restoreModal">
+                            Восстановить проверку
+                        </button>
+                    </div>
+                <#else>
+                    <div class="text-end mb-5">
+                        <button class="btn btn-outline-danger mt-2" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal">Удалить проверку
+                        </button>
+                    </div>
+                </#if>
+            </#if>
+        </#list>
     </main>
 
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить проверку?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary"
+                            data-bs-dismiss="modal">Отмена
+                    </button>
+                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete" method="post">
+                        <button class="btn btn-danger">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="restoreModalLabel">Восстановление проверки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите восстановить проверку?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/restore" method="post">
+                        <button class="btn btn-primary">Восстановить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const maxPoint = document.getElementById('maxPoint')
@@ -320,7 +398,38 @@
                     accordionBody.appendChild(ol)
                 }
             }
-        })
+
+            const commentsButtons = document.querySelectorAll('.comments-button');
+
+            commentsButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const criteriaId = button.getAttribute('data-criteria-id');
+                    await fetchAndDisplayComments(criteriaId);
+                });
+            });
+
+            async function fetchAndDisplayComments(criteriaId) {
+                let checkId = document.getElementById('checkId').value;
+                let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
+                let data = await response.json();
+                displayComments(data);
+            }
+
+
+            function displayComments(comments) {
+
+                const commentsModalBody = document.getElementById('commentsModalBody');
+                commentsModalBody.innerHTML = '';
+
+                comments.forEach(comment => {
+                    const commentElement = document.createElement('p');
+                    commentElement.textContent = comment.comment;
+                    commentsModalBody.appendChild(commentElement);
+                });
+
+                $('#commentsModal').modal('show');
+            }
+        });
     </script>
 
 </@main.layout>

@@ -35,6 +35,20 @@
                                         Аналитика
                                     </a>
                                 </div>
+                                <div class="col button-wrapper">
+                                    <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Апелляции
+                                    </a>
+                                    <#if (appealsCount > 0)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">${appealsCount}</div>
+                                        </div>
+                                    <#elseif (appealsCount > 99)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">99</div>
+                                        </div>
+                                    </#if>
+                                </div>
                             </div>
                             <div class="py-3 px-3 text-center">
                                 <h6>Фильтры</h6>
@@ -186,6 +200,30 @@
         .calendar-date {
             font-size: 11px;
             text-align: right;
+        }
+
+        .badge-notification-icon {
+            position: absolute;
+            display:block;
+            top: -8px;
+            right: 0px;
+            height: 27px;
+            width: 27px;
+            border-radius: 50%;
+            background: red;
+        }
+
+        .badge-notification-num {
+            text-align: center;
+            vertical-align: middle;
+            line-height: 27px;
+            width: 27px;
+            color: white;
+        }
+
+        .button-wrapper {
+            position: relative;
+            display: inline-block;
         }
     </style>
 

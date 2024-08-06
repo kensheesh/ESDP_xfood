@@ -20,6 +20,7 @@ import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
+import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -119,7 +120,7 @@ public class OpportunityServiceImpl implements OpportunityService {
 
     @Override
     @Transactional
-    public void changeExpertOpportunities (OpportunityCreateDto dto) {
+    public void changeExpertOpportunity(OpportunityCreateDto dto) {
         User expert = userService.getByEmail(AuthParams.getAuth().getName());
 
         Opportunity newOpportunity = Opportunity.builder()
@@ -134,10 +135,8 @@ public class OpportunityServiceImpl implements OpportunityService {
         if (savedOpportunity.getIsDayOff()) {
             shiftService.deleteAllByOpportunityId(savedOpportunity.getId());
         } else {
-
             List<Long> shiftsIds;
-            List<Long> existingIds = shiftService.getAllByOpportunityId (savedOpportunity.getId());
-
+            List<Long> existingIds = shiftService.getAllByOpportunityId(savedOpportunity.getId());
 
             if (dto.getShifts() != null) {
                 shiftsIds = dto.getShifts().stream()
@@ -164,12 +163,12 @@ public class OpportunityServiceImpl implements OpportunityService {
                     }
 
                     if (i > 0) {
-                        if (filteredShifts.get(i-1).getEndTime().isAfter(filteredShifts.get(i).getStartTime())) {
+                        if (filteredShifts.get(i - 1).getEndTime().isAfter(filteredShifts.get(i).getStartTime())) {
                             throw new ShiftIntersectionException("Смены не могут пересекаться");
                         }
                     }
                 }
-                shiftService.saveAll (filteredShifts);
+                shiftService.saveAll(filteredShifts);
             } else {
                 shiftsIds = new ArrayList<>();
             }

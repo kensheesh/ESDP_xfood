@@ -32,7 +32,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -57,7 +56,7 @@ public class CheckListServiceImpl implements CheckListService {
     private final PizzeriaService pizzeriaService;
     private final CheckListDao checkListDao;
     private final CheckTypeFeeService checkTypeFeeService;
-    private final CheckListCriteriaCommentService checkListCriteriaCommentService;
+    private  CheckListCriteriaCommentService checkListCriteriaCommentService;
 
     private final DtoBuilder dtoBuilder;
 
@@ -74,13 +73,18 @@ public class CheckListServiceImpl implements CheckListService {
         this.managerService = managerService;
     }
 
+    @Autowired
+    public void setCheckListCriteriaCommentService(@Lazy CheckListCriteriaCommentService checkListCriteriaCommentService) {
+        this.checkListCriteriaCommentService = checkListCriteriaCommentService;
+    }
+
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(String username, Status status) {
-        return null;
-//        return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
-//                .stream()
-//                .map(dtoBuilder::buildChecklistDto)
-//                .toList();
+//        return null;
+        return checkListRepository.findCheckListByExpertEmailAndStatus(username, status)
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
     }
 
     @Override
@@ -115,8 +119,21 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public ChecklistShowDto getCheckListById(String id) {
+        for (var authority : AuthParams.getAuth().getAuthorities()) {
+            if (!authority.getAuthority().equals("ROLE_EXPERT") && authority.getAuthority() != null) {
+                Optional<CheckList> deletedCheckList = findDeletedCheckList(id);
+                if (deletedCheckList.isPresent()) {
+                    return dtoBuilder.buildChecklistShowDto(deletedCheckList.get(), Boolean.TRUE);
+                }
+            }
+        }
+
         CheckList checkList = getModelCheckListById(id);
         return dtoBuilder.buildChecklistShowDto(checkList);
+    }
+
+    private Optional<CheckList> findDeletedCheckList(String uuid) {
+        return checkListRepository.findDeleted(uuid);
     }
 
     @Override
@@ -136,12 +153,10 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public List<ChecklistMiniExpertShowDto> getUsersChecklists(Status status) {
-        return null;
-        //
-//        return checkListRepository.findCheckListByStatus(status)
-//                .stream()
-//                .map(dtoBuilder::buildChecklistDto)
-//                .toList();
+        return checkListRepository.findCheckListByStatus(status)
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
     }
 
 
@@ -373,12 +388,36 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
+    @Transactional
+    public void delete(String uuid) {
+        for (var authority : AuthParams.getPrincipal().getAuthorities()) {
+            if (Objects.equals(authority.getAuthority(), "ROLE_SUPERVISOR")) {
+                  checkListRepository.deleteByUuidLinkAndStatusIsNot(uuid, Status.DONE);
+                  break;
+            }
+            if (Objects.equals(authority.getAuthority(), "ROLE_ADMIN")) {
+                checkListRepository.deleteByUuidLink(uuid);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public List<ChecklistMiniExpertShowDto> getDeletedChecklists() {
+        return checkListRepository.findDeletedChecklists()
+                .stream()
+                .map(dtoBuilder::buildChecklistDto)
+                .toList();
+    }
+
+    @Override
     public List<CheckListRewardDto> getChecklistRewardsByExpert(String expertEmail, LocalDateTime startDate, LocalDateTime endDate, String pizzeriaName) {
         Specification<CheckList> spec = Specification
                 .where(ChecklistSpecification.hasStatus(Status.DONE))
                 .and(ChecklistSpecification.hasExpert(expertEmail))
                 .and(ChecklistSpecification.betweenDate(startDate, endDate))
-                .and(ChecklistSpecification.hasPizzeria(pizzeriaName));
+                .and(ChecklistSpecification.hasPizzeria(pizzeriaName))
+                .and(ChecklistSpecification.isDeleted(false));
 
         List<CheckList> checkLists = checkListRepository.findAll(spec);
 
@@ -571,6 +610,11 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public void comment(String uuid, Long criteriaId, CommentDto commentDto) {
+        log.info(uuid);
+        log.info(criteriaId.toString());
+        if (commentDto.getComment() != null) {
+            log.info("comment {}", commentDto);
+        }
         CheckList checkList = checkListRepository.findByUuidLink(uuid).orElseThrow(()-> new NoSuchElementException("Чеклист с uuid " + uuid + " не найден"));
         CheckListsCriteria checkListsCriteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkList.getId());
         Comment comment = new Comment();
@@ -578,6 +622,7 @@ public class CheckListServiceImpl implements CheckListService {
             comment = commentService.findById(commentDto.getCommentId());
         }else {
             comment.setComment(commentDto.getComment());
+            commentService.save(comment);
         }
 
         CheckListsCriteriaComment commentCriteria = CheckListsCriteriaComment.builder()
@@ -585,5 +630,18 @@ public class CheckListServiceImpl implements CheckListService {
                 .checklistCriteria(checkListsCriteria)
                 .build();
         checkListCriteriaCommentService.save(commentCriteria);
+        log.info("commentCriteria {}",commentCriteria);
     }
+    @Override
+    @Transactional
+    public void restore (String uuid) {
+        checkListRepository.restore (uuid);
+    }
+
+    @Override
+    public ChecklistShowDto getCheckListByIdIncludeDeleted(String checkListId) {
+        return dtoBuilder.buildChecklistShowDto(checkListRepository.findDeleted(checkListId)
+                .orElseThrow(() -> new NotFoundException("CheckList not found")));
+    }
+
 }

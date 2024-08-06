@@ -22,7 +22,7 @@
                                 </div>
                                 <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
                                     <div class="col">
-                                        <a href="/supervisor/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <a href="/supervisor/opportunities" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
                                             Возможности
                                         </a>
                                     </div>
@@ -36,6 +36,20 @@
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Аналитика
                                     </a>
+                                </div>
+                                <div class="col button-wrapper">
+                                    <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Апелляции
+                                    </a>
+                                    <#if (appealsCount > 0)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">${appealsCount}</div>
+                                        </div>
+                                    <#elseif (appealsCount > 99)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">99</div>
+                                        </div>
+                                    </#if>
                                 </div>
                             </div>
                             <div class="col align-self-end d-none d-md-block">
@@ -240,6 +254,30 @@
         .calendar-date {
             font-size: 11px;
             text-align: right;
+        }
+
+        .badge-notification-icon {
+            position: absolute;
+            display:block;
+            top: -8px;
+            right: 0px;
+            height: 27px;
+            width: 27px;
+            border-radius: 50%;
+            background: red;
+        }
+
+        .badge-notification-num {
+            text-align: center;
+            vertical-align: middle;
+            line-height: 27px;
+            width: 27px;
+            color: white;
+        }
+
+        .button-wrapper {
+            position: relative;
+            display: inline-block;
         }
     </style>
 
