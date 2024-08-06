@@ -196,12 +196,7 @@
                 lengthChange: false,
                 pageLength: 5,
                 searching: false,
-                language: {
-                    paginate: {
-                        previous: "&laquo;",
-                        next: "&raquo;"
-                    }
-                },
+                pagingType: "numbers",
                 drawCallback: function (settings) {
                     updateStatistics();
                 }

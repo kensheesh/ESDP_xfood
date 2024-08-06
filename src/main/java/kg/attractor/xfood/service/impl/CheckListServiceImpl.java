@@ -416,7 +416,8 @@ public class CheckListServiceImpl implements CheckListService {
                 .where(ChecklistSpecification.hasStatus(Status.DONE))
                 .and(ChecklistSpecification.hasExpert(expertEmail))
                 .and(ChecklistSpecification.betweenDate(startDate, endDate))
-                .and(ChecklistSpecification.hasPizzeria(pizzeriaName));
+                .and(ChecklistSpecification.hasPizzeria(pizzeriaName))
+                .and(ChecklistSpecification.isDeleted(false));
 
         List<CheckList> checkLists = checkListRepository.findAll(spec);
 
