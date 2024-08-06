@@ -61,8 +61,8 @@ public class SecurityConfig {
 	@Bean
 	static RoleHierarchy roleHierarchy() {
 		return RoleHierarchyImpl.withDefaultRolePrefix()
-				.role(ADMIN.getAuthority()).implies(SUPERVISOR.getAuthority())
-				.role(SUPERVISOR.getAuthority()).implies(EXPERT.getAuthority())
+				.role(ADMIN.toString()).implies(SUPERVISOR.toString())
+				.role(SUPERVISOR.toString()).implies(EXPERT.toString())
 				.build();
 	}
 	

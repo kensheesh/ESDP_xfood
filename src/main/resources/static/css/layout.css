@@ -97,3 +97,12 @@ a.btn.disabled.btn-dodo-light  {
     color: #fff;
 }
 
+.was-validated .form-control:invalid {
+    border-color: #dc3545;
+}
+.was-validated .form-check-input:invalid {
+    border-color: #dc3545;
+}
+.invalid-feedback {
+    display: block;
+}
