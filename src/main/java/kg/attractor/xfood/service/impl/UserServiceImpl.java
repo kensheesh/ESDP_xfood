@@ -8,12 +8,10 @@ import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.UserRepository;
-import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
 import kg.attractor.xfood.specification.UserSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -35,16 +33,23 @@ public class UserServiceImpl implements UserService {
 
 
     public void register(RegisterUserDto dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) throw new IllegalArgumentException("User already exists");
-        User user = User.builder()
-                .email(dto.getEmail())
-                .password(encoder.encode(dto.getPassword()))
-                .name(dto.getName())
-                .surname(dto.getSurname())
-                .role(dto.getRole())
-                .phoneNumber(dto.getPhoneNumber())
-                .build();
-        userRepository.save(user);
+        if (userRepository.getByEmail(dto.getEmail()).isPresent()) throw new IllegalArgumentException("User already exists");
+        if (dto.getRole().isEmpty()) throw new NotFoundException("Role not found");
+        try {
+            Role role = Role.valueOf(dto.getRole().toUpperCase());
+            String encodedPassword = encoder.encode(dto.getPassword());
+            
+            userRepository.saveUser(
+                    dto.getName(),
+                    dto.getSurname(),
+                    dto.getEmail(),
+                    encodedPassword,
+                    dto.getTgLink(),
+                    role.toString().toUpperCase()
+            );
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid role: {}", dto.getRole());
+        }
     }
 
     @Override
@@ -97,7 +102,12 @@ public class UserServiceImpl implements UserService {
                 .map(dtoBuilder::buildUserDto)
                 .toList(), pageable, users.getTotalElements());
     }
-
+    
+    @Override
+    public Boolean isUserExist(String email) {
+        return userRepository.getByEmail(email).isPresent();
+    }
+    
     public List<User> findSupervisors() {
         return userRepository.findByRole(Role.SUPERVISOR.toString());
     }
