@@ -26,4 +26,5 @@ public class ChecklistShowDto {
 	private String uuidLink;
 	private String expertEmail;
 	private List<CriteriaExpertShowDto> criteria;
+	private Boolean isDeleted;
 }

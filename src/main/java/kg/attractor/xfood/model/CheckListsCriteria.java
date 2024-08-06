@@ -24,7 +24,7 @@ public class CheckListsCriteria {
     private Criteria criteria;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "checklist_id", nullable = false)
     private CheckList checklist;
 

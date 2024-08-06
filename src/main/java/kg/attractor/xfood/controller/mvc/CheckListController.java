@@ -13,6 +13,7 @@ import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -162,10 +163,24 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
         return "redirect:/checks/"+uuid+"/check";
     }
 
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
+    @PostMapping("{uuid}/delete")
+    public String delete (@PathVariable String uuid) {
+        checkListService.delete(uuid);
+        return "redirect:/expert/checks";
+    }
 
     @PostMapping("/{uuid}/{criteriaId}")
     public String comment(@PathVariable(name = "uuid")String uuid, @PathVariable (name = "criteriaId") Long criteriaId, CommentDto commentDto, Model model) {
         checkListService.comment(uuid, criteriaId, commentDto);
         return "redirect:/checks/"+uuid+"/check";
+      
     }
+    @PostMapping("{uuid}/restore")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String restore (@PathVariable String uuid) {
+        checkListService.restore(uuid);
+        return "redirect:/expert/checks";
+    }
+
 }

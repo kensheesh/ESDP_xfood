@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: Add column if not exists 'deleted' in table 'check_lists'
+      author: dkoooh
+      changes:
+        - addColumn:
+            tableName: check_lists
+            columns:
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

@@ -18,13 +18,12 @@ public class CheckListDao {
     private final JdbcTemplate jdbcTemplate;
 
     public void updateStatusToDone(Status status, CheckList checkList) {
-        String sql = "update check_lists set status = ?, duration = ?, end_time = ? where id = ?";
+        String sql = "update check_lists set status = ?, end_time = ? where id = ?";
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setObject(1, status, java.sql.Types.OTHER);
-            ps.setTime(2, Time.valueOf(checkList.getDuration()));
-            ps.setTimestamp(3, Timestamp.valueOf(checkList.getEndTime()));
-            ps.setLong(4, checkList.getId());
+            ps.setTimestamp(2, Timestamp.valueOf(checkList.getEndTime()));
+            ps.setLong(3, checkList.getId());
             return ps;
         });
     }

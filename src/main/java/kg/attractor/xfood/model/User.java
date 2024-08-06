@@ -37,8 +37,8 @@ public class User implements UserDetails {
 
     @Size(max = 255)
     @NotNull
-    @Column(name = "phone_number", nullable = false)
-    private String phoneNumber;
+    @Column(name = "tg_link", nullable = false)
+    private String tgLink;
 
     @Size(max = 255)
     @NotNull
@@ -49,11 +49,6 @@ public class User implements UserDetails {
     @NotNull
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Size(max = 255)
-    @NotNull
-    @Column(name = "avatar", nullable = false)
-    private String avatar;
 
     @NotNull
     @Column(name = "enabled", nullable = false)
