@@ -18,8 +18,8 @@ public interface UserService {
     List<ExpertShowDto> fetchAllExperts();
 
     User findById(Long expertId);
-    
-    Page<UserDto> getAllUsers(String role, Pageable pageable);
+  
+    Page<UserDto> getAllUsers(String role, Pageable pageable, String word);
     
     void register(RegisterUserDto dto);
     

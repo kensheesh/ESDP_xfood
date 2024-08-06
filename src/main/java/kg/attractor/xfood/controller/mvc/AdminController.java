@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.service.UserService;
@@ -31,11 +32,13 @@ public class AdminController {
                            @RequestParam(name = "size", defaultValue = "4") String size,
                            @RequestParam(name = "search", defaultValue = "", required = false) String search) {
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
-        Page<UserDto> userPage = userService.getAllUsers(role, pageable);
+        Page<UserDto> userPage = userService.getAllUsers(role, pageable, search);
+        UserDto admin = userService.getUserDto();
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("totalPages", userPage.getTotalPages());
         model.addAttribute("currentRole", role);
         model.addAttribute("searchWord", search);
+        model.addAttribute("admin", admin);
         model.addAttribute("currentPage", Integer.parseInt(page));
         model.addAttribute("currentSize", Integer.parseInt(size));
         return "users/users";

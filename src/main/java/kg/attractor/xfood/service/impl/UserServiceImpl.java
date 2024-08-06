@@ -89,15 +89,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDto> getAllUsers(String role, Pageable pageable) {
+    public Page<UserDto> getAllUsers(String role, Pageable pageable, String word) {
         Page<User> users;
         if(!role.equals("default")) {
-            Specification<User> spec = UserSpecification.hasRole(Role.valueOf(role));
+            Specification<User> spec = UserSpecification
+                    .hasRole(Role.valueOf(role))
+                    .and(UserSpecification.filterByQuery(word));
             users = userRepository.findAll(spec, pageable);
         } else {
-            users = userRepository.findAll(pageable);
+            Specification<User> spec = UserSpecification.filterByQuery(word);
+            users = userRepository.findAll(spec, pageable);
         }
-
         return new PageImpl<>(users.getContent().stream()
                 .map(dtoBuilder::buildUserDto)
                 .toList(), pageable, users.getTotalElements());
