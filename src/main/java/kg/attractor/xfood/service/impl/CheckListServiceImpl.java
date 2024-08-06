@@ -420,23 +420,8 @@ public class CheckListServiceImpl implements CheckListService {
                 .and(ChecklistSpecification.isDeleted(false));
 
         List<CheckList> checkLists = checkListRepository.findAll(spec);
-
-        List<CheckListRewardDto> rewardDtoList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        checkLists.forEach(c -> {
-            rewardDtoList.add(
-                    CheckListRewardDto.builder()
-                            .checklistUUID(c.getUuidLink())
-                            .endDate(formatter.format(c.getEndTime()))
-                            .expertName(c.getExpert().getName() + " " + c.getExpert().getSurname())
-                            .pizzeriaName(c.getWorkSchedule().getPizzeria().getName())
-                            .sumRewards(checkTypeFeeService.getFeesByCheckTypeId(c.getCheckType().getId()).doubleValue())
-                            .build()
-            );
-        });
-        return rewardDtoList;
+        return checkLists.stream().map(dtoBuilder::buildCheckListRewardDto).toList();
     }
-
 
     @Override
     public void bindChecklistWithCriterion(CheckListMiniSupervisorCreateDto checklistDto) {
