@@ -11,6 +11,8 @@ public class UserEditDto {
     private Long id;
     private String name;
     private String surname;
+    private String email;
+    private String phoneNumber;
     private Boolean enabled;
     private Role role;
 

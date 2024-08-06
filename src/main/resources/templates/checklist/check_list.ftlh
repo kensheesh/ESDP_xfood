@@ -71,53 +71,67 @@
             z-index: 2000;
         }
     </style>
-
-    <#if error??>
+     <#if error??>
         <div class="error-message">${error}</div>
      <#else>
-         <main class="container mt-4">
-             <div class="table-responsive rounded p-3">
-                 <table id="mainTable" class="table rounded-3">
-                     <thead>
-                     <tr>
-                         <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
-                         <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
-                     </tr>
-                     <tr>
-                         <th class="text-center">Раздел</th>
-                         <th class="text-center">Что проверить</th>
-                         <th class="text-center">Оценка</th>
-                         <th class="text-center">${checkList.managerWorkDate} ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
-                     </tr>
-                     </thead>
-                     <tbody id="mainTableBody">
-                     </tbody>
-                     <tfoot>
-                     <tr>
-                         <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
-                         <td colspan="2" class="text-center" id="maxPoint"><strong></strong></td>
-                     </tr>
-                     <tr>
-                         <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
-                                 x 100%</strong></td>
-                         <td colspan="2" class="text-center" id="percentageResult"></td>
-                     </tr>
-                     </tfoot>
-                 </table>
-             </div>
-             <#assign
-             known = SPRING_SECURITY_CONTEXT??
-             >
-             <#if known>
-                 <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
-                 <#assign name = user.getUsername()>
-                 <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
-                 <div class="text-end mb-5 mt-2">
-                     <#list authorities as authority>
-                         <#if authority.authority == 'ROLE_SUPERVISOR'>
-                             <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
-                         </#if>
-                     </#list>
+    <main class="container mt-4">
+        <div class="table-responsive rounded p-3">
+            <table id="mainTable" class="table rounded-3">
+                <thead>
+                <tr>
+                    <th colspan="3" class="text-center">${checkList.pizzeria.name}</th>
+                    <th colspan="1" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Раздел</th>
+                    <th class="text-center">Что проверить</th>
+                    <th class="text-center">Оценка</th>
+                    <th class="text-center"><#if checkList.managerWorkDate??>${checkList.managerWorkDate}</#if> ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
+                </tr>
+                </thead>
+                <tbody id="mainTableBody">
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="2" class="text-center"><strong>Максимальное количество баллов: </strong></td>
+                    <td colspan="2" class="text-center" id="maxPoint"><strong></strong></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center"><strong>(количество набранных баллов / макс. количество баллов)
+                            x 100%</strong></td>
+                    <td colspan="2" class="text-center" id="percentageResult"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="error-message" style="display: none;" class="alert alert-danger" role="alert">
+            Введите длительность проверки !
+        </div>
+        <#assign
+        known = SPRING_SECURITY_CONTEXT??
+        >
+        <#if known>
+        <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+        <#assign name = user.getUsername()>
+        <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+            <#if checkList.isDeleted == false>
+            <#list authorities as authority>
+              <#if authority.authority == 'ROLE_EXPERT' && checkList.status = 'IN_PROGRESS'>
+                  <div class="form-group m-3 shadow-sm">
+                      <label for="expertStartTime" class="form-label">Общее время, потрачееное на проверку:</label><br>
+                      <input type="time" id="duration" class="form-control" name="duration"  required>
+                  </div>
+              </#if>
+             </#list>
+        <div class="text-end mb-5 mt-2">
+                <#list authorities as authority>
+                 <#if authority.authority == 'ROLE_SUPERVISOR' || authority.authority == 'ROLE_ADMIN'>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить проверку</button>
+                        </#if>
+                    <#if authority.authority == 'ROLE_SUPERVISOR'>
+                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
+                    </#if>
+                </#list>
 
                      <#if checkList.status == 'IN_PROGRESS'>
                          <button id="getTemplate" class="btn btn-warning">Получить шаблон сообщение</button>
@@ -154,7 +168,17 @@
                          </div>
                      </div>
                  </div>
-             </#if>
+               <#else>
+                <#if authorities[0].authority == "ROLE_ADMIN">
+                    <div class="text-end mb-5 mt-2">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#restoreModal">
+                            Восстановить проверку
+                        </button>
+                    </div>
+                </#if>
+            </#if>
+
+        </#if>
          </main>
     </#if>
 
@@ -193,7 +217,7 @@
                 <div class="modal-body">
                     <form id="critFactorForm">
                         <div class="mb-3">
-                            <label for="critFactorDescription" class="form-label">Описание</label>
+                               <label for="critFactorDescription" class="form-label">Описание</label>
                             <select class="form-select form-select-sm" id="critFactorDescription"
                                     aria-label=".form-select-sm example">
                             </select>
@@ -211,6 +235,45 @@
     </div>
     <input type="hidden" value="${checkList.uuidLink}" id="uuid">
     <input type="hidden" value="${checkList.id}" id="checkId">
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить проверку?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete" method="post">
+                        <button class="btn btn-danger">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="restoreModalLabel">Восстановление проверки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите восстановить проверку?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/restore" method="post">
+                        <button class="btn btn-primary">Восстановить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
 

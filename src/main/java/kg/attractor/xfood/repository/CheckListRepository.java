@@ -44,14 +44,19 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
             """)
     List<CheckList> findByStatus(Status status);
 
-  /*  @Query(value = """
+   @Query(value = """
             SELECT c
             FROM CheckList c
-                    JOIN Opportunity o ON c.opportunity.id = o.id
-                     JOIN User u ON o.user.id = u.id
             WHERE CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    List<CheckList> findCheckListByStatus(Status status);*/
+    List<CheckList> findCheckListByStatus(Status status);
+
+    @Query(value = """
+            SELECT *
+            FROM check_lists
+            WHERE deleted = TRUE
+            """, nativeQuery = true)
+    List<CheckList> findDeletedChecklists();
 
     @Modifying
     @Transactional
@@ -76,6 +81,18 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
     Optional<CheckList> findCheckListByWorkSchedule_IdAndExpert_Id(Long workScheduleId, Long expertId);
 
     boolean existsByWorkSchedule_IdAndExpert_Id(Long id, Long expertId);
+
+    void deleteByUuidLinkAndStatusIsNot(String uuid, Status status);
+
+    void deleteByUuidLink(String uuid);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE check_lists SET deleted = false WHERE uuid_link = ?1", nativeQuery = true)
+    void restore(String uuid);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM check_lists WHERE uuid_link = ?1 and deleted = true")
+    Optional<CheckList> findDeleted(String checkListId);
 
     @Query("select c from CheckList  c where c.endTime between :startDate and :endDate ")
     List<CheckList> findAllByEndTimeBetween(LocalDate startDate, LocalDate endDate);

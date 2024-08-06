@@ -35,7 +35,7 @@ public class ExpertController {
 
     @PostMapping("/opportunities/change")
     public String changeOpportunities (@Valid OpportunityCreateDto opportunity) {
-        opportunityService.changeExpertOpportunities(opportunity);
+        opportunityService.changeExpertOpportunity(opportunity);
         return "redirect:/expert/opportunities";
     }
 
