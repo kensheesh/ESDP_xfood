@@ -14,6 +14,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Expert checks</title>
+
         <link href="/DataTables/datatables.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
@@ -178,6 +179,66 @@
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="/DataTables/datatables.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/ru.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+           $('#myTable').DataTable({
+                responsive: true,
+                language: {
+                    url: '/DataTables/ru.json',
+                },
+                rowGroup: {
+                    dataSrc: 2,
+                    endRender: function(rows) {
+                        let totalColumns = rows.columns().header().length;
+                        let lastColumnIndex = totalColumns - 2;
+
+                        let averageColumnIndex = rows.columns().indexes().filter(index => {
+                            return $(rows.column(index).header()).text().includes('Среднее за пиццерию');
+                        })[0];
+
+
+                        if (averageColumnIndex !== undefined) {
+                            $('#myTable').DataTable().column(averageColumnIndex).visible(false);
+                        }
+
+                        let avg = rows
+                            .data()
+                            .pluck(lastColumnIndex)
+                            .reduce(function(a, b) {
+                                return a + parseFloat(b);
+                            }, 0) / rows.count();
+                        return $('<tr/>')
+                            .append('<td colspan="3">Среднее за пиццерию</td>')
+                            .append('<td colspan="' + (rows.columns().header().length - 4) + '">' + avg.toFixed(2) + '</td>');
+                    }
+                },
+                layout: {
+                    topStart: {
+                        buttons: [
+                            {
+                                extend: 'excelHtml5',
+                                autoFilter: true,
+                                sheetName: 'Статистика',
+                                filename: 'Статистика',
+                                header: true,
+                                footer: true,
+                                exportOptions: {
+                                    modifier: {
+                                        search: 'applied',
+                                    }}
+                            }
+                        ]
+                    }
+                }
+
+        });
+
+        })
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/moment/min/moment-with-locales.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.js"></script>

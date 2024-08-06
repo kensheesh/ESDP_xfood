@@ -23,7 +23,7 @@ public class CheckListsCriteriaComment {
 	private Comment comment;
 	
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "checklist_criteria_id", nullable = false)
 	private CheckListsCriteria checklistCriteria;
 	

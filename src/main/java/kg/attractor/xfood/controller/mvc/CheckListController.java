@@ -170,6 +170,12 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
         return "redirect:/expert/checks";
     }
 
+    @PostMapping("/{uuid}/{criteriaId}")
+    public String comment(@PathVariable(name = "uuid")String uuid, @PathVariable (name = "criteriaId") Long criteriaId, CommentDto commentDto, Model model) {
+        checkListService.comment(uuid, criteriaId, commentDto);
+        return "redirect:/checks/"+uuid+"/check";
+      
+    }
     @PostMapping("{uuid}/restore")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public String restore (@PathVariable String uuid) {

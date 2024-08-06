@@ -4,6 +4,7 @@ import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 
 import java.util.List;
+import java.util.Optional;
 
 import kg.attractor.xfood.model.CheckListsCriteria;
 
@@ -23,4 +24,6 @@ public interface CheckListCriteriaService {
     CheckListsCriteria findByCriteriaIdAndChecklistId(Long criteriaId, Long checkListId);
 
     void deleteCriterionByChecklist(Long id);
+
+
 }
