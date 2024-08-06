@@ -326,26 +326,20 @@
                 let commentByCriteria = await getCommentsByCriteria(checkId, id);
                 let shouldShowButton = false;
 
-                if (commentByCriteria.length === 0) {
-                    console.log('Комментариев нет');
-                    let commentQuantity = Math.abs( value/step);
-                    let commentsRealQuantity = 0;
-                    console.log("comment should be : "+commentQuantity);
-                    console.log("comments are : "+commentsRealQuantity);
-                    if (commentsRealQuantity<commentQuantity){
-                        shouldShowButton = true;
-                    }
-
-                } else {
-                    console.log('Comments:', commentByCriteria);
-                    let commentQuantity = Math.abs( value/step);
+                function updateCommentsButtonVisibility() {
+                    let commentQuantity = Math.abs(value / step);
                     let commentsRealQuantity = commentByCriteria.length;
-                    console.log("comment should be : "+commentQuantity);
-                    console.log("comments are : "+commentsRealQuantity);
-                    if (commentsRealQuantity<commentQuantity){
-                        shouldShowButton = true;
+                    console.log("comment should be : " + commentQuantity);
+                    console.log("comments are : " + commentsRealQuantity);
+
+                    shouldShowButton = commentsRealQuantity < commentQuantity;
+                    if (shouldShowButton) {
+                        commentButton.style.display = 'inline-block';
+                    } else {
+                        commentButton.style.display = 'none';
                     }
                 }
+
 
                 let commentsList = '';
                 if (Array.isArray(commentByCriteria) && commentByCriteria.length > 0) {
@@ -529,10 +523,15 @@
                         modalBody.appendChild(inputBox);
                     }
                 });
-                if (shouldShowButton){
-                    inputGroupAppend.appendChild(commentButton);
 
-                }
+                scoreInput.addEventListener('input', async () => {
+                    value = scoreInput.value;
+                    commentByCriteria = await getCommentsByCriteria(checkId, id);
+                    updateCommentsButtonVisibility();
+                });
+
+                inputGroupAppend.appendChild(commentButton);
+
                 inputGroupAppend.appendChild(commentsButton)
                 inputGroupAppend.appendChild(deleteButton);
                 inputGroup.appendChild(scoreInput);
@@ -823,6 +822,7 @@
                                     const listItem = document.getElementById('list' + commentId);
                                     if (listItem) {
                                         listItem.remove();
+                                        window.location.reload()
                                     }
                                 } else {
                                     alert('Ошибка при удалении комментария. Статус: ' + response.status);
