@@ -39,11 +39,12 @@
                 <a href="https://xfood.youtrack.cloud/issue/XFOODCRM-72" class="card my-2 text-decoration-none">
                     <div class="card-body py-1 mb-0">
                         <span><b>${template.name?capitalize}</b></span>
-                        <p class="row">
+                        <div class="row">
                             <span class="col-4">Кол. критериев: <b>${template.numsOfCriteria}</b></span>
                             <span class="col-4">Макс. балл: <b>${template.totalValue}</b></span>
                             <span class="col-4">Вознаграждение: <b>${template.fee}₽</b></span>
-                        </p>
+                            <div class="btn"><i class="bi bi-pencil-fill"></i></div>
+                        </div>
                     </div>
                 </a>
             </#list>
