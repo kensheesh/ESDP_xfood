@@ -7,7 +7,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SoftDelete;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedHashSet;
@@ -45,7 +44,7 @@ public class CheckList {
 	@JoinColumn(name = "expert_id")
 	private User expert;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "type_id")
 	private CheckType checkType;
 	
@@ -58,5 +57,11 @@ public class CheckList {
 	@Column(name = "status", columnDefinition = "status not null")
 	@Enumerated(EnumType.STRING)
 	private Status status;
+
+
+	@NotNull
+	@ColumnDefault("false")
+	@Column(name = "deleted", nullable = false, insertable = false, updatable = false)
+	private Boolean deleted = false;
 
 }
