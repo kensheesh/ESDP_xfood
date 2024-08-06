@@ -174,6 +174,9 @@
                                             <#if criteria.isAccepted?? && true>
                                                 <span class="appeal-submitted">!</span>
                                             </#if>
+                                            <button class="btn btn-info btn-sm comments-button"
+                                                    data-criteria-id="${criteria.id}">Комментарии
+                                            </button>
                                         </div>
                                     </td>
                                 <#elseif criteria.section == 'WOW фактор'>
@@ -208,6 +211,24 @@
                 </table>
             </div>
         </#if>
+
+        <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentsModalLabel">Комментарии</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="commentsModalBody">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="checkId" value="${checkList.id}">
     </main>
 
     <script>
@@ -316,7 +337,38 @@
                     accordionBody.appendChild(ol)
                 }
             }
-        })
+
+            const commentsButtons = document.querySelectorAll('.comments-button');
+
+            commentsButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const criteriaId = button.getAttribute('data-criteria-id');
+                    await fetchAndDisplayComments(criteriaId);
+                });
+            });
+
+            async function fetchAndDisplayComments(criteriaId) {
+                let checkId = document.getElementById('checkId').value;
+                let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
+                let data = await response.json();
+                displayComments(data);
+            }
+
+
+            function displayComments(comments) {
+
+                const commentsModalBody = document.getElementById('commentsModalBody');
+                commentsModalBody.innerHTML = '';
+
+                comments.forEach(comment => {
+                    const commentElement = document.createElement('p');
+                    commentElement.textContent = comment.comment;
+                    commentsModalBody.appendChild(commentElement);
+                });
+
+                $('#commentsModal').modal('show');
+            }
+        });
     </script>
 
 </@main.layout>
