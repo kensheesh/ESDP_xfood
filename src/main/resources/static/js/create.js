@@ -265,8 +265,8 @@ function clearFields() {
     toggleFields(sectionSelect.value);
 }
 
-async function getCriterion(value, pizzeriaId) {
-    let criterion = await getCriterionByTypeAndPizzeriaId(value, pizzeriaId);
+async function getCriterion(value) {
+    let criterion = await getCriterionByTypeAndPizzeriaId(value);
     console.log(criterion)
     let criteriaList = document.querySelector('.criterion-list');
     criteriaList.innerHTML = '';
@@ -281,7 +281,7 @@ async function getCriterion(value, pizzeriaId) {
                 '<td>' + criterion[i].description + '</td>' +
                 '<td>' +
                 (criterion[i].section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-' + criterion[i].id + '">'
+                    ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-75" required min="1" value="'+criterion[i].maxValueType+'" id="maxValueInput-' + criterion[i].id + '">'
                     : criterion[i].coefficient/* + '<input type="hidden" name="criteriaMaxValueDtoList[' + i + '].maxValue" value="'+criterion[i].coefficient+'" id="maxValueInput-' + criterion[i].id + '">'*/) +
                 '</td>' +
                 '<td>' +
@@ -300,8 +300,8 @@ async function getCriterion(value, pizzeriaId) {
     }
 }
 
-async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId) {
-    let response = await fetch("/api/criteria/" + value + "/" + pizzeriaId);
+async function getCriterionByTypeAndPizzeriaId(value) {
+    let response = await fetch("/api/criteria/" + value);
     if (response.ok) {
         return await response.json();
     } else {

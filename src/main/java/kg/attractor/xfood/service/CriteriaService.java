@@ -20,7 +20,7 @@ public interface CriteriaService {
 
     Map<String, String> handleValidationErrors(BindingResult bindingResult);
 
-    List<CriteriaSupervisorShowDto> getByCheckTypeAndPizzeria(Long checkTypeId);
+    List<CriteriaSupervisorShowDto> getByCheckType(Long checkTypeId);
     Criteria getCriteriaById(Long criteriaId);
 
     List<CriteriaSupervisorShowDto> getWowCriteria();

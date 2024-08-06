@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CriteriaSupervisorShowDto {
     private Long id;
     private String description;
+    private Integer maxValueType;
     private Integer maxValue;
     private Integer coefficient;
     private String zone;
