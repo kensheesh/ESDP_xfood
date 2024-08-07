@@ -13,7 +13,7 @@ update  criteria_types set max_value = 2 where id = 12;
 update  criteria_types set max_value = 2 where id = 13;
 update  criteria_types set max_value = 2 where id = 14;
 update  criteria_types set max_value = 4 where id = 15;
-update  criteria_types set max_value = 3 where id = 16;
+update  criteria_types set max_value = 2 where id = 16;
 update  criteria_types set max_value = 2 where id = 17;
 update  criteria_types set max_value = 2 where id = 18;
 update  criteria_types set max_value = 1 where id = 19;
