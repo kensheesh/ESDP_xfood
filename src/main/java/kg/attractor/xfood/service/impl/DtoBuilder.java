@@ -199,6 +199,7 @@ public class DtoBuilder {
         checkList.setManager(model.getWorkSchedule().getManager());
         checkList.setExpert(model.getExpert());
         checkList.setDate(model.getWorkSchedule().getStartTime().toLocalDate());
+        checkList.setUuid(model.getUuidLink());
 
         List<CheckListsCriteria> criterias = checkListsCriteriaRepository.findAllByChecklistId(model.getId());
         int maxvalue = 0;
