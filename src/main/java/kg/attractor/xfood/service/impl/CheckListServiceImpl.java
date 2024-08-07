@@ -90,7 +90,7 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     @Transactional
     public CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto) {
-
+        log.info(createDto.getCriteriaMaxValueDtoList().toString());
         if (createDto.getCriteriaMaxValueDtoList().isEmpty()) {
             throw new IncorrectDateException("Чек лист не содержит критериев");
         }
@@ -457,6 +457,7 @@ public class CheckListServiceImpl implements CheckListService {
             checkListCriteriaService.save(checkListsCriteria);
             CriteriaType criteriaType = CriteriaType.builder()
                     .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
+                    .maxValue(criteriaMaxValueDto.getMaxValue())
                     .type(checkType)
                     .build();
             log.info("критерия {} связана с типом {}", criteriaMaxValueDto.getCriteriaId(), criteriaType.getType());
@@ -477,7 +478,7 @@ public class CheckListServiceImpl implements CheckListService {
         List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
         log.info("all checklists {}", checkLists);
 
-        checkLists.removeIf(checkList -> checkList.getEndTime() == null &&
+        checkLists.removeIf(checkList -> checkList.getEndTime() == null ||
                 !Objects.equals(checkList.getStatus().getStatus(), "DONE"));
 
         checkLists.removeIf(checkList ->

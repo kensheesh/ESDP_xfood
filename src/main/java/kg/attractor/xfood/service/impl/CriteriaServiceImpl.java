@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.model.Criteria;
+import kg.attractor.xfood.model.CriteriaType;
 import kg.attractor.xfood.repository.CriteriaRepository;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class CriteriaServiceImpl implements CriteriaService {
     private final DtoBuilder dtoBuilder;
     private final SectionService sectionService;
     private final ZoneService zoneService;
+    private final CriteriaTypeService criteriaTypeService;
 
 
 
@@ -67,8 +69,20 @@ public class CriteriaServiceImpl implements CriteriaService {
     }
 
     @Override
-    public List<CriteriaSupervisorShowDto> getByCheckTypeAndPizzeria(Long checkTypeId) {
-       return criteriaRepository.findCriteriaByCriteriaType(checkTypeId).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+    public List<CriteriaSupervisorShowDto> getByCheckType(Long checkTypeId) {
+        List <CriteriaType> criterion = criteriaTypeService.findAllByTypeId(checkTypeId);
+        List<CriteriaSupervisorShowDto> dtos = new ArrayList<>();
+        for (CriteriaType criteriaType : criterion) {
+            dtos.add(CriteriaSupervisorShowDto
+                    .builder()
+                            .maxValueType(criteriaType.getMaxValue())
+                            .id(criteriaType.getCriteria().getId())
+                            .section(criteriaType.getCriteria().getSection().getName())
+                            .description(criteriaType.getCriteria().getDescription())
+                            .zone(criteriaType.getCriteria().getZone().getName())
+                    .build());
+        }
+        return dtos;
     }
 
     @Override

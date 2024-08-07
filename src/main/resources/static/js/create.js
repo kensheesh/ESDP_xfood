@@ -1,17 +1,6 @@
 let totalSum = 0;
 let type = 0;
 
-let totalValueInput = document.getElementById('totalValue');
-totalValueInput.addEventListener('input', ()=>{
-    updateTotalValueInput();
-    updateTotalSum();
-})
-
-function updateTotalValueInput(){
-    type = totalValueInput.value;
-    console.log("value "+type);
-}
-updateTotalValueInput();
 
 let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
 let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
@@ -116,7 +105,7 @@ async function addCriteriaToList(id) {
 }
 
 async function getCriteriaById(id) {
-    let response = await fetch("/api/criteria/" + id);
+    let response = await fetch("/api/criteria/get/" + id);
     if (response.ok) {
         return await response.json();
     } else {
@@ -175,7 +164,7 @@ async function validate(event) {
                 '<td>' + data.description + '</td>' +
                 '<td>' +
                 (data.section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-' + createdId + '">'
+                    ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required min="1" value="'+data.maxValueType+'" id="maxValueInput-' + createdId + '">'
                     : data.coefficient /*+ '<input type="hidden" name="criteriaMaxValueDtoList[' + createdId + '].maxValue" value="'+data.coefficient+'" id="maxValueInput-' + createdId + '"/> '*/) +
                 '</td>' +
                 '<td>' +
@@ -239,6 +228,7 @@ let zoneLabel = document.getElementById('zoneLabel')
 sectionSelect.addEventListener('change', function () {
     toggleFields(sectionSelect.value);
 });
+
 function toggleFields(value) {
     if (value === '') {
         coefficientInput.style.display = 'none';
@@ -265,13 +255,15 @@ function clearFields() {
     toggleFields(sectionSelect.value);
 }
 
-async function getCriterion(value, pizzeriaId) {
-    let criterion = await getCriterionByTypeAndPizzeriaId(value, pizzeriaId);
-    console.log(criterion)
+async function getCriterion(value) {
+    let criterion = await getCriterionByTypeAndPizzeriaId(value);
     let criteriaList = document.querySelector('.criterion-list');
     criteriaList.innerHTML = '';
     if (criterion && criterion.length > 0) {
+        type = 0;
         for (let i = 0; i < criterion.length; i++) {
+            type += criterion[i].maxValueType;
+            console.log(type)
             let newCriteria = document.createElement('tr');
             newCriteria.setAttribute('id', 'criteria-wrap-' + criterion[i].id);
             newCriteria.innerHTML =
@@ -280,12 +272,10 @@ async function getCriterion(value, pizzeriaId) {
                 '<td>' + criterion[i].zone + '</td>' +
                 '<td>' + criterion[i].description + '</td>' +
                 '<td>' +
-                (criterion[i].section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-' + criterion[i].id + '">'
-                    : criterion[i].coefficient/* + '<input type="hidden" name="criteriaMaxValueDtoList[' + i + '].maxValue" value="'+criterion[i].coefficient+'" id="maxValueInput-' + criterion[i].id + '">'*/) +
+                '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-75" required min="1" value="'+criterion[i].maxValueType+'" id="maxValueInput-' + criterion[i].id + '">'+
                 '</td>' +
                 '<td>' +
-                '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '" id="maxValueInput-' + criterion[i].id + '">' +
+                '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '">' +
                 '<i class="bi bi-trash text-secondary fs-4"></i>' +
                 '</button>' +
                 '</td>';
@@ -300,8 +290,8 @@ async function getCriterion(value, pizzeriaId) {
     }
 }
 
-async function getCriterionByTypeAndPizzeriaId(value, pizzeriaId) {
-    let response = await fetch("/api/criteria/" + value + "/" + pizzeriaId);
+async function getCriterionByTypeAndPizzeriaId(value) {
+    let response = await fetch("/api/criteria/" + value);
     if (response.ok) {
         return await response.json();
     } else {
@@ -325,7 +315,6 @@ function setupMaxValueInputs() {
     for (let input of maxValueInputs) {
         input.addEventListener('input', () => {
             updateTotalSum();
-
         });
     }
     updateTotalSum();
@@ -337,7 +326,6 @@ function countTotalSum(maxValueInputs) {
         totalSum += parseInt(maxValueInputs[i].value) || 0;
     }
     let sum = document.getElementById('totalSum');
-    type = document.getElementById('totalValue').value
     sum.innerHTML = totalSum+'/'+type;
     console.log(totalSum);
 }
@@ -383,11 +371,9 @@ function putIndexesToListAndValidate() {
 document.getElementById('checklistType').addEventListener('change', async function() {
     let sum = document.getElementById('totalSum');
     sum.innerHTML = " ";
-    updateTotalValueInput();
     updateTotalSum();
     let value = this.value;
-    let pizzeriaId = document.getElementById('pizzeriaId').value;
     totalSum = 0;
-    await getCriterion(value, pizzeriaId);
+    await getCriterion(value);
     updateTotalSum();
 });
