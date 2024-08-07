@@ -456,6 +456,7 @@ public class CheckListServiceImpl implements CheckListService {
             checkListCriteriaService.save(checkListsCriteria);
             CriteriaType criteriaType = CriteriaType.builder()
                     .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
+                    .maxValue(criteriaMaxValueDto.getMaxValue())
                     .type(checkType)
                     .build();
             log.info("критерия {} связана с типом {}", criteriaMaxValueDto.getCriteriaId(), criteriaType.getType());

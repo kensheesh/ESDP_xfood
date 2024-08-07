@@ -36,7 +36,7 @@
                     <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100 disabled">Создать чек-лист</button>
                 </div>
                 <div class="col-md-3">
-                    <a class="btn btn-primary" href="/supervisor/weekly" role="button">Отменить</a>
+                    <a class="btn btn-danger my-2" href="/supervisor/weekly" role="button">Отменить</a>
                 </div>
             </div>
         </div>
