@@ -28,6 +28,8 @@ public class SecurityConfig {
 	
 	private static final String[] WHITE_LIST_URL = {
 			"/auth/**",
+			"/DataTables/**",
+			"/js/validation.js",
 			"/css/layout.css",
 			"/appeal/**",
 			"/checks/**",
