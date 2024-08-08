@@ -1,12 +1,13 @@
 server:
-  port: 8089
+  port: ${SERVER_PORT}
 
 spring:
   datasource:
-    url:
-    username: root
-    password: qwerty
-    driver-class-name:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS_NAME}
+
   liquibase:
     change-log: classpath:/db/changelog/master.yml
   jpa:
@@ -22,16 +23,28 @@ spring:
   freemarker:
     expose-session-attributes: true
   mail:
-    host: smtp.gmail.com
-    username: example@gmail.com
-    password:
-    port: 587
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    port: ${MAIL_PORT}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+  data:
+    jdbc:
+      dialect: postgresql
+#    redis:
+#      host: localhost
+#      port: ${REDIS_SERVER_PORT}
+
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 25MB
+      location: ./data
 
 
 logging:
@@ -51,3 +64,11 @@ logging:
     rollingpolicy:
       max-file-size: 5MB
       max-history: 5
+
+#okta:
+#  oauth2:
+#    client-id: ${CLIENT_ID}
+#    client-secret: ${SECRET}
+#    scopes: ${AUTH_SCOPE}
+#    redirect-uri: ${REDIRECT_URI}
+#    post-logout-redirect-uri: /

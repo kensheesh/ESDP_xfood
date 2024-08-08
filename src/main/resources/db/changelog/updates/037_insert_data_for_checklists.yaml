@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: add type_id and expert ids
+      author: Dastan
+      changes:
+        - sql:
+            sql:
+              UPDATE public.check_lists SET status = 'DONE', work_schedule_id = 1, uuid_link = 'aa0073f5-5aec-45b8-9f86-f27625c42fa3', feedback = null, duration = null, expert_id = 3, end_time = '2024-07-22 17:12:20.000000', type_id = 1 WHERE id = 1;
+              UPDATE public.check_lists SET status = 'NEW', work_schedule_id = 6, uuid_link = '2900fd68-3139-466b-ba51-04242077b67d', feedback = null, duration = null, expert_id = 5, end_time = null, type_id = 1 WHERE id = 3;
+              UPDATE public.check_lists SET status = 'IN_PROGRESS', work_schedule_id = 9, uuid_link = '6a854a8c-41f7-4eee-bbd5-9db540a61dd2', feedback = null, duration = null, expert_id = 4, end_time = null, type_id = 1 WHERE id = 2;
+              INSERT INTO public.users (name, surname, phone_number, email, password, avatar, role, enabled) VALUES ('supervisor2', '', '', 'supervisor2@ex.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '', 'SUPERVISOR', true);
+              INSERT INTO public.users (name, surname, phone_number, email, password, avatar, role, enabled) VALUES ('supervisor3', '', '', 'supervisor3@ex.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '', 'SUPERVISOR', true);
+              UPDATE public.locations SET country_id = 1 WHERE id = 8;
+              UPDATE public.locations SET country_id = 1 WHERE id = 2;
+              UPDATE public.locations SET country_id = 1 WHERE id = 9;
+              UPDATE public.locations SET country_id = 2 WHERE id = 1;
+              UPDATE public.locations SET country_id = 1 WHERE id = 3;
+              UPDATE public.locations SET country_id = 1 WHERE id = 5;
+              UPDATE public.locations SET country_id = 1 WHERE id = 4;
+              UPDATE public.locations SET country_id = 1 WHERE id = 7;
+              UPDATE public.locations SET country_id = 1 WHERE id = 6;
+
+
+  - changeSet:
+      id: changes type id and expert id columns to nn in table check_lists. also do nn country_id in locations
+      author: Dastan
+      changes:
+        - addNotNullConstraint:
+            columnName: country_id
+            tableName: locations
+

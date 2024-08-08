@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.env
 ToDo.txt
 /db/
 /logs/
@@ -35,3 +36,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/.env
+../../../hotfix/ESDP_xfood/.env
+/data/

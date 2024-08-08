@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+     id: add max_value to table criteria_types
+     author: Dastan
+     changes:
+       - addColumn:
+           tableName: criteria_types
+           columns:
+             - column:
+                name: max_value
+                type: int
+
+  - changeSet:
+      id: add column create_date to table check_type_fees
+      author: Dastan
+      changes:
+        - addColumn:
+            tableName: check_type_fees
+            columns:
+              - column:
+                  name: created_date
+                  type: timestamp

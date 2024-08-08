@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: add table appeals
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: appeals
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tg_link_message
+                  type: text
+                  constraints:
+                    nullable: true
+              - column:
+                  name: link_to_external_src
+                  type: text
+                  constraints:
+                    nullable: true
+              - column:
+                  name: is_accepted
+                  type: boolean
+                  constraints:
+                    nullable: true
+              - column:
+                  name: check_lists_criteria_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: appeals_check_lists_criteria_id
+                    references: check_lists_criteria(id)
+
+  - changeSet:
+      id: add table files
+      author: Dastan
+      changes:
+        - createTable:
+            tableName: files
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: path
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: appeal_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: files_appeals_id
+                    references: appeals(id)
