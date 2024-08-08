@@ -59,7 +59,7 @@
                                     <h5 class="card-title">ФИО: ${user.getName()} ${user.getSurname()}</h5>
                                     <p class="card-text">Роль: ${user.getRole()}</p>
                                     <p class="card-text">Почта: ${user.getEmail()}</p>
-                                    <p class="card-text">Телефон: ${user.getPhoneNumber()}</p>
+                                    <p class="card-text">Телеграм: ${user.getTgLink()}</p>
                                     <p class="card-text">Активный: <#if user.getEnabled() == true>Да<#else>Нет</#if></p>
                                 </div>
                                 <div class="card-icons">
@@ -173,8 +173,8 @@
                             <input type="email" disabled class="form-control" id="editEmail" name="email">
                         </div>
                         <div class="mb-3">
-                            <label for="editPhoneNumber" class="form-label">Телефон</label>
-                            <input type="text" disabled class="form-control" id="editPhoneNumber" name="phoneNumber">
+                            <label for="editPhoneNumber" class="form-label">Телеграм</label>
+                            <input type="text" disabled class="form-control" id="editPhoneNumber" name="tgLink">
                         </div>
                         <div class="mb-3" id="edit-user-enabled">
                             <label for="editEnabled" class="form-label">Активный</label>
@@ -249,7 +249,7 @@
                 document.getElementById('editSurname').value = user.surname;
                 await getRoles(document.getElementById('editRole'), user.role);
                 document.getElementById('editEmail').value = user.email;
-                document.getElementById('editPhoneNumber').value = user.phoneNumber;
+                document.getElementById('editPhoneNumber').value = user.tgLink;
                 document.getElementById('editEnabled').value = user.enabled;
 
                 const editEnabledField = document.getElementById('editEnabled');
