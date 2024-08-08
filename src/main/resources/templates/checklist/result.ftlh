@@ -203,6 +203,16 @@
                 </table>
             </div>
 
+            <div class="text-end mb-5 mt-2">
+                <#if name?? && name == checkList.getExpertEmail() >
+                    <#if checkList.status == "IN_PROGRESS">
+                        <button id="reopenCheck" class="btn btn-success">Возобновить</button>
+                    <#elseif checkList.status == "NEW">
+                        <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
+                    </#if>
+                </#if>
+            </div>
+
             <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">
@@ -221,13 +231,6 @@
                 </div>
             </div>
             <input type="hidden" id="checkId" value="${checkList.id}">
-            <#if name?? && name == checkList.getExpertEmail() >
-                <#if checkList.status == "IN_PROGRESS">
-                    <button id="reopenCheck">Возобновить</button>
-                <#elseif checkList.status == "NEW">
-                    <button id="startCheck">Выполнить проверку</button>
-                </#if>
-            </#if>
 
             <#if known>
                 <#list authorities as authority>
@@ -309,10 +312,14 @@
                 return data;
             }
 
+            <#if checkList.status == "NEW">
             btnStartCheck.addEventListener('click', () => startCheck());
+            <#elseif checkList.status = "IN_PROGRESS">
             btnReopenCheck.addEventListener('click', () => {
                 window.location.href = '/checks/${checkList.uuidLink}/fill'
             });
+            </#if>
+
 
             async function startCheck() {
                 await fetch('/api/checks/change/status/' + ${checkList.id}, {
