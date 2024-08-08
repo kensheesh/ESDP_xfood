@@ -29,7 +29,7 @@ public class RewardController {
                           @RequestParam(name = "startDate", required = false) LocalDate startDate,
                           @RequestParam(name = "endDate", required = false) LocalDate endDate) {
         Role role = userService.getUserDto().getRole();
-        if (role.equals(Role.SUPERVISOR)) {
+        if (role.equals(Role.SUPERVISOR) || role.equals(Role.ADMIN)) {
             model.addAttribute("experts", rewardService.getRewards(pizzeria, expert, startDate, endDate));
         }
         if(role.equals(Role.EXPERT)) {

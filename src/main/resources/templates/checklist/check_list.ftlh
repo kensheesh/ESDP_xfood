@@ -654,13 +654,6 @@
             async function updatePercentage() {
                 let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
                 let data = await response.json()
-                await fetch('/api/checks/change/status/' + ${checkList.id}, {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                });
-
                 percentageDisplay.textContent = data + '%';
                 console.log('Сделан запрос' + data)
                 return data;
@@ -795,21 +788,8 @@
                 button.addEventListener('click', deleteFactor);
             });
 
-            let uuidLink;
-            const url = 'http://localhost:2345/checks/';
-
-            async function getUrl() {
-                try {
-                    let response = await fetch(`/api/checks/${checkList.id}`);
-                    uuidLink = await response.text();
-                } catch (error) {
-                    console.error('There was a проблема с fetch операцией:', error);
-                }
-            }
-
             let a = document.createElement('a');
-            await getUrl();
-            a.href = url + uuidLink + '/result';
+            a.href = '/checks/${checkList.uuidLink}';
 
             document.getElementById('getTemplate').addEventListener('click', async () => {
                 const message = `Дата: ${checkList.managerWorkDate}\n` +
@@ -837,8 +817,7 @@
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
-                    await getUrl();
-                    await navigator.clipboard.writeText(url + uuidLink + '/result');
+                    await navigator.clipboard.writeText('/checks/${checkList.uuidLink}/result');
                     console.log("Скопировано в буфер обмена!");
                     window.location.href = '/analytics';
                 } catch (error) {
@@ -847,7 +826,7 @@
             }
 
             async function showMaxPoint() {
-                let response = await fetch('/api/checks/${checkList.id}/points')
+                let response = await fetch('/api/checks/points/${checkList.id}')
                 let data = await response.json()
                 console.log(data)
                 maxPoint.innerText = data
@@ -885,7 +864,7 @@
                                     const listItem = document.getElementById('list' + commentId);
                                     if (listItem) {
                                         listItem.remove();
-                                        window.location.reload()
+                                        window.location.reload();
                                     }
                                 } else {
                                     alert('Ошибка при удалении комментария. Статус: ' + response.status);
