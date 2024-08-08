@@ -34,7 +34,7 @@ public class UserSpecification {
 
             predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("name")), "%" + queryUpperCase + "%"));
             predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("surname")), "%" + queryUpperCase + "%"));
-            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("phoneNumber")), "%" + queryUpperCase + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("tgLink")), "%" + queryUpperCase + "%"));
             predicates.add(criteriaBuilder.like(criteriaBuilder.upper(root.get("email")), "%" + queryUpperCase + "%"));
 
             Role matchingRole = getRoleFromQuery(queryUpperCase);
