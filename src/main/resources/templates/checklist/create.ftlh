@@ -32,14 +32,11 @@
                     <p>Смена менеджера: </p>
                     <p class="form-control w-50">${workSchedule.startTime}-${workSchedule.endTime}</p>
                 </div>
-                <div class="col-md-3 mt-2">
-                   <div class="form-group">
-                       <label for="totalValue" class="form-label">Введите максимальное кол-во баллов:</label>
-                       <input type="number" id="totalValue" class="form-control" name="totalSum" min="1"  required >
-                   </div>
-                </div>
                 <div class="col-md-3">
                     <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100 disabled">Создать чек-лист</button>
+                </div>
+                <div class="col-md-3">
+                    <a class="btn btn-danger my-2" href="/supervisor/weekly" role="button">Отменить</a>
                 </div>
             </div>
         </div>

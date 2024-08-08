@@ -28,7 +28,8 @@
                                 </div>
                                 <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
                                     <div class="col">
-                                        <a href="/supervisor/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <a href="/supervisor/opportunities"
+                                           class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             Возможности
                                         </a>
                                     </div>
@@ -85,17 +86,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <#list checklists as checklist>
-                            <tr>
-                                <td>${checklist.pizzeria.name}</td>
-                                <td>${checklist.manager.name} ${checklist.manager.surname}</td>
-                                <#if user.role != "EXPERT">
-                                    <td>${checklist.expert.name} ${checklist.expert.surname}</td>
-                                </#if>
-                                <td>${checklist.date}</td>
-                                <td>${checklist.result} %</td>
-                            </tr>
+                            <#list checklists as checklist>
+                                <tr class="clickable-row" data-href="/checks/${checklist.uuid}" style="cursor: pointer;">
+                                    <td>${checklist.pizzeria.name}</td>
+                                    <td>${checklist.manager.name} ${checklist.manager.surname}</td>
+                                    <#if user.role != "EXPERT">
+                                        <td>${checklist.expert.name} ${checklist.expert.surname}</td>
+                                    </#if>
+                                    <td>${checklist.date}</td>
+                                    <td>${checklist.result} %</td>
+                                </tr>
                             </#list>
                             </tbody>
                         </table>
@@ -265,6 +265,13 @@
                         console.error('Ошибка при загрузке данных:', error);
                     });
             });
-        });</script>
+        });
+
+        jQuery(document).ready(function($) {
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
 
 </@main.layout>

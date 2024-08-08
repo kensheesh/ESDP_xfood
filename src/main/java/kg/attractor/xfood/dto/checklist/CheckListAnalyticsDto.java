@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CheckListAnalyticsDto {
     private Long id;
+    private String uuid;
     private Pizzeria pizzeria;
     private Manager manager;
     private User expert;

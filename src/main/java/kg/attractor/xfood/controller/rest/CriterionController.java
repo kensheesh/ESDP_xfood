@@ -23,12 +23,11 @@ public class CriterionController {
     private final CriteriaService criteriaService;
 
     //    ROLE: SUPERVISOR
-    @GetMapping("/{checkTypeId}/{pizzeriaId}")
+    @GetMapping("/{checkTypeId}")
     @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
-    public ResponseEntity<List<CriteriaSupervisorShowDto>> getAllByPizzeriaAndCheckType (
-            @PathVariable (name = "checkTypeId") Long checkTypeId,
-            @PathVariable String pizzeriaId) {
-        return ResponseEntity.ok(criteriaService.getByCheckTypeAndPizzeria(checkTypeId));
+    public ResponseEntity<List<CriteriaSupervisorShowDto>> getAllByCheckType (
+            @PathVariable (name = "checkTypeId") Long checkTypeId) {
+        return ResponseEntity.ok(criteriaService.getByCheckType(checkTypeId));
     }
 
     @GetMapping("/search")
@@ -36,7 +35,7 @@ public class CriterionController {
         return ResponseEntity.ok(criteriaService.getByDescription(description));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<CriteriaSupervisorShowDto> getById(@PathVariable (name = "id") Long id) {
         return ResponseEntity.ok(criteriaService.getById(id));
     }
