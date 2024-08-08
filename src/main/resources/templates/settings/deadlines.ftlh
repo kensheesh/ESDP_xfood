@@ -146,7 +146,7 @@
                 </div>
             </div>
             <div class="text-end">
-                <button id="submitSettings" class="btn btn-primary">Сохранить настройки</button>
+                <button id="submitSettings" class="btn btn-secondary">Сохранить настройки</button>
             </div>
         </div>
     </div>

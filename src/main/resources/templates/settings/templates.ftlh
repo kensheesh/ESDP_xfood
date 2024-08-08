@@ -35,6 +35,9 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-9">
+            <div class="text-end">
+                <a href="#" class="btn btn-secondary">+ Добавить шаблон</a>
+            </div>
             <#list templates as template>
                 <div class="card my-2 text-decoration-none border border-secondary">
                     <div class="card-body py-1 mb-0">
