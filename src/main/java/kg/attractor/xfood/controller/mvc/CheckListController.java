@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -76,27 +77,6 @@ public class CheckListController {
 //        return null;
 //    }
 
-    // ROLE: EXPERT
-    @GetMapping("/{id}/check")
-    public String check(@PathVariable(name = "id") String checkListId, Model model) {
-        Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder
-                .getContext().getAuthentication().getAuthorities();
-        ChecklistShowDto checkListDto = checkListService.getCheckListById(checkListId);
-        String role = authorities.stream().toList().get(0).getAuthority();
-        if (role.equalsIgnoreCase("role_expert")) {
-            String authExpertEmail = AuthParams.getPrincipal().getUsername();
-            if (authExpertEmail.equals(checkListDto.getExpertEmail())) {
-                model.addAttribute("checkList", checkListDto);
-            } else {
-                model.addAttribute("error", "Эта проверка не назначена на вас!");
-            }
-        } else {
-            model.addAttribute("checkList", checkListDto);
-        }
-
-        return "checklist/check_list";
-    }
-
     @GetMapping("{uuid}")
     public String getCheck(@PathVariable String uuid, Model model, Authentication auth) {
         if(auth == null) {
@@ -108,8 +88,21 @@ public class CheckListController {
     }
 
     @GetMapping("{uuid}/fill")
-    public String getCheckForFill(@PathVariable String uuid) {
-        return "";
+    public String getCheckForFill(@PathVariable String uuid, Model model) {
+        Collection<? extends GrantedAuthority> authorities = AuthParams.getAuth().getAuthorities();
+        ChecklistShowDto checkListDto = checkListService.getCheckListById(uuid);
+        String role = authorities.stream().toList().get(0).getAuthority();
+        if (role.equalsIgnoreCase("role_expert")) {
+            String authExpertEmail = AuthParams.getPrincipal().getUsername();
+            if (authExpertEmail.equals(checkListDto.getExpertEmail())) {
+                model.addAttribute("checkList", checkListDto);
+            } else {
+                model.addAttribute("error", "Эта проверка не назначена на вас!");
+            }
+        } else {
+            model.addAttribute("checkList", checkListDto);
+        }
+        return "checklist/check_list";
     }
 
     // ROLE: EXPERT
