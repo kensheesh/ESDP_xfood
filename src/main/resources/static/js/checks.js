@@ -35,9 +35,9 @@ function displayChecks(checks, status) {
 
     checks.forEach(c => {
         console.log("uuid = "+c.uuid)
-        let url = (c.status === statuses.NEW || c.status === statuses.IN_PROGRESS)
-            ? `/checks/${c.uuid}/check`
-            : `/checks/${c.uuid}/result`;
+        let url = (c.status === statuses.IN_PROGRESS)
+            ? `/checks/${c.uuid}/fill`
+            : `/checks/${c.uuid}`;
 
         htmlContent += `
            <a href=${url} class="text-decoration-none d-block col">
