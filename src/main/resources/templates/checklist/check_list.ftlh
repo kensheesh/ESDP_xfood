@@ -654,13 +654,6 @@
             async function updatePercentage() {
                 let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
                 let data = await response.json()
-                await fetch('/api/checks/change/status/' + ${checkList.id}, {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                });
-
                 percentageDisplay.textContent = data + '%';
                 console.log('Сделан запрос' + data)
                 return data;
@@ -847,7 +840,7 @@
             }
 
             async function showMaxPoint() {
-                let response = await fetch('/api/checks/${checkList.id}/points')
+                let response = await fetch('/api/checks/points/${checkList.id}')
                 let data = await response.json()
                 console.log(data)
                 maxPoint.innerText = data

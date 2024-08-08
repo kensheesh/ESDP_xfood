@@ -374,7 +374,7 @@ public class CheckListServiceImpl implements CheckListService {
                 .mapToDouble(CheckListsCriteria::getValue)
                 .sum();
 
-        Double percentage = (normalValue / normalMaxSum) * 100;
+        double percentage = (normalValue / normalMaxSum) * 100;
 
         if (percentage < 100) {
             Double totalValue = normalValue + wowValue;

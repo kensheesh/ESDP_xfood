@@ -49,7 +49,7 @@ public class CheckListController {
         return HttpStatus.OK;
     }
 
-    @GetMapping("{id}/points")
+    @GetMapping("/points/{id}")
     public ResponseEntity<Integer> getMaxPointsCheckList(@PathVariable Long id) {
         return ResponseEntity.ok(checkListService.getMaxPoints(id));
     }
