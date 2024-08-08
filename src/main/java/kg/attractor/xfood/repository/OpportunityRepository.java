@@ -44,4 +44,6 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, Long> 
 
     @Query("select o from Opportunity o where o.date between ?1 and ?2 order by o.user.surname")
     List<Opportunity> findByDateBetweenOrderByUser_SurnameAsc(LocalDate dateStart, LocalDate dateEnd);
+
+    Optional<Opportunity> findFirstByUser_IdAndDate(Long id, LocalDate date);
 }
