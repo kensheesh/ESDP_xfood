@@ -1,9 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: add column feedback and spend_time to checklist
-      author: Dastan
-      changes:
-        - sql:
-            sql:
-              alter table check_lists add column feedback text;
-              alter table check_lists add column duration time;
