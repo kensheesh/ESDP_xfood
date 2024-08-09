@@ -33,8 +33,10 @@ public class ExpertController {
     @GetMapping ("/opportunities")
     public String getOpportunityMap (Model model) {
         Map<String, OpportunityDto> opportunitiesMap = opportunityService.getAllByExpert();
+        LocalDate monday = LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()-1);
         model.addAttribute("opportunities", opportunitiesMap);
-        model.addAttribute("monday", LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()-1));
+        model.addAttribute("monday", monday);
+        model.addAttribute("isAvailableToChange", settingService.isAvailableToChange(monday));
         model.addAttribute("isAvailableToDayOff", settingService.isAvailableToDayOff(opportunitiesMap));
         return "expert/opportunities";
     }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -50,6 +51,13 @@ public class SettingServiceImpl implements SettingService {
         LocalDateTime currentTime = LocalDateTime.now();
         int appealCreateDeadline = getAppealDeadline().getValueInt();
         return checkEndTime.isAfter(currentTime.minusDays(appealCreateDeadline));
+    }
+
+    @Override
+    public boolean isAvailableToChange(LocalDate monday) {
+        LocalDate today = LocalDate.now();
+        int opportunityChangeDeadline = getOpportunityDeadline().getValueInt();
+        return today.isBefore(monday.minusDays(opportunityChangeDeadline));
     }
 
     @Override
