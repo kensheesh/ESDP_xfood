@@ -81,10 +81,12 @@ public class CheckListController {
     @GetMapping("{uuid}")
     public String getCheck(@PathVariable String uuid, Model model, Authentication auth) {
         if(auth == null) {
-            model.addAttribute("guess", true);
+            model.addAttribute("guest", true);
         }
         ChecklistShowDto checkList = checkListService.getCheckListById(uuid);
         model.addAttribute("checkList", checkList);
+        boolean isRecent = settingService.isCheckRecent(checkList);
+        model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
         return "checklist/result";
     }
 
@@ -142,7 +144,7 @@ public class CheckListController {
     public String getResult (@PathVariable (name = "id") String checkListId, Model model, Authentication auth) {
         ChecklistShowDto checkList = checkListService.getCheckListById(checkListId);
         if(auth == null) {
-            model.addAttribute("guess", true);
+            model.addAttribute("guest", true);
         }
         if(checkList.getStatus().equals(Status.DONE)) {
             model.addAttribute("checkList", checkList);
