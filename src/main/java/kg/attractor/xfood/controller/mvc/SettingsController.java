@@ -1,5 +1,7 @@
 package kg.attractor.xfood.controller.mvc;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializer;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.dto.workSchedule.WorkScheduleCreateDto;
 import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
@@ -30,7 +32,8 @@ public class SettingsController {
     }
 
     @PostMapping("/deadlines")
-    public String updateDeadlines(DeadlinesDto deadlines) {
+    public String updateDeadlines(@RequestBody DeadlinesDto deadlines) {
+        log.info("Settings: " + deadlines.getOppDeadline() + ", " + deadlines.getDayOff()  + ", " + deadlines.getAppealDeadline());
         settingService.updateDeadlines(deadlines);
         return "redirect:/deadlines";
     }

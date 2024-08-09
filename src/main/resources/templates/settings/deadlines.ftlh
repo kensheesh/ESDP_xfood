@@ -5,7 +5,7 @@
         <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
     </#if>
 
-    <div class="row row-cols-md-2 row-gap-3">
+    <div class="row row-cols-md-2 row-gap-3 position-relative">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 shadow-sm border-0">
                 <div class="card-body">
@@ -35,6 +35,10 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-9">
+
+            <div id="notifications-container" class="position-absolute end-0">
+            </div>
+
             <div>
                 <div class="mx-3 my-5">
                     <h3>Период планирования карты возможностей</h3>
@@ -157,6 +161,8 @@
             const dayOffValue = document.querySelector('input[name="dayOffRadio"]:checked').value;
             const appealDeadlineValue = document.querySelector('input[name="appealDeadlineRadio"]:checked').value;
 
+            console.log('Settings: ' + oppDeadlineValue + ', ' + dayOffValue + ', ' + appealDeadlineValue);
+
             const data = {
                 oppDeadline: oppDeadlineValue,
                 dayOff: dayOffValue,
@@ -173,6 +179,43 @@
                 .catch((error) => {
                     console.error('Ошибка:', error);
                 });
+
+            const maxNotifications = 3;
+            let notificationCount = 0;
+            const notificationsContainer = document.getElementById('notifications-container');
+
+            let alertDiv = document.createElement('div');
+            alertDiv.classList.add('alert', 'alert-success', 'alert-dismissible');
+            alertDiv.setAttribute('role', 'alert');
+            alertDiv.innerText = 'Настройки успешно сохранены';
+
+            let closeButton = document.createElement('button');
+            closeButton.classList.add('btn-close');
+            closeButton.setAttribute('type', 'button');
+            closeButton.setAttribute('data-bs-dismiss', 'alert');
+            closeButton.setAttribute('aria-label', 'close');
+
+            closeButton.addEventListener('click', () => {
+                alertDiv.remove();
+                notificationCount--;
+            });
+
+            alertDiv.appendChild(closeButton);
+
+            notificationsContainer.appendChild(alertDiv);
+
+            notificationCount++;
+
+            if (notificationCount > maxNotifications) {
+                let notifications = notificationsContainer.querySelectorAll('.alert');
+                notifications[0].remove();
+                notificationCount--;
+            }
+
+            setTimeout(() => {
+                alertDiv.remove();
+                notificationCount--;
+            }, 5000);
         });
     </script>
 </@main.layout>
