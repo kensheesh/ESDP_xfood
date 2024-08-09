@@ -85,7 +85,7 @@ async function addCriteriaToList(id) {
              <td>${criteria.description}</td>
              <td>${criteria.section === '' ?
                 `<input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required min="1" value="1" id="maxValueInput-${id}">` :
-                `${criteria.coefficient}`/*<input type="hidden" name="criteriaMaxValueDtoList[${id}].maxValue" value="${criteria.coefficient}" id="maxValueInput-${id}">*/}
+                `<input type="number" name="criteriaMaxValueDtoList[${id}].maxValue" class="form-control form-control-sm w-75" value="${criteria.coefficient}" id="maxValueInput-${id}">`}
              </td>
              <td>
                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${id}">
@@ -163,9 +163,7 @@ async function validate(event) {
                 '<td>' + data.zone + '</td>' +
                 '<td>' + data.description + '</td>' +
                 '<td>' +
-                (data.section === ''
-                    ? '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required min="1" value="'+data.maxValueType+'" id="maxValueInput-' + createdId + '">'
-                    : data.coefficient /*+ '<input type="hidden" name="criteriaMaxValueDtoList[' + createdId + '].maxValue" value="'+data.coefficient+'" id="maxValueInput-' + createdId + '"/> '*/) +
+                '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required '+  (data.section === '' ? ' min="1" value="'+data.maxValueType+'"' : ' value="'+data.coefficient+'"')+ ' id="maxValueInput-' + createdId + '">'+
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
@@ -262,7 +260,9 @@ async function getCriterion(value) {
     if (criterion && criterion.length > 0) {
         type = 0;
         for (let i = 0; i < criterion.length; i++) {
-            type += criterion[i].maxValueType;
+            if (criterion[i].maxValueType>0){
+                type += criterion[i].maxValueType;
+            }
             console.log(type)
             let newCriteria = document.createElement('tr');
             newCriteria.setAttribute('id', 'criteria-wrap-' + criterion[i].id);
@@ -272,7 +272,7 @@ async function getCriterion(value) {
                 '<td>' + criterion[i].zone + '</td>' +
                 '<td>' + criterion[i].description + '</td>' +
                 '<td>' +
-                '<input type="number" name="criteriaMaxValueDtoList[' + i + '].maxValue" class="form-control form-control-sm w-75" required min="1" value="'+criterion[i].maxValueType+'" id="maxValueInput-' + criterion[i].id + '">'+
+                    '<input type="number" name="criteriaMaxValueDtoList[' + criterion[i].id + '].maxValue"  class="form-control form-control-sm w-75" required '+(criterion[i].section === '' ? ' min="1" value="'+criterion[i].maxValueType+'"' : 'value="'+criterion[i].coefficient+'"') + 'id="maxValueInput-' +criterion[i].id + '">'+
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '">' +
@@ -323,7 +323,10 @@ function setupMaxValueInputs() {
 function countTotalSum(maxValueInputs) {
     totalSum = 0;
     for (let i = 0; i < maxValueInputs.length; i++) {
-        totalSum += parseInt(maxValueInputs[i].value) || 0;
+        let value = parseInt(maxValueInputs[i].value) || 0;
+        if (value>=0){
+            totalSum +=value;
+        }
     }
     let sum = document.getElementById('totalSum');
     sum.innerHTML = totalSum+'/'+type;
@@ -334,7 +337,10 @@ function updateTotalSum() {
     totalSum = 0;
     let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
     countTotalSum(maxValueInputs);
+    console.log('type:', type);
+    console.log('totalSum:', totalSum);
 }
+
 
 
 let createForm = document.getElementById('create-form');
