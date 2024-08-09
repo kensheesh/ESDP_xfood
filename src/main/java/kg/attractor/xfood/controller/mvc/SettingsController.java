@@ -1,9 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializer;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
-import kg.attractor.xfood.dto.workSchedule.WorkScheduleCreateDto;
 import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import kg.attractor.xfood.service.impl.SettingServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +22,9 @@ public class SettingsController {
 
     @GetMapping("/deadlines")
     public String getDeadlines(Model model) {
-        model.addAttribute("oppDeadlineSetting", settingService.getOpportunityDeadlineValue());
+        model.addAttribute("oppDeadlineSetting", settingService.getOpportunityDeadline());
         model.addAttribute("dayOffSetting", settingService.getDayOffCount());
-        model.addAttribute("appealDeadlineSetting", settingService.getAppealDeadlineValue());
+        model.addAttribute("appealDeadlineSetting", settingService.getAppealDeadline());
         return "settings/deadlines";
     }
 

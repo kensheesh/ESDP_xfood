@@ -40,6 +40,7 @@ public class CheckListController {
     private final UserService userService;
     private final ManagerService managerService;
     private final OpportunityService opportunityService;
+    private final SettingService settingService;
 
 
     //    // ROLE: SUPERVISOR
@@ -135,6 +136,23 @@ public class CheckListController {
         */
 
         return null;
+    }
+
+    @GetMapping ("/{id}/result")
+    public String getResult (@PathVariable (name = "id") String checkListId, Model model, Authentication auth) {
+        ChecklistShowDto checkList = checkListService.getCheckListById(checkListId);
+        if(auth == null) {
+            model.addAttribute("guess", true);
+        }
+        if(checkList.getStatus().equals(Status.DONE)) {
+            model.addAttribute("checkList", checkList);
+            model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
+        } else {
+            model.addAttribute("error",
+                    "Данный чеклист еще не опубликован или такого чеклиста не существует!");
+        }
+
+        return "checklist/result";
     }
 
     // ROLE: SUPERVISOR
