@@ -39,6 +39,7 @@ public class CheckListController {
     private final UserService userService;
     private final ManagerService managerService;
     private final OpportunityService opportunityService;
+    private final SettingService settingService;
 
 
 //    // ROLE: SUPERVISOR
@@ -137,6 +138,7 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
         }
         if(checkList.getStatus().equals(Status.DONE)) {
             model.addAttribute("checkList", checkList);
+            model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
         } else {
             model.addAttribute("error",
                     "Данный чеклист еще не опубликован или такого чеклиста не существует!");

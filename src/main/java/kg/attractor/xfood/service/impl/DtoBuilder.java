@@ -149,6 +149,7 @@ public class DtoBuilder {
                 .pizzeria(pizzeriaDto)
                 .manager(managerDto)
                 .status(model.getStatus())
+                .endTime(model.getEndTime())
                 .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(formatter))
                 .managerWorkEndTime(model.getWorkSchedule().getEndTime().format(formatter))
                 .criteria(sortedCriteriaDtos)
