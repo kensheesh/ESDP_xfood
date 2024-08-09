@@ -2,7 +2,9 @@ package kg.attractor.xfood.controller.mvc;
 
 import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.service.OpportunityService;
+import kg.attractor.xfood.service.impl.SettingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/expert")
 public class ExpertController {
     private final OpportunityService opportunityService;
+    private final SettingServiceImpl settingService;
 
     @GetMapping("/checks")
     public String getChecks () {
@@ -28,8 +32,10 @@ public class ExpertController {
 
     @GetMapping ("/opportunities")
     public String getOpportunityMap (Model model) {
-        model.addAttribute("opportunities", opportunityService.getAllByExpert());
+        Map<String, OpportunityDto> opportunitiesMap = opportunityService.getAllByExpert();
+        model.addAttribute("opportunities", opportunitiesMap);
         model.addAttribute("monday", LocalDate.now().minusDays(LocalDate.now().getDayOfWeek().getValue()-1));
+        model.addAttribute("isAvailableToDayOff", settingService.isAvailableToDayOff(opportunitiesMap));
         return "expert/opportunities";
     }
 

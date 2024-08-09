@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.Setting;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -48,5 +50,17 @@ public class SettingServiceImpl implements SettingService {
         LocalDateTime currentTime = LocalDateTime.now();
         int appealCreateDeadline = getAppealDeadline().getValueInt();
         return checkEndTime.isAfter(currentTime.minusDays(appealCreateDeadline));
+    }
+
+    @Override
+    public boolean isAvailableToDayOff(Map<String, OpportunityDto> opportunitiesMap) {
+        int weeklyDayOffCount = 0;
+        int dayOffLimit = getDayOffCount().getValueInt();
+        for (OpportunityDto dto : opportunitiesMap.values()) {
+            if (dto.getIsDayOff()) {
+                weeklyDayOffCount++;
+            }
+        }
+        return weeklyDayOffCount < dayOffLimit;
     }
 }
