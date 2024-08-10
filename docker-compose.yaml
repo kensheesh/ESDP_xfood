@@ -1,37 +1,137 @@
-version: '3.8'
+version: "3.8"
 
 services:
+
   app:
-    container_name: xfood-app
-    build:
-      context: /
-      dockerfile: /Dockerfile
-    ports:
-      - "5005:5005"
-    volumes:
-      - /data
-      - /var/log/app
-    env_file:
-      - /.env
     depends_on:
-      - db
+      - postgresdb
       - redis
-
-
-  db:
-    container_name: xfood_psql
-    image: postgres:16.3
-    environment:
-      POSTGRES_DB: xfood_db
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    build: ./ESDP_xfood
+    restart: always
+    env_file: ./.env
     ports:
-      - "5050:5432"
+      - "2352:2352"
+    environment:
+      SPRING_APPLICATION_JSON: |
+        {
+          "server": {
+            "port": "$SERVER_PORT",
+                "ssl": {
+                "key-store": "classpath:keystore.p12",
+                "key-store-password": "yourpassword",
+                "key-store-type": "PKCS12",
+                "key-alias": "tomcat"
+                }
+          },
+          "spring": {
+            "datasource": {
+              "url": "$DB_URL",
+              "username": "$DB_USERNAME",
+              "password": "$DB_PASSWORD",
+              "driver-class-name": "$DB_DRIVER_CLASS_NAME"
+            },
+            "liquibase": {
+              "change-log": "classpath:/db/changelog/master.yml"
+            },
+            "jpa": {
+              "hibernate": {
+                "ddl-auto": "validate"
+              },
+              "properties": {
+                "hibernate": {
+                  "generate_statistics": false,
+                  "format_sql": true
+                }
+              },
+              "show-sql": false
+            },
+            "mvc": {
+              "log-request-details": false
+            },
+            "freemarker": {
+              "expose-session-attributes": true
+            },
+            "mail": {
+              "host": "$MAIL_HOST",
+              "username": "$MAIL_USERNAME",
+              "password": "$MAIL_PASSWORD",
+              "port": "$MAIL_PORT",
+              "properties": {
+                "mail": {
+                  "smtp": {
+                    "auth": true,
+                    "starttls": {
+                      "enable": true
+                    }
+                  }
+                }
+              }
+            },
+            "data": {
+              "jdbc": {
+                "dialect": "postgresql"
+              },
+              "redis": {
+                "host": "localhost",
+                "port": "$REDIS_SERVER_PORT"
+              }
+            },
+            "servlet": {
+              "multipart": {
+                "max-file-size": "25MB",
+                "max-request-size": "25MB",
+                "location": "./data"
+              }
+            }
+          },
+          "logging": {
+            "level": {
+              "root": "info",
+              "org": {
+                "springframework": {
+                  "security": "debug"
+                },
+                "hibernate": {
+                  "stat": "debug",
+                  "type": "trace"
+                }
+              },
+              "sql": "trace",
+              "web": "debug"
+            },
+            "file": {
+              "name": "logs/demo.log"
+            },
+            "logback": {
+              "rollingpolicy": {
+                "max-file-size": "5MB",
+                "max-history": 5
+              }
+            }
+          }
+        }
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
 
   redis:
-    container_name: xfood_redis
     image: redis:latest
     ports:
       - "6379:6379"
+
+  postgresdb:
+    image: postgres:16.3
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - POSTGRES_USER=$DB_USERNAME
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$POSTGRESDB_DATABASE
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
 volumes:
-  app-config:
+  db-data:
