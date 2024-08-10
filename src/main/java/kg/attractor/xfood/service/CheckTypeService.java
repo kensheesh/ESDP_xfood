@@ -12,4 +12,6 @@ public interface CheckTypeService {
 //    Integer getTypeById(Long checkTypeId);
 
     List<CheckTypeShowDto> getCheckTypes();
+
+    CheckType findByName(String type);
 }

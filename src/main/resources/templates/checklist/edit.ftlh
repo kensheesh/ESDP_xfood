@@ -15,7 +15,7 @@
                     </p>
                     <p class="card-subtitle text-secondary"><strong>Тип проверки: </strong></p>
                     <div class="my-3">
-                        <select class="form-select w-50" aria-label="Default select example">
+                       <#-- <select class="form-select w-50" aria-label="Default select example">
                             <#list types as t>
                                 <#if t.name == checklist.checkType>
                                     <option selected ${t.id}>${checklist.checkType}</option>
@@ -23,7 +23,23 @@
                                     <option value="${t.id}">${t.name}</option>
                                 </#if>
                             </#list>
-                        </select>
+                        </select>-->
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                               <#if type??>
+                                   ${type}
+                                   <input type="hidden" name="checkType" value="${type}" >
+                                   <#else >
+                                       ${checklist.checkType}
+                                   <input type="hidden" name="checkType" value="${checklist.checkType}" >
+                               </#if>
+                            </a>
+                            <ul class="dropdown-menu">
+                            <#list types as tp>
+                                    <li><a class="dropdown-item" href="/checks/${checklist.id}/update?type=${tp.name}">${tp.name}</a></li>
+                            </#list>
+                            </ul>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6 mb-3 mb-sm-0">

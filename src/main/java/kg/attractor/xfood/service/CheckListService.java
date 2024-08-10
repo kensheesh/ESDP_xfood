@@ -41,7 +41,7 @@ public interface CheckListService {
     
     CheckList updateCheckStatusCheckList(String id);
 
-    CheckListSupervisorEditDto getChecklistByUuid(String uuid);
+    CheckListSupervisorEditDto getChecklistByUuid(String uuid, String type);
 
     void edit(CheckListSupervisorEditDto checkList);
 

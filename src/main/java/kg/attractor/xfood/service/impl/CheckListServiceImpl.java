@@ -277,7 +277,7 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public CheckListSupervisorEditDto getChecklistByUuid(String uuid) {
+    public CheckListSupervisorEditDto getChecklistByUuid(String uuid, String type) {
         CheckList checkList = checkListRepository.findByUuidLink(uuid).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + uuid));
         ExpertShowDto expert = dtoBuilder.buildExpertShowDto(checkList.getExpert());
 
@@ -289,19 +289,34 @@ public class CheckListServiceImpl implements CheckListService {
                 .manager(dtoBuilder.buildManagerShowDto(checkList.getWorkSchedule().getManager()))
                 .build();
 
-        List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
         List<CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>();
         int sum = 0;
-        for (CheckListsCriteria criteria : checkListsCriteria) {
-            sum += criteria.getMaxValue();
-            criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
-                    .id(criteria.getCriteria().getId())
-                    .maxValue(criteria.getMaxValue())
-                    .coefficient(criteria.getCriteria().getCoefficient())
-                    .description(criteria.getCriteria().getDescription())
-                    .zone(criteria.getCriteria().getZone().getName())
-                    .section(criteria.getCriteria().getSection().getName())
-                    .build());
+        if (type == null || type.equals(checkList.getCheckType().getName())){
+            List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
+            for (CheckListsCriteria criteria : checkListsCriteria) {
+                sum += criteria.getMaxValue();
+                criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
+                        .id(criteria.getCriteria().getId())
+                        .maxValue(criteria.getMaxValue())
+                        .coefficient(criteria.getCriteria().getCoefficient())
+                        .description(criteria.getCriteria().getDescription())
+                        .zone(criteria.getCriteria().getZone().getName())
+                        .section(criteria.getCriteria().getSection().getName())
+                        .build());
+            }
+        }else{
+            List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkTypeService.findByName(type).getId());
+            for (CriteriaType criteria : criteriaTypes) {
+                sum += criteria.getMaxValue();
+                criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
+                        .id(criteria.getCriteria().getId())
+                        .maxValue(criteria.getMaxValue())
+                        .coefficient(criteria.getCriteria().getCoefficient())
+                        .description(criteria.getCriteria().getDescription())
+                        .zone(criteria.getCriteria().getZone().getName())
+                        .section(criteria.getCriteria().getSection().getName())
+                        .build());
+            }
         }
         return CheckListSupervisorEditDto.builder()
                 .id(checkList.getUuidLink())
@@ -332,6 +347,7 @@ public class CheckListServiceImpl implements CheckListService {
                     .build();
             checkListCriteriaService.save(checkListsCriteria);
         }
+        checkList.setCheckType(checkTypeService.findByName(checkListDto.getCheckType()));
         checkListRepository.save(checkList);
     }
 

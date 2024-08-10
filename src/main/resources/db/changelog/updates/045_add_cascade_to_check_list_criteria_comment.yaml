@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: add cascade to check_lists_criteria
+      author: Bubunur
+      changes:
+        - dropForeignKeyConstraint:
+            constraintName: checklist_criteria_id_fk
+            baseTableName: check_lists_criteria_comments
+        - addForeignKeyConstraint:
+            constraintName: checklist_criteria_id_fk
+            baseTableName: check_lists_criteria_comments
+            baseColumnNames: checklist_criteria_id
+            referencedTableName: check_lists_criteria
+            referencedColumnNames: id
+            onDelete: CASCADE
