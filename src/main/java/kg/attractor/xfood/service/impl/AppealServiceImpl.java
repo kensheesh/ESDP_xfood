@@ -11,11 +11,14 @@ import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.service.*;
+import kg.attractor.xfood.specification.AppealSpecification;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -147,8 +150,13 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page) {
-        Page<Appeal> appeals = appealRepository.findAllByIsAccepted(isAccepted, PageRequest.of(page - 1, 6));
+    public Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page, Long pizzeriaId, Long expertId) {
+        Specification<Appeal> spec = AppealSpecification.hasPizzeria(pizzeriaId)
+                .and(AppealSpecification.hasExpert(expertId))
+                .and(AppealSpecification.isAccepted(isAccepted));
+
+        Pageable pageable = PageRequest.of(page-1, 6);
+        Page<Appeal> appeals = appealRepository.findAll(spec, pageable);
         return appeals.map(dtoBuilder::buildAppealsListDto);
     }
 }
