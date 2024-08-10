@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ public class AppealController {
     private final AppealService appealService;
     private final FileService fileService;
 
+    @PreAuthorize("hasAnyAuthority('supervisor:read', 'admin:read')")
     @GetMapping
     public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
                                 @RequestParam(name = "expertId", defaultValue = "0") Long expertId,
