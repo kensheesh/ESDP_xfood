@@ -25,12 +25,15 @@ public class AppealController {
 
     @GetMapping
     public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
-                                @RequestParam(name = "expertEmail", defaultValue = "default") String expertEmail,
-                                @RequestParam(name = "pizzeria", defaultValue = "default") String pizzeria,
+                                @RequestParam(name = "expertId", defaultValue = "0") Long expertId,
+                                @RequestParam(name = "pizzeriaId", defaultValue = "0") Long pizzeriaId,
                                 @RequestParam(name = "status", required = false) Boolean status,
                                 Model model) {
-        var appeals = appealService.getAllByStatus(status, page, pizzeria, expertEmail);
+        var appeals = appealService.getAllByStatus(status, page, pizzeriaId, expertId);
         model.addAttribute("appeals", appeals);
+        model.addAttribute("currentExpert", expertId);
+        model.addAttribute("currentPizzeria", pizzeriaId);
+        model.addAttribute("currentStatus", status);
         return "appeals/appeals";
     }
     

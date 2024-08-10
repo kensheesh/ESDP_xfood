@@ -49,9 +49,9 @@ public class AppealController {
     @GetMapping
     public ResponseEntity<Page<AppealListDto>> getAppealsByStatus(@RequestParam(name = "p", defaultValue = "1") int page,
                                                                   @RequestParam(name = "s", required = false) Boolean isAccepted,
-                                                                  @RequestParam(name = "expertEmail", defaultValue = "default") String expertEmail,
-                                                                  @RequestParam(name = "pizzeria", defaultValue = "default") String pizzeria) {
-        Page<AppealListDto> appeals = appealService.getAllByStatus(isAccepted, page, pizzeria, expertEmail);
+                                                                  @RequestParam(name = "expertId", defaultValue = "0") Long expertId,
+                                                                  @RequestParam(name = "pizzeriaId", defaultValue = "0") Long pizzeriaId) {
+        Page<AppealListDto> appeals = appealService.getAllByStatus(isAccepted, page, pizzeriaId, expertId);
         return ResponseEntity.ok(appeals);
     }
 

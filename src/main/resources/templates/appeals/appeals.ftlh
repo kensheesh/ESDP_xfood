@@ -68,36 +68,46 @@
                     <div class="row row-cols-1 row-gap-3">
 
                         <div class="col">
-                            <form id="filterForm" class="mb-3">
-                                <div class="row row-cols-1 row-cols-md-3 g-2">
-                                    <div class="col">
+                            <form action="/appeals" id="filterForm" class="mb-3">
+                                <div class="row g-3">
+                                    <div class="col-md">
                                         <label for="statusFilter" class="form-label">Статус:</label>
-                                        <select id="statusFilter" name="status" class="form-select form-select-sm" aria-label="Фильтр по статусу">
-                                            <option value="">Новые</option>
-                                            <option value="true">Принятые</option>
-                                            <option value="false">Отклоненные</option>
+                                        <select id="statusFilter" name="status" class="form-select"
+                                                aria-label="Фильтр по статусу">
+                                            <#if currentStatus??>
+                                                <#if currentStatus == true>
+                                                    <option value="">Новые</option>
+                                                    <option selected value="true">Принятые</option>
+                                                    <option value="false">Отклоненные</option>
+                                                <#elseif currentStatus == false>
+                                                    <option value="">Новые</option>
+                                                    <option value="true">Принятые</option>
+                                                    <option selected value="false">Отклоненные</option>
+                                                </#if>
+                                            <#else>
+                                                <option selected value="">Новые</option>
+                                                <option value="true">Принятые</option>
+                                                <option value="false">Отклоненные</option>
+                                            </#if>
+
                                         </select>
                                     </div>
-                                    <div class="col">
-                                        <label for="expertFilter" class="form-label">Эксперт:</label>
-                                        <select id="expertFilter" name="expertEmail" class="form-select form-select-sm" aria-label="Фильтр по эксперту">
-                                            <option value="default">Все</option>
-                                            <option value="expert1">Эксперт 1</option>
-                                            <option value="expert2">Эксперт 2</option>
-                                            <option value="expert3">Эксперт 3</option>
+                                    <div class="col-md">
+                                        <label for="pizzeria-select" class="form-label">Пиццерия:</label>
+                                        <select id="pizzeria-select" name="pizzeriaId" class="form-select">
+                                            <option value="0">Все</option>
                                         </select>
                                     </div>
-                                    <div class="col">
-                                        <label for="pizzeriaFilter" class="form-label">Пиццерия:</label>
-                                        <select id="pizzeriaFilter" name="pizzeria" class="form-select form-select-sm" aria-label="Фильтр по пиццерии">
-                                            <option value="default">Все</option>
-                                            <option value="pizzeria1">Пиццерия 1</option>
-                                            <option value="pizzeria2">Пиццерия 2</option>
-                                            <option value="pizzeria3">Пиццерия 3</option>
+                                    <div class="col-md">
+                                        <label for="expert-select" class="form-label">Эксперт:</label>
+                                        <select id="expert-select" name="expertId" class="form-select">
+                                            <option value="0">Все</option>
                                         </select>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-3">Применить фильтр</button>
+                                <div class="text-center mt-3">
+                                    <button type="submit" class="btn btn-primary">Применить фильтр</button>
+                                </div>
                             </form>
                         </div>
 
@@ -106,7 +116,8 @@
                                  style="height: 55vh">
                                 <div id="appeals" class="row row-cols-1 row-gap-2">
                                     <#list appeals.content as appeal>
-                                        <a href="/appeals/${appeal.id}/approve" class="col text-decoration-none d-block">
+                                        <a href="/appeals/${appeal.id}/approve"
+                                           class="col text-decoration-none d-block">
                                             <div class="card border-0 rounded-4 bg-primary-subtle">
                                                 <div class="card-body">
                                                     <div class="row row-cols-3">
@@ -134,7 +145,8 @@
                                 <ul class="pagination m-0">
                                     <li class="page-item">
                                         <#if appeals.first>
-                                            <button id="prevPage" class="page-link link-success disabled" aria-label="Previous">
+                                            <button id="prevPage" class="page-link link-success disabled"
+                                                    aria-label="Previous">
                                                 <span aria-hidden="true">&laquo;</span>
                                             </button>
                                         <#else>
@@ -145,7 +157,8 @@
                                     </li>
                                     <li class="page-item">
                                         <#if appeals.last>
-                                            <button id="nextPage" class="page-link link-success disabled" aria-label="Next">
+                                            <button id="nextPage" class="page-link link-success disabled"
+                                                    aria-label="Next">
                                                 <span aria-hidden="true">&raquo;</span>
                                             </button>
                                         <#else>
@@ -168,15 +181,62 @@
     <script src="/js/clock.js"></script>
     <script src="../js/appeals.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             document.querySelectorAll('.btn').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     document.querySelectorAll('.btn').forEach(btn => {
                         btn.style.backgroundColor = (btn === this) ? '#28A745' : '';
                         btn.style.color = (btn === this) ? '#fff' : '';
                     });
                 });
             });
+
+            let pizzeriaSelect = document.getElementById('pizzeria-select');
+            let expertSelect = document.getElementById('expert-select');
+
+            await getPizzeria();
+            await getExperts();
+
+            async function getPizzeria() {
+                try {
+                    const response = await fetch('/api/pizzerias');
+                    const data = await response.json();
+                    data.forEach(function (pizzeria) {
+                        let option = document.createElement('option');
+                        option.value = pizzeria.id;
+                        option.textContent = pizzeria.name;
+
+                        if (${currentPizzeria} === pizzeria.id) {
+                            option.selected = true;
+                        }
+
+
+                        pizzeriaSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных:', error);
+                }
+            }
+
+            async function getExperts() {
+                try {
+                    const response = await fetch('/api/experts');
+                    const data = await response.json();
+                    data.forEach(function (expert) {
+                        let option = document.createElement('option');
+                        option.value = expert.id;
+                        option.textContent = expert.name + " " + expert.surname;
+                        console.log(${currentExpert})
+                        if (${currentExpert} === expert.id) {
+                            option.selected = true;
+                        }
+
+                        expertSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных:', error);
+                }
+            }
         });
     </script>
     <script src="../js/appealsCount.js">

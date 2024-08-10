@@ -150,9 +150,9 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page, String pizzeriaName, String expertEmail) {
-        Specification<Appeal> spec = AppealSpecification.hasPizzeria(pizzeriaName)
-                .and(AppealSpecification.hasExpert(expertEmail))
+    public Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page, Long pizzeriaId, Long expertId) {
+        Specification<Appeal> spec = AppealSpecification.hasPizzeria(pizzeriaId)
+                .and(AppealSpecification.hasExpert(expertId))
                 .and(AppealSpecification.isAccepted(isAccepted));
 
         Pageable pageable = PageRequest.of(page-1, 6);

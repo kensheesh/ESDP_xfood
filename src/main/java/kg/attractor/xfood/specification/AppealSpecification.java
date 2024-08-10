@@ -14,9 +14,9 @@ public class AppealSpecification {
         };
     }
 
-    public static Specification<Appeal> hasPizzeria(String pizzeriaName) {
+    public static Specification<Appeal> hasPizzeria(Long pizzeriaId) {
         return(r, q, cb) -> {
-            if(pizzeriaName.equals("default")) {
+            if(pizzeriaId == 0) {
                 return cb.conjunction();
             }
             return cb.equal(r
@@ -24,20 +24,20 @@ public class AppealSpecification {
                     .get("checklist")
                     .get("workSchedule")
                     .get("pizzeria")
-                    .get("name"), pizzeriaName);
+                    .get("id"), pizzeriaId);
         };
     }
 
-    public static Specification<Appeal> hasExpert(String expertEmail) {
+    public static Specification<Appeal> hasExpert(Long expertId) {
         return(r, q, cb) -> {
-            if(expertEmail.equals("default")) {
+            if(expertId == 0) {
                 return cb.conjunction();
             }
             return cb.equal(r
                     .get("checkListsCriteria")
                     .get("checklist")
                     .get("expert")
-                    .get("email"), expertEmail);
+                    .get("id"), expertId);
         };
     }
 }
