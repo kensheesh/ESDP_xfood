@@ -89,4 +89,5 @@ public class GlobalExceptionHandler implements ErrorController {
 		model.addAttribute("details", request);
 		return "/errors/error";
 	}
+
 }

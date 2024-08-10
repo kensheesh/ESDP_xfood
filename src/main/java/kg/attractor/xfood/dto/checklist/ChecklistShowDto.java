@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,6 +19,7 @@ import java.util.List;
 public class ChecklistShowDto {
 	private Long id;
 	private Status status;
+	private LocalDateTime endTime;
 	private PizzeriaDto pizzeria;
 	private ManagerShowDto manager;
 	private String managerWorkDate;

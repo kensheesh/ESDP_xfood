@@ -1,4 +1,4 @@
-<#import "layout.ftlh" as main>
+<#import "../layout.ftlh" as main>
 <@main.layout>
     <#assign known = SPRING_SECURITY_CONTEXT??>
     <#if known>
@@ -14,17 +14,17 @@
                         <div class="col">
                             <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                 <div class="col">
-                                    <a href="#" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/deadlines" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Дедлайны
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="#" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Токены
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/analytics" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/templates" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
                                         Шаблоны
                                     </a>
                                 </div>
@@ -35,6 +35,9 @@
             </div>
         </div>
         <div class="col-md-8 col-xl-9">
+            <div class="text-end">
+                <a href="#" class="btn btn-secondary">+ Добавить шаблон</a>
+            </div>
             <#list templates as template>
                 <div class="card my-2 text-decoration-none border border-secondary">
                     <div class="card-body py-1 mb-0">
