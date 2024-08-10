@@ -20,6 +20,8 @@ import java.util.List;
 public class CheckListSupervisorEditDto {
     private Integer totalValue;
     private ExpertShowDto expert;
+    private String checkType;
+    private Long typeId;
     private String id;
     private WorkScheduleSupervisorEditDto workSchedule;
     List<CriteriaExpertShowDto> criterion;

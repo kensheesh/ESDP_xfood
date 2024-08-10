@@ -156,13 +156,13 @@ public class CheckListController {
     }
 
     // ROLE: SUPERVISOR
-    @GetMapping("/{id}/update")
-    public String edit(@PathVariable(name = "id") String uuid, Model model) {
-        model.addAttribute("zones", zoneService.getZones());
-        model.addAttribute("sections", sectionService.getSections());
-        model.addAttribute("checklist", checkListService.getChecklistByUuid(uuid));
-        model.addAttribute("experts", userService.getAllExperts());
-        model.addAttribute("managers", managerService.getAllAvailable(uuid));
+    @GetMapping ("/{id}/update")
+    public String edit (@PathVariable (name="id") String uuid,@RequestParam(name = "type", required = false) String type,  Model model) {
+            model.addAttribute("zones",zoneService.getZones() );
+            model.addAttribute("sections", sectionService.getSections());
+            model.addAttribute("checklist", checkListService.getChecklistByUuid(uuid, type));
+            model.addAttribute("types",checkTypeService.getTypes());
+            model.addAttribute("type", type);
         return "checklist/edit";
     }
 

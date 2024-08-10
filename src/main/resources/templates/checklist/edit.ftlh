@@ -5,61 +5,64 @@
             <div class="alert alert-danger" role="alert" style="display: none;" id="error">
                 Сумма баллов не соответствует требумой сумме!
             </div>
-            <div class="row mb-4">
-                <div class="col text-center">
-                    <p class="">${checklist.workSchedule.pizzeria.name}</p>
-                    <p class="">${checklist.workSchedule.pizzeria.location.name}</p>
+            <div class="card mb-3 shadow-sm border-light rounded">
+                <div class="card-header bg-dodo text-white">
+                    <h5 class="card-title mb-0">${checklist.workSchedule.pizzeria.name}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-subtitle mb-2 text-secondary">
+                        <strong>Локация:</strong> ${checklist.workSchedule.pizzeria.location.name}
+                    </p>
+                    <p class="card-subtitle text-secondary"><strong>Тип проверки: </strong></p>
+                    <div class="my-3">
+                       <#-- <select class="form-select w-50" aria-label="Default select example">
+                            <#list types as t>
+                                <#if t.name == checklist.checkType>
+                                    <option selected ${t.id}>${checklist.checkType}</option>
+                                <#else>
+                                    <option value="${t.id}">${t.name}</option>
+                                </#if>
+                            </#list>
+                        </select>-->
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                               <#if type??>
+                                   ${type}
+                                   <input type="hidden" name="checkType" value="${type}" >
+                                   <#else >
+                                       ${checklist.checkType}
+                                   <input type="hidden" name="checkType" value="${checklist.checkType}" >
+                               </#if>
+                            </a>
+                            <ul class="dropdown-menu">
+                            <#list types as tp>
+                                    <li><a class="dropdown-item" href="/checks/${checklist.id}/update?type=${tp.name}">${tp.name}</a></li>
+                            </#list>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname}  </h5>
+                                    <p class="card-text">${checklist.workSchedule.startTime} - ${checklist.workSchedule.endTime}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Эксперт : </h5>
+                                    <p class="card-text">${checklist.expert.name} ${checklist.expert.surname} </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <input type="hidden" name="uuid" value="${checklist.id}">
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="card border-0  shadow-sm rounded">
-                        <div class="card-body">
-                            <h4>График менеджера: </h4>
-                            <div class="row">
-                                <div class="col">
-                                    <select  name="workSchedule.manager.phoneNumber" class="form-select" aria-label="Default select example">
-                                        <option selected  value="${checklist.workSchedule.manager.phoneNumber}">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname} </option>
-                                        <#list managers as m>
-                                            <#if m.phoneNumber != checklist.workSchedule.manager.phoneNumber>
-                                                <option value="${m.phoneNumber}">${m.firstName} ${m.lastName}</option>
-                                            </#if>
-                                        </#list>
-                                    </select>
-                                    <div class="form-group my-2">
-                                        <label for="managerStartTime" class="form-label">Время начала смены:</label>
-                                        <input type="datetime-local" id="managerStartTime" class="form-control" name="workSchedule.startTime" value="${checklist.workSchedule.startTime}">
-                                    </div>
-                                    <div class="form-group my-2">
-                                        <label for="managerEndTime" class="form-label">Время конца смены:</label>
-                                        <input type="datetime-local" id="managerEndTime" class="form-control" name="workSchedule.endTime" value="${checklist.workSchedule.endTime}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="card border-0 shadow-sm rounded">
-                        <div class="card-body">
-                            <h4>Выбрать эксперта: </h4>
-                         <div class="row">
-                                <div class="col"  id="opportunity">
-                                    <select class="form-select" aria-label="Default select example" name="opportunity.user.id">
-                                        <option selected value="${checklist.expert.id}">${checklist.expert.name} ${checklist.expert.surname}</option>
-                                        <#list experts as e>
-                                            <#if e.id != checklist.expert.id>
-                                                <option value="${e.id}">${e.name} ${e.surname}</option>
-                                            </#if>
-                                        </#list>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col">
                         <div class="input-group my-4">
                             <button type="button" class="search_btn btn btn-white shadow-sm border w-100" id="findCriteria"  data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -73,9 +76,10 @@
                     <div class="col">
                         <button type="button" class="btn btn-success rounded-2 my-4 " data-bs-toggle="modal" data-bs-target="#create" id="createCriteria">создать новый критерий</button>
                     </div>
+
                 </div>
             </div>
-            <div class="table-responsive" style="max-height: 350px;">
+        <div class="table-responsive" style="max-height: 350px;">
                 <table class="table">
                     <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
                     <tr>
@@ -93,23 +97,21 @@
                             <td>${c.zone}</td>
                             <td>${c.description}</td>
                             <input type="hidden" name="criterion[${c?index}].id" value="${c.id}">
-                             <td><input type="number" class="form-control" name="criterion[${c?index}].maxValue" id="value-${c.id}" required min="1" value="${c.maxValue}"></td>
+                             <td><input type="number" class="form-control" name="criterion[${c?index}].maxValue" id="value-${c.id}" required min="1" <#if c.section == "Критический фактор">readonly value="${c.coefficient}" <#else> value="${c.maxValue}"</#if> ></td>
                             <td>
                                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
                                     <i class="bi bi-trash text-secondary fs-4"></i>
                                 </button>
-                            </td>`
+                            </td>
                         </tr>
                     </#list>
                     </tbody>
                 </table>
             </div>
-            <div class="container text-end">
-                <button type="submit" class="btn btn-success rounded my-3 w-75">
-                    Изменить
-                </button>
+            <div class="d-grid gap-2 d-md-block text-end">
+                <a class="btn btn-danger" href="/checks/${checklist.id}/check" role="button">Отменить</a>
+                <button class="btn btn-success" type="submit">Сохранить</button>
             </div>
-        </div>
     </form>
 
 
