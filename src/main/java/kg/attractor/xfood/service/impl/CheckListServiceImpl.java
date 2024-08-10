@@ -297,17 +297,18 @@ public class CheckListServiceImpl implements CheckListService {
             criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                     .id(criteria.getCriteria().getId())
                     .maxValue(criteria.getMaxValue())
+                    .coefficient(criteria.getCriteria().getCoefficient())
                     .description(criteria.getCriteria().getDescription())
                     .zone(criteria.getCriteria().getZone().getName())
                     .section(criteria.getCriteria().getSection().getName())
                     .build());
         }
-        criterionWithMaxValue.removeIf(criteria -> !criteria.getSection().equals(""));
         return CheckListSupervisorEditDto.builder()
                 .id(checkList.getUuidLink())
                 .workSchedule(workScheduleDto)
                 .expert(expert)
                 .totalValue(sum)
+                .checkType(checkList.getCheckType().getName())
                 .criterion(criterionWithMaxValue.stream()
                         .sorted(Comparator.comparing(CriteriaExpertShowDto::getSection)
                                 .thenComparing(CriteriaExpertShowDto::getZone)).toList())
@@ -319,18 +320,6 @@ public class CheckListServiceImpl implements CheckListService {
     public void edit(CheckListSupervisorEditDto checkListDto) {
         log.info(checkListDto.toString());
         CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
-        Manager manager = managerService.findByPhoneNumber(checkListDto.getWorkSchedule().getManager().getPhoneNumber());
-        if (checkListDto.getWorkSchedule().getStartTime().isAfter(checkListDto.getWorkSchedule().getEndTime())) {
-            throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени конца смены");
-        }
-        WorkSchedule workSchedule = WorkSchedule.builder()
-                .id(checkList.getWorkSchedule().getId())
-                .manager(manager)
-                .startTime(checkListDto.getWorkSchedule().getStartTime())
-                .endTime(checkListDto.getWorkSchedule().getEndTime())
-                .pizzeria(checkList.getWorkSchedule().getPizzeria())
-                .build();
-        workScheduleService.save(workSchedule);
         log.info("list {}", checkListDto.getCriterion().toString());
         checkListDto.getCriterion().removeIf(criteria -> criteria.getId() == null);
         checkListCriteriaService.deleteCriterionByChecklist(checkList.getId());
@@ -343,7 +332,6 @@ public class CheckListServiceImpl implements CheckListService {
                     .build();
             checkListCriteriaService.save(checkListsCriteria);
         }
-        checkList.setWorkSchedule(workSchedule);
         checkListRepository.save(checkList);
     }
 

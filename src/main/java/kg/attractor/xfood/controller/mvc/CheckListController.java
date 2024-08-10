@@ -151,8 +151,7 @@ public String create (@RequestParam(name = "date") LocalDate date,  @RequestPara
             model.addAttribute("zones",zoneService.getZones() );
             model.addAttribute("sections", sectionService.getSections());
             model.addAttribute("checklist", checkListService.getChecklistByUuid(uuid));
-            model.addAttribute("experts", userService.getAllExperts());
-            model.addAttribute("managers", managerService.getAllAvailable(uuid));
+            model.addAttribute("types",checkTypeService.getTypes());
         return "checklist/edit";
     }
 

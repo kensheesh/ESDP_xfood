@@ -84,7 +84,7 @@ async function addCriteriaToList(id) {
              <td>${criteria.zone}</td>
              <td>${criteria.description}</td>
              <td>
-                <input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required ${criteria.section === 'Критический фактор' ? `value="${criteria.coefficient}"` : ` min="1" value="1"` } id="maxValueInput-${id}"> 
+                <input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required ${criteria.section === 'Критический фактор' ? `value="${criteria.coefficient} readonly"` : ` min="1" value="1"` } id="maxValueInput-${id}"> 
              </td>
              <td>
                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${id}">
@@ -162,7 +162,7 @@ async function validate(event) {
                 '<td>' + data.zone + '</td>' +
                 '<td>' + data.description + '</td>' +
                 '<td>' +
-                '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required '+  (data.section === 'Критический фактор' ? 'value="'+data.coefficient+'" ' : 'min="1" value="'+data.maxValueType+'"' )+ ' id="maxValueInput-' + createdId + '">'+
+                '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required '+  (data.section === 'Критический фактор' ? 'value="'+data.coefficient+'" readonly ' : 'min="1" value="'+data.maxValueType+'"' )+ ' id="maxValueInput-' + createdId + '">'+
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
@@ -271,7 +271,7 @@ async function getCriterion(value) {
                 '<td>' + criterion[i].zone + '</td>' +
                 '<td>' + criterion[i].description + '</td>' +
                 '<td>' +
-                    '<input type="number" name="criteriaMaxValueDtoList[' + criterion[i].id + '].maxValue"  class="form-control form-control-sm w-75" required '+(criterion[i].section === 'Критический фактор' ? 'value="'+criterion[i].coefficient+'"' : ' min="1" value="'+criterion[i].maxValueType+'"') + 'id="maxValueInput-' +criterion[i].id + '">'+
+                    '<input type="number" name="criteriaMaxValueDtoList[' + criterion[i].id + '].maxValue"  class="form-control form-control-sm w-75" required '+(criterion[i].section === 'Критический фактор' ? 'value="'+criterion[i].coefficient+'" readonly' : ' min="1" value="'+criterion[i].maxValueType+'"') + 'id="maxValueInput-' +criterion[i].id + '">'+
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '">' +
