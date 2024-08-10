@@ -4,7 +4,6 @@ import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.FileService;
-import kg.attractor.xfood.service.impl.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 @Controller
 @RequestMapping("appeals")
@@ -27,8 +25,11 @@ public class AppealController {
 
     @GetMapping
     public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
+                                @RequestParam(name = "expertEmail", defaultValue = "default") String expertEmail,
+                                @RequestParam(name = "pizzeria", defaultValue = "default") String pizzeria,
+                                @RequestParam(name = "status", required = false) Boolean status,
                                 Model model) {
-        var appeals = appealService.getAllByStatus(null, page);
+        var appeals = appealService.getAllByStatus(status, page, pizzeria, expertEmail);
         model.addAttribute("appeals", appeals);
         return "appeals/appeals";
     }

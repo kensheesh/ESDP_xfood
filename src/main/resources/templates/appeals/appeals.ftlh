@@ -68,20 +68,45 @@
                     <div class="row row-cols-1 row-gap-3">
 
                         <div class="col">
-                            <button id="new" type="button"
-                                    class="btn btn-light-green rounded-4">Новые</button>
-                            <button id="accepted" type="button"
-                                    class="btn btn-light-green rounded-4">Принятые</button>
-                            <button id="rejected" type="button"
-                                    class="btn btn-light-green rounded-4">Отклоненные</button>
+                            <form id="filterForm" class="mb-3">
+                                <div class="row row-cols-1 row-cols-md-3 g-2">
+                                    <div class="col">
+                                        <label for="statusFilter" class="form-label">Статус:</label>
+                                        <select id="statusFilter" name="status" class="form-select form-select-sm" aria-label="Фильтр по статусу">
+                                            <option value="">Новые</option>
+                                            <option value="true">Принятые</option>
+                                            <option value="false">Отклоненные</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="expertFilter" class="form-label">Эксперт:</label>
+                                        <select id="expertFilter" name="expertEmail" class="form-select form-select-sm" aria-label="Фильтр по эксперту">
+                                            <option value="default">Все</option>
+                                            <option value="expert1">Эксперт 1</option>
+                                            <option value="expert2">Эксперт 2</option>
+                                            <option value="expert3">Эксперт 3</option>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="pizzeriaFilter" class="form-label">Пиццерия:</label>
+                                        <select id="pizzeriaFilter" name="pizzeria" class="form-select form-select-sm" aria-label="Фильтр по пиццерии">
+                                            <option value="default">Все</option>
+                                            <option value="pizzeria1">Пиццерия 1</option>
+                                            <option value="pizzeria2">Пиццерия 2</option>
+                                            <option value="pizzeria3">Пиццерия 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Применить фильтр</button>
+                            </form>
                         </div>
 
                         <div class="col">
                             <div class="row row-cols-1 row-gap-2 mt-2 align-items-start overflow-y-scroll"
-                            style="height: 55vh">
+                                 style="height: 55vh">
                                 <div id="appeals" class="row row-cols-1 row-gap-2">
                                     <#list appeals.content as appeal>
-                                        <a href="/appeals/${appeal.id}" class="col text-decoration-none d-block">
+                                        <a href="/appeals/${appeal.id}/approve" class="col text-decoration-none d-block">
                                             <div class="card border-0 rounded-4 bg-primary-subtle">
                                                 <div class="card-body">
                                                     <div class="row row-cols-3">

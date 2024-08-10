@@ -48,8 +48,10 @@ public class AppealController {
 
     @GetMapping
     public ResponseEntity<Page<AppealListDto>> getAppealsByStatus(@RequestParam(name = "p", defaultValue = "1") int page,
-                                                                  @RequestParam(name = "s", required = false) Boolean isAccepted) {
-        Page<AppealListDto> appeals = appealService.getAllByStatus(isAccepted, page);
+                                                                  @RequestParam(name = "s", required = false) Boolean isAccepted,
+                                                                  @RequestParam(name = "expertEmail", defaultValue = "default") String expertEmail,
+                                                                  @RequestParam(name = "pizzeria", defaultValue = "default") String pizzeria) {
+        Page<AppealListDto> appeals = appealService.getAllByStatus(isAccepted, page, pizzeria, expertEmail);
         return ResponseEntity.ok(appeals);
     }
 

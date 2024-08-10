@@ -38,7 +38,7 @@ function displayChecks(appeals) {
             console.log(appeal)
 
             htmlContent += `
-        <a href="/appeals/${appeal.id}" class="col text-decoration-none d-block">
+        <a href="/appeals/${appeal.id}/approve" class="col text-decoration-none d-block">
             <div class="card border-0 rounded-4 bg-primary-subtle">
                 <div class="card-body">
                     <div class="row row-cols-3">
@@ -118,8 +118,8 @@ function displayPagination (json) {
 
 
 
-document.getElementById("new").onclick = () => getChecks(statuses.NEW);
-document.getElementById("accepted").onclick = () => getChecks(statuses.ACCEPTED);
-document.getElementById("rejected").onclick = () => getChecks(statuses.REJECTED);
+// document.getElementById("new").onclick = () => getChecks(statuses.NEW);
+// document.getElementById("accepted").onclick = () => getChecks(statuses.ACCEPTED);
+// document.getElementById("rejected").onclick = () => getChecks(statuses.REJECTED);
 document.getElementById("nextPage").onclick = () => getChecks(currentStatus, currentPage + 1)
 document.getElementById("prevPage").onclick = () => getChecks(currentStatus, currentPage - 1)
