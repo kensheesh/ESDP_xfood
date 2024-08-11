@@ -99,3 +99,142 @@ async function getCriteriaById(id) {
         alert("Ошибка HTTP: " + response.status);
     }
 }
+
+let saveButton = document.getElementById('form');
+saveButton.addEventListener('submit', (e) => {
+    validate(e);
+})
+
+async function validate(event) {
+    event.preventDefault();
+    let list = document.getElementById('criterion-list');
+    let zone = document.getElementById('zoneSelect').value;
+    let section = document.getElementById('sectionSelect').value;
+    let description = document.getElementById('descriptionInput').value;
+    let coefficient = document.getElementById('coefficientInput').value;
+
+    const data = {
+        description: description,
+        coefficient: coefficient,
+        zone: zone,
+        section: section
+    }
+    console.log(data)
+    try {
+        const resp = await fetch("/api/criteria/create", {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const respData = await resp.json();
+
+        if (!resp.ok) {
+            console.log(respData)
+            handleErrors(respData);
+        } else {
+            const createdId = respData;
+            console.log("new criteria id " + createdId);
+            let criteriaList = document.querySelector('.criterion-list');
+            let newCriteria = document.createElement('tr');
+            newCriteria.setAttribute('id', 'criteria-wrap-' + createdId);
+            newCriteria.innerHTML =
+                '<th scope="row">' + data.section + '</th>' +
+                '<input type="hidden" value="' + createdId + '" name="criteriaMaxValueDtoList[' + createdId + '].criteriaId">' +
+                '<td>' + data.zone + '</td>' +
+                '<td>' + data.description + '</td>' +
+                '<td>' +
+                '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required '+  (data.section === 'Критический фактор' ? 'value="'+data.coefficient+'" readonly ' : 'min="1" value="'+data.maxValueType+'"' )+ ' id="maxValueInput-' + createdId + '">'+
+                '</td>' +
+                '<td>' +
+                '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
+                '<i class="bi bi-trash text-secondary fs-4"></i>' +
+                '</button>' +
+                '</td>';
+            criteriaList.appendChild(newCriteria);
+
+            let deleteButton = document.getElementById('deleteCriteria-' + createdId);
+            deleteButton.addEventListener('click', function () {
+                document.getElementById('criteria-wrap-' + createdId).remove();
+               // updateTotalSum();
+            });
+          //  setupMaxValueInputs();
+            let modal = document.getElementById('create');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            let modalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
+            if (modalBackdrop) {
+                modalBackdrop.parentNode.removeChild(modalBackdrop);
+            }
+        }
+    } catch (error) {
+        console.log("Error: ", error)
+    }
+}
+function handleErrors(errorData) {
+    let desc = document.getElementById('descr-err');
+    let coeff = document.getElementById('coef-err');
+    let zoneER = document.getElementById('zone-err');
+    let sectionER = document.getElementById('section-err');
+    desc.innerHTML = "";
+    coeff.innerHTML = "";
+    zoneER.innerHTML = "";
+    sectionER.innerHTML = "";
+
+    for (const [field, message] of Object.entries(errorData)) {
+        const errorElement = document.createElement("p");
+        if (field === 'description') {
+            errorElement.textContent = message + '';
+            desc.appendChild(errorElement)
+        } else if (field === 'section') {
+            sectionER.textContent = message + '';
+            desc.appendChild(errorElement)
+        } else {
+            errorElement.textContent = message + '';
+            coeff.appendChild(errorElement);
+        }
+    }
+}
+
+let sectionSelect = document.getElementById('sectionSelect');
+let zoneSelect = document.getElementById('zoneSelect');
+let coefficientInput = document.getElementById('coefficientInput');
+let descriptionInput = document.getElementById('descriptionInput');
+let coefLabel = document.getElementById('coef-label');
+let zoneLabel = document.getElementById('zoneLabel')
+
+sectionSelect.addEventListener('change', function () {
+    toggleFields(sectionSelect.value);
+});
+
+function toggleFields(value) {
+    if (value === '') {
+        coefficientInput.style.display = 'none';
+        coefLabel.style.display = 'none';
+        zoneLabel.style.display = 'block';
+        zoneSelect.style.display = 'block';
+    } else {
+        zoneLabel.style.display = 'none';
+        zoneSelect.style.display = 'none';
+        coefLabel.style.display = 'block';
+        coefficientInput.style.display = 'block';
+    }
+}
+
+document.getElementById('create').addEventListener('shown.bs.modal', function () {
+    toggleFields(sectionSelect.value);
+});
+document.getElementById('create').addEventListener('hidden.bs.modal', function () {
+    clearFields();
+});
+function clearFields() {
+    descriptionInput.value = '';
+    coefficientInput.value = '';
+    toggleFields(sectionSelect.value);
+}
