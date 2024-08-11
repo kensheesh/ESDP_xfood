@@ -118,36 +118,33 @@
 
             <#if checkList.isDeleted == false>
                 <div class="justify-content-center mx-0 mx-sm-4 mx-md-0 justify-content-md-end mb-5 mt-3 row row-gap-2">
-<#--                    <#if userRole == 'ROLE_SUPERVISOR' || userRole == 'ROLE_ADMIN'>-->
-<#--                        <div class="col-md-auto px-1">-->
-<#--                            <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">-->
-<#--                                Удалить проверку-->
-<#--                            </button>-->
-<#--                        </div>-->
-<#--                    </#if>-->
 
                     <#if checkList.status == "IN_PROGRESS" || checkList.status == "NEW">
                         <div class="col-md-auto">
                             <div class="row row cols-1 row-cols-md-2 row-gap-2">
                                 <div class="col-md-auto px-1">
-                                    <button class="btn btn-green w-100" data-bs-toggle="modal" data-bs-target="#wowFactorModal">Добавить
+                                    <button class="btn btn-green w-100" data-bs-toggle="modal"
+                                            data-bs-target="#wowFactorModal">Добавить
                                         wow-фактор
                                     </button>
                                 </div>
                                 <div class="col-md-auto px-1">
-                                    <button class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#critFactorModal">
+                                    <button class="btn btn-danger w-100" data-bs-toggle="modal"
+                                            data-bs-target="#critFactorModal">
                                         Добавить критический фактор
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel"
+                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="wowFactorModalLabel">Добавить WOW-фактор</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form id="wowFactorForm">
@@ -165,13 +162,16 @@
                             </div>
                         </div>
 
-                        <div class="modal fade" id="critFactorModal" tabindex="-1" aria-labelledby="critwowFactorModalLabel"
+                        <div class="modal fade" id="critFactorModal" tabindex="-1"
+                             aria-labelledby="critwowFactorModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="wowFactorModalLabel">Добавить критический фактор</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h5 class="modal-title" id="wowFactorModalLabel">Добавить критический
+                                            фактор</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form id="critFactorForm">
@@ -182,10 +182,13 @@
                                                 </select>
                                             </div>
                                             <div class="mb-3" id="otherDescriptionDiv" style="display: none;">
-                                                <label for="otherDescription" class="form-label">Введите описание</label>
-                                                <input type="text" class="form-control" id="otherDescription" name="otherDescription"/>
+                                                <label for="otherDescription" class="form-label">Введите
+                                                    описание</label>
+                                                <input type="text" class="form-control" id="otherDescription"
+                                                       name="otherDescription"/>
                                             </div>
-                                            <button type="submit" id="addCritFactor" data-bs-dismiss="modal" class="btn btn-primary">
+                                            <button type="submit" id="addCritFactor" data-bs-dismiss="modal"
+                                                    class="btn btn-primary">
                                                 Добавить
                                             </button>
                                         </form>
@@ -195,45 +198,34 @@
                         </div>
                     </#if>
 
-<#--                    <#if userRole == 'ROLE_SUPERVISOR'>-->
-<#--                        <div class="col-md-auto px-1">-->
-<#--                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-light-green w-100" role="link">-->
-<#--                                Редактировать-->
-<#--                            </a>-->
-<#--                        </div>-->
-<#--                    </#if>-->
-
                     <#if checkList.status == 'IN_PROGRESS'>
-                        <div class="col-md-auto px-1">
-                            <button id="getTemplate" class="btn btn-dodo w-100">Получить шаблон сообщение</button>
-                        </div>
                         <div class="col-md-auto px-1">
                             <button type="button" class="btn btn-dodo-light w-100" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                 Опубликовать
                             </button>
                         </div>
-                    </#if>
 
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите
-                                        опубликовать?</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Закрыть"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
-                                        публиковать
-                                    </button>
-                                    <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите
+                                            опубликовать?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Закрыть"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
+                                            публиковать
+                                        </button>
+                                        <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </#if>
                 </div>
             </#if>
         </#if>
@@ -376,10 +368,10 @@
                 if (Array.isArray(commentByCriteria) && commentByCriteria.length > 0) {
                     commentsList = commentByCriteria.map(comment =>
                         '<ul class="list-group">' +
-                        '<li class="list-group-item my-2 d-flex justify-content-between align-items-center" id="list'+comment.checkCritCommId+'">' +
+                        '<li class="list-group-item my-2 d-flex justify-content-between align-items-center" id="list' + comment.checkCritCommId + '">' +
                         '<span>' + '-' + step + ' ' + comment.comment + '</span>' +
                         '<div>' +
-                        '<button type="button" class="btn btn-danger me-2" id="del'+comment.checkCritCommId+'" ' +
+                        '<button type="button" class="btn btn-danger me-2" id="del' + comment.checkCritCommId + '" ' +
                         '-bs-toggle="tooltip" data-bs-placement="right" ' +
                         'data-bs-title="Удалить комментарий" ' +
                         'data-comment-id="' + comment.checkCritCommId + '" >' +
@@ -406,12 +398,12 @@
                 commentsModal.setAttribute('aria-labelledby', 'commentsModal-' + id);
                 commentsModal.setAttribute('aria-hidden', 'true');
                 commentsModal.innerHTML =
-                    '<div class="modal-dialog">'+
-                    '<div class="modal-content">'+
-                    '<div class="modal-header">'+
-                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Комментарии</h1>'+
-                    '</div>'+
-                    '<div class="modal-body">'+
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Комментарии</h1>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
                     commentsList +
                     '</div>' +
                     '<div class="modal-footer">' +
@@ -765,7 +757,7 @@
                 const message = `Дата: ${checkList.managerWorkDate}\n` +
                     `Пиццерия: ${checkList.pizzeria.name}\n` +
                     `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
-                    `Результат проверки в %: `+ await updatePercentage() +``+
+                    `Результат проверки в %: ` + await updatePercentage() + `` +
                     `\nПоложительная обратная связь: \n` +
                     `Критический фактор: ` + countCriticalFactors +
                     `\nWOW фактор: ` + countWowFactors +
@@ -801,6 +793,7 @@
                 console.log(data)
                 maxPoint.innerText = data
             }
+
             async function getComments() {
                 let response = await fetch('/api/comments');
                 let data = await response.json();

@@ -205,16 +205,6 @@
             </table>
         </div>
 
-            <div class="text-end mb-5 mt-2">
-                <#if name?? && name == checkList.getExpertEmail() >
-                    <#if checkList.status == "IN_PROGRESS">
-                        <button id="reopenCheck" class="btn btn-success">Возобновить</button>
-                    <#elseif checkList.status == "NEW">
-                        <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
-                    </#if>
-                </#if>
-            </div>
-
         <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"
              aria-hidden="true">
             <div class="modal-dialog">
@@ -272,14 +262,75 @@
                     </div>
                 </#if>
             <#else>
-                <div class="text-end mb-5">
-                    <#if userRole == 'ROLE_SUPERVISOR' || userRole == 'ROLE_ADMIN'>
-                        <div class="col-md-auto px-1">
-                            <button class="btn btn-outline-danger w-100" data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal">
-                                Удалить проверку
-                            </button>
-                        </div>
+                <div class="justify-content-center mx-0 mx-sm-4 mx-md-0 justify-content-md-end mb-5 mt-3 row row-gap-2">
+                    <#if checkList.status == "DONE">
+                        <#if userRole == 'ROLE_ADMIN'>
+                            <div class="col-md-auto px-1">
+                                <button class="btn btn-outline-danger w-100" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">
+                                    Удалить проверку
+                                </button>
+                            </div>
+
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Вы уверены, что хотите удалить проверку?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-link text-decoration-none link-secondary"
+                                                    data-bs-dismiss="modal">Отмена
+                                            </button>
+                                            <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete"
+                                                  method="post">
+                                                <button class="btn btn-danger">Удалить</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#if>
+                    <#else>
+                        <#if userRole == 'ROLE_SUPERVISOR' || userRole == 'ROLE_ADMIN'>
+                            <div class="col-md-auto px-1">
+                                <button class="btn btn-outline-danger w-100" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">
+                                    Удалить проверку
+                                </button>
+                            </div>
+
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Вы уверены, что хотите удалить проверку?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-link text-decoration-none link-secondary"
+                                                    data-bs-dismiss="modal">Отмена
+                                            </button>
+                                            <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete"
+                                                  method="post">
+                                                <button class="btn btn-danger">Удалить</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#if>
                     </#if>
 
                     <#if userRole == 'ROLE_SUPERVISOR'>
@@ -291,44 +342,23 @@
                         </div>
                     </#if>
 
-                    <#if checkList.status == 'IN_PROGRESS'>
+                    <#if checkList.status == 'DONE'>
                         <div class="col-md-auto px-1">
                             <button id="getTemplate" class="btn btn-dodo w-100">Получить шаблон сообщение</button>
                         </div>
                     </#if>
 
-                    <#if name?? && name == checkList.getExpertEmail() >
+                    <#if name?? && name == checkList.getExpertEmail()>
                         <#if checkList.status == "IN_PROGRESS">
-                            <button id="reopenCheck" class="btn btn-dodo-light">Возобновить</button>
+                            <div class="col-md-auto px-1">
+                                <button id="reopenCheck" class="btn btn-dodo-light">Возобновить</button>
+                            </div>
                         <#elseif checkList.status == "NEW">
-                            <button id="startCheck" class="btn btn-dodo-light">Выполнить проверку</button>
+                            <div class="col-md-auto px-1">
+                                <button id="startCheck" class="btn btn-dodo-light">Выполнить проверку</button>
+                            </div>
                         </#if>
                     </#if>
-
-                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Вы уверены, что хотите удалить проверку?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-link text-decoration-none link-secondary"
-                                            data-bs-dismiss="modal">Отмена
-                                    </button>
-                                    <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete"
-                                          method="post">
-                                        <button class="btn btn-danger">Удалить</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </#if>
         </#if>
