@@ -90,7 +90,7 @@
         <#assign size = (statistics.days?size) + 3>
         <#assign size1 = (statistics.days?size) + 4>
 
-        <table id="myTable" class="display cell-border">
+        <table id="myTable" class="table table-bordered">
             <thead class="fs-6">
             <tr>
                 <th>Менеджер</th>
@@ -161,6 +161,10 @@
             language: {
                 url: '/DataTables/ru.json',
             },
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All']
+            ],
             rowGroup: {
                 dataSrc: 2,
                 endRender: function(rows) {
