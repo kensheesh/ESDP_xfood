@@ -1,8 +1,11 @@
 package kg.attractor.xfood.controller.mvc;
 
+import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.dto.settings.TemplateCreateDto;
+import kg.attractor.xfood.service.CheckTypeService;
 import kg.attractor.xfood.service.SectionService;
+import kg.attractor.xfood.service.SettingService;
 import kg.attractor.xfood.service.ZoneService;
 import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import kg.attractor.xfood.service.impl.SettingServiceImpl;
@@ -21,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping()
 public class SettingsController {
-    public final SettingServiceImpl settingService;
-    private final CheckTypeServiceImpl checkTypeService;
+    public final SettingService settingService;
+    private final CheckTypeService checkTypeService;
     private final ZoneService zoneService;
     private final SectionService sectionService;
 
@@ -44,7 +47,7 @@ public class SettingsController {
     @GetMapping("/templates")
 //    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
     public String getTemplates (Model model) {
-        model.addAttribute("templates", checkTypeService.getCheckTypes());
+         model.addAttribute("templates", checkTypeService.getCheckTypes());
         return "settings/templates";
     }
 
@@ -55,5 +58,14 @@ public class SettingsController {
         model.addAttribute("sections", sectionService.getSections());
         model.addAttribute("templateCreateDto", new TemplateCreateDto());
         return "settings/template_create";
+    }
+
+
+    @PostMapping("/templates/create")
+    public String TemplatesCreate (Model model,@Valid TemplateCreateDto templateCreateDto) {
+        model.addAttribute("zones", zoneService.getZones());
+        model.addAttribute("sections", sectionService.getSections());
+        settingService.createTemplate(templateCreateDto);
+        return "redirect:/templates";
     }
 }

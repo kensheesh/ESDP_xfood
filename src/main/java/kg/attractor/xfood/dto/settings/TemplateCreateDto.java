@@ -20,11 +20,11 @@ import java.util.List;
 public class TemplateCreateDto {
     @NotNull
     @NotBlank
-    @UniqueElements
+
     private String templateName;
     @NotNull
     @Positive
     @Min(value = 1)
     private Double templatePrice;
-    private List<CriteriaMaxValueDto> criterion;
+    private List<CriteriaMaxValueDto> criteriaMaxValueDtoList;
 }

@@ -1,5 +1,6 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
+    <form action="/templates/create" method="post">
     <div class="container my-5">
         <div class="border rounded shadow-sm p-4 my-3">
             <h2 class="mb-4">Создать шаблон</h2>
@@ -54,7 +55,16 @@
                 </div>
             </div>
         </div>
+        <div class="row bg-white rounded shadow-sm d-flex align-items-end">
+            <div class="col-md-3">
+                <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100">Создать шаблон</button>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-danger my-2" href="/templates" role="button">Отменить</a>
+            </div>
+        </div>
     </div>
+    </form>
 
     <!-- Modal -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
