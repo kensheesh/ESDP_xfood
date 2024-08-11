@@ -19,4 +19,6 @@ public interface SettingService {
     boolean isAvailableToDayOff(Map<String, OpportunityDto> opportunitiesMap);
 
     void createTemplate(TemplateCreateDto templateCreateDto);
+
+    TemplateCreateDto  getTemplate(Long id);
 }

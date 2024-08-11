@@ -1,6 +1,7 @@
 package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.SectionSupervisorShowDto;
+import kg.attractor.xfood.dto.settings.TemplateCreateDto;
 import kg.attractor.xfood.model.Section;
 import kg.attractor.xfood.repository.SectionRepository;
 import kg.attractor.xfood.service.SectionService;
@@ -27,4 +28,5 @@ public class SectionServiceImpl implements SectionService {
     public Section findByName(String section) {
         return sectionRepository.findByName(section).orElseThrow(()->new NoSuchElementException("Раздел с именем "+section+" не найден"));
     }
+
 }

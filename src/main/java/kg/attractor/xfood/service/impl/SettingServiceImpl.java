@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -106,5 +108,23 @@ public class SettingServiceImpl implements SettingService {
                     .build();
             criteriaTypeService.save(criteriaType);
         }
+    }
+
+    @Override
+    public TemplateCreateDto getTemplate(Long id) {
+        TemplateCreateDto templateCreateDto = new TemplateCreateDto();
+        CheckType checkType = checkTypeService.getById(id);
+        templateCreateDto.setTemplateName(checkType.getName());
+        templateCreateDto.setTemplatePrice(checkTypeFeeService.getFeesByCheckTypeId(checkType.getId()).doubleValue());
+        List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkType.getId());
+        List<CriteriaMaxValueDto> criteriaMaxValueDtoList = new ArrayList<>();
+        for(CriteriaType criteriaType : criteriaTypes){
+            criteriaMaxValueDtoList.add(CriteriaMaxValueDto.builder()
+                            .criteriaId(criteriaType.getCriteria().getId())
+                            .maxValue(criteriaType.getMaxValue())
+                    .build());
+        }
+        templateCreateDto.setCriteriaMaxValueDtoList(criteriaMaxValueDtoList);
+        return templateCreateDto;
     }
 }

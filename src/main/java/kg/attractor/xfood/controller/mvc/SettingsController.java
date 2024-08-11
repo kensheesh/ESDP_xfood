@@ -14,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,7 +57,6 @@ public class SettingsController {
         return "settings/template_create";
     }
 
-
     @PostMapping("/templates/create")
     public String TemplatesCreate (@Valid TemplateCreateDto templateCreateDto,BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -73,5 +69,13 @@ public class SettingsController {
         model.addAttribute("sections", sectionService.getSections());
         settingService.createTemplate(templateCreateDto);
         return "redirect:/templates";
+    }
+
+    @GetMapping("/templates/{id}")
+    public String getTemplateDetail (@PathVariable Long id, Model model) {
+        model.addAttribute("zones", zoneService.getZones());
+        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("template", settingService.getTemplate(id));
+        return "settings/template_edit";
     }
 }
