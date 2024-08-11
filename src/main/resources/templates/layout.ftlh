@@ -32,7 +32,7 @@
 
     <body>
     <header>
-        <nav class="navbar navbar-expand fw-medium bg-white border-bottom " id="navbar">
+0        <nav class="navbar navbar-expand fw-medium bg-body border-bottom " id="navbar">
             <div class="container">
                 <a class="navbar-brand fw-semibold " href="#">XFOOD</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
