@@ -16,4 +16,6 @@ public interface CheckTypeService {
     CheckType findByName(String type);
 
     void save(CheckType checkType);
+
+    boolean existsByName(String value);
 }

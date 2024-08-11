@@ -14,4 +14,5 @@ public interface CheckTypeRepository extends JpaRepository<CheckType, Long> {
     List<CheckType> findByOrderByNameAsc();
 
     Optional<CheckType> findByName(String name);
+    boolean existsByName(String name);
 }

@@ -62,7 +62,13 @@ public class SettingsController {
 
 
     @PostMapping("/templates/create")
-    public String TemplatesCreate (Model model,@Valid TemplateCreateDto templateCreateDto) {
+    public String TemplatesCreate (@Valid TemplateCreateDto templateCreateDto,BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("zones", zoneService.getZones());
+            model.addAttribute("sections", sectionService.getSections());
+            model.addAttribute("templateCreateDto", templateCreateDto);
+            return "settings/template_create";
+        }
         model.addAttribute("zones", zoneService.getZones());
         model.addAttribute("sections", sectionService.getSections());
         settingService.createTemplate(templateCreateDto);

@@ -103,6 +103,7 @@ async function addCriteriaToList(id) {
     let del = document.getElementById('del-' + id);
     if (del) del.remove();
 
+
     let criteriaList = document.querySelector('.criterion-list');
     let criteriaWrap = document.getElementById('criteria-wrap-' + id);
     if (!criteriaWrap) {
@@ -131,6 +132,10 @@ async function addCriteriaToList(id) {
         });
 
         setupMaxValueInputs();
+        let alertB = document.getElementById('alert');
+        if (alertB){
+            alertB.remove();
+        }
     }
 }
 
@@ -201,7 +206,10 @@ async function validate(event) {
                 '</button>' +
                 '</td>';
             criteriaList.appendChild(newCriteria);
-
+            let alertB = document.getElementById('alert');
+            if (alertB){
+                alertB.remove();
+            }
             let deleteButton = document.getElementById('deleteCriteria-' + createdId);
             deleteButton.addEventListener('click', function () {
                 document.getElementById('criteria-wrap-' + createdId).remove();

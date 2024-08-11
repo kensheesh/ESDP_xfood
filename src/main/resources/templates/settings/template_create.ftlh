@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout ; spring>
     <form action="/templates/create" method="post">
     <div class="container my-5">
         <div class="border rounded shadow-sm p-4 my-3">
@@ -8,13 +8,15 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="templateName" class="form-label">Название шаблона:</label>
-                            <input type="text" class="form-control" id="templateName" name="templateName" minlength="2" required maxlength="200" placeholder="Введите название шаблона">
+                            <@spring.formInput "templateCreateDto.templateName" 'class="form-control" minlength="2" required maxlength="200" id="templateName"' 'text'/>
+                            <@spring.showErrors  "<br>" "text-danger small text-center mb-1" />
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="templatePrice" class="form-label">Вознаграждение:</label>
-                            <input type="number" class="form-control" id="templatePrice" name="templatePrice" required min="1" placeholder="Введите вознаграждение">
+                            <@spring.formInput "templateCreateDto.templatePrice" 'class="form-control" required min="1"  id="templatePrice"' 'number'/>
+                            <@spring.showErrors  "<br>" "text-danger small text-center mb-1" />
                         </div>
                     </div>
                 </div>
@@ -49,7 +51,12 @@
                             <th scope="col" id="totalSum"></th>
                         </tr>
                         </thead>
-                        <tbody class="criterion-list">
+                        <tbody class="criterion-list" >
+                        <#if !templateCreateDto.criteriaMaxValueDtoList??>
+                            <div class="alert alert-warning mt-3" id="alert">
+                                Пожалуйста, добавьте критерии.
+                            </div>
+                        </#if>
                         </tbody>
                     </table>
                 </div>

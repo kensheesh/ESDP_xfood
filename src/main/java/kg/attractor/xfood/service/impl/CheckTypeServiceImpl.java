@@ -57,6 +57,11 @@ public class CheckTypeServiceImpl implements CheckTypeService {
         checkTypeRepository.save(checkType);
     }
 
+    @Override
+    public boolean existsByName(String value) {
+        return checkTypeRepository.existsByName(value);
+    }
+
     public int getTotalMaxValueByTypeId(Long typeId) {
         List<CriteriaType> criterias = criteriaTypeRepository.findByType_Id(typeId);
         return criterias.stream()
