@@ -1,12 +1,16 @@
 package kg.attractor.xfood.controller.mvc;
 
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
+import kg.attractor.xfood.dto.settings.TemplateCreateDto;
+import kg.attractor.xfood.service.SectionService;
+import kg.attractor.xfood.service.ZoneService;
 import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import kg.attractor.xfood.service.impl.SettingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SettingsController {
     public final SettingServiceImpl settingService;
     private final CheckTypeServiceImpl checkTypeService;
+    private final ZoneService zoneService;
+    private final SectionService sectionService;
 
     @GetMapping("/deadlines")
     public String getDeadlines(Model model) {
@@ -45,6 +51,9 @@ public class SettingsController {
 
     @GetMapping("/templates/create")
     public String getTemplatesCreate (Model model) {
+        model.addAttribute("zones", zoneService.getZones());
+        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("templateCreateDto", new TemplateCreateDto());
         return "settings/template_create";
     }
 }
