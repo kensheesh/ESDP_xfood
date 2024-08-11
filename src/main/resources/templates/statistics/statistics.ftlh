@@ -80,11 +80,11 @@
     <form action="/statistics" method="get" id="period">
         <input type="hidden" name="from" id="from" value="">
         <input type="hidden" name="to" id="to" value="">
-        <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="fa fa-calendar"></i>&nbsp;
+        <div id="reportrange" class="form-select w-50 m-3 ms-3 fs-5 shadow-sm" style="cursor: pointer;">
+            <i class="bi bi-calendar-fill text-dodo"></i>
             <span></span> <i class="fa fa-caret-down"></i>
         </div>
-        <button type="submit" id="date-range-button">применить</button>
+        <button type="submit" id="date-range-button" class="m-3 btn btn-dodo">применить</button>
     </form>
     <#if from?? && to??>
         <#assign size = (statistics.days?size) + 3>
@@ -204,7 +204,9 @@
                             exportOptions: {
                                 modifier: {
                                     search: 'applied',
-                                }}
+                                }},
+                            text: 'Экспорт в Excel',
+                            className: 'btn btn-secondary ms-3'
                         }
                     ]
                 }
