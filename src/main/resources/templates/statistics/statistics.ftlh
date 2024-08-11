@@ -76,7 +76,7 @@
         </div>
     </nav>
 </header>-->
-<main class="container my-4">
+<main class=" my-4">
     <form action="/statistics" method="get" id="period">
         <input type="hidden" name="from" id="from" value="">
         <input type="hidden" name="to" id="to" value="">
@@ -157,7 +157,7 @@
 <script>
     $(document).ready(function() {
         $('#myTable').DataTable({
-            responsive: true,
+            responsive: false,
             language: {
                 url: '/DataTables/ru.json',
             },
