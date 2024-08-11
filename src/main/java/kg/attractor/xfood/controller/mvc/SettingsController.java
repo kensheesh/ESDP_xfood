@@ -43,4 +43,8 @@ public class SettingsController {
     }
 
 
+    @GetMapping("/templates/create")
+    public String getTemplatesCreate (Model model) {
+        return "settings/template_create";
+    }
 }
