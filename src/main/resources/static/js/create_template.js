@@ -1,3 +1,47 @@
+let totalSum = 0;
+
+let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
+let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
+for (let i = 0; i < criterias.length; i++) {
+    criterias[i].addEventListener('click', () => {
+        criteriaWraps[i].remove();
+        setupMaxValueInputs();
+        updateTotalSum();
+    });
+}
+
+
+function setupMaxValueInputs() {
+    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
+    for (let input of maxValueInputs) {
+        input.addEventListener('input', () => {
+            updateTotalSum();
+        });
+    }
+    updateTotalSum();
+}
+
+function countTotalSum(maxValueInputs) {
+    totalSum = 0;
+    for (let i = 0; i < maxValueInputs.length; i++) {
+        let value = parseInt(maxValueInputs[i].value) || 0;
+        if (value>=0){
+            totalSum +=value;
+        }
+    }
+    let sum = document.getElementById('totalSum');
+    sum.innerHTML = totalSum
+    console.log(totalSum);
+}
+
+function updateTotalSum() {
+    totalSum = 0;
+    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
+    countTotalSum(maxValueInputs);
+    console.log('totalSum:', totalSum);
+}
+
+
 
 let search = document.getElementById('searchbar');
 search.addEventListener('input', onInput);
@@ -161,9 +205,9 @@ async function validate(event) {
             let deleteButton = document.getElementById('deleteCriteria-' + createdId);
             deleteButton.addEventListener('click', function () {
                 document.getElementById('criteria-wrap-' + createdId).remove();
-               // updateTotalSum();
+                updateTotalSum();
             });
-          //  setupMaxValueInputs();
+            setupMaxValueInputs();
             let modal = document.getElementById('create');
             modal.classList.remove('show');
             modal.style.display = 'none';
@@ -238,3 +282,5 @@ function clearFields() {
     coefficientInput.value = '';
     toggleFields(sectionSelect.value);
 }
+
+
