@@ -9,7 +9,5 @@ toInput.addEventListener('input', ()=>{
     let fromValue = fromInput.value;
     periodForm.action = periodForm.action+"?from="+fromValue+"&to="+toValue;
     console.log(periodForm.action)
-   /* let periodButton = document.getElementById('periodButton');
-    periodButton.submit();*/
     periodForm.submit();
 })

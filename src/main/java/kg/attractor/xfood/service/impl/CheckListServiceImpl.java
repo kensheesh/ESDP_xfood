@@ -454,7 +454,7 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public StatisticsDto getStatistics(LocalDate from, LocalDate to) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
         StatisticsDto statisticsDto = new StatisticsDto();
         List<CheckList> checkLists = checkListRepository.findAll();
         List<PizzeriaDto> pizzerias = pizzeriaService.getAllPizzerias();
@@ -561,16 +561,14 @@ public class CheckListServiceImpl implements CheckListService {
         int tableCount = tableDtos.size();
         statisticsDto.setAverage(tableCount > 0 ? totalSum / tableCount : 0);
         statisticsDto.setPizzerias(pizzeriaNames.stream().distinct().toList());
-        statisticsDto.setDays(getDays(from, to));
+        statisticsDto.setDays(getDays(from, to, rowDtos));
         log.info("statistics average {}", statisticsDto.getAverage());
         statisticsDto.setTables(tableDtos);
         log.info("statistics {}", statisticsDto);
         return statisticsDto;
     }
 
-
-    @Override
-    public List<DayDto> getDays(LocalDate from, LocalDate to) {
+    public List<DayDto> getDays(LocalDate from, LocalDate to, List<RowDto> rowDtos) {
 
         List<LocalDate> localDates = new ArrayList<>();
         LocalDate currentDate = from;
@@ -579,8 +577,8 @@ public class CheckListServiceImpl implements CheckListService {
             localDates.add(currentDate);
             currentDate = currentDate.plusDays(1);
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
         List<DayDto> dayDtos = new ArrayList<>();
         for (LocalDate localDate : localDates) {
             dayDtos.add(DayDto.builder()
@@ -588,8 +586,17 @@ public class CheckListServiceImpl implements CheckListService {
                     .dayOfWeek(localDate.getDayOfWeek().name().toLowerCase())
                     .build());
         }
+
+
+        dayDtos.removeIf(dayDto -> rowDtos.stream()
+                .noneMatch(rowDto -> rowDto.getCells().stream()
+                        .anyMatch(cellDto -> cellDto.getDate().equals(dayDto.getDay()))
+                )
+        );
+
         return dayDtos;
     }
+
 
     @Override
     public void comment(String uuid, Long criteriaId, CommentDto commentDto) {
