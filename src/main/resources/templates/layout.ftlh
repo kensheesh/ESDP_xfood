@@ -4,6 +4,7 @@
     <#assign known = SPRING_SECURITY_CONTEXT??>
     <#if known>
         <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
+        <#assign userRole = authorizedUser.authorities[0].authority>
     <#else>
     </#if>
 
@@ -54,19 +55,11 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
-                                    <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
-<#--                                    <#if authorizedUser.authorities[0].authority??>-->
-<#--                                        <#if authorizedUser.authorities[0].authority == "ROLE_ADMIN" ||-->
-<#--                                        authorizedUser.authorities[0].authority == "ROLE_SUPERVISOR">-->
-<#--                                            <li>-->
-<#--                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"-->
-<#--                                                        data-bs-target="#addUser">-->
-<#--                                                    Создать пользователя-->
-<#--                                                </button>-->
-<#--                                            </li>-->
-<#--                                        <#else>-->
-<#--                                        </#if>-->
-<#--                                    </#if>-->
+                                    <#if userRole == "ROLE_EXPERT">
+                                        <li><a class="dropdown-item" href="/expert/opportunities">Карта возможностей</a></li>
+                                    <#else>
+                                        <li><a class="dropdown-item" href="/deadlines">Настройки</a></li>
+                                    </#if>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -84,94 +77,6 @@
         <#nested spring>
     </main>
 
-    <div class="modal fade modal-lg" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addUserLabel">Введите данные нового сотдрудника</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="container mt-4">
-                    <form id="addUserForm" class="needs-validation" novalidate>
-                        <div class="mb-4">
-                            <label for="name" class="form-label">Имя</label>
-                            <input type="text" id="name" name="name" class="form-control" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="surname" class="form-label">Фамилия</label>
-                            <input type="text" id="surname" name="surname" class="form-control" required>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label" for="tgLink">Ccылка на телеграм</label>
-                            <input type="text" id="tgLink" name="tgLink" class="form-control" required
-                                   pattern="^t\.me/.*"
-                                   placeholder="Пожалуйста, введите ссылку на телеграм, начиная с t.me/."/>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="email" class="form-label">Адрес эл. почты</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                            <div id="emailError" class="invalid-feedback"></div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="password" class="form-label">Пароль</label>
-                            <input type="password" id="password" name="password" class="form-control" required
-                                   pattern="^(?=.*\d)(?=.*[a-zA-Z]).{8,}$"
-                                   placeholder="Пароль должен быть не менее 8 символов, содержать цифры и буквы."/>
-                        </div>
-
-                        <#if authorizedUser??>
-                            <#if authorizedUser.authorities[0].authority??>
-                                <#if authorizedUser.authorities[0].authority == "ROLE_ADMIN" >
-                                    <div class="mb-4">
-                                        <div class="d-flex ">
-                                            <p class="me-3">Выберите роль:</p>
-                                            <div class="form-check me-3">
-                                                <input type="radio" id="expert" name="role" value="expert"
-                                                       class="form-check-input"
-                                                       checked required>
-                                                <label class="form-check-label" for="expert">Эксперт</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="radio" id="supervisor" name="role" value="supervisor"
-                                                       class="form-check-input" required>
-                                                <label class="form-check-label" for="supervisor">Руководитель</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <#else>
-                                    <div class="mb-4">
-                                        <div class="d-flex ">
-                                            <p class="me-3">Выберите роль:</p>
-                                            <div class="form-check me-3">
-                                                <input type="radio" id="expert" name="role" value="expert"
-                                                       class="form-check-input"
-                                                       checked required>
-                                                <label class="form-check-label" for="expert">Эксперт</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </#if>
-                            <#else>
-                            </#if>
-                        <#else>
-                        </#if>
-
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary mb-2">Создать</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="/js/validation.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
             integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
             crossorigin="anonymous"></script>
