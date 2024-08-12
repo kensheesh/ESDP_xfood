@@ -5,7 +5,6 @@ FROM maven:3.8.5-openjdk-17
 WORKDIR /ESDP_xfood
 
 # Копируем все файлы в рабочую директорию
-
 COPY . .
 
 # Собираем проект Maven и пропускаем тесты
