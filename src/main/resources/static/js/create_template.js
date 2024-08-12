@@ -1,6 +1,4 @@
 let totalSum = 0;
-let type = 0;
-
 
 let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
 let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
@@ -11,6 +9,39 @@ for (let i = 0; i < criterias.length; i++) {
         updateTotalSum();
     });
 }
+
+
+function setupMaxValueInputs() {
+    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
+    for (let input of maxValueInputs) {
+        input.addEventListener('input', () => {
+            updateTotalSum();
+        });
+    }
+    updateTotalSum();
+}
+
+function countTotalSum(maxValueInputs) {
+    totalSum = 0;
+    for (let i = 0; i < maxValueInputs.length; i++) {
+        let value = parseInt(maxValueInputs[i].value) || 0;
+        if (value>=0){
+            totalSum +=value;
+        }
+    }
+    let sum = document.getElementById('totalSum');
+    sum.innerHTML = totalSum
+    console.log(totalSum);
+}
+
+function updateTotalSum() {
+    totalSum = 0;
+    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
+    countTotalSum(maxValueInputs);
+    console.log('totalSum:', totalSum);
+}
+
+
 
 let search = document.getElementById('searchbar');
 search.addEventListener('input', onInput);
@@ -72,6 +103,7 @@ async function addCriteriaToList(id) {
     let del = document.getElementById('del-' + id);
     if (del) del.remove();
 
+
     let criteriaList = document.querySelector('.criterion-list');
     let criteriaWrap = document.getElementById('criteria-wrap-' + id);
     if (!criteriaWrap) {
@@ -84,7 +116,7 @@ async function addCriteriaToList(id) {
              <td>${criteria.zone}</td>
              <td>${criteria.description}</td>
              <td>
-                <input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required ${criteria.section === 'Критический фактор' ? `value="${criteria.coefficient} readonly" max="-1"` : ` min="1" value="1"` } id="maxValueInput-${id}"> 
+                <input type="number" name="criteriaMaxValueDtoList[${id}].maxValue"  class="form-control form-control-sm w-75" required ${criteria.section === 'Критический фактор' ? `value="${criteria.coefficient} readonly"` : ` min="1" value="1"` } id="maxValueInput-${id}"> 
              </td>
              <td>
                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${id}">
@@ -100,6 +132,10 @@ async function addCriteriaToList(id) {
         });
 
         setupMaxValueInputs();
+        let alertB = document.getElementById('alert');
+        if (alertB){
+            alertB.remove();
+        }
     }
 }
 
@@ -162,7 +198,7 @@ async function validate(event) {
                 '<td>' + data.zone + '</td>' +
                 '<td>' + data.description + '</td>' +
                 '<td>' +
-                '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required '+  (data.section === 'Критический фактор' ? 'value="'+data.coefficient+'" readonly max="-1"' : 'min="1" value="1"' )+ ' id="maxValueInput-' + createdId + '">'+
+                '<input type="number" name="criteriaMaxValueDtoList[' + createdId + '].maxValue"  class="form-control form-control-sm w-75" required '+  (data.section === 'Критический фактор' ? 'value="'+data.coefficient+'" readonly' : 'min="1" value="1"' )+ ' id="maxValueInput-' + createdId + '">'+
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
@@ -170,7 +206,10 @@ async function validate(event) {
                 '</button>' +
                 '</td>';
             criteriaList.appendChild(newCriteria);
-
+            let alertB = document.getElementById('alert');
+            if (alertB){
+                alertB.remove();
+            }
             let deleteButton = document.getElementById('deleteCriteria-' + createdId);
             deleteButton.addEventListener('click', function () {
                 document.getElementById('criteria-wrap-' + createdId).remove();
@@ -190,7 +229,6 @@ async function validate(event) {
         console.log("Error: ", error)
     }
 }
-
 function handleErrors(errorData) {
     let desc = document.getElementById('descr-err');
     let coeff = document.getElementById('coef-err');
@@ -215,6 +253,7 @@ function handleErrors(errorData) {
         }
     }
 }
+
 let sectionSelect = document.getElementById('sectionSelect');
 let zoneSelect = document.getElementById('zoneSelect');
 let coefficientInput = document.getElementById('coefficientInput');
@@ -252,133 +291,4 @@ function clearFields() {
     toggleFields(sectionSelect.value);
 }
 
-async function getCriterion(value) {
-    let criterion = await getCriterionByTypeAndPizzeriaId(value);
-    let criteriaList = document.querySelector('.criterion-list');
-    criteriaList.innerHTML = '';
-    if (criterion && criterion.length > 0) {
-        type = 0;
-        for (let i = 0; i < criterion.length; i++) {
-            if (criterion[i].maxValueType>0){
-                type += criterion[i].maxValueType;
-                console.log(type)
-            }
-            let newCriteria = document.createElement('tr');
-            newCriteria.setAttribute('id', 'criteria-wrap-' + criterion[i].id);
-            newCriteria.innerHTML =
-                '<th scope="row">' + criterion[i].section + '</th>' +
-                '<input type="hidden" name="criteriaMaxValueDtoList[' + i + '].criteriaId" value="' + criterion[i].id + '">' +
-                '<td>' + criterion[i].zone + '</td>' +
-                '<td>' + criterion[i].description + '</td>' +
-                '<td>' +
-                    '<input type="number" name="criteriaMaxValueDtoList[' + criterion[i].id + '].maxValue"  class="form-control form-control-sm w-75" required '+(criterion[i].section === 'Критический фактор' ? 'value="'+criterion[i].coefficient+'" readonly' : ' min="1" value="'+criterion[i].maxValueType+'"') + 'id="maxValueInput-' +criterion[i].id + '">'+
-                '</td>' +
-                '<td>' +
-                '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + criterion[i].id + '">' +
-                '<i class="bi bi-trash text-secondary fs-4"></i>' +
-                '</button>' +
-                '</td>';
-            criteriaList.appendChild(newCriteria);
-            let deleteButton = document.getElementById('deleteCriteria-' + criterion[i].id);
-            deleteButton.addEventListener('click', function () {
-                document.getElementById('criteria-wrap-' + criterion[i].id).remove();
-                updateTotalSum();
-            });
-        }
-        setupMaxValueInputs();
-    }
-}
 
-async function getCriterionByTypeAndPizzeriaId(value) {
-    let response = await fetch("/api/criteria/" + value);
-    if (response.ok) {
-        return await response.json();
-    } else {
-        console.log(response);
-        alert("Ошибка HTTP: " + response.status);
-    }
-}
-const checklistSubmitButton = document.getElementById("checklistSubmitButton");
-const createCriteriaButton = document.getElementById('createCriteria');
-const findCriteriaButton = document.getElementById('findCriteria');
-const checklistType = document.getElementById("checklistType")
-
-checklistType.addEventListener('change', () => {
-    checklistSubmitButton.classList.remove('disabled');
-    createCriteriaButton.classList.remove('disabled');
-    findCriteriaButton.classList.remove('disabled');
-})
-
-function setupMaxValueInputs() {
-    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
-    for (let input of maxValueInputs) {
-        input.addEventListener('input', () => {
-            updateTotalSum();
-        });
-    }
-    updateTotalSum();
-}
-
-function countTotalSum(maxValueInputs) {
-    totalSum = 0;
-    for (let i = 0; i < maxValueInputs.length; i++) {
-        let value = parseInt(maxValueInputs[i].value) || 0;
-        if (value>=0){
-            totalSum +=value;
-        }
-    }
-    let sum = document.getElementById('totalSum');
-    sum.innerHTML = totalSum+'/'+type;
-    console.log(totalSum);
-}
-
-function updateTotalSum() {
-    totalSum = 0;
-    let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
-    countTotalSum(maxValueInputs);
-    console.log('type:', type);
-    console.log('totalSum:', totalSum);
-}
-
-
-
-let createForm = document.getElementById('create-form');
-createForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    putIndexesToListAndValidate();
-});
-
-function putIndexesToListAndValidate() {
-    updateTotalSum();
-    if (totalSum < type || totalSum>type){
-        console.error("не правильно !");
-        document.getElementById('error-message').style.display = 'block';
-        return;
-    }
-    document.getElementById('error-message').style.display = 'none';
-    let criteriaList = document.querySelector('.criterion-list');
-    let criteriaWraps = criteriaList.querySelectorAll('tr');
-    for (let i = 0; i < criteriaWraps.length; i++) {
-        let hiddenInput = criteriaWraps[i].querySelector('input[type="hidden"]');
-        let maxValueInput = criteriaWraps[i].querySelector('input[type="number"]');
-
-        if (hiddenInput) {
-            hiddenInput.name = 'criteriaMaxValueDtoList[' + i + '].criteriaId';
-        }
-        if (maxValueInput) {
-            maxValueInput.name = 'criteriaMaxValueDtoList[' + i + '].maxValue';
-        }
-    }
-
-    createForm.submit();
-}
-
-document.getElementById('checklistType').addEventListener('change', async function() {
-    let sum = document.getElementById('totalSum');
-    sum.innerHTML = " ";
-    updateTotalSum();
-    let value = this.value;
-    totalSum = 0;
-    await getCriterion(value);
-    updateTotalSum();
-});
