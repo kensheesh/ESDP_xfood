@@ -27,7 +27,6 @@ public class SupervisorController {
     private final ManagerServiceImpl managerService;
     private final WorkScheduleServiceImpl workScheduleService;
     private final OpportunityServiceImpl opportunityService;
-    private final CheckTypeServiceImpl checkTypeService;
     private final AppealServiceImpl appealService;
     private final OkHttpService okHttpService;
     private final AuthParams authParams;
@@ -82,12 +81,4 @@ public class SupervisorController {
         model.addAttribute("appealsCount", appealService.getAmountOfNewAppeals());
         return "weekly_schedules";
     }
-
-    @GetMapping("/templates")
-//    @PreAuthorize("hasAnyAuthority('admin:read','supervisor:read')")
-    public String getTemplates (Model model) {
-        model.addAttribute("templates", checkTypeService.getCheckTypes());
-        return "templates";
-    }
-
 }

@@ -34,6 +34,8 @@ public class SecurityConfig {
 			"/appeal/**",
 			"/checks/**",
 			"/api/oauth/**",
+			"/api/checklist/criteria/percentage/**",
+			"/api/checks/points/**",
 			"/"
 			
 	};

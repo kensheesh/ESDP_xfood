@@ -54,15 +54,6 @@
             font-size: 0.875rem;
         }
 
-        .error-message {
-            color: white;
-            background-color: #dc3545;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-        }
-
         .appeal-submitted {
             float: right;
             margin-left: 5px;
@@ -83,15 +74,13 @@
     </style>
 
     <main class="container mt-4">
-        <#if error??>
-            <div class="error-message">${error}</div>
+        <#if guest?? && checkList.status == "IN_PROGRESS" || guest?? && checkList.status == "NEW">
+            <h1>Данный чеклист еще не опубликован</h1>
         <#else>
             <div class="notification">
                 ! - Данный знак рядом с критерием означает, что на данный критерий подана аппеляция, которую еще не
                 рассмотрели.
             </div>
-
-
 
             <div class="table-responsive rounded p-3">
                 <table id="mainTable" class="table rounded-3">
@@ -99,13 +88,16 @@
                     <tr>
                         <th colspan="1" class="text-center">${checkList.pizzeria.name}</th>
                         <th colspan="2" class="text-center">${checkList.manager.name} ${checkList.manager.surname}</th>
-                        <th colspan="1" class="text-center">${checkList.managerWorkDate} ${checkList.managerWorkStartTime}-${checkList.managerWorkEndTime}</th>
+                        <th colspan="2"
+                            class="text-center">${checkList.managerWorkDate} ${checkList.managerWorkStartTime}
+                            -${checkList.managerWorkEndTime}</th>
                     </tr>
                     <tr>
                         <th class="text-center">Раздел</th>
                         <th class="text-center">Что проверить</th>
                         <th class="text-center">Оценка</th>
                         <th class="text-center">Действия</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody id="mainTableBody">
@@ -140,17 +132,18 @@
                                            aria-valuemax="${criteria.maxValue}">
                                 </td>
                                 <td class="text-center">
-                                    <#if guess??>
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <button class="btn btn-warning btn-sm appeal-button"
-                                                data-criteria-id="${criteria.id}">Подать апелляцию
-                                        </button>
+                                    <#if guest?? && checkList.status == "DONE">
+                                        <#if isRecent == true>
+                                            <div class="d-flex justify-content-end align-items-center">
+                                                <button class="btn btn-warning btn-sm appeal-button"
+                                                        data-criteria-id="${criteria.id}">Подать апелляцию
+                                                </button>
+                                                <#if criteria.isAccepted?? && true>
+                                                    <span class="appeal-submitted">!</span>
+                                                </#if>
+                                            </div>
                                         </#if>
-                                        <#if criteria.isAccepted?? && true>
-                                            <span class="appeal-submitted">!</span>
-                                        </#if>
-                                    </div>
-
+                                    </#if>
                                 </td>
                             <#else>
                                 <#if criteria.section == 'Критический фактор'>
@@ -165,19 +158,22 @@
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
                                     <td class="text-center bg-danger">
-                                        <#if guess??>
-                                        <div class="d-flex justify-content-end align-items-center">
-                                            <button class="btn btn-warning btn-sm appeal-button"
-                                                    data-criteria-id="${criteria.id}">Подать апелляцию
-                                            </button>
+                                        <#if guest?? && checkList.status == "DONE">
+                                            <#if isRecent == true>
+                                                <div class="d-flex justify-content-end align-items-center">
+                                                    <button class="btn btn-warning btn-sm appeal-button"
+                                                            data-criteria-id="${criteria.id}">Подать апелляцию
+                                                    </button>
+
+                                                    <#if criteria.isAccepted?? && true>
+                                                        <span class="appeal-submitted">!</span>
+                                                    </#if>
+                                                    <button class="btn btn-info btn-sm comments-button"
+                                                            data-criteria-id="${criteria.id}">Комментарии
+                                                    </button>
+                                                </div>
                                             </#if>
-                                            <#if criteria.isAccepted?? && true>
-                                                <span class="appeal-submitted">!</span>
-                                            </#if>
-                                            <button class="btn btn-info btn-sm comments-button"
-                                                    data-criteria-id="${criteria.id}">Комментарии
-                                            </button>
-                                        </div>
+                                        </#if>
                                     </td>
                                 <#elseif criteria.section == 'WOW фактор'>
                                     <td class="text-center bg-success">${criteria.section}</td>
@@ -210,46 +206,59 @@
                     </tfoot>
                 </table>
             </div>
-        </#if>
-        <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="commentsModalLabel">Комментарии</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="commentsModalBody">
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            <div class="text-end mb-5 mt-2">
+                <#list authorities as authority>
+                    <#if authority.authority == "ROLE_ADMIN" || name?? && name == checkList.getExpertEmail()>
+                        <#if checkList.status == "IN_PROGRESS">
+                            <button id="reopenCheck" class="btn btn-success">Возобновить</button>
+                        <#elseif checkList.status == "NEW">
+                            <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
+                        </#if>
+                    </#if>
+                </#list>
+            </div>
+
+            <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="commentsModalLabel">Комментарии</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="commentsModalBody">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <input type="hidden" id="checkId" value="${checkList.id}">
-        <#assign known = SPRING_SECURITY_CONTEXT??>
-        <#if known>
-            <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
-        </#if>
+            <input type="hidden" id="checkId" value="${checkList.id}">
 
-        <#list authorities as authority>
-            <#if authority.authority == "ROLE_ADMIN">
-                <#if checkList.isDeleted>
-                    <div class="text-end mb-5">
-                        <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#restoreModal">
-                            Восстановить проверку
-                        </button>
-                    </div>
-                <#else>
-                    <div class="text-end mb-5">
-                        <button class="btn btn-outline-danger mt-2" data-bs-toggle="modal"
-                                data-bs-target="#deleteModal">Удалить проверку
-                        </button>
-                    </div>
-                </#if>
+            <#if known>
+                <#list authorities as authority>
+                    <#if authority.authority == "ROLE_ADMIN">
+                        <#if checkList.isDeleted>
+                            <div class="text-end mb-5">
+                                <button class="btn btn-primary mt-2" data-bs-toggle="modal"
+                                        data-bs-target="#restoreModal">
+                                    Восстановить проверку
+                                </button>
+                            </div>
+                        <#else>
+                            <div class="text-end mb-5">
+                                <button class="btn btn-outline-danger mt-2" data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal">Удалить проверку
+                                </button>
+                            </div>
+                        </#if>
+                    </#if>
+                </#list>
             </#if>
-        </#list>
+        </#if>
     </main>
 
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -284,7 +293,9 @@
                     Вы уверены, что хотите восстановить проверку?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary"
+                            data-bs-dismiss="modal">Отмена
+                    </button>
                     <form class="d-inline-block" action="/checks/${checkList.uuidLink}/restore" method="post">
                         <button class="btn btn-primary">Восстановить</button>
                     </form>
@@ -296,6 +307,8 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const maxPoint = document.getElementById('maxPoint')
             const percentageDisplay = document.getElementById('percentageResult');
+            const btnStartCheck = document.getElementById('startCheck');
+            const btnReopenCheck = document.getElementById('reopenCheck');
 
             async function showResultPercentage() {
                 let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
@@ -305,8 +318,27 @@
                 return data;
             }
 
+            <#if checkList.status == "NEW">
+            btnStartCheck.addEventListener('click', () => startCheck());
+            <#elseif checkList.status = "IN_PROGRESS">
+            btnReopenCheck.addEventListener('click', () => {
+                window.location.href = '/checks/${checkList.uuidLink}/fill'
+            });
+            </#if>
+
+
+            async function startCheck() {
+                await fetch('/api/checks/change/status/' + ${checkList.id}, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+                window.location.href = '/checks/${checkList.uuidLink}/fill'
+            }
+
             async function showMaxPoint() {
-                let response = await fetch('/api/checks/${checkList.id}/points')
+                let response = await fetch('/api/checks/points/${checkList.id}')
                 let data = await response.json()
                 console.log(data)
                 maxPoint.innerText = data
@@ -410,7 +442,7 @@
 
             async function fetchAndDisplayComments(criteriaId) {
                 let checkId = document.getElementById('checkId').value;
-                let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
+                let response = await fetch('/api/comments/' + checkId + '/' + criteriaId);
                 let data = await response.json();
                 displayComments(data);
             }

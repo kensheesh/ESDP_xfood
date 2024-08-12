@@ -3,10 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.*;
 import kg.attractor.xfood.dto.appeal.AppealDto;
 import kg.attractor.xfood.dto.appeal.AppealListDto;
-import kg.attractor.xfood.dto.checklist.CheckListAnalyticsDto;
-import kg.attractor.xfood.dto.checklist.CheckListResultDto;
-import kg.attractor.xfood.dto.checklist.ChecklistMiniExpertShowDto;
-import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
+import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
@@ -26,6 +23,7 @@ import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
+import kg.attractor.xfood.service.CheckTypeFeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +40,7 @@ import static java.util.stream.Collectors.toList;
 public class DtoBuilder {
     private final ChecklistCriteriaRepository checkListsCriteriaRepository;
     private final AppealRepository appealRepository;
+    private final CheckTypeFeeService checkTypeFeeService;
 
 
     public ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
@@ -109,11 +108,12 @@ public class DtoBuilder {
 
         return ChecklistShowDto.builder()
                 .uuidLink(model.getUuidLink())
+                .endTime(model.getEndTime())
                 .id(model.getId())
                 .pizzeria(pizzeriaDto)
                 .manager(managerDto)
                 .status(model.getStatus())
-                .isDeleted(Boolean.FALSE)
+                .isDeleted(model.getDeleted())
                 .expertEmail(model.getExpert().getEmail())
                 .managerWorkDate(model.getWorkSchedule().getStartTime().format(dateTimeFormatter))
                 .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(timeFormatter))
@@ -149,6 +149,7 @@ public class DtoBuilder {
                 .pizzeria(pizzeriaDto)
                 .manager(managerDto)
                 .status(model.getStatus())
+                .endTime(model.getEndTime())
                 .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(formatter))
                 .managerWorkEndTime(model.getWorkSchedule().getEndTime().format(formatter))
                 .criteria(sortedCriteriaDtos)
@@ -419,8 +420,20 @@ public class DtoBuilder {
 				.fullName(model.getFullName())
 				.pizzeriaName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getName())
 				.locationName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getLocation().getName())
-//				.expertFullName(model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getName() + " "
-//						+ model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getSurname() )
+				.expertFullName(model.getCheckListsCriteria().getChecklist().getExpert().getName() + " "
+						+ model.getCheckListsCriteria().getChecklist().getExpert().getSurname() )
 				.build();
 	}
+
+    public CheckListRewardDto buildCheckListRewardDto(CheckList model) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        Long checkTypeId = model.getCheckType().getId();
+        return CheckListRewardDto.builder()
+                .checklistUUID(model.getUuidLink())
+                .endDate(formatter.format(model.getEndTime()))
+                .expertName(model.getExpert().getName() + " " + model.getExpert().getSurname())
+                .pizzeriaName(model.getWorkSchedule().getPizzeria().getName())
+                .sumRewards(checkTypeFeeService.getFeesByCheckTypeId(checkTypeId).doubleValue())
+                .build();
+    }
 }

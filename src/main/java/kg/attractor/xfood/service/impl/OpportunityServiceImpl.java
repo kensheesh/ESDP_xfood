@@ -207,7 +207,7 @@ public class OpportunityServiceImpl implements OpportunityService {
 
         for (LocalDateTime dayOfWeek = monday; dayOfWeek.isBefore(monday.plusDays(7)); dayOfWeek = dayOfWeek.plusDays(1)) {
             DailyOpportunityShowDto opportunityDto = new DailyOpportunityShowDto();
-            Optional<Opportunity> opportunity = opportunityRepository.findByUser_IdAndLocalDate(e.getId(), dayOfWeek.toLocalDate());
+            Optional<Opportunity> opportunity = opportunityRepository.findFirstByUser_IdAndDate(e.getId(), dayOfWeek.toLocalDate());
             log.info("Optional opportunity: " + opportunity.toString());
             if (opportunity.isPresent()){
                 opportunityDto.setId(opportunity.get().getId());

@@ -44,7 +44,7 @@ public class CheckList {
 	@JoinColumn(name = "expert_id")
 	private User expert;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "type_id")
 	private CheckType checkType;
 	
