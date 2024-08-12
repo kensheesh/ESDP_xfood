@@ -55,18 +55,18 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
                                     <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
-                                    <#if authorizedUser.authorities[0].authority??>
-                                        <#if authorizedUser.authorities[0].authority == "ROLE_ADMIN" ||
-                                        authorizedUser.authorities[0].authority == "ROLE_SUPERVISOR">
-                                            <li>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#addUser">
-                                                    Создать пользователя
-                                                </button>
-                                            </li>
-                                        <#else>
-                                        </#if>
-                                    </#if>
+<#--                                    <#if authorizedUser.authorities[0].authority??>-->
+<#--                                        <#if authorizedUser.authorities[0].authority == "ROLE_ADMIN" ||-->
+<#--                                        authorizedUser.authorities[0].authority == "ROLE_SUPERVISOR">-->
+<#--                                            <li>-->
+<#--                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"-->
+<#--                                                        data-bs-target="#addUser">-->
+<#--                                                    Создать пользователя-->
+<#--                                                </button>-->
+<#--                                            </li>-->
+<#--                                        <#else>-->
+<#--                                        </#if>-->
+<#--                                    </#if>-->
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
