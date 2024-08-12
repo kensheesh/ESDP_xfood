@@ -121,6 +121,9 @@ public class SettingServiceImpl implements SettingService {
         for(CriteriaType criteriaType : criteriaTypes){
             criteriaMaxValueDtoList.add(CriteriaMaxValueDto.builder()
                             .criteriaId(criteriaType.getCriteria().getId())
+                            .description(criteriaType.getCriteria().getDescription())
+                            .zone(criteriaType.getCriteria().getZone().getName())
+                            .section(criteriaType.getCriteria().getSection().getName())
                             .maxValue(criteriaType.getMaxValue())
                     .build());
         }

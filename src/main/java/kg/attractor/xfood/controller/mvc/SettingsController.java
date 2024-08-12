@@ -76,6 +76,7 @@ public class SettingsController {
         model.addAttribute("zones", zoneService.getZones());
         model.addAttribute("sections", sectionService.getSections());
         model.addAttribute("template", settingService.getTemplate(id));
+        model.addAttribute("templateCreateDto", new TemplateCreateDto());
         return "settings/template_edit";
     }
 }
