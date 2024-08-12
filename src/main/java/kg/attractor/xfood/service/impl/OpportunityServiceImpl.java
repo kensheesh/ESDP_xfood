@@ -84,12 +84,12 @@ public class OpportunityServiceImpl implements OpportunityService {
     }
 
     @Override
-    public Map<String, OpportunityDto> getAllByExpert() {
+    public Map<String, OpportunityDto> getAllByExpert(int week) {
         String expertEmail = AuthParams.getPrincipal().getUsername();
 
         int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue();
-        LocalDate monday = LocalDate.now().minusDays(dayOfWeek - 1);
-        LocalDate sunday = LocalDate.now().plusDays(7 - dayOfWeek);
+        LocalDate monday = LocalDate.now().plusWeeks(week).minusDays(dayOfWeek - 1);
+        LocalDate sunday = LocalDate.now().plusWeeks(week).plusDays(7 - dayOfWeek);
 
         List<Opportunity> models = opportunityRepository.findAllByUserEmailAndDateBetween(expertEmail, monday, sunday);
 
