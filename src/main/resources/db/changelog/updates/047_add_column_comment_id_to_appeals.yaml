@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: add column comment_id to appeals table
+      author: Bubunur
+      changes:
+        - addColumn:
+            tableName: appeals
+            columns:
+              - column:
+                  name: comment_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    references: comments(id)
+                    foreignKeyName: fk_comment__id
+
