@@ -277,6 +277,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', async (node, child) => {
 
+
+
             const mainTableBody = document.getElementById('mainTableBody');
             const percentageDisplay = document.getElementById('percentageResult');
             const criticalSelect = document.getElementById('critFactorDescription');
@@ -343,6 +345,8 @@
                         let sectionCell, descriptionCell, inputCell, maxValueCell;
 
                         if (criteria.section === 'Критический фактор') {
+                            row.id = "crit-"+criteria.id;
+
                             sectionCell = createTableCell('td', 'text-center bg-danger', criteria.section);
                             descriptionCell = createTableCell('td', 'bg-danger', criteria.description);
                             maxValueCell = createTableCell('td', 'bg-danger', '')
@@ -879,6 +883,18 @@
                 });
             }
 
+            async function checkCritComments(){
+                let elements = document.querySelectorAll('[id^="crit-"]');
+                let criteriaIds = [];
+                elements.forEach(element => {
+                    let id = element.id;
+                    let criteriaId = id.substring(5);
+                    console.log(criteriaId);
+                    criteriaIds.push(criteriaId);
+                });
+
+
+            }
 
         });
 

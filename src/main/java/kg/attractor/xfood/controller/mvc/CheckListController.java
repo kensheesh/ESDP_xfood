@@ -188,9 +188,9 @@ public class CheckListController {
 
     @PostMapping("/{uuid}/{criteriaId}")
     public String comment(@PathVariable(name = "uuid") String uuid, @PathVariable(name = "criteriaId") Long
-            criteriaId, CommentDto commentDto, Model model) {
+            criteriaId, CommentDto commentDto) {
         checkListService.comment(uuid, criteriaId, commentDto);
-        return "redirect:/checks/" + uuid + "/check";
+        return "redirect:/checks/" + uuid + "/fill";
 
     }
 
