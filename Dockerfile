@@ -12,3 +12,6 @@ RUN mvn clean install -DskipTests
 
 # Определяем команду для запуска приложения
 CMD ["mvn", "spring-boot:run"]
+
+
+
