@@ -9,9 +9,9 @@ body {
 @media screen and (max-width: 575px) {
     .sidebar {
         position: fixed;
-        bottom: 0;
+        bottom: 0px;
         left: 0;
-        z-index: 10;
+        z-index: 10 ;
     }
     body {
         margin-bottom: 140px;
@@ -28,25 +28,13 @@ body {
     color: #D15700;
 }
 
-.btn.btn-dodo-light:active  {
+a.btn.btn-dodo-light:active  {
     background-color: transparent;
     border: 3px solid #F1D8C7;
     color: #F1D8C7;
 }
 
-.btn.disabled.btn-dodo-light  {
-    background-color: #F1D8C7;
-    color: #D15700;
-    border: 0;
-}
-
-.btn.disabled.btn-dodo-light  {
-    background-color: #F1D8C7;
-    color: #D15700;
-    border: 0;
-}
-
-.btn.btn-dodo-light.show.dropdown-toggle {
+a.btn.disabled.btn-dodo-light  {
     background-color: #F1D8C7;
     color: #D15700;
     border: 0;
