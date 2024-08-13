@@ -41,7 +41,7 @@
         </div>
         <div class="col-md-8 col-xl-9">
             <div class="text-end">
-                <a href="#" class="btn btn-secondary">+ Добавить шаблон</a>
+                <a href="/templates/create" class="btn btn-secondary">+ Добавить шаблон</a>
             </div>
             <#list templates as template>
                 <div class="card my-2 text-decoration-none border border-secondary">
@@ -51,8 +51,8 @@
                             <span class="col-3">Кол. критериев: <b>${template.numsOfCriteria}</b></span>
                             <span class="col-3">Макс. балл: <b>${template.totalValue}</b></span>
                             <span class="col-3">Вознаграждение: <b>${template.fee}₽</b></span>
-                            <div class="btn btn-secondary col-1 ms-auto" id="edit_btn" value="${template.id}" onclick="handleEditClick(this.value)"><i class="bi bi-pencil-fill"></i></div>
-                            <div class="btn btn-warning col-1 ms-auto text-white" id="delete_btn" value="${template.id}" onclick="handleDeleteClick(this.value)"><i class="bi bi-trash-fill"></i></div>
+                            <div class="btn btn-secondary col-1 ms-auto" data-id="${template.id}" onclick="handleEditClick(this)"><i class="bi bi-pencil-fill"></i></div>
+                            <div class="btn btn-warning col-1 ms-auto text-white" id="delete_btn" data-id="${template.id}" onclick="handleDeleteClick(this)"><i class="bi bi-trash-fill"></i></div>
                         </div>
                     </div>
                 </div>
@@ -61,12 +61,14 @@
     </div>
 
     <script>
-        function handleEditClick(selectedValue) {
-            window.location.href = '#' + selectedValue
+        function handleEditClick(element) {
+            const selectedValue = element.getAttribute('data-id');
+            window.location.href = '/templates/' + selectedValue;
         }
 
-        function handleDeleteClick(selectedValue) {
-            window.location.href = '#' + selectedValue
+        function handleDeleteClick(element) {
+            const selectedValue = element.getAttribute('data-id');
+            window.location.href = '#' + selectedValue;
         }
     </script>
 
