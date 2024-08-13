@@ -63,6 +63,12 @@
                                                     Создать пользователя
                                                 </button>
                                             </li>
+                                            <li>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#tokenModal">
+                                                    Привязать токен
+                                                </button>
+                                            </li>
                                         <#else>
                                         </#if>
                                     </#if>
@@ -82,6 +88,35 @@
     <main class="container my-4">
         <#nested spring>
     </main>
+
+    <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tokenModal">
+                        Привязать токен доступа
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form id="bearerForm">
+                    <div class="modal-body">
+                        <label for="bearer" class="form-label">Токен</label>
+                        <input type="text" id="bearer" name="bearer" class="form-control" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" id="pushToken" class="btn btn-primary" data-bs-dismiss="modal"
+                                data-bs-target="#tokenModal">
+                            Сохранить токен
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade modal-lg" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -179,6 +214,34 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/ru.min.js"></script>
+    <script>
+        document.getElementById('pushToken').addEventListener('click', async function() {
+            const form = document.getElementById('bearerForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/api/bearer', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Optionally, handle the response here
+                const result = await response.json();
+                console.log(result);
+
+                // Close the modal if needed
+                const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                modal.hide();
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+        });
+    </script>
+    </script>
     </body>
     </html>
 </#macro>
