@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout>
+<@main.layout; spring>
 
     <style>
         body {
@@ -208,15 +208,17 @@
             </div>
 
             <div class="text-end mb-5 mt-2">
-                <#list authorities as authority>
-                    <#if authority.authority == "ROLE_ADMIN" || name?? && name == checkList.getExpertEmail()>
-                        <#if checkList.status == "IN_PROGRESS">
-                            <button id="reopenCheck" class="btn btn-success">Возобновить</button>
-                        <#elseif checkList.status == "NEW">
-                            <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
+                <#if authorities??>
+                    <#list authorities as authority>
+                        <#if authority.authority == "ROLE_ADMIN" || name?? && name == checkList.getExpertEmail()>
+                            <#if checkList.status == "IN_PROGRESS">
+                                <button id="reopenCheck" class="btn btn-success">Возобновить</button>
+                            <#elseif checkList.status == "NEW">
+                                <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
+                            </#if>
                         </#if>
-                    </#if>
-                </#list>
+                    </#list>
+                </#if>
             </div>
 
             <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"

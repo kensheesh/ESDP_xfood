@@ -20,7 +20,7 @@ public class StatisticsController {
     private final UserService userService;
     private final CheckListService checkListService;
 
-    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
+
     @GetMapping
     private String statistics(@RequestParam(name = "from", required = false) LocalDate from, @RequestParam(name = "to", required = false)LocalDate to, Model model){
        if (from != null && to != null) {
