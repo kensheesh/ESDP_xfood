@@ -82,7 +82,7 @@ public class SettingsController {
         return "settings/template_edit";
     }
 
-    @PostMapping("/templates/{id}/update")
+    @PostMapping("/templates/{id}")
     public String updateTemplate( @PathVariable Long id ,@Valid TemplateUpdateDto templateUpdateDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("zones", zoneService.getZones());
