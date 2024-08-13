@@ -35,7 +35,7 @@ public class OpportunityController {
 
     @GetMapping("/opportunities")
     public ResponseEntity<OpportunityDto> getAllByExpertAndDate (@RequestParam (name = "d") LocalDate date) {
-        var opportunities = opportunityService.getByExpertAndDate(date);
-        return ResponseEntity.ok(opportunities);
+        OpportunityDto opportunity = opportunityService.getByExpertAndDate(date);
+        return ResponseEntity.ok(opportunity);
     }
 }

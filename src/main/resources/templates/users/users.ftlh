@@ -1,5 +1,10 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
+    <#assign known = SPRING_SECURITY_CONTEXT??>
+    <#if known>
+        <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
+    </#if>
+
 
     <style>
         .user-info {
@@ -45,15 +50,102 @@
     </style>
 
     <div class="container">
-        <div class="row">
-            <div class="card-container col-lg-8" id="user-list">
+        <div class="row row-cols-md-3 row-gap-3" >
+            <div class="col-md-4 col-xl-3 bg-body sidebar">
+                <div class="row row-cols-1 row-gap-3">
+                    <div class="col">
+                        <div class="card rounded-4 mb-2 mb-sm-0 shadow-sm border-0">
+                            <div class="card-body">
+                                <div class="row row-cols-1 row-gap-3 h-100">
+                                    <#assign userRole = authorizedUser.authorities[0].authority>
+                                    <div class="col">
+                                        <div class="row row-cols-4 row-cols-md-1 row-gap-2">
+                                            <div class="col">
+                                                <a href="/deadlines" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                                    Дедлайны
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="#" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                                    Токены
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="/templates" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                                    Шаблоны
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
+                                                    Пользователи
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card d-none d-md-block border-0 shadow-sm rounded-4 ">
+                            <div class="card-body">
+                                <h6>Фильтры</h6>
+                                <form action="/admin/users" method="GET">
+                                    <div class="mb-3">
+                                        <label for="role-select" class="form-label">Тип пользователя</label>
+                                        <select class="form-select" id="role-select-1" name="role">
+                                            <option value="default">Все</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" value="<#if searchWord??>${searchWord}</#if>"
+                                               class="form-control" placeholder="Поиск">
+                                    </div>
+                                    <button class="btn btn-green rounded-4 w-100" type="submit">Применить
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-container col-xl-9 col-md-8" id="user-list">
                 <#if users?size == 0>
                     <div class="alert alert-warning" role="alert">
                         Ничего не найдено.
                     </div>
                 <#else>
+                    <div class="d-flex flex-row gap-2 mb-3 flex-wrap">
+                        <div class="dropdown d-md-none">
+                            <button class="btn btn btn-light rounded-4 dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-funnel"></i> Фильтр
+                            </button>
+                            <div class="dropdown-menu p-3 rounded-4 shadow border-0 w-100">
+                                <h6>Фильтры</h6>
+                                <form action="/admin/users" method="GET">
+                                    <div class="mb-3">
+                                        <label for="role-select" class="form-label">Тип пользователя</label>
+                                        <select class="form-select" id="role-select-2" name="role">
+                                            <option value="default">Все</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="search" value="<#if searchWord??>${searchWord}</#if>"
+                                               class="form-control" placeholder="Поиск">
+                                    </div>
+                                    <button class="btn btn-green rounded-4 w-100" type="submit">Применить
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <button class="btn btn-dodo rounded-4" data-bs-toggle="modal" data-bs-target="#addUser">
+                            <i class="bi bi-person-fill-add"></i> Создать <span class="d-none d-sm-inline">пользователя</span>
+                        </button>
+                    </div>
                     <#list users as user>
-                        <div class="card mb-2 user-card">
+                        <div class="card border-0 shadow-sm rounded-4 mb-2 user-card">
                             <div class="card-body d-flex">
                                 <div class="user-info">
                                     <h5 class="card-title">ФИО: ${user.getName()} ${user.getSurname()}</h5>
@@ -120,28 +212,6 @@
                     </ul>
                 </nav>
             </div>
-
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h6>Фильтры</h6>
-                        <form action="/admin/users" method="GET">
-                            <div class="mb-3">
-                                <label for="role-select" class="form-label">Тип пользователя</label>
-                                <select class="form-select" id="role-select" name="role">
-                                    <option value="default">Все</option>
-                                </select>
-                            </div>
-                            <div class="input-group mb-3">
-                                <input type="text" name="search" value="<#if searchWord??>${searchWord}</#if>"
-                                       class="form-control" id="search-input" placeholder="Поиск">
-                            </div>
-                            <button class="btn btn-outline-success w-100" id="buttonFilter" type="submit">Применить
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -194,14 +264,104 @@
         </div>
     </div>
 
+    <div class="modal fade modal-lg" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content rounded-4">
 
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserLabel">Введите данные нового сотрудника</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="addUserForm" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Имя</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="surname" class="form-label">Фамилия</label>
+                            <input type="text" id="surname" name="surname" class="form-control" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label" for="tgLink">Ccылка на телеграм</label>
+                            <input type="text" id="tgLink" name="tgLink" class="form-control" required
+                                   pattern="^t\.me/.*"
+                                   placeholder="Пожалуйста, введите ссылку на телеграм, начиная с t.me/."/>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Адрес эл. почты</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                            <div id="emailError" class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Пароль</label>
+                            <input type="password" id="password" name="password" class="form-control" required
+                                   pattern="^(?=.*\d)(?=.*[a-zA-Z]).{8,}$"
+                                   placeholder="Пароль должен быть не менее 8 символов, содержать цифры и буквы."/>
+                        </div>
+
+                        <#if authorizedUser??>
+                            <#if authorizedUser.authorities[0].authority??>
+                                <#if authorizedUser.authorities[0].authority == "ROLE_ADMIN" >
+                                    <div class="mb-4">
+                                        <div class="row row-cols-2 gap-2">
+                                            <div class="col-auto">
+                                                <p class="mb-1">Выберите роль:</p>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <div class="form-check">
+                                                        <input type="radio" id="expert" name="role" value="expert"
+                                                               class="form-check-input"
+                                                               checked required>
+                                                        <label class="form-check-label" for="expert">Эксперт</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="radio" id="supervisor" name="role" value="supervisor"
+                                                               class="form-check-input" required>
+                                                        <label class="form-check-label" for="supervisor">Руководитель</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <#else>
+                                    <div class="mb-4">
+                                        <div class="d-flex ">
+                                            <p class="me-3">Выберите роль:</p>
+                                            <div class="form-check me-3">
+                                                <input type="radio" id="expert" name="role" value="expert"
+                                                       class="form-check-input"
+                                                       checked required>
+                                                <label class="form-check-label" for="expert">Эксперт</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </#if>
+                            <#else>
+                            </#if>
+                        <#else>
+                        </#if>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-dodo rounded-4">Создать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/validation.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const roleSelect = document.getElementById('role-select');
-            const searchInput = document.getElementById('search-input');
-            const userCards = document.querySelectorAll('.user-card');
-            const btnEdit = document.getElementById('btn-edit');
-            const btnDelete = document.getElementById('btn-delete');
+            const roleSelect1 = document.getElementById('role-select-1');
+            const roleSelect2 = document.getElementById('role-select-2');
             const editUserModal = new bootstrap.Modal(document.getElementById('editUserModal'));
 
             async function getRoles(select, currentRole) {
@@ -289,7 +449,8 @@
             });
 
 
-            await getRoles(roleSelect, '${currentRole}');
+            await getRoles(roleSelect1, '${currentRole}');
+            await getRoles(roleSelect2, '${currentRole}')
         });
     </script>
 </@main.layout>
