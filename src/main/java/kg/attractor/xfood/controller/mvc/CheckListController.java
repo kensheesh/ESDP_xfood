@@ -44,6 +44,7 @@ public class CheckListController {
 
 
     //    // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR')")
     @GetMapping("/create")
     public String create(@RequestParam(name = "date") LocalDate date, @RequestParam(name = "managerId") Long managerId, @RequestParam(name = "expertId") Long expertId, Model model) {
         model.addAttribute("zones", zoneService.getZones());
@@ -59,6 +60,7 @@ public class CheckListController {
 
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR')")
     @PostMapping("/create")
     public String create(CheckListSupervisorCreateDto createDto) {
         CheckListMiniSupervisorCreateDto checklistDto = checkListService.create(createDto);
@@ -158,6 +160,7 @@ public class CheckListController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR')")
     @GetMapping ("/{id}/update")
     public String edit (@PathVariable (name="id") String uuid,@RequestParam(name = "type", required = false) String type,  Model model) {
             model.addAttribute("zones",zoneService.getZones() );
@@ -169,10 +172,11 @@ public class CheckListController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR')")
     @PostMapping("/{id}/update")
     public String edit(@PathVariable(name = "id") String uuid, CheckListSupervisorEditDto checkList) {
         checkListService.edit(checkList);
-        return "redirect:/checks/" + uuid + "/check";
+        return "redirect:/checks/" + uuid;
     }
 
     @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")

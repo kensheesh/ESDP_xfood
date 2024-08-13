@@ -12,6 +12,7 @@ import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
 import kg.attractor.xfood.service.impl.SettingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,7 +50,7 @@ public class SettingsController {
         return "settings/templates";
     }
 
-
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @GetMapping("/templates/create")
     public String getTemplatesCreate (Model model) {
         model.addAttribute("zones", zoneService.getZones());
@@ -58,6 +59,7 @@ public class SettingsController {
         return "settings/template_create";
     }
 
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @PostMapping("/templates/create")
     public String TemplatesCreate (@Valid TemplateCreateDto templateCreateDto,BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -71,7 +73,7 @@ public class SettingsController {
         settingService.createTemplate(templateCreateDto);
         return "redirect:/templates";
     }
-
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @GetMapping("/templates/{id}")
     public String getTemplateDetail (@PathVariable Long id, Model model) {
         model.addAttribute("zones", zoneService.getZones());
@@ -82,6 +84,7 @@ public class SettingsController {
         return "settings/template_edit";
     }
 
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @PostMapping("/templates/{id}/update")
     public String updateTemplate( @PathVariable Long id ,@Valid TemplateUpdateDto templateUpdateDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {

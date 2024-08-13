@@ -4,6 +4,7 @@ import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class StatisticsController {
     private final UserService userService;
     private final CheckListService checkListService;
 
-
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @GetMapping
     private String statistics(@RequestParam(name = "from", required = false) LocalDate from, @RequestParam(name = "to", required = false)LocalDate to, Model model){
        if (from != null && to != null) {
