@@ -4,8 +4,8 @@ import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.FileService;
-import kg.attractor.xfood.service.impl.FileServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 @Controller
 @RequestMapping("appeals")
@@ -25,11 +24,18 @@ public class AppealController {
     private final AppealService appealService;
     private final FileService fileService;
 
+    @PreAuthorize("hasAnyAuthority('supervisor:read', 'admin:read')")
     @GetMapping
     public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
+                                @RequestParam(name = "expertId", defaultValue = "0") Long expertId,
+                                @RequestParam(name = "pizzeriaId", defaultValue = "0") Long pizzeriaId,
+                                @RequestParam(name = "status", required = false) Boolean status,
                                 Model model) {
-        var appeals = appealService.getAllByStatus(null, page);
+        var appeals = appealService.getAllByStatus(status, page, pizzeriaId, expertId);
         model.addAttribute("appeals", appeals);
+        model.addAttribute("currentExpert", expertId);
+        model.addAttribute("currentPizzeria", pizzeriaId);
+        model.addAttribute("currentStatus", status);
         return "appeals/appeals";
     }
     

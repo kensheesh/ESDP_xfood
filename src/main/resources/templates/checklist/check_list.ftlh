@@ -128,7 +128,7 @@
                  <#if authority.authority == 'ROLE_SUPERVISOR' || authority.authority == 'ROLE_ADMIN'>
                             <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить проверку</button>
                         </#if>
-                    <#if authority.authority == 'ROLE_SUPERVISOR'>
+                    <#if authority.authority == 'ROLE_SUPERVISOR' || authority.authority == 'ROLE_ADMIN'>
                             <a href="/checks/${checkList.uuidLink}/update" class="btn btn-success"  role="link" >Редактировать </a>
                     </#if>
                 </#list>

@@ -1,5 +1,6 @@
 package kg.attractor.xfood.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LocationDto {
     private Long id;
+    @NotBlank
     private String name;
     private Integer timezone;
-    private String countryCode;
+    @NotBlank
+    private CountryDto country;
 }

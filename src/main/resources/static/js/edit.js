@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalSum = 0;
 
     values.forEach((element) => {
-        totalSum += parseInt(element.value) || 0;
+        if (element.value>0){
+            totalSum += parseInt(element.value) || 0;
+        }
     });
-    sum.innerHTML = `<p>${totalSum}</p>`;
+    sum.innerHTML = `<p>${totalSum}/${totalSum}</p>`;
 
 
     values.forEach((element) => {
@@ -87,9 +89,8 @@ async function addCriteriaToList(id) {
              <input type="hidden" value="${criteria.id}" name="criterion[${id}].id">
              <td>${criteria.zone}</td>
              <td>${criteria.description}</td>
-             <td>${criteria.section === '' ?
-                `<input type="number" name="criterion[${id}].maxValue"  class="form-control form-control-sm" required min="1" value="1" id="value-${id}">` :
-                `${criteria.coefficient}`}
+             <td>
+                <input type="number" name="criterion[${id}].maxValue"  class="form-control form-control-sm" required ${criteria.section === '' ? `min="1" value="1"` : `max="${criteria.coefficient}" value="${criteria.coefficient} readonly"`} id="value-${id}">
              </td>
              <td>
                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${id}">
@@ -109,7 +110,7 @@ async function addCriteriaToList(id) {
 }
 
 async function getCriteriaById(id) {
-    let response = await fetch("/api/criteria/" + id);
+    let response = await fetch("/api/criteria/get/" + id);
     if (response.ok) {
         return await response.json();
     } else {
@@ -167,9 +168,7 @@ async function validate(event) {
                 '<td>' + data.zone + '</td>' +
                 '<td>' + data.description + '</td>' +
                 '<td>' +
-                (data.section === ''
-                    ? '<input type="number" name="criterion[' + createdId + '].maxValue"  class="form-control form-control-sm" required min="1" value="1" id="value-' + createdId + '">'
-                    : data.coefficient) +
+                '<input type="number" name="criterion[' + createdId + '].maxValue"  class="form-control form-control-sm" required  '+ (data.section === ''  ? 'min="1" value="1"' : 'max="'+data.coefficient+'" value="'+data.coefficient+'"')+ 'id="value-' + createdId + '">'+
                 '</td>' +
                 '<td>' +
                 '<button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-' + createdId + '">' +
@@ -287,11 +286,13 @@ function setupMaxValueInputs() {
 function countTotalSum(maxValueInputs) {
     totalSum = 0;
     for (let i = 0; i < maxValueInputs.length; i++) {
-        totalSum += parseInt(maxValueInputs[i].value) || 0;
+        if (parseInt(maxValueInputs[i].value)>0){
+            totalSum += parseInt(maxValueInputs[i].value) || 0;
+        }
     }
     let sum = document.getElementById('sum');
     type = document.getElementById('totalSum').value
-    sum.innerHTML = `${totalSum}/${type}`;
+    sum.innerHTML = `<p>${totalSum}/${type}</p>`;
     console.log(totalSum);
 }
 
@@ -308,7 +309,9 @@ function checkSum(ev){
     let maxValueInputs = document.querySelectorAll('[id^="value-"]');
     let sum = 0;
     for (let i = 0; i < maxValueInputs.length; i++) {
-        sum += parseInt(maxValueInputs[i].value) || 0;
+        if (parseInt(maxValueInputs[i].value)>0){
+            sum += parseInt(maxValueInputs[i].value) || 0;
+        }
     }
    console.log("total "+total +" sum "+sum)
    if (sum < total || sum>total){

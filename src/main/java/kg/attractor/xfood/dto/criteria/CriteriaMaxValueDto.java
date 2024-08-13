@@ -18,4 +18,8 @@ public class CriteriaMaxValueDto {
     @NotNull(message = "оценка не может быть null")
     private Integer maxValue;
     private Long criteriaId;
+
+    private String zone;
+    private String section;
+    private String description;
 }
