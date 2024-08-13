@@ -2,14 +2,17 @@ package kg.attractor.xfood.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "check_type_fees")
 public class CheckTypeFee {
 	@Id
@@ -24,7 +27,11 @@ public class CheckTypeFee {
 	@NotNull
 	@Column(name = "fees", nullable = false, precision = 10, scale = 2)
 	private BigDecimal fees;
-	
+
+	@NotNull
+	@Column(name = "created_date", nullable = false)
+	private LocalDateTime createdDate;
+
 	@NotNull
 	@Column(name = "enabled", nullable = false)
 	private Boolean enabled;

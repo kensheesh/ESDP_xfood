@@ -52,7 +52,7 @@ public interface CheckListService {
 
     StatisticsDto getStatistics(LocalDate from, LocalDate to);
 
-    List<DayDto> getDays(LocalDate from, LocalDate to);
+
 
     void comment(String uuid, Long criteriaId, CommentDto commentDto);
     void delete(String uuid);
@@ -62,4 +62,6 @@ public interface CheckListService {
     void restore(String uuid);
 
     ChecklistShowDto getCheckListByIdIncludeDeleted(String checkListId);
+
+    long getAmountOfNewChecks();
 }

@@ -52,6 +52,16 @@ public class CheckTypeServiceImpl implements CheckTypeService {
        return   checkTypeRepository.findByName(type).orElseThrow(() -> new NoSuchElementException("No such checkType: " + type));
     }
 
+    @Override
+    public void save(CheckType checkType) {
+        checkTypeRepository.save(checkType);
+    }
+
+    @Override
+    public boolean existsByName(String value) {
+        return checkTypeRepository.existsByName(value);
+    }
+
     public int getTotalMaxValueByTypeId(Long typeId) {
         List<CriteriaType> criterias = criteriaTypeRepository.findByType_Id(typeId);
         return criterias.stream()

@@ -14,4 +14,8 @@ public interface CheckTypeService {
     List<CheckTypeShowDto> getCheckTypes();
 
     CheckType findByName(String type);
+
+    void save(CheckType checkType);
+
+    boolean existsByName(String value);
 }

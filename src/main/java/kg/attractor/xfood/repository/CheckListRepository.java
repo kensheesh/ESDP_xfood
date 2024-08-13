@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -96,4 +97,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
 
     @Query("select c from CheckList  c where c.endTime between :startDate and :endDate ")
     List<CheckList> findAllByEndTimeBetween(LocalDate startDate, LocalDate endDate);
+
+    @Query("select count(c) from CheckList c where c.expert.email = ?1 and CAST(c.status as text) = :#{#status.getStatus()}")
+    long countByExpert_EmailAndStatus(String email, Status status);
 }

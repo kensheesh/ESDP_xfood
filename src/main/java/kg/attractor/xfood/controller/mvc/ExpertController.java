@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.service.OpportunityService;
+import kg.attractor.xfood.service.impl.CheckListServiceImpl;
 import kg.attractor.xfood.service.impl.SettingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class ExpertController {
     private final OpportunityService opportunityService;
     private final SettingServiceImpl settingService;
+    private final CheckListServiceImpl checkListService;
 
     @GetMapping("/checks")
     public String getChecks () {
@@ -38,6 +40,7 @@ public class ExpertController {
         model.addAttribute("monday", monday);
         model.addAttribute("isAvailableToChange", settingService.isAvailableToChange(monday));
         model.addAttribute("isAvailableToDayOff", settingService.isAvailableToDayOff(opportunitiesMap));
+        model.addAttribute("checksCount", checkListService.getAmountOfNewChecks());
         return "expert/opportunities";
     }
 
