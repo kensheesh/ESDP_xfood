@@ -62,4 +62,6 @@ public interface CheckListService {
     void restore(String uuid);
 
     ChecklistShowDto getCheckListByIdIncludeDeleted(String checkListId);
+
+    long getAmountOfNewChecks();
 }
