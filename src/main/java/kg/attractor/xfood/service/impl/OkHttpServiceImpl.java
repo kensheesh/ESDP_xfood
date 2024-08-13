@@ -56,6 +56,7 @@ public class OkHttpServiceImpl implements OkHttpService {
 	private final ManagerServiceImpl managerService;
 	private final ModelBuilder modelBuilder;
 	private final OAuthController oAuthController;
+	private final CountryServiceImpl countryService;
 	
 	private String API_URL = "";
 	private String BEARER = "";
@@ -170,11 +171,11 @@ public class OkHttpServiceImpl implements OkHttpService {
 	}
 	
 	@Override
-	public void rewritePizzeriasToRedis(List<String> countryCodes) {
+	public void rewritePizzeriasToRedis() {
 		redisTemplate.delete(PIZZERIA_CACHE_KEY);
 		log.info("Deleted all pizzerias from Redis");
-		
-		countryCodes.forEach(countryCode -> {
+		countryService.getDistinctCountryCodes()
+				.forEach(countryCode -> {
 			List<PizzeriasShowDodoIsDto> dtos = getAllPizzeriasByCountry(countryCode);
 			
 			dtos.forEach(dto -> redisTemplate

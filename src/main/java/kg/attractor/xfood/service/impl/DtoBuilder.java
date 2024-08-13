@@ -232,9 +232,19 @@ public class DtoBuilder {
                 .id(model.getId())
                 .name(model.getName())
                 .timezone(model.getTimezone())
+                .country(this.buildCountryDto(model.getCountry()))
                 .build();
     }
-
+    
+    protected CountryDto buildCountryDto(Country model) {
+        return CountryDto.builder()
+                .id(model.getId())
+                .apiUrl(model.getApiUrl())
+                .countryName(model.getCountryName())
+                .authUrl(model.getAuthUrl())
+                .build();
+    }
+    
     public WeekDto buildWeekDto(Long weekOrder, String mondayDate, String sundayDate) {
         return WeekDto.builder()
                 .weekOrder(weekOrder)
