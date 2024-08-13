@@ -15,16 +15,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TemplateUpdateDto {
-
     @NotNull
     @NotBlank
     private String templateName;
-
     @NotNull
     @Positive
     @Min(value = 1)
     private Double templatePrice;
-
     @NotEmpty(message = "Кол-во критериев должно быть >= 1!")
     private List<CriteriaMaxValueDto> criteriaMaxValueDtoList;
 }

@@ -15,15 +15,6 @@
                     </p>
                     <p class="card-subtitle text-secondary"><strong>Тип проверки: </strong></p>
                     <div class="my-3">
-                       <#-- <select class="form-select w-50" aria-label="Default select example">
-                            <#list types as t>
-                                <#if t.name == checklist.checkType>
-                                    <option selected ${t.id}>${checklist.checkType}</option>
-                                <#else>
-                                    <option value="${t.id}">${t.name}</option>
-                                </#if>
-                            </#list>
-                        </select>-->
                         <div class="dropdown">
                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                <#if type??>
@@ -96,8 +87,8 @@
                             <th scope="row">${c.section}</th>
                             <td>${c.zone}</td>
                             <td>${c.description}</td>
-                            <input type="hidden" name="criterion[${c?index}].id" value="${c.id}">
-                             <td><input type="number" class="form-control" name="criterion[${c?index}].maxValue" id="value-${c.id}" required min="1" <#if c.section == "Критический фактор">readonly value="${c.coefficient}" <#else> value="${c.maxValue}"</#if> ></td>
+                            <input type="hidden" name="criterion[${c.id}].id" value="${c.id}">
+                             <td><input type="number" class="form-control" name="criterion[${c.id}].maxValue" id="value-${c.id}" required min="1" <#if c.section == "Критический фактор">readonly value="${c.coefficient}" <#else> value="${c.maxValue}"</#if> ></td>
                             <td>
                                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
                                     <i class="bi bi-trash text-secondary fs-4"></i>

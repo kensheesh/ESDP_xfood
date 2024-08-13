@@ -78,15 +78,18 @@ public class SettingsController {
         model.addAttribute("sections", sectionService.getSections());
         model.addAttribute("template", settingService.getTemplate(id));
         model.addAttribute("templateUpdateDto", new TemplateUpdateDto());
+        model.addAttribute("id", id);
         return "settings/template_edit";
     }
 
-    @PostMapping("/templates/{id/}update")
+    @PostMapping("/templates/{id}/update")
     public String updateTemplate( @PathVariable Long id ,@Valid TemplateUpdateDto templateUpdateDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("zones", zoneService.getZones());
+            model.addAttribute("template", settingService.getTemplate(id));
             model.addAttribute("sections", sectionService.getSections());
             model.addAttribute("templateUpdateDto", templateUpdateDto);
+            model.addAttribute("id", id);
             return "settings/template_edit";
         }
         settingService.updateTemplate(id, templateUpdateDto);

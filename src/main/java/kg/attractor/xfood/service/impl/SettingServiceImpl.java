@@ -152,16 +152,16 @@ public class SettingServiceImpl implements SettingService {
         List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkType.getId());
         for(CriteriaType criteriaType : criteriaTypes){
             checkTypeService.delete(criteriaType);
-            criteriaTypes.remove(criteriaType);
         }
         templateUpdateDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         for(CriteriaMaxValueDto criteriaMaxValueDto : templateUpdateDto.getCriteriaMaxValueDtoList()){
-            criteriaTypeService.save(
-                    CriteriaType.builder()
+            CriteriaType criteriaType = CriteriaType.builder()
                     .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
                     .maxValue(criteriaMaxValueDto.getMaxValue())
                     .type(checkType)
-                    .build());
+                    .build();
+            log.info("Saving CriteriaType: " + criteriaType.getCriteria().getDescription());
+            criteriaTypeService.save(criteriaType);
         }
     }
 }

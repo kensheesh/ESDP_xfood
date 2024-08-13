@@ -1,6 +1,6 @@
 <#import "../layout.ftlh" as main>
 <@main.layout ; spring>
-    <form action="/templates/update" method="post">
+    <form action="/templates/${id}/update" method="post">
         <div class="container my-5">
             <div class="border rounded shadow-sm p-4 my-3">
                 <h2 class="mb-4">Редактировать шаблон</h2>
@@ -8,18 +8,14 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="templateName" class="form-label">Название шаблона:</label>
-
-                            <@spring.bind "templateCreateDto.templateName"/>
-                            <input type="text" name="${spring.status.expression}" value="${template.templateName}" class="form-control" minlength="2" required maxlength="200" id="templateName">
-                            <@spring.showErrors  "<br>" "text-danger small text-center mb-1" />
+                            <input type="text" name="templateName"  value="${template.templateName}" class="form-control" minlength="2" required maxlength="200" id="templateName">
+                            <p class="text-danger" id="nameError"></p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="templatePrice" class="form-label">Вознаграждение:</label>
-                            <@spring.bind "templateCreateDto.templatePrice"/>
-                            <input type="number" name="${spring.status.expression}" class="form-control" required min="1"  id="templatePrice" value="${template.templatePrice}">
-                            <@spring.showErrors  "<br>" "text-danger small text-center mb-1" />
+                            <input type="number" name="templatePrice" class="form-control" required min="1"  id="templatePrice" value="${template.templatePrice}">
                         </div>
                     </div>
                 </div>
@@ -43,11 +39,9 @@
             </div>
             <div class="mt-4 shadow-sm p-3 bg-white">
                 <div>
-                    <#if !templateCreateDto.criteriaMaxValueDtoList??>
-                        <div class="alert alert-warning mt-3" id="alert">
+                        <div class="alert alert-warning mt-3" style="display: none;" id="alert">
                             Пожалуйста, добавьте критерии.
                         </div>
-                    </#if>
                     <div class="table-responsive" style="max-height: 400px;">
                         <table class="table table-striped-columns">
                             <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
@@ -65,8 +59,8 @@
                                     <th scope="row">${c.section}</th>
                                     <td>${c.zone}</td>
                                     <td>${c.description}</td>
-                                    <input type="hidden" name="criterion[${c?index}].id" value="${c.criteriaId}">
-                                    <td><input type="number" class="form-control" name="criterion[${c?index}].maxValue" id="value-${c.criteriaId}" required min="1" value="${c.maxValue}"></td>
+                                    <input type="hidden" name="criteriaMaxValueDtoList[${c.criteriaId}].criteriaId" value="${c.criteriaId}">
+                                    <td><input type="number" class="form-control" name="criteriaMaxValueDtoList[${c.criteriaId}].maxValue" id="value-${c.criteriaId}" required min="1" value="${c.maxValue}"></td>
                                     <td>
                                         <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.criteriaId}">
                                             <i class="bi bi-trash text-secondary fs-4"></i>
@@ -81,7 +75,7 @@
             </div>
             <div class="row bg-white rounded shadow-sm d-flex align-items-end">
                 <div class="col-md-3">
-                    <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100">Создать шаблон</button>
+                    <button id="checklistSubmitButton" type="submit" class="btn btn-success my-2 w-100">Сохранить изменения</button>
                 </div>
                 <div class="col-md-3">
                     <a class="btn btn-danger my-2" href="/templates" role="button">Отменить</a>
@@ -164,6 +158,6 @@
         </div>
     </div>
 
-    <script src="/js/create_template.js">
+    <script src="/js/edit_template.js">
     </script>
 </@main.layout>
