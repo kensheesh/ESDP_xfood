@@ -284,3 +284,54 @@ function clearFields() {
 }
 
 
+
+let updateForm = document.getElementById('updateForm');
+updateForm.addEventListener('submit', (ev) => {
+    check(ev);
+})
+
+async function check(ev) {
+    ev.preventDefault();
+    let allowed = true;
+    let oldName = document.getElementById('oldName').value;
+    let newName = document.getElementById('templateName').value;
+
+    if (oldName !== newName) {
+        try {
+            let isNameAllowed = await isAllowed(newName);
+            if (isNameAllowed) {
+                document.getElementById('nameError').innerHTML = 'Шаблон с таким названием уже существует!';
+                allowed = false;
+            }
+        } catch (error) {
+            console.error("Ошибка при проверке имени:", error);
+            allowed = false;
+        }
+    }
+
+    let criterion = document.getElementById('criterion-list');
+    if (!criterion || criterion.querySelectorAll('tr').length === 0) {
+        document.getElementById('alert').style.display = "block";
+        allowed = false;
+    }
+
+    if (allowed) {
+        updateForm.submit();
+    }
+}
+
+async function isAllowed(name) {
+    try {
+        let response = await fetch("/api/check-type/" + encodeURIComponent(name));
+        if (response.ok) {
+            return await response.json();
+        } else {
+            console.log("Ошибка HTTP: " + response.status);
+            throw new Error("Ошибка HTTP: " + response.status);
+        }
+    } catch (error) {
+        console.error("Ошибка при запросе:", error);
+        throw error;
+    }
+}
+

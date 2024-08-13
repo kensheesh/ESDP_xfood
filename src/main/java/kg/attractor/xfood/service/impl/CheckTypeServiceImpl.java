@@ -59,7 +59,9 @@ public class CheckTypeServiceImpl implements CheckTypeService {
 
     @Override
     public boolean existsByName(String value) {
-        return checkTypeRepository.existsByName(value);
+        boolean b = checkTypeRepository.existsByName(value);
+        log.info("existsByName: " + b);
+        return b;
     }
 
     @Override

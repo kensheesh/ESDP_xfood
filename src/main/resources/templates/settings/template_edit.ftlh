@@ -1,6 +1,7 @@
 <#import "../layout.ftlh" as main>
 <@main.layout ; spring>
-    <form action="/templates/${id}/update" method="post">
+    <form action="/templates/${id}/update" method="post" id="updateForm">
+        <input type="hidden" value="${template.templateName}" id="oldName">
         <div class="container my-5">
             <div class="border rounded shadow-sm p-4 my-3">
                 <h2 class="mb-4">Редактировать шаблон</h2>
@@ -39,9 +40,9 @@
             </div>
             <div class="mt-4 shadow-sm p-3 bg-white">
                 <div>
-                        <div class="alert alert-warning mt-3" style="display: none;" id="alert">
+                    <div class="alert alert-warning mt-3" style="display: none;" id="alert">
                             Пожалуйста, добавьте критерии.
-                        </div>
+                    </div>
                     <div class="table-responsive" style="max-height: 400px;">
                         <table class="table table-striped-columns">
                             <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
@@ -53,7 +54,7 @@
                                 <th scope="col" id="totalSum"></th>
                             </tr>
                             </thead>
-                            <tbody class="criterion-list" >
+                            <tbody class="criterion-list" id="criterion-list" >
                             <#list template.criteriaMaxValueDtoList as c>
                                 <tr id="criteria-wrap-${c.criteriaId}">
                                     <th scope="row">${c.section}</th>
