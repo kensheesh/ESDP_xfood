@@ -82,8 +82,10 @@ public class SettingServiceImpl implements SettingService {
         int weeklyDayOffCount = 0;
         int dayOffLimit = getDayOffCount().getValueInt();
         for (OpportunityDto dto : opportunitiesMap.values()) {
-            if (dto.getIsDayOff()) {
-                weeklyDayOffCount++;
+            if (dto != null) {
+                if (dto.getIsDayOff()) {
+                    weeklyDayOffCount++;
+                }
             }
         }
         return weeklyDayOffCount < dayOffLimit;

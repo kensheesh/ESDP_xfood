@@ -11,7 +11,7 @@ public interface OkHttpService {
 	
 	List<PizzeriasShowDodoIsDto> getPizzeriasByMatch(String name);
 	
-	void rewritePizzeriasToRedis(List<String> countryCodes);
+	void rewritePizzeriasToRedis();
 	
 	List<PizzeriaStaffMemberDto> getPizzeriaStaff(String countryCode, String pizzeriaUuid);
 	

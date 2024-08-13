@@ -7,7 +7,7 @@
 
     <div class="row row-cols-md-2 row-gap-3">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
-            <div class="card rounded-4 mb-2 mb-sm-0 h-100 shadow-sm border-0">
+            <div class="card rounded-4 mb-2 mb-sm-0 shadow-sm border-0">
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
                         <#assign userRole = authorizedUser.authorities[0].authority>
@@ -24,8 +24,13 @@
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/templates" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
                                         Шаблоны
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a href="/admin/users" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Пользователи
                                     </a>
                                 </div>
                             </div>

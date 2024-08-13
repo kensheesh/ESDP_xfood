@@ -84,8 +84,9 @@ public class SettingsController {
         return "settings/template_edit";
     }
 
+    @PostMapping("/templates/{id}")
     @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
-    @PostMapping("/templates/{id}/update")
+
     public String updateTemplate( @PathVariable Long id ,@Valid TemplateUpdateDto templateUpdateDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("zones", zoneService.getZones());

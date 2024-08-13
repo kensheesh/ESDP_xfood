@@ -15,10 +15,19 @@
                                         График
                                     </a>
                                 </div>
-                                <div class="col">
+                                <div class="col button-wrapper">
                                     <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Проверки
                                     </a>
+                                    <#if (checksCount?has_content && checksCount > 0)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">${checksCount}</div>
+                                        </div>
+                                    <#elseif (checksCount?has_content && checksCount > 99)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">99</div>
+                                        </div>
+                                    </#if>
                                 </div>
                                 <div class="col">
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">

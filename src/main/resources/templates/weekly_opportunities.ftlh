@@ -41,11 +41,11 @@
                                     <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         Апелляции
                                     </a>
-                                    <#if (appealsCount > 0)>
+                                    <#if (appealsCount?has_content && appealsCount > 0)>
                                         <div class="badge-notification-icon">
                                             <div class="badge-notification-num">${appealsCount}</div>
                                         </div>
-                                    <#elseif (appealsCount > 99)>
+                                    <#elseif (appealsCount?has_content && appealsCount > 99)>
                                         <div class="badge-notification-icon">
                                             <div class="badge-notification-num">99</div>
                                         </div>
