@@ -60,7 +60,7 @@
                                     <td>${c.zone}</td>
                                     <td>${c.description}</td>
                                     <input type="hidden" name="criteriaMaxValueDtoList[${c.criteriaId}].criteriaId" value="${c.criteriaId}">
-                                    <td><input type="number" class="form-control" name="criteriaMaxValueDtoList[${c.criteriaId}].maxValue" id="value-${c.criteriaId}" required min="1" value="${c.maxValue}"></td>
+                                    <td><input type="number" class="form-control" name="criteriaMaxValueDtoList[${c.criteriaId}].maxValue" id="maxValueInput-${c.criteriaId}" required min="1" value="${c.maxValue}"></td>
                                     <td>
                                         <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.criteriaId}">
                                             <i class="bi bi-trash text-secondary fs-4"></i>

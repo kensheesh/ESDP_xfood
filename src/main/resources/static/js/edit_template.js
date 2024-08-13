@@ -1,4 +1,4 @@
-let totalSum = 0;
+let summ = 0;
 
 let criteriaWraps = document.querySelectorAll('[id^="criteria-wrap-"]');
 let criterias = document.querySelectorAll('[id^="deleteCriteria"]');
@@ -10,7 +10,8 @@ for (let i = 0; i < criterias.length; i++) {
     });
 }
 
-
+setupMaxValueInputs();
+updateTotalSum();
 function setupMaxValueInputs() {
     let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
     for (let input of maxValueInputs) {
@@ -26,19 +27,19 @@ function countTotalSum(maxValueInputs) {
     for (let i = 0; i < maxValueInputs.length; i++) {
         let value = parseInt(maxValueInputs[i].value) || 0;
         if (value>=0){
-            totalSum +=value;
+            summ +=value;
         }
     }
     let sum = document.getElementById('totalSum');
-    sum.innerHTML = totalSum
-    console.log(totalSum);
+    sum.innerHTML = `<p>${summ}</p>` ;
+    console.log(summ);
 }
 
 function updateTotalSum() {
-    totalSum = 0;
+    summ = 0;
     let maxValueInputs = document.querySelectorAll('[id^="maxValueInput-"]');
     countTotalSum(maxValueInputs);
-    console.log('totalSum:', totalSum);
+    console.log('totalSum:', summ);
 }
 
 
@@ -130,12 +131,7 @@ async function addCriteriaToList(id) {
             document.getElementById('criteria-wrap-' + id).remove();
             updateTotalSum();
         });
-
         setupMaxValueInputs();
-        let alertB = document.getElementById('alert');
-        if (alertB){
-            alertB.remove();
-        }
     }
 }
 
@@ -206,10 +202,6 @@ async function validate(event) {
                 '</button>' +
                 '</td>';
             criteriaList.appendChild(newCriteria);
-            let alertB = document.getElementById('alert');
-            if (alertB){
-                alertB.remove();
-            }
             let deleteButton = document.getElementById('deleteCriteria-' + createdId);
             deleteButton.addEventListener('click', function () {
                 document.getElementById('criteria-wrap-' + createdId).remove();
