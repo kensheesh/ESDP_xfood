@@ -106,3 +106,7 @@ a.btn.disabled.btn-dodo-light  {
 .invalid-feedback {
     display: block;
 }
+
+.text-dodo{
+    color: #FF6900;
+}

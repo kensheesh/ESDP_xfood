@@ -26,7 +26,6 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <link rel="stylesheet" href="/css/layout.css">
     </head>
 
@@ -170,7 +169,6 @@
             </div>
         </div>
     </div>
-
     <script src="/js/validation.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
             integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
@@ -179,174 +177,8 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="/DataTables/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/ru.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-           $('#myTable').DataTable({
-                responsive: true,
-                language: {
-                    url: '/DataTables/ru.json',
-                },
-                rowGroup: {
-                    dataSrc: 2,
-                    endRender: function(rows) {
-                        let totalColumns = rows.columns().header().length;
-                        let lastColumnIndex = totalColumns - 2;
-
-                        let averageColumnIndex = rows.columns().indexes().filter(index => {
-                            return $(rows.column(index).header()).text().includes('Среднее за пиццерию');
-                        })[0];
-
-
-                        if (averageColumnIndex !== undefined) {
-                            $('#myTable').DataTable().column(averageColumnIndex).visible(false);
-                        }
-
-                        let avg = rows
-                            .data()
-                            .pluck(lastColumnIndex)
-                            .reduce(function(a, b) {
-                                return a + parseFloat(b);
-                            }, 0) / rows.count();
-                        return $('<tr/>')
-                            .append('<td colspan="3">Среднее за пиццерию</td>')
-                            .append('<td colspan="' + (rows.columns().header().length - 4) + '">' + avg.toFixed(2) + '</td>');
-                    }
-                },
-                layout: {
-                    topStart: {
-                        buttons: [
-                            {
-                                extend: 'excelHtml5',
-                                autoFilter: true,
-                                sheetName: 'Статистика',
-                                filename: 'Статистика',
-                                header: true,
-                                footer: true,
-                                exportOptions: {
-                                    modifier: {
-                                        search: 'applied',
-                                    }}
-                            }
-                        ]
-                    }
-                }
-
-        });
-
-        })
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/moment/min/moment-with-locales.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.1.0/js/buttons.html5.min.js"></script>
-    <script>
-        $(function() {
-           moment.locale('ru');
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-
-            function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                $('#from').val(start.format('YYYY-MM-DD'));
-                $('#to').val(end.format('YYYY-MM-DD'));
-            }
-
-            $('#reportrange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                ranges: {
-                    'Сегодня': [moment(), moment()],
-                    'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Последние 7 дней': [moment().subtract(6, 'days'), moment()],
-                    'Последние 30 дней': [moment().subtract(29, 'days'), moment()],
-                    'Этот месяц': [moment().startOf('month'), moment().endOf('month')],
-                    'Последний месяц': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                },
-                locale: {
-                    format: 'DD.MM.YYYY',
-                    separator: ' - ',
-                    applyLabel: 'Применить',
-                    cancelLabel: 'Отменить',
-                    fromLabel: 'С',
-                    toLabel: 'По',
-                    customRangeLabel: 'Выбрать диапазон',
-                    daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                    firstDay: 1
-                }
-            }, cb);
-
-            cb(start, end);
-
-            $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-                start = picker.startDate;
-                end = picker.endDate;
-                $('#from').val(start.format('YYYY-MM-DD'));
-                $('#to').val(end.format('YYYY-MM-DD'));
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable({
-                responsive: true,
-                language: {
-                    url: '/DataTables/ru.json',
-                },
-                rowGroup: {
-                    dataSrc: 2,
-                    endRender: function (rows) {
-                        let totalColumns = rows.columns().header().length;
-                        let lastColumnIndex = totalColumns - 2;
-
-                        let averageColumnIndex = rows.columns().indexes().filter(index => {
-                            return $(rows.column(index).header()).text().includes('Среднее за пиццерию');
-                        })[0];
-
-
-                        if (averageColumnIndex !== undefined) {
-                            $('#myTable').DataTable().column(averageColumnIndex).visible(false);
-                        }
-
-                        let avg = rows
-                            .data()
-                            .pluck(lastColumnIndex)
-                            .reduce(function (a, b) {
-                                return a + parseFloat(b);
-                            }, 0) / rows.count();
-                        return $('<tr/>')
-                            .append('<td colspan="3">Среднее за пиццерию</td>')
-                            .append('<td colspan="' + (rows.columns().header().length - 4) + '">' + avg.toFixed(2) + '</td>');
-                    }
-                },
-                layout: {
-                    topStart: {
-                        buttons: [
-                            {
-                                extend: 'excelHtml5',
-                                autoFilter: true,
-                                sheetName: 'Статистика',
-                                filename: 'Статистика',
-                                header: true,
-                                footer: true,
-                                exportOptions: {
-                                    modifier: {
-                                        search: 'applied',
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-
-            });
-
-        })
-    </script>
     </body>
     </html>
 </#macro>

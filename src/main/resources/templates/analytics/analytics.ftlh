@@ -146,6 +146,8 @@
                         </div>
                         <a href="/export/excel?pizzeria=${currentPizzeria}&manager=${currentManager}&expert=${currentExpert}&startDate=<#if currentStartDate??>${currentStartDate}</#if>&endDate=<#if currentEndDate??>${currentEndDate}</#if>"
                            class="btn btn-green rounded-4">Скачать <i class="bi bi-file-arrow-down"></i></a>
+                        <a href="/statistics"
+                           class="btn btn-green rounded-4">Статистика</a>
                     </div>
                 </div>
                 <div class="col-lg-4 d-none d-lg-inline text-center">
@@ -188,6 +190,9 @@
                     </form>
                     <a href="/export/excel?pizzeria=${currentPizzeria}&manager=${currentManager}&expert=${currentExpert}&startDate=<#if currentStartDate??>${currentStartDate}</#if>&endDate=<#if currentEndDate??>${currentEndDate}</#if>"
                        class="btn btn-green mt-3 rounded-4">Скачать Excel</a>
+
+                    <a href="/statistics"
+                       class="btn btn-green mt-3 rounded-4">Статистика</a>
                 </div>
             </div>
         </div>
