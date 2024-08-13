@@ -12,4 +12,10 @@ public interface CheckTypeService {
 //    Integer getTypeById(Long checkTypeId);
 
     List<CheckTypeShowDto> getCheckTypes();
+
+    CheckType findByName(String type);
+
+    void save(CheckType checkType);
+
+    boolean existsByName(String value);
 }

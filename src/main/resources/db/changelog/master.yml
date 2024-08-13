@@ -3,4 +3,6 @@ databaseChangeLog:
         path: db/changelog/initial
     - includeAll:
           path: db/changelog/updates
+    - includeAll:
+        path: db/changelog/updates-2
 #  - logicalFilePath: db/changelog/initial/001_create_table_users_and_enums.yaml

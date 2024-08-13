@@ -18,7 +18,7 @@ public interface AppealService {
 
     Integer getAmountOfNewAppeals();
 
-    Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page);
+    Page<AppealListDto> getAllByStatus(Boolean isAccepted, int page, Long pizzeriaId, Long expertId);
 
     void approve(AppealSupervisorApproveDto appeal) throws MessagingException, UnsupportedEncodingException;
 

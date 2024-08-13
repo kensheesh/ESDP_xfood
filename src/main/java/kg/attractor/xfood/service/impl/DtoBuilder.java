@@ -108,11 +108,12 @@ public class DtoBuilder {
 
         return ChecklistShowDto.builder()
                 .uuidLink(model.getUuidLink())
+                .endTime(model.getEndTime())
                 .id(model.getId())
                 .pizzeria(pizzeriaDto)
                 .manager(managerDto)
                 .status(model.getStatus())
-                .isDeleted(Boolean.FALSE)
+                .isDeleted(model.getDeleted())
                 .expertEmail(model.getExpert().getEmail())
                 .managerWorkDate(model.getWorkSchedule().getStartTime().format(dateTimeFormatter))
                 .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(timeFormatter))
@@ -419,8 +420,8 @@ public class DtoBuilder {
 				.fullName(model.getFullName())
 				.pizzeriaName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getName())
 				.locationName(model.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria().getLocation().getName())
-//				.expertFullName(model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getName() + " "
-//						+ model.getCheckListsCriteria().getChecklist().getOpportunity().getUser().getSurname() )
+				.expertFullName(model.getCheckListsCriteria().getChecklist().getExpert().getName() + " "
+						+ model.getCheckListsCriteria().getChecklist().getExpert().getSurname() )
 				.build();
 	}
 

@@ -74,7 +74,7 @@
     </style>
 
     <main class="container mt-4">
-        <#if guess?? && checkList.status == "IN_PROGRESS" || guess?? && checkList.status == "NEW">
+        <#if guest?? && checkList.status == "IN_PROGRESS" || guest?? && checkList.status == "NEW">
             <h1>Данный чеклист еще не опубликован</h1>
         <#else>
             <div class="notification">
@@ -132,15 +132,17 @@
                                            aria-valuemax="${criteria.maxValue}">
                                 </td>
                                 <td class="text-center">
-                                    <#if guess?? && checkList.status == "DONE">
-                                        <div class="d-flex justify-content-end align-items-center">
-                                            <button class="btn btn-warning btn-sm appeal-button"
-                                                    data-criteria-id="${criteria.id}">Подать апелляцию
-                                            </button>
-                                            <#if criteria.isAccepted?? && true>
-                                                <span class="appeal-submitted">!</span>
-                                            </#if>
-                                        </div>
+                                    <#if guest?? && checkList.status == "DONE">
+                                        <#if isRecent == true>
+                                            <div class="d-flex justify-content-end align-items-center">
+                                                <button class="btn btn-warning btn-sm appeal-button"
+                                                        data-criteria-id="${criteria.id}">Подать апелляцию
+                                                </button>
+                                                <#if criteria.isAccepted?? && true>
+                                                    <span class="appeal-submitted">!</span>
+                                                </#if>
+                                            </div>
+                                        </#if>
                                     </#if>
                                 </td>
                             <#else>
@@ -156,19 +158,21 @@
                                                value="${criteria.value}" id="${criteria.id}"/>
                                     </td>
                                     <td class="text-center bg-danger">
-                                        <#if guess?? && checkList.status == "DONE">
-                                            <div class="d-flex justify-content-end align-items-center">
-                                                <button class="btn btn-warning btn-sm appeal-button"
-                                                        data-criteria-id="${criteria.id}">Подать апелляцию
-                                                </button>
+                                        <#if guest?? && checkList.status == "DONE">
+                                            <#if isRecent == true>
+                                                <div class="d-flex justify-content-end align-items-center">
+                                                    <button class="btn btn-warning btn-sm appeal-button"
+                                                            data-criteria-id="${criteria.id}">Подать апелляцию
+                                                    </button>
 
-                                                <#if criteria.isAccepted?? && true>
-                                                    <span class="appeal-submitted">!</span>
-                                                </#if>
-                                                <button class="btn btn-info btn-sm comments-button"
-                                                        data-criteria-id="${criteria.id}">Комментарии
-                                                </button>
-                                            </div>
+                                                    <#if criteria.isAccepted?? && true>
+                                                        <span class="appeal-submitted">!</span>
+                                                    </#if>
+                                                    <button class="btn btn-info btn-sm comments-button"
+                                                            data-criteria-id="${criteria.id}">Комментарии
+                                                    </button>
+                                                </div>
+                                            </#if>
                                         </#if>
                                     </td>
                                 <#elseif criteria.section == 'WOW фактор'>
@@ -204,13 +208,15 @@
             </div>
 
             <div class="text-end mb-5 mt-2">
-                <#if name?? && name == checkList.getExpertEmail() >
-                    <#if checkList.status == "IN_PROGRESS">
-                        <button id="reopenCheck" class="btn btn-success">Возобновить</button>
-                    <#elseif checkList.status == "NEW">
-                        <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
+                <#list authorities as authority>
+                    <#if authority.authority == "ROLE_ADMIN" || name?? && name == checkList.getExpertEmail()>
+                        <#if checkList.status == "IN_PROGRESS">
+                            <button id="reopenCheck" class="btn btn-success">Возобновить</button>
+                        <#elseif checkList.status == "NEW">
+                            <button id="startCheck" class="btn btn-success">Выполнить проверку</button>
+                        </#if>
                     </#if>
-                </#if>
+                </#list>
             </div>
 
             <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"
