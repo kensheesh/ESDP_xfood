@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout; spring>
+<@main.layout ; spring>
 
     <style>
         body {
@@ -219,6 +219,7 @@
                         </#if>
                     </#list>
                 </#if>
+
             </div>
 
             <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"
