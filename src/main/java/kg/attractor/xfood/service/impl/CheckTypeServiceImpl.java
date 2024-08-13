@@ -59,7 +59,15 @@ public class CheckTypeServiceImpl implements CheckTypeService {
 
     @Override
     public boolean existsByName(String value) {
-        return checkTypeRepository.existsByName(value);
+        boolean b = checkTypeRepository.existsByName(value);
+        log.info("existsByName: " + b);
+        return b;
+    }
+
+    @Override
+    public void delete(CriteriaType criteriaType) {
+        criteriaTypeRepository.delete(criteriaType);
+        log.info("Deleted checkType: " + criteriaType);
     }
 
     public int getTotalMaxValueByTypeId(Long typeId) {

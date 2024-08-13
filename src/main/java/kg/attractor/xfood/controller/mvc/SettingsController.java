@@ -3,6 +3,7 @@ package kg.attractor.xfood.controller.mvc;
 import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.dto.settings.TemplateCreateDto;
+import kg.attractor.xfood.dto.settings.TemplateUpdateDto;
 import kg.attractor.xfood.service.CheckTypeService;
 import kg.attractor.xfood.service.SectionService;
 import kg.attractor.xfood.service.SettingService;
@@ -14,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,7 +58,6 @@ public class SettingsController {
         return "settings/template_create";
     }
 
-
     @PostMapping("/templates/create")
     public String TemplatesCreate (@Valid TemplateCreateDto templateCreateDto,BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -72,6 +69,30 @@ public class SettingsController {
         model.addAttribute("zones", zoneService.getZones());
         model.addAttribute("sections", sectionService.getSections());
         settingService.createTemplate(templateCreateDto);
+        return "redirect:/templates";
+    }
+
+    @GetMapping("/templates/{id}")
+    public String getTemplateDetail (@PathVariable Long id, Model model) {
+        model.addAttribute("zones", zoneService.getZones());
+        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("template", settingService.getTemplate(id));
+        model.addAttribute("templateUpdateDto", new TemplateUpdateDto());
+        model.addAttribute("id", id);
+        return "settings/template_edit";
+    }
+
+    @PostMapping("/templates/{id}")
+    public String updateTemplate( @PathVariable Long id ,@Valid TemplateUpdateDto templateUpdateDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("zones", zoneService.getZones());
+            model.addAttribute("template", settingService.getTemplate(id));
+            model.addAttribute("sections", sectionService.getSections());
+            model.addAttribute("templateUpdateDto", templateUpdateDto);
+            model.addAttribute("id", id);
+            return "settings/template_edit";
+        }
+        settingService.updateTemplate(id, templateUpdateDto);
         return "redirect:/templates";
     }
 }
