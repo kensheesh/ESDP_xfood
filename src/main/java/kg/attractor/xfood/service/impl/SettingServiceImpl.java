@@ -5,6 +5,7 @@ import kg.attractor.xfood.dto.criteria.CriteriaMaxValueDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.dto.settings.TemplateCreateDto;
+import kg.attractor.xfood.dto.settings.TemplateUpdateDto;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.CheckType;
 import kg.attractor.xfood.model.CheckTypeFee;
@@ -129,5 +130,38 @@ public class SettingServiceImpl implements SettingService {
         }
         templateCreateDto.setCriteriaMaxValueDtoList(criteriaMaxValueDtoList);
         return templateCreateDto;
+    }
+
+    @Override
+    public void updateTemplate(Long id, TemplateUpdateDto templateUpdateDto) {
+        CheckType checkType = checkTypeService.getById(id);
+        BigDecimal fee = BigDecimal.valueOf(templateUpdateDto.getTemplatePrice());
+        checkType.setName(templateUpdateDto.getTemplateName());
+        checkTypeService.save(checkType);
+        CheckTypeFee oldFee = checkTypeFeeService.getCheckTypeFeeByTypeId(checkType.getId());
+        oldFee.setEnabled(false);
+        checkTypeFeeService.save(oldFee);
+        CheckTypeFee checkTypeFee = CheckTypeFee
+                .builder()
+                .checkType(checkType)
+                .fees(fee)
+                .enabled(true)
+                .createdDate(LocalDateTime.now())
+                .build();
+        checkTypeFeeService.save(checkTypeFee);
+        List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkType.getId());
+        for(CriteriaType criteriaType : criteriaTypes){
+            checkTypeService.delete(criteriaType);
+            criteriaTypes.remove(criteriaType);
+        }
+        templateUpdateDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
+        for(CriteriaMaxValueDto criteriaMaxValueDto : templateUpdateDto.getCriteriaMaxValueDtoList()){
+            criteriaTypeService.save(
+                    CriteriaType.builder()
+                    .criteria(criteriaService.findById(criteriaMaxValueDto.getCriteriaId()))
+                    .maxValue(criteriaMaxValueDto.getMaxValue())
+                    .type(checkType)
+                    .build());
+        }
     }
 }

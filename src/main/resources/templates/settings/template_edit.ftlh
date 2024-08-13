@@ -1,6 +1,6 @@
 <#import "../layout.ftlh" as main>
 <@main.layout ; spring>
-    <form action="/templates/create" method="post">
+    <form action="/templates/update" method="post">
         <div class="container my-5">
             <div class="border rounded shadow-sm p-4 my-3">
                 <h2 class="mb-4">Редактировать шаблон</h2>
@@ -8,6 +8,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="templateName" class="form-label">Название шаблона:</label>
+
                             <@spring.bind "templateCreateDto.templateName"/>
                             <input type="text" name="${spring.status.expression}" value="${template.templateName}" class="form-control" minlength="2" required maxlength="200" id="templateName">
                             <@spring.showErrors  "<br>" "text-danger small text-center mb-1" />

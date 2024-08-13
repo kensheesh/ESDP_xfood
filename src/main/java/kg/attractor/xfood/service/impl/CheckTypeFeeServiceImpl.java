@@ -25,6 +25,11 @@ public class CheckTypeFeeServiceImpl implements CheckTypeFeeService {
         checkTypeFeeRepository.save(checkTypeFee);
     }
 
+    @Override
+    public CheckTypeFee getCheckTypeFeeByTypeId(Long id) {
+        return checkTypeFeeRepository.findByCheckType_IdAndEnabledTrue(id).orElseThrow(() -> new FeesNotFoundException("Тарифы не найдены, ошибка"));
+    }
+
     public BigDecimal getEnabledFeeByCheckTypeId(Long checkTypeID) {
         return checkTypeFeeRepository.findByCheckType_IdAndEnabledTrue(checkTypeID)
                 .orElseThrow(() -> new FeesNotFoundException("Тарифы не найдены, ошибка")).getFees();

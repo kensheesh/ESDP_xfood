@@ -62,6 +62,12 @@ public class CheckTypeServiceImpl implements CheckTypeService {
         return checkTypeRepository.existsByName(value);
     }
 
+    @Override
+    public void delete(CriteriaType criteriaType) {
+        criteriaTypeRepository.delete(criteriaType);
+        log.info("Deleted checkType: " + criteriaType);
+    }
+
     public int getTotalMaxValueByTypeId(Long typeId) {
         List<CriteriaType> criterias = criteriaTypeRepository.findByType_Id(typeId);
         return criterias.stream()

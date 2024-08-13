@@ -3,6 +3,7 @@ package kg.attractor.xfood.controller.mvc;
 import jakarta.validation.Valid;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.dto.settings.TemplateCreateDto;
+import kg.attractor.xfood.dto.settings.TemplateUpdateDto;
 import kg.attractor.xfood.service.CheckTypeService;
 import kg.attractor.xfood.service.SectionService;
 import kg.attractor.xfood.service.SettingService;
@@ -76,7 +77,19 @@ public class SettingsController {
         model.addAttribute("zones", zoneService.getZones());
         model.addAttribute("sections", sectionService.getSections());
         model.addAttribute("template", settingService.getTemplate(id));
-        model.addAttribute("templateCreateDto", new TemplateCreateDto());
+        model.addAttribute("templateUpdateDto", new TemplateUpdateDto());
         return "settings/template_edit";
+    }
+
+    @PostMapping("/templates/{id/}update")
+    public String updateTemplate( @PathVariable Long id ,@Valid TemplateUpdateDto templateUpdateDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("zones", zoneService.getZones());
+            model.addAttribute("sections", sectionService.getSections());
+            model.addAttribute("templateUpdateDto", templateUpdateDto);
+            return "settings/template_edit";
+        }
+        settingService.updateTemplate(id, templateUpdateDto);
+        return "redirect:/templates";
     }
 }
