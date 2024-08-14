@@ -463,7 +463,7 @@
                         '<button type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">'+
                         '<i class="bi bi-hammer"></i></button> </li>';
                     commentsModalBody.appendChild(commentElement);
-
+                    console.log("comment id: " + comment.commentId)
                     commentElement.addEventListener('click', (ev)=>{
                         ev.preventDefault();
                         appealByComment(comment.commentId, criteriaId, checkId);
@@ -475,10 +475,11 @@
 
             async function appealByComment(commentId, criteriaId, checkId){
                 let object = {
-                    checkId: checkId,
+                    commentId: commentId,
                     criteriaId: criteriaId,
-                    commentId: commentId
+                    checkListId: checkId,
                 }
+                console.log("object "+object)
                 let response = await fetch('/api/appeal/comment', {
                     method: 'post',
                     headers: {

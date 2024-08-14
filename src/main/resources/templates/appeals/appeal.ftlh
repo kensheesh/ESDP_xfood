@@ -26,6 +26,12 @@
                                 <label for="criterion" class="form-label">Критерий</label>
                                 <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.criteriaDescription}</textarea>
                             </div>
+                            <#if appeal.remark??>
+                                <div class="mb-3">
+                                    <label for="criterion" class="form-label">Нарушение</label>
+                                    <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.remark}</textarea>
+                                </div>
+                            </#if>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="email" id="email" required>

@@ -411,7 +411,7 @@ public class DtoBuilder {
     public AppealDto buildAppealDto(Appeal model) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
                 .withZone(ZoneId.systemDefault());
-        return AppealDto.builder()
+        AppealDto appealDto = AppealDto.builder()
                 .linkToExternalSrc(model.getLinkToExternalSrc())
                 .tgLinkMessage(model.getTgLinkMessage())
                 .fullName(model.getFullName())
@@ -425,6 +425,10 @@ public class DtoBuilder {
                 .id(model.getId())
                 .email(model.getEmail())
                 .build();
+         if (model.getComment() != null){
+             appealDto.setRemark(model.getComment().getComment());
+         }
+         return appealDto;
     }
 
 	public AppealListDto buildAppealsListDto (Appeal model) {

@@ -148,6 +148,8 @@ public class AppealServiceImpl implements AppealService {
         Appeal appeal = Appeal.builder()
                 .checkListsCriteria(criteria)
                 .comment(comment)
+                .fullName(" ")
+                .email(" ")
                 .build();
         return  appealRepository.save(appeal).getId();
     }
