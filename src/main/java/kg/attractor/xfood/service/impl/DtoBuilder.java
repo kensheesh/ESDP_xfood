@@ -25,6 +25,8 @@ import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.service.CheckTypeFeeService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -38,6 +40,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 @RequiredArgsConstructor
 public class DtoBuilder {
+    private static final Logger log = LoggerFactory.getLogger(DtoBuilder.class);
     private final ChecklistCriteriaRepository checkListsCriteriaRepository;
     private final AppealRepository appealRepository;
     private final CheckTypeFeeService checkTypeFeeService;

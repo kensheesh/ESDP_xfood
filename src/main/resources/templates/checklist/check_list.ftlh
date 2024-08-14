@@ -493,6 +493,7 @@
 
                 const commentButton = document.createElement('button');
                 commentButton.classList.add('btn', 'btn-success');
+                commentButton.id = "leaveComment-"+id;
                 commentButton.setAttribute('data-bs-toggle', 'modal');
                 commentButton.setAttribute('data-bs-target', '#commentModal-' + id);
                 commentButton.innerHTML = `<i class="bi bi-pencil-square"></i>`;
@@ -652,6 +653,44 @@
 
                 } catch (error) {
                     console.error('There was a problem with the fetch operation:', error);
+                }
+            }
+
+            async function checkCritComments(){
+                let elements = document.querySelectorAll('[id^="crit-"]');
+                let criteriaIds = [];
+                elements.forEach(element => {
+                    let id = element.id;
+                    let criteriaId = id.substring(5);
+                    console.log(criteriaId);
+                    criteriaIds.push(criteriaId);
+                });
+                for (let i = 0; i <criteriaIds.length ; i++) {
+                    let criteria = await getCriteriaById(criteriaIds[i]);
+                    console.log("id "+criteria.id)
+                    let value = criteria.value;
+                    console.log("value "+value)
+                    let comments = await getCommentsByCriteria(${checkList.id}, criteria.id);
+                    let mSize = Math.abs(value/criteria.coefficient);
+                    console.log("mSize "+mSize);
+                    console.log("length "+comments.length)
+                    let writeButton = document.getElementById('leaveComment-'+criteria.id);
+                    if (mSize <= comments.length){
+                        if (writeButton){
+                            writeButton.style.display = "none";
+                        }
+                    }
+                }
+
+            }
+            checkCritComments();
+            async function getCriteriaById(id) {
+                let response = await fetch("/api/checklist/criteria/"+${checkList.id}+"/" + id);
+                if (response.ok) {
+                    return await response.json();
+                } else {
+                    console.log(response);
+                    alert("Ошибка HTTP: " + response.status);
                 }
             }
 
@@ -844,6 +883,7 @@
 
 
             async function getCommentsByCriteria(checkId, criteriaId) {
+                console.log("check id "+checkId)
                 let response = await fetch('/api/comments/'+checkId+'/'+criteriaId);
                 let data = await response.json();
                 console.log(data.type)
@@ -883,18 +923,7 @@
                 });
             }
 
-            async function checkCritComments(){
-                let elements = document.querySelectorAll('[id^="crit-"]');
-                let criteriaIds = [];
-                elements.forEach(element => {
-                    let id = element.id;
-                    let criteriaId = id.substring(5);
-                    console.log(criteriaId);
-                    criteriaIds.push(criteriaId);
-                });
 
-
-            }
 
         });
 
