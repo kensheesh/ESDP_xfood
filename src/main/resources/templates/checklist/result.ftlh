@@ -447,22 +447,34 @@
                 let checkId = document.getElementById('checkId').value;
                 let response = await fetch('/api/comments/' + checkId + '/' + criteriaId);
                 let data = await response.json();
-                displayComments(data);
+                displayComments(data, checkId, criteriaId);
             }
 
 
-            function displayComments(comments) {
-
+            function displayComments(comments, checkId, criteriaId) {
                 const commentsModalBody = document.getElementById('commentsModalBody');
                 commentsModalBody.innerHTML = '';
 
                 comments.forEach(comment => {
-                    const commentElement = document.createElement('p');
-                    commentElement.textContent = comment.comment;
+                    const commentElement = document.createElement('div');
+                    commentElement.classList.add('list-group', 'list-group-flush')
+                    commentElement.innerHTML =
+                         '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">'+comment.comment+
+                        '<button type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">'+
+                        '<i class="bi bi-hammer"></i></button> </li>';
                     commentsModalBody.appendChild(commentElement);
+
+                    commentElement.addEventListener('click', (ev)=>{
+                        ev.preventDefault();
+                        appealByComment(comment.commentId, criteriaId, checkId);
+                    })
                 });
 
                 $('#commentsModal').modal('show');
+            }
+
+            async function appealByComment(commentId, criteriaId, checkId){
+
             }
         });
     </script>

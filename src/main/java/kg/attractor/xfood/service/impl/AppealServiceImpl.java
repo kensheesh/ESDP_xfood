@@ -5,10 +5,7 @@ import kg.attractor.xfood.dto.appeal.*;
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaSupervisorReviewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.exception.AppealNotFoundException;
-import kg.attractor.xfood.model.Appeal;
-import kg.attractor.xfood.model.CheckListsCriteria;
-import kg.attractor.xfood.model.Criteria;
-import kg.attractor.xfood.model.Pizzeria;
+import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.specification.AppealSpecification;
@@ -37,7 +34,7 @@ public class AppealServiceImpl implements AppealService {
     private static final Logger log = LoggerFactory.getLogger(AppealServiceImpl.class);
     private final CheckListCriteriaServiceImpl checkListCriteriaServiceImpl;
     private final CheckListCriteriaService checkListCriteriaService;
-    private final CheckListCriteriaCommentService commentService;
+    private final CommentService commentService;
     private final AppealRepository appealRepository;
     private final EmailService emailService;
     private final FileService fileService;
@@ -142,6 +139,17 @@ public class AppealServiceImpl implements AppealService {
             dtoList.add(dtoBuilder.buildAppealDto(a));
         });
         return dtoList;
+    }
+
+    @Override
+    public Long createByComment(DataAppealDto data) {
+        Comment comment = commentService.findById(data.getCommentId());
+        CheckListsCriteria criteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(data.getCriteriaId(), data.getCheckListId());
+        Appeal appeal = Appeal.builder()
+                .checkListsCriteria(criteria)
+                .comment(comment)
+                .build();
+        return  appealRepository.save(appeal).getId();
     }
 
     @Override

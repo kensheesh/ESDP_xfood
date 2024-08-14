@@ -3,6 +3,7 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.CheckListsCriteriaComment;
+import kg.attractor.xfood.model.Comment;
 import kg.attractor.xfood.repository.ChecklistCriteriaCommentRepository;
 import kg.attractor.xfood.service.CheckListCriteriaCommentService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
@@ -52,6 +53,14 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
     public boolean ifExists(Long id, Long commentId) {
         return criteriaCommentRepository.existsByChecklistCriteria_IdAndComment_Id(id, commentId);
     }
+
+    @Override
+    public CheckListsCriteriaComment getByCommentIdCriteriaIdAndCheckId(Long commentId, Long criteriaId, Long checkId) {
+        CheckListsCriteria criteria = criteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkId);
+        return criteriaCommentRepository.findFirstByChecklistCriteria_IdAndComment_Id(criteria.getId(), commentId).orElseThrow(() -> new NoSuchElementException("Комментарий "+commentId+"к критерию "+criteriaId+" и чек-листу "+checkId+" не найдено"));
+    }
+
+
 
 
 }

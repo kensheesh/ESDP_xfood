@@ -421,11 +421,6 @@
                         'data-comment-id="' + comment.checkCritCommId + '" >' +
                         '<i class="bi bi-trash"></i>' +
                         '</button>' +
-                        '<button type="button" class="btn btn-warning" ' +
-                        'data-bs-toggle="tooltip" data-bs-placement="right" ' +
-                        'data-bs-title="Подать апелляцию">' +
-                        '<i class="bi bi-hammer"></i>' +
-                        '</button>' +
                         '</div>' +
                         '</li>' +
                         '</ul>'

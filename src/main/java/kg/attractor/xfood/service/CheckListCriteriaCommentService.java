@@ -2,6 +2,7 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.model.CheckListsCriteriaComment;
+import kg.attractor.xfood.model.Comment;
 
 import java.util.List;
 
@@ -13,4 +14,7 @@ public interface CheckListCriteriaCommentService {
     boolean delete(Long commentId);
 
     boolean ifExists(Long id, Long commentId);
+
+    CheckListsCriteriaComment getByCommentIdCriteriaIdAndCheckId(Long commentId,Long criteriaId, Long checkId);
+
 }
