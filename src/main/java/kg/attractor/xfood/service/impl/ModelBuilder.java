@@ -64,7 +64,7 @@ public class ModelBuilder {
                 .build();
     }
     
-    protected Location buildLocation(LocationDto dto) {
+    public Location buildLocation(LocationDto dto) {
         return Location.builder()
                 .id(dto.getId())
                 .name(dto.getName())
