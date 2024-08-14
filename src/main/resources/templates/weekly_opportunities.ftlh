@@ -12,63 +12,62 @@
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
-                        <#assign userRole = authorizedUser.authorities[0].authority>
                         <div class="col">
-                            <div class="row row-cols-4 row-cols-md-1 row-gap-2">
+                            <div class="row row-cols-3 row-cols-md-1 row-gap-2">
                                 <div class="col">
                                     <a href="/supervisor/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        График
+                                        <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline">График</span>
                                     </a>
                                 </div>
-                                <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
-                                    <div class="col">
-                                        <a href="/supervisor/opportunities" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
-                                            Возможности
-                                        </a>
-                                    </div>
-                                </#if>
                                 <div class="col">
+                                    <a href="#"
+                                       class="btn rounded-4 w-100 h-100 btn-dodo-light disabled">
+                                        <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline">Возможности</span>
+                                    </a>
+                                </div>
+                                <div class="col button-wrapper">
                                     <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Проверки
+                                        <span class="d-none d-md-inline">Проверки</span>
+                                        <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Аналитика
+                                        <i class="bi bi-bar-chart-fill fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline">Аналитика</span>
                                     </a>
                                 </div>
-                                <div class="col button-wrapper">
-                                    <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Апелляции
-                                    </a>
-                                    <#if (appealsCount?has_content && appealsCount > 0)>
-                                        <div class="badge-notification-icon">
-                                            <div class="badge-notification-num">${appealsCount}</div>
-                                        </div>
-                                    <#elseif (appealsCount?has_content && appealsCount > 99)>
-                                        <div class="badge-notification-icon">
-                                            <div class="badge-notification-num">99</div>
-                                        </div>
-                                    </#if>
-                                </div>
-                            </div>
-                            <div class="col align-self-end d-none d-md-block">
+                                    <div class="col button-wrapper">
+                                        <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            <i class="bi bi-flag fs-5 d-md-none"></i>
+                                            <span class="d-none d-md-inline">Апелляции</span>
+                                            <span class="badge-notification-icon">
+                                                <span class="badge-notification-num" id="counter">
+
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
                                 <div class="col">
                                     <div class="dropdown d-md-none h-100">
-                                        <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-clock"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <section class="times_second"></section>
-                                        </ul>
+                                        <a class="btn btn-dodo-light rounded-4 dropdown-toggle w-100 h-100"
+                                           type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-clock fs-5"></i>
+                                        </a>
+                                        <div class="dropdown-menu border-0 rounded-4 shadow">
+                                            <section class="times_second d-flex flex-column row-gap-2 p-3"></section>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card rounded-4 border-0 shadow-sm">
-                                    <div class="card-body">
-                                        <section class="d-flex flex-column row-gap-2 text-center times">
-                                        </section>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="col align-self-end d-none d-md-block">
+                            <div class="card rounded-4 border-0 shadow-sm">
+                                <div class="card-body">
+                                    <section class="d-flex flex-column row-gap-2 text-center times">
+                                    </section>
                                 </div>
                             </div>
                         </div>
@@ -281,8 +280,10 @@
         }
     </style>
 
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
+    <script src="/js/clock.js"></script>
+    <script src="../js/appealsCount.js"></script>
     <script>
         let currentDate;
         let expertId;
