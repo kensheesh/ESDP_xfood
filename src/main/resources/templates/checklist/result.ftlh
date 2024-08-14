@@ -474,7 +474,21 @@
             }
 
             async function appealByComment(commentId, criteriaId, checkId){
+                let object = {
+                    checkId: checkId,
+                    criteriaId: criteriaId,
+                    commentId: commentId
+                }
+                let response = await fetch('/api/appeal/comment', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                })
 
+                let data = await response.json()
+                window.location.href = '/appeals/' + data
             }
         });
     </script>
