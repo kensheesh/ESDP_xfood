@@ -49,8 +49,12 @@ public class SettingServiceImpl implements SettingService {
     public boolean isCheckRecent(ChecklistShowDto dto) {
         LocalDateTime checkEndTime = dto.getEndTime();
         LocalDateTime currentTime = LocalDateTime.now();
-        int appealCreateDeadline = getAppealDeadline().getValueInt();
-        return checkEndTime.isAfter(currentTime.minusDays(appealCreateDeadline));
+        if (checkEndTime != null) {
+            int appealCreateDeadline = getAppealDeadline().getValueInt();
+            return checkEndTime.isAfter(currentTime.minusDays(appealCreateDeadline));
+        } else {
+            return true;
+        }
     }
 
     @Override
