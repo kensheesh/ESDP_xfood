@@ -10,11 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationDto {
-    private Long id;
-    @NotBlank
-    private String name;
-    private Integer timezone;
-    @NotBlank
-    private CountryDto country;
+public class CountryDto {
+	private Long id;
+	@NotBlank
+	private String countryName, countryCode, apiUrl, authUrl;
+	
 }

@@ -2,7 +2,6 @@ package kg.attractor.xfood.mockito.service;
 
 import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.repository.ManagerRepository;
-import kg.attractor.xfood.service.ManagerService;
 import kg.attractor.xfood.service.impl.ManagerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,9 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
-public class ManagerServiceTest {
+class ManagerServiceTest {
     @InjectMocks
     private ManagerServiceImpl managerService;
     @Mock
@@ -28,7 +27,7 @@ public class ManagerServiceTest {
     }
 
     @Test
-    void testFindById(){
+    void testFindById() {
         Manager manager = Manager.builder().id(1L).name("Manager").build();
         when(managerRepository.findById(1L)).thenReturn(Optional.of(manager));
         Manager found = managerService.findById(1L);
@@ -37,7 +36,7 @@ public class ManagerServiceTest {
     }
 
     @Test
-    void testFindByIdThrowsException(){
+    void testFindByIdThrowsException() {
         long id = -1L;
         NoSuchElementException e = assertThrows(NoSuchElementException.class, () -> managerService.findById(id));
         assertEquals("Manager not found by id: " + id, e.getMessage());

@@ -634,4 +634,9 @@ public class CheckListServiceImpl implements CheckListService {
                 .orElseThrow(() -> new NotFoundException("CheckList not found")));
     }
 
+    @Override
+    public long getAmountOfNewChecks() {
+        String expertEmail = AuthParams.getPrincipal().getUsername();
+        return checkListRepository.countByExpert_EmailAndStatus(expertEmail, Status.getStatusEnum("new"));
+    }
 }

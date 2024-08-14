@@ -7,7 +7,7 @@
 
     <div class="row row-cols-md-2 row-gap-3">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
-            <div class="card rounded-4 mb-2 mb-sm-0 h-100 shadow-sm border-0">
+            <div class="card rounded-4 mb-2 mb-sm-0 shadow-sm border-0">
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3 h-100">
                         <#assign userRole = authorizedUser.authorities[0].authority>
@@ -24,8 +24,13 @@
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/templates" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
                                         Шаблоны
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a href="/admin/users" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Пользователи
                                     </a>
                                 </div>
                             </div>
@@ -36,7 +41,7 @@
         </div>
         <div class="col-md-8 col-xl-9">
             <div class="text-end">
-                <a href="#" class="btn btn-secondary">+ Добавить шаблон</a>
+                <a href="/templates/create" class="btn btn-secondary">+ Добавить шаблон</a>
             </div>
             <#list templates as template>
                 <div class="card my-2 text-decoration-none border border-secondary">
@@ -46,8 +51,8 @@
                             <span class="col-3">Кол. критериев: <b>${template.numsOfCriteria}</b></span>
                             <span class="col-3">Макс. балл: <b>${template.totalValue}</b></span>
                             <span class="col-3">Вознаграждение: <b>${template.fee}₽</b></span>
-                            <div class="btn btn-secondary col-1 ms-auto" id="edit_btn" value="${template.id}" onclick="handleEditClick(this.value)"><i class="bi bi-pencil-fill"></i></div>
-                            <div class="btn btn-warning col-1 ms-auto text-white" id="delete_btn" value="${template.id}" onclick="handleDeleteClick(this.value)"><i class="bi bi-trash-fill"></i></div>
+                            <div class="btn btn-secondary col-1 ms-auto" data-id="${template.id}" onclick="handleEditClick(this)"><i class="bi bi-pencil-fill"></i></div>
+                            <div class="btn btn-warning col-1 ms-auto text-white" id="delete_btn" data-id="${template.id}" onclick="handleDeleteClick(this)"><i class="bi bi-trash-fill"></i></div>
                         </div>
                     </div>
                 </div>
@@ -56,12 +61,14 @@
     </div>
 
     <script>
-        function handleEditClick(selectedValue) {
-            window.location.href = '#' + selectedValue
+        function handleEditClick(element) {
+            const selectedValue = element.getAttribute('data-id');
+            window.location.href = '/templates/' + selectedValue;
         }
 
-        function handleDeleteClick(selectedValue) {
-            window.location.href = '#' + selectedValue
+        function handleDeleteClick(element) {
+            const selectedValue = element.getAttribute('data-id');
+            window.location.href = '#' + selectedValue;
         }
     </script>
 

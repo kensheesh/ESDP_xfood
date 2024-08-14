@@ -3,11 +3,13 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaShowDto;
 import kg.attractor.xfood.dto.pizzeria.PizzeriaWeeklyDto;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.Pizzeria;
 import kg.attractor.xfood.repository.PizzeriaRepository;
 import kg.attractor.xfood.service.PizzeriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,9 @@ import java.util.List;
 public class PizzeriaServiceImpl implements PizzeriaService {
 
     private final PizzeriaRepository pizzeriaRepository;
+    private final LocationServiceImpl locationService;
     private final DtoBuilder dtoBuilder;
+    private final ModelBuilder modelBuilder;
 
     @Override
     public List<PizzeriaWeeklyDto> getPizzeriasByLocationId(long locationId) {
@@ -43,16 +47,28 @@ public class PizzeriaServiceImpl implements PizzeriaService {
         }
         return pizzeriaRepository.findByNameContainingIgnoreCase(query);
     }
-
+    
     @Override
-    public PizzeriaDto getPizzeriaDtoById(long id) {
-        Pizzeria pizzeria = pizzeriaRepository.findById(id).orElseThrow(null);
+    public void add(PizzeriaDto dto) {
+        Pizzeria p = modelBuilder.buildPizzeria(dto, locationService.findLocationById(dto.getLocationId()));
+        pizzeriaRepository.save(p);
+    }
+    
+    @Modifying
+    @Override
+    public void edit(PizzeriaDto dto) {
+        Pizzeria p = modelBuilder.buildPizzeria(dto, locationService.findLocationById(dto.getLocation().getId()));
+        pizzeriaRepository.save(p);
+    }
+    
+    @Override
+    public PizzeriaDto getPizzeriaDtoById(Long id) {
+        Pizzeria pizzeria = pizzeriaRepository.findById(id).orElseThrow(() -> new NotFoundException("Pizzeria not found"));
         return dtoBuilder.buildPizzeriaDto(pizzeria);
     }
-
-
+    
     protected Pizzeria getPizzeriaById(Long id) {
-        return pizzeriaRepository.findById(id).orElse(null);
+        return pizzeriaRepository.findById(id).orElseThrow(() -> new NotFoundException("Pizzeria not found"));
     }
 
     protected Pizzeria getPizzeriaByUuid(String unitId) {

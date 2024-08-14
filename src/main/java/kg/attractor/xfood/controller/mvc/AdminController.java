@@ -1,8 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
-import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.user.UserDto;
-import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("admin")
+@RequestMapping("/admin/")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
@@ -43,4 +41,12 @@ public class AdminController {
         model.addAttribute("currentSize", Integer.parseInt(size));
         return "users/users";
     }
+
+    
+    
+    @GetMapping("pizzerias-management")
+    public String getPizzaManagement(Model model) {
+        return "pizzerias/pizzeria_management";
+    }
+
 }
