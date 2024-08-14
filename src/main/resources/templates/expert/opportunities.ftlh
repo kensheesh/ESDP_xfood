@@ -12,8 +12,9 @@
                             <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                 <div class="col">
                                     <a href="#" class="btn rounded-4 w-100 h-100 disabled btn-dodo-light">
-                                        <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
-                                        <span class="d-none d-md-inline">График</span>
+                                        <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline d-lg-none">Возможности</span>
+                                        <span class="d-none d-lg-inline">Карта возможностей</span>
                                     </a>
                                 </div>
                                 <div class="col button-wrapper">

@@ -13,7 +13,6 @@
                 <#assign userRole = authorizedUser.authorities[0].authority>
                 <div class="card-body">
                     <div class="row row-cols-1 row-gap-3">
-                        <#assign userRole = authorizedUser.authorities[0].authority>
                         <div class="col">
                             <div class="row <#if userRole == "ROLE_EXPERT">rol-cols-4<#else>row-cols-3</#if> row-cols-md-1 row-gap-2">
                                 <div class="col">
@@ -39,11 +38,20 @@
                                         </a>
                                     </div>
                                 </#if>
-                                <div class="col">
+                                <div class="col button-wrapper">
                                     <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         <span class="d-none d-md-inline">Проверки</span>
                                         <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
+                                    <#if (checksCount?has_content && checksCount > 0)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">${checksCount}</div>
+                                        </div>
+                                    <#elseif (checksCount?has_content && checksCount > 99)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">99</div>
+                                        </div>
+                                    </#if>
                                 </div>
                                 <div class="col">
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
@@ -52,13 +60,14 @@
                                     </a>
                                 </div>
                                 <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
-                                    <div class="col">
-                                        <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light position-relative">
+                                    <div class="col button-wrapper">
+                                        <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-flag fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline">Апелляции</span>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                99+
-                                                <span class="visually-hidden">Нерасмотренные апелляции</span>
+                                            <span class="badge-notification-icon">
+                                                <span class="badge-notification-num" id="counter">
+
+                                                </span>
                                             </span>
                                         </a>
                                     </div>
@@ -88,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-xl-9">
+        <div class  ="col-md-8 col-xl-9">
             <h1 class="mb-4">Личный кабинет
                 <#if user.role == "SUPERVISOR">
                     руководителя
@@ -152,5 +161,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
     <script src="/js/profile.js"></script>
-
+    <script src="../js/appealsCount.js">
 </@main.layout>
