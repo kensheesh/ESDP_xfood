@@ -21,6 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class AppealSupervisorReviewDto {
     private String checkListUuid;
+    private String remark;
     private Long id;
     private String email;
     private String fullName;

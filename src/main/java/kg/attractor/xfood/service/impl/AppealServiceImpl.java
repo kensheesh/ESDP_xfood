@@ -63,8 +63,7 @@ public class AppealServiceImpl implements AppealService {
         Appeal appeal = appealRepository.findAppealById(id).orElseThrow(() -> new NoSuchElementException("Апелляция с айди " + id + "не найденно"));
         Criteria criteria = appeal.getCheckListsCriteria().getCriteria();
         Pizzeria pizzeria = appeal.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria();
-        //  List<CheckListsCriteriaComment> commentList = commentService.findAllByCriteriaIdAndCheckListId(criteria.getId(), appeal.getCheckListsCriteria().getChecklist().getId());
-        return AppealSupervisorReviewDto.builder()
+        AppealSupervisorReviewDto appealSupervisorReviewDto =  AppealSupervisorReviewDto.builder()
                 .checkListUuid(appeal.getCheckListsCriteria().getChecklist().getUuidLink())
                 .id(appeal.getId())
                 .email(appeal.getEmail())
@@ -87,6 +86,10 @@ public class AppealServiceImpl implements AppealService {
                         .pizzeria(pizzeria.getName())
                         .build())
                 .build();
+        if (appeal.getComment() != null) {
+            appealSupervisorReviewDto.setRemark(appeal.getComment().getComment());
+        }
+        return appealSupervisorReviewDto;
     }
 
     @Override
