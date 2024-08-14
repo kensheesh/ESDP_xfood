@@ -20,19 +20,20 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
               crossorigin="anonymous">
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <!-- Fontawesome CDN Link -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+              rel="stylesheet">
         <link rel="stylesheet" href="/css/layout.css">
     </head>
 
     <body>
     <header>
-0        <nav class="navbar navbar-expand fw-medium bg-body border-bottom " id="navbar">
+        <nav class="navbar navbar-expand fw-medium bg-body border-bottom " id="navbar">
             <div class="container">
                 <a class="navbar-brand fw-semibold " href="#">XFOOD</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -55,7 +56,8 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
                                     <#if userRole == "ROLE_EXPERT">
-                                        <li><a class="dropdown-item" href="/expert/opportunities">Карта возможностей</a></li>
+                                        <li><a class="dropdown-item" href="/expert/opportunities">Карта возможностей</a>
+                                        </li>
                                     <#else>
                                         <li><a class="dropdown-item" href="/deadlines">Настройки</a></li>
                                     </#if>
