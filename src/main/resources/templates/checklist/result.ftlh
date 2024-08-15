@@ -137,11 +137,13 @@
                                        aria-valuemax="${criteria.maxValue}">
                             </td>
                             <td class="text-center">
-                                <#if guess?? && checkList.status == "DONE">
+                                <#if guest??>
                                     <div class="d-flex justify-content-end align-items-center">
-                                        <button class="btn btn-warning btn-sm appeal-button"
-                                                data-criteria-id="${criteria.id}">Подать апелляцию
-                                        </button>
+                                        <#if isRecent == true>
+                                            <button class="btn btn-warning btn-sm appeal-button"
+                                                    data-criteria-id="${criteria.id}">Подать апелляцию
+                                            </button>
+                                        </#if>
                                         <#if criteria.isAccepted?? && true>
                                             <span class="appeal-submitted">!</span>
                                         </#if>
@@ -161,18 +163,19 @@
                                            value="${criteria.value}" id="${criteria.id}"/>
                                 </td>
                                 <td class="text-center table-danger">
-                                    <#if guess?? && checkList.status == "DONE">
+                                    <#if guest??>
                                         <div class="d-flex justify-content-end align-items-center">
-                                            <button class="btn btn-warning btn-sm appeal-button"
-                                                    data-criteria-id="${criteria.id}">Подать апелляцию
-                                            </button>
-
+                                            <#if isRecent == true>
+                                                <button class="btn btn-warning btn-sm appeal-button"
+                                                        data-criteria-id="${criteria.id}">Подать апелляцию
+                                                </button>
+                                                <button class="btn btn-info btn-sm comments-button"
+                                                        data-criteria-id="${criteria.id}">Комментарии
+                                                </button>
+                                            </#if>
                                             <#if criteria.isAccepted?? && true>
                                                 <span class="appeal-submitted">!</span>
                                             </#if>
-                                            <button class="btn btn-info btn-sm comments-button"
-                                                    data-criteria-id="${criteria.id}">Комментарии
-                                            </button>
                                         </div>
                                     </#if>
                                 </td>
