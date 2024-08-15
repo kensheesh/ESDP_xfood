@@ -120,7 +120,7 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     public ChecklistShowDto getCheckListById(String id) {
         for (var authority : AuthParams.getAuth().getAuthorities()) {
-            if (!authority.getAuthority().equals("ROLE_EXPERT") && authority.getAuthority() != null) {
+            if (!authority.getAuthority().equals("ROLE_EXPERT") && !authority.getAuthority().equals("ROLE_ANONYMOUS")) {
                 Optional<CheckList> deletedCheckList = findDeletedCheckList(id);
                 if (deletedCheckList.isPresent()) {
                     return dtoBuilder.buildChecklistShowDto(deletedCheckList.get(), Boolean.TRUE);
