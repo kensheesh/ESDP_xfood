@@ -161,16 +161,20 @@
                                         <#if guest?? && checkList.status == "DONE">
                                             <#if isRecent == true>
                                                 <div class="d-flex justify-content-end align-items-center">
-                                                    <button class="btn btn-warning btn-sm appeal-button"
-                                                            data-criteria-id="${criteria.id}">Подать апелляцию
-                                                    </button>
+                                                   <#if criteria.hasComments == false>
+                                                       <button class="btn btn-warning btn-sm appeal-button"
+                                                               data-criteria-id="${criteria.id}">Подать апелляцию
+                                                       </button>
 
-                                                    <#if criteria.isAccepted?? && true>
-                                                        <span class="appeal-submitted">!</span>
-                                                    </#if>
-                                                    <button class="btn btn-info btn-sm comments-button"
-                                                            data-criteria-id="${criteria.id}">Комментарии
-                                                    </button>
+                                                       <#if criteria.isAccepted?? && true>
+                                                           <span class="appeal-submitted">!</span>
+                                                       </#if>
+                                                       <#else >
+                                                           <button class="btn btn-info btn-sm comments-button"
+                                                                   data-criteria-id="${criteria.id}">Комментарии
+                                                           </button>
+                                                   </#if>
+
                                                 </div>
                                             </#if>
                                         </#if>
@@ -482,8 +486,9 @@
                     }
 
                 });
-
                 $('#commentsModal').modal('show');
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
             }
 
             async function appealByComment(commentId, criteriaId, checkId){
@@ -504,8 +509,6 @@
                 let data = await response.json()
                 window.location.href = '/appeals/' + data
 
-                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
             }
         });
     </script>

@@ -22,7 +22,9 @@ import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.AppealRepository;
+import kg.attractor.xfood.repository.ChecklistCriteriaCommentRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
+import kg.attractor.xfood.service.CheckListCriteriaCommentService;
 import kg.attractor.xfood.service.CheckTypeFeeService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -40,10 +42,10 @@ import static java.util.stream.Collectors.toList;
 @Component
 @RequiredArgsConstructor
 public class DtoBuilder {
-    private static final Logger log = LoggerFactory.getLogger(DtoBuilder.class);
     private final ChecklistCriteriaRepository checkListsCriteriaRepository;
     private final AppealRepository appealRepository;
     private final CheckTypeFeeService checkTypeFeeService;
+    private final ChecklistCriteriaCommentRepository checkListCriteriaCommentService;
 
 
     public ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
@@ -98,6 +100,8 @@ public class DtoBuilder {
                     criteriaExpertShowDto.setIsAccepted(true);
                 }
             }
+
+            criteriaExpertShowDto.setHasComments(checkListCriteriaCommentService.existsByChecklistCriteria_Id(checklistCriteria.getId()));
             criteriaDtos.add(criteriaExpertShowDto);
         }
 

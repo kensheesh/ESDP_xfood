@@ -18,5 +18,6 @@ public class CriteriaExpertShowDto {
 	private Integer coefficient;
 	private Integer value;
 	private Boolean isAccepted;
+	private Boolean hasComments;
 
 }

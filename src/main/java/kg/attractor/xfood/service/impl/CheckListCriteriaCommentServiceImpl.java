@@ -52,19 +52,6 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
         return true;
     }
 
-    @Override
-    public boolean ifExists(Long id, Long commentId) {
-        return criteriaCommentRepository.existsByChecklistCriteria_IdAndComment_Id(id, commentId);
-    }
-
-    @Override
-    public CheckListsCriteriaComment getByCommentIdCriteriaIdAndCheckId(Long commentId, Long criteriaId, Long checkId) {
-        CheckListsCriteria criteria = criteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkId);
-        return criteriaCommentRepository.findFirstByChecklistCriteria_IdAndComment_Id(criteria.getId(), commentId).orElseThrow(() -> new NoSuchElementException("Комментарий "+commentId+"к критерию "+criteriaId+" и чек-листу "+checkId+" не найдено"));
-    }
-
-
-
 
 }
 

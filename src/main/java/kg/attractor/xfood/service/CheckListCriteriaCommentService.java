@@ -13,8 +13,4 @@ public interface CheckListCriteriaCommentService {
 
     boolean delete(Long commentId);
 
-    boolean ifExists(Long id, Long commentId);
-
-    CheckListsCriteriaComment getByCommentIdCriteriaIdAndCheckId(Long commentId,Long criteriaId, Long checkId);
-
 }
