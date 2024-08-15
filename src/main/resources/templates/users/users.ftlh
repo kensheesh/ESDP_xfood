@@ -101,7 +101,7 @@
                         <div class="card d-none d-md-block border-0 shadow-sm rounded-4 ">
                             <div class="card-body">
                                 <h6>Фильтры</h6>
-                                <form action="/admin/users" method="GET">
+                                <form action="" method="GET">
                                     <div class="mb-3">
                                         <label for="role-select" class="form-label">Тип пользователя</label>
                                         <select class="form-select" id="role-select-1" name="role">
@@ -135,7 +135,7 @@
                             </button>
                             <div class="dropdown-menu p-3 rounded-4 shadow border-0 w-100">
                                 <h6>Фильтры</h6>
-                                <form action="/admin/users" method="GET">
+                                <form action="/users" method="GET">
                                     <div class="mb-3">
                                         <label for="role-select" class="form-label">Тип пользователя</label>
                                         <select class="form-select" id="role-select-2" name="role">
@@ -184,7 +184,7 @@
                         <#if totalPages gt 0>
                             <#if currentPage gt 0>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}" aria-label="Previous">
+                                    <a class="page-link" href="/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                     </a>
@@ -200,13 +200,13 @@
 
                             <#list 0..(totalPages-1) as page>
                                 <li class="page-item <#if page == currentPage>active</#if>">
-                                    <a class="page-link" href="/admin/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
+                                    <a class="page-link" href="/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
                                 </li>
                             </#list>
 
                             <#if currentPage lt totalPages - 1>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}" aria-label="Next">
+                                    <a class="page-link" href="/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                     </a>

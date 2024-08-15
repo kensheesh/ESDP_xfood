@@ -73,7 +73,7 @@
         }
     </style>
 
-    <a href="/expert/checks" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
+    <a href="/checks" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
 
     <#if error??>
         <div class="error-message">${error}</div>

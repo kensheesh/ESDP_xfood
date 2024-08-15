@@ -7,7 +7,6 @@ import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
-import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.service.*;
@@ -16,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +27,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/checks")
-public class CheckListController {
+public class ChecksController {
     private final CheckListService checkListService;
     private final CheckTypeService checkTypeService;
     private final CriteriaService criteriaService;
@@ -42,6 +39,13 @@ public class CheckListController {
     private final OpportunityService opportunityService;
     private final SettingService settingService;
 
+    @GetMapping()
+    public String getChecks (Model model) {
+        if (AuthParams.getPrincipal().getAuthorities().contains(Role.EXPERT)) {
+            model.addAttribute("checksCount", checkListService.getAmountOfNewChecks());
+        }
+        return "TODO_sketches/checks";
+    }
 
     //    // ROLE: SUPERVISOR
     @GetMapping("/create")
@@ -119,26 +123,34 @@ public class CheckListController {
     }
 
     // ROLE: SUPERVISOR, ADMIN
+/*
     @GetMapping("/{id}/change")
     public String changeResult(@PathVariable(name = "id") Long checkListId, Model model) {
-        /* TODO:
+        */
+/* TODO:
             Изменение результата проверки *после
             подтверждения экспертом
-        */
+        *//*
+
 
         return null;
     }
+*/
 
     // ROLE: SUPERVISOR, ADMIN
+/*
     @PostMapping("/{id}/change")
     public String changeResult(@PathVariable(name = "id") Long checkListId, BindingResult result, Model model) {
-        /* TODO:
+        */
+/* TODO:
             Изменение результата проверки *после
             подтверждения экспертом
-        */
+        *//*
+
 
         return null;
     }
+*/
 
     @GetMapping ("/{id}/result")
     public String getResult (@PathVariable (name = "id") String checkListId, Model model, Authentication auth) {
@@ -179,7 +191,7 @@ public class CheckListController {
     @PostMapping("{uuid}/delete")
     public String delete(@PathVariable String uuid) {
         checkListService.delete(uuid);
-        return "redirect:/expert/checks";
+        return "redirect:/checks";
     }
 
     @PostMapping("/{uuid}/{criteriaId}")
@@ -194,7 +206,7 @@ public class CheckListController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public String restore(@PathVariable String uuid) {
         checkListService.restore(uuid);
-        return "redirect:/expert/checks";
+        return "redirect:/checks";
     }
 
 }

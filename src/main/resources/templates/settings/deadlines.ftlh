@@ -37,7 +37,7 @@
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/admin/users" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/users" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                                     <span class="d-none d-md-inline">
                                                         Пользователи
                                                     </span>

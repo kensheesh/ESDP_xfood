@@ -28,14 +28,6 @@ public class ExpertController {
     private final SettingServiceImpl settingService;
     private final CheckListServiceImpl checkListService;
 
-    @GetMapping("/checks")
-    public String getChecks (Model model) {
-        if (AuthParams.getPrincipal().getAuthorities().contains(Role.EXPERT)) {
-            model.addAttribute("checksCount", checkListService.getAmountOfNewChecks());
-        }
-        return "TODO_sketches/checks";
-    }
-
     @GetMapping ("/opportunities")
     public String getOpportunityMap (Model model) {
         Map<String, OpportunityDto> opportunitiesMap = opportunityService.getAllByExpert();

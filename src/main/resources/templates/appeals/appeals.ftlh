@@ -22,7 +22,7 @@
                                     </a>
                                 </div>
                                 <div class="col button-wrapper">
-                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         <span class="d-none d-md-inline">Проверки</span>
                                         <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
