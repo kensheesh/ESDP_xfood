@@ -75,6 +75,9 @@
 
     <a href="/expert/checks" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
 
+    <#assign countWowFactors = 0>
+    <#assign countCriticalFactors = 0>
+
     <#if guest?? && checkList.status == "IN_PROGRESS" || guess?? && checkList.status == "NEW">
         <h1>Данная проверка еще не опубликована</h1>
     <#else>
@@ -173,6 +176,7 @@
                                         </div>
                                     </#if>
                                 </td>
+                                <#assign countCriticalFactors = countCriticalFactors + 1>
                             <#elseif criteria.section == 'WOW фактор'>
                                 <td class="text-center table-success">${criteria.section}</td>
                                 <td class="table-success">${criteria.description}</td>
@@ -185,6 +189,7 @@
                                 </td>
                                 <td class="text-center table-success">
                                 </td>
+                                <#assign countWowFactors = countWowFactors + 1>
                             </#if>
                         </#if>
                     </tr>
@@ -285,7 +290,8 @@
                                             Вы уверены, что хотите удалить проверку?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-link text-decoration-none link-secondary"
+                                            <button type="button"
+                                                    class="btn btn-link text-decoration-none link-secondary"
                                                     data-bs-dismiss="modal">Отмена
                                             </button>
                                             <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete"
@@ -319,7 +325,8 @@
                                             Вы уверены, что хотите удалить проверку?
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-link text-decoration-none link-secondary"
+                                            <button type="button"
+                                                    class="btn btn-link text-decoration-none link-secondary"
                                                     data-bs-dismiss="modal">Отмена
                                             </button>
                                             <form class="d-inline-block" action="/checks/${checkList.uuidLink}/delete"
@@ -520,6 +527,30 @@
                 });
 
                 $('#commentsModal').modal('show');
+            }
+
+            let a = document.createElement('a');
+            a.href = '/checks/${checkList.uuidLink}';
+
+            document.getElementById('getTemplate').addEventListener('click', async () => {
+                const message = `Дата: ${checkList.managerWorkDate}\n` +
+                    `Пиццерия: ${checkList.pizzeria.name}\n` +
+                    `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
+                    `Результат проверки в %: ` + await updatePercentage() + `` +
+                    // `\nПоложительная обратная связь: ` +
+                    `\nКритический фактор: ` + ${countCriticalFactors} +
+                    `\nWOW фактор: ` + ${countWowFactors} +
+                    `\nПоделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
+                    a.href;
+
+                await navigator.clipboard.writeText(message);
+
+                alert("Скопировано в буфер обмена!");
+            });
+
+            async function updatePercentage() {
+                let response = await fetch('/api/checklist/criteria/percentage/${checkList.id}')
+                return await response.json()
             }
         });
     </script>
