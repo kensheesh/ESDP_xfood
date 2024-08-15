@@ -1,8 +1,10 @@
 package kg.attractor.xfood.controller.mvc;
 
 import jakarta.validation.Valid;
+import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityDto;
+import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.service.OpportunityService;
 import kg.attractor.xfood.service.impl.CheckListServiceImpl;
 import kg.attractor.xfood.service.impl.SettingServiceImpl;
@@ -27,8 +29,10 @@ public class ExpertController {
     private final CheckListServiceImpl checkListService;
 
     @GetMapping("/checks")
-    public String getChecks () {
-        // TODO список назначенных проверок (все на сегодня и просроченные)
+    public String getChecks (Model model) {
+        if (AuthParams.getPrincipal().getAuthorities().contains(Role.EXPERT)) {
+            model.addAttribute("checksCount", checkListService.getAmountOfNewChecks());
+        }
         return "TODO_sketches/checks";
     }
 

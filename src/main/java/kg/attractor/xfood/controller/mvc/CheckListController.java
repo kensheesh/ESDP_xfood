@@ -172,7 +172,7 @@ public class CheckListController {
     @PostMapping("/{id}/update")
     public String edit(@PathVariable(name = "id") String uuid, CheckListSupervisorEditDto checkList) {
         checkListService.edit(checkList);
-        return "redirect:/checks/" + uuid + "/check";
+        return "redirect:/checks/" + uuid;
     }
 
     @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
