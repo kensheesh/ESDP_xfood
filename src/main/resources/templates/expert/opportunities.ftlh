@@ -59,7 +59,11 @@
                         <ul class="pagination justify-content-center mb-3 mt-1">
                             <li class="page-item"><a class="page-link text-secondary"
                                                      href="/expert/opportunities?w=${week - 1}">Previous</a></li>
-                            <span class="text-secondary pt-2 mx-3">${monday} - ${monday.plusDays(6)}</span>
+                            <#assign mondayStr = "${monday}">
+                            <#assign sundayStr = "${monday.plusDays(6)}">
+                            <#assign formattedMonday = mondayStr?date("yyyy-MM-dd")?string("dd.MM.yyyy")>
+                            <#assign formattedSunday = sundayStr?date("yyyy-MM-dd")?string("dd.MM.yyyy")>
+                            <span class="text-secondary pt-2 mx-3">${formattedMonday} - ${formattedSunday}</span>
                             <li class="page-item"><a class="page-link text-secondary"
                                                      href="/expert/opportunities?w=${week + 1}">Next</a></li>
                         </ul>
