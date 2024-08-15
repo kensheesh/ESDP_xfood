@@ -73,7 +73,8 @@ document.getElementById('form').addEventListener('submit', function (event) {
         if (response.ok) {
             $('#successModal').modal('show');
             setTimeout(function () {
-                window.location.href = '/checks/${appeal.checklistUuid}/result';
+                let uuid = document.getElementById('uuid').value;
+                window.location.href = '/checks/'+uuid+'/result';
             }, 3000);
         } else {
             response.json().then(data => {

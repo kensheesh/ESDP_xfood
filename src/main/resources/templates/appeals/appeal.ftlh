@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-
+    <input type="hidden" id="uuid" value="${appeal.checklistUuid}">
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
