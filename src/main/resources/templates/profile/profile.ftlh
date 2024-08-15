@@ -112,8 +112,8 @@
                             <h4 class="card-title">${user.name} ${user.surname}</h4>
                             <p class="card-text">Email: ${user.email}</p>
                             <div class="mt-3" role="group" aria-label="User actions">
-                                <button type="button" class="btn btn-dodo rounded-4 w-100 px-5">
-                                    История вознаграждений
+                                <button id="btn-reward" type="button" class="btn btn-dodo rounded-4 w-100 px-5">
+                                    <a href="/reward" class="text-white" style="text-decoration: none" role="button">История вознаграждений</a>
                                 </button>
                             </div>
                         </div>
