@@ -57,27 +57,38 @@
                         <div class="card rounded-4 mb-2 mb-sm-0 shadow-sm border-0">
                             <div class="card-body">
                                 <div class="row row-cols-1 row-gap-3 h-100">
-                                    <#assign userRole = authorizedUser.authorities[0].authority>
                                     <div class="col">
                                         <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                             <div class="col">
                                                 <a href="/deadlines" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                                    Дедлайны
+                                                    <i class="bi bi-hourglass-split fs-5 d-md-none"></i>
+                                                    <span class="d-none d-md-inline">
+                                                        Дедлайны
+                                                    </span>
                                                 </a>
                                             </div>
                                             <div class="col">
                                                 <a href="#" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                                    Токены
+                                                    <i class="bi bi-key fs-5 d-md-none"></i>
+                                                    <span class="d-none d-md-inline">
+                                                        Токены
+                                                    </span>
                                                 </a>
                                             </div>
                                             <div class="col">
                                                 <a href="/templates" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                                    Шаблоны
+                                                    <i class="bi bi-clipboard-plus fs-5 d-md-none"></i>
+                                                    <span class="d-none d-md-inline">
+                                                        Шаблоны
+                                                    </span>
                                                 </a>
                                             </div>
                                             <div class="col">
                                                 <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
-                                                    Пользователи
+                                                    <span class="d-none d-md-inline">
+                                                        Пользователи
+                                                    </span>
+                                                    <i class="bi bi-people d-md-none fs-5"></i>
                                                 </a>
                                             </div>
                                         </div>
