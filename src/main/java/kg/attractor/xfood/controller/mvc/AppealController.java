@@ -46,6 +46,7 @@ public class AppealController {
 	    return "appeals/appeal";
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
 	@GetMapping("{id}/approve")
     public String approveAppeal(@PathVariable Long id, Model model){
         model.addAttribute("appeal", appealService.getAppealById(id));
@@ -53,6 +54,7 @@ public class AppealController {
         return "appeals/approve";
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
     @PostMapping("/approve")
     public String approveAppeal(AppealSupervisorApproveDto appeal) throws MessagingException, UnsupportedEncodingException {
         appealService.approve(appeal);

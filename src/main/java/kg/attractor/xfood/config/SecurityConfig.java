@@ -31,11 +31,12 @@ public class SecurityConfig {
 			"/DataTables/**",
 			"/js/validation.js",
 			"/css/layout.css",
-			"/appeal/**",
+			"/api/appeal/**",
 			"/checks/**",
 			"/api/oauth/**",
 			"/api/checklist/criteria/percentage/**",
 			"/api/checks/points/**",
+			"/appeals/**",
 			"/"
 			
 	};

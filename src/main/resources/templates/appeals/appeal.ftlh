@@ -88,5 +88,29 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('form');
+            console.log(form)
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/checks/' + `${appeal.checklistUuid}`
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                    });
+            });
+        })
+    </script>
     <script src="../js/appeal.js"></script>
 </@main.layout>
