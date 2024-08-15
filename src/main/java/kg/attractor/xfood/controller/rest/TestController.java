@@ -9,6 +9,7 @@ import kg.attractor.xfood.service.OkHttpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,13 +28,17 @@ public class TestController {
 		return "redirect:/analytics";
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
 	@PostMapping("/bearer")
 	public ResponseEntity<?> setBearer(
 			@RequestParam @Valid @NotBlank String bearer,
 			@RequestParam(required = false) Long lifeTime) {
 		
-		bearerTokenService.setBearerForSupervisors(bearer, lifeTime);
+		if (AuthParams.getAuth().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+			bearerTokenService.setBearerForSupervisors(bearer, lifeTime);
+		} else {
+			bearerTokenService.setBearer(AuthParams.getPrincipal().getUsername(), bearer, lifeTime);
+		}
 		return ResponseEntity.ok().build();
 	}
 	
