@@ -51,7 +51,7 @@ public class CheckListCriteriaController {
 
     @GetMapping("{uuid}")
     public ResponseEntity<List<CriteriaExpertShowDto>> getCriteriaByCheckListId(@PathVariable(name = "uuid") String checkListUUID) {
-        return ResponseEntity.ok(checkListService.getCheckListById(checkListUUID).getCriteria());
+        return ResponseEntity.ok(checkListService.getCheckListByUuid(checkListUUID).getCriteria());
     }
 
     @PostMapping("save")

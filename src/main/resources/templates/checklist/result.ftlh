@@ -335,7 +335,7 @@
 
                     <#if userRole == 'ROLE_SUPERVISOR'>
                         <div class="col-md-auto px-1">
-                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-light-green w-100"
+                            <a href="/checks/${checkList.uuidLink}/edit" class="btn btn-light-green w-100"
                                role="link">
                                 Редактировать
                             </a>

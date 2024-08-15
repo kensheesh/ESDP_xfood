@@ -434,7 +434,7 @@
 
     <div class="modal fade" id="workShiftModal" tabindex="-1" aria-labelledby="workShiftModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content rounded-4" method="POST" action="/expert/opportunities/change">
+            <form class="modal-content rounded-4" method="POST" action="/expert/my-opportunities/change">
                 <div class="modal-header">
                     <h1 class="modal-title fs-6" id="workShiftModalLabel"></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

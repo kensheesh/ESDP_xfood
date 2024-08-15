@@ -15,7 +15,7 @@
                         <div class="col">
                             <div class="row row-cols-3 row-cols-md-1 row-gap-2">
                                 <div class="col">
-                                    <a href="/supervisor/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
                                         <span class="d-none d-md-inline">График</span>
                                     </a>
@@ -78,9 +78,9 @@
         <div class="col-md-8 col-xl-9">
             <nav aria-label="navigation">
                 <ul class="pagination justify-content-center my-3">
-                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/opportunities?week=${week.weekOrder - 1}">Previous</a></li>
+                    <li class="page-item"><a class="page-link text-secondary" href="/opportunities?week=${week.weekOrder - 1}">Previous</a></li>
                     <span class="text-secondary pt-2 mx-3">${week.monday} - ${week.sunday}</span>
-                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/opportunities?week=${week.weekOrder + 1}">Next</a></li>
+                    <li class="page-item"><a class="page-link text-secondary" href="/opportunities?week=${week.weekOrder + 1}">Next</a></li>
                 </ul>
             </nav>
             <div class="card border-0 shadow-sm rounded-4">
@@ -164,7 +164,7 @@
                     <h1 class="modal-title fs-6" id="workShiftModalLabel">Выберите данные для назначения проверки</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="my-1 mx-2 p-1" method="POST" action="/supervisor/opportunities">
+                <form class="my-1 mx-2 p-1" method="POST" action="/opportunities">
                     <div class="mb-3">
                         <label for="category" class="form-label ps-1 mt-2">Пиццерия</label>
 <#--                        //ToDo Доделать живой поиск-->

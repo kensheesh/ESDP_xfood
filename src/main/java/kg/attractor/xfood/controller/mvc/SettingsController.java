@@ -9,8 +9,6 @@ import kg.attractor.xfood.service.CheckTypeService;
 import kg.attractor.xfood.service.SectionService;
 import kg.attractor.xfood.service.SettingService;
 import kg.attractor.xfood.service.ZoneService;
-import kg.attractor.xfood.service.impl.CheckTypeServiceImpl;
-import kg.attractor.xfood.service.impl.SettingServiceImpl;
 import kg.attractor.xfood.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

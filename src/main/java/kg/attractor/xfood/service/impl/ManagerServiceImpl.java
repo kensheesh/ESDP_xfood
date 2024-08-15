@@ -52,7 +52,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<PizzeriaStaffMemberDto> getAllAvailable(String uuid) {
-        CheckList checkList = checkListService.getModelCheckListById(uuid);
+        CheckList checkList = checkListService.getModelCheckListByUuid(uuid);
         Pizzeria pizzeria = checkList.getWorkSchedule().getPizzeria();
         return okHttpService.getPizzeriaStaff(pizzeria.getLocation().getCountry().getCountryCode(), pizzeria.getUuid());
     }

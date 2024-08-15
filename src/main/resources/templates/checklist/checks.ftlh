@@ -16,13 +16,13 @@
                             <div class="row <#if userRole == "ROLE_EXPERT">rol-cols-4<#else>row-cols-3</#if> row-cols-md-1 row-gap-2">
                                 <div class="col">
                                     <#if userRole == "ROLE_EXPERT">
-                                        <a href="/expert/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <a href="/my-opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline d-lg-none">Возможности</span>
                                             <span class="d-none d-lg-inline">Карта возможностей</span>
                                         </a>
                                     <#else>
-                                        <a href="/supervisor/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <a href="/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline">График</span>
                                         </a>
@@ -30,7 +30,7 @@
                                 </div>
                                 <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
                                     <div class="col">
-                                        <a href="/supervisor/opportunities"
+                                        <a href="/opportunities"
                                            class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline">Возможности</span>

@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,24 +29,20 @@ import java.util.Collection;
 public class ChecksController {
     private final CheckListService checkListService;
     private final CheckTypeService checkTypeService;
-    private final CriteriaService criteriaService;
     private final ZoneService zoneService;
     private final SectionService sectionService;
     private final WorkScheduleService workScheduleService;
-    private final UserService userService;
-    private final ManagerService managerService;
-    private final OpportunityService opportunityService;
     private final SettingService settingService;
 
-    @GetMapping()
+    @GetMapping
     public String getChecks (Model model) {
         if (AuthParams.getPrincipal().getAuthorities().contains(Role.EXPERT)) {
             model.addAttribute("checksCount", checkListService.getAmountOfNewChecks());
         }
-        return "TODO_sketches/checks";
+        return "checklist/checks";
     }
 
-    //    // ROLE: SUPERVISOR
+    // ROLE: SUPERVISOR
     @GetMapping("/create")
     public String create(@RequestParam(name = "date") LocalDate date, @RequestParam(name = "managerId") Long managerId, @RequestParam(name = "expertId") Long expertId, Model model) {
         model.addAttribute("zones", zoneService.getZones());
@@ -61,100 +56,29 @@ public class ChecksController {
         return "checklist/create";
     }
 
-
     // ROLE: SUPERVISOR
     @PostMapping("/create")
     public String create(CheckListSupervisorCreateDto createDto) {
         CheckListMiniSupervisorCreateDto checklistDto = checkListService.create(createDto);
         checkListService.bindChecklistWithCriterion(checklistDto);
-        return "redirect:/supervisor/weekly";
+        return "redirect:/weekly";
     }
-
-//    // ROLE: ADMIN
-//    @GetMapping ("/{id}/edit")
-//    public String edit (@PathVariable (name="id") Long checkListId, Model model) {
-//        return null;
-//    }
-//
-//    // ROLE: ADMIN
-//    @PostMapping ("/{id}/edit")
-//    public String edit (@PathVariable (name="id") Long checkListId, BindingResult result, Model model) {
-//        return null;
-//    }
 
     @GetMapping("{uuid}")
     public String getCheck(@PathVariable String uuid, Model model, Authentication auth) {
         if(auth == null) {
             model.addAttribute("guest", true);
         }
-        ChecklistShowDto checkList = checkListService.getCheckListById(uuid);
+        ChecklistShowDto checkList = checkListService.getCheckListByUuid(uuid);
         model.addAttribute("checkList", checkList);
         boolean isRecent = settingService.isCheckRecent(checkList);
         model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
         return "checklist/result";
     }
-
-    @GetMapping("{uuid}/fill")
-    public String getCheckForFill(@PathVariable String uuid, Model model) {
-        Collection<? extends GrantedAuthority> authorities = AuthParams.getAuth().getAuthorities();
-        ChecklistShowDto checkListDto = checkListService.getCheckListById(uuid);
-        String role = authorities.stream().toList().get(0).getAuthority();
-        if (role.equalsIgnoreCase("role_expert")) {
-            String authExpertEmail = AuthParams.getPrincipal().getUsername();
-            if (authExpertEmail.equals(checkListDto.getExpertEmail())) {
-                model.addAttribute("checkList", checkListDto);
-            } else {
-                model.addAttribute("error", "Эта проверка не назначена на вас!");
-            }
-        } else {
-            model.addAttribute("checkList", checkListDto);
-        }
-        return "checklist/check_list";
-    }
-
-    // ROLE: EXPERT
-    @PostMapping("/{id}/check")
-    public String check(@PathVariable(name = "id") Long checkListId, BindingResult result, Model model) {
-        /* TODO:
-            Подтверждение проверки экспертом
-        */
-
-        return null;
-    }
-
-    // ROLE: SUPERVISOR, ADMIN
-/*
-    @GetMapping("/{id}/change")
-    public String changeResult(@PathVariable(name = "id") Long checkListId, Model model) {
-        */
-/* TODO:
-            Изменение результата проверки *после
-            подтверждения экспертом
-        *//*
-
-
-        return null;
-    }
-*/
-
-    // ROLE: SUPERVISOR, ADMIN
-/*
-    @PostMapping("/{id}/change")
-    public String changeResult(@PathVariable(name = "id") Long checkListId, BindingResult result, Model model) {
-        */
-/* TODO:
-            Изменение результата проверки *после
-            подтверждения экспертом
-        *//*
-
-
-        return null;
-    }
-*/
-
-    @GetMapping ("/{id}/result")
-    public String getResult (@PathVariable (name = "id") String checkListId, Model model, Authentication auth) {
-        ChecklistShowDto checkList = checkListService.getCheckListById(checkListId);
+    //ToDo объединить контроллеры под url=/checks/{uuid}
+    @GetMapping ("/{uuid}/result")
+    public String getResult (@PathVariable (name = "uuid") String checkListUuid, Model model, Authentication auth) {
+        ChecklistShowDto checkList = checkListService.getCheckListByUuid(checkListUuid);
         if(auth == null) {
             model.addAttribute("guest", true);
         }
@@ -169,9 +93,27 @@ public class ChecksController {
         return "checklist/result";
     }
 
+    @GetMapping("{uuid}/fill")
+    public String getCheckForFill(@PathVariable String uuid, Model model) {
+        Collection<? extends GrantedAuthority> authorities = AuthParams.getAuth().getAuthorities();
+        ChecklistShowDto checkListDto = checkListService.getCheckListByUuid(uuid);
+        String role = authorities.stream().toList().get(0).getAuthority();
+        if (role.equalsIgnoreCase("role_expert")) {
+            String authExpertEmail = AuthParams.getPrincipal().getUsername();
+            if (authExpertEmail.equals(checkListDto.getExpertEmail())) {
+                model.addAttribute("checkList", checkListDto);
+            } else {
+                model.addAttribute("error", "Эта проверка не назначена на вас!");
+            }
+        } else {
+            model.addAttribute("checkList", checkListDto);
+        }
+        return "checklist/check_list";
+    }
+
     // ROLE: SUPERVISOR
-    @GetMapping ("/{id}/update")
-    public String edit (@PathVariable (name="id") String uuid,@RequestParam(name = "type", required = false) String type,  Model model) {
+    @GetMapping ("/{uuid}/edit")
+    public String edit (@PathVariable (name="uuid") String uuid,@RequestParam(name = "type", required = false) String type,  Model model) {
             model.addAttribute("zones",zoneService.getZones() );
             model.addAttribute("sections", sectionService.getSections());
             model.addAttribute("checklist", checkListService.getChecklistByUuid(uuid, type));
@@ -181,8 +123,8 @@ public class ChecksController {
     }
 
     // ROLE: SUPERVISOR
-    @PostMapping("/{id}/update")
-    public String edit(@PathVariable(name = "id") String uuid, CheckListSupervisorEditDto checkList) {
+    @PostMapping("/{uuid}/edit")
+    public String edit(@PathVariable(name = "uuid") String uuid, CheckListSupervisorEditDto checkList) {
         checkListService.edit(checkList);
         return "redirect:/checks/" + uuid;
     }

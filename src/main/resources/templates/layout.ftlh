@@ -56,7 +56,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
                                     <#if userRole == "ROLE_EXPERT">
-                                        <li><a class="dropdown-item" href="/expert/opportunities">Карта возможностей</a>
+                                        <li><a class="dropdown-item" href="/my-opportunities">Карта возможностей</a>
                                         </li>
                                     <#else>
                                         <li><a class="dropdown-item" href="/deadlines">Настройки</a></li>
