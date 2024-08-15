@@ -3,6 +3,7 @@ package kg.attractor.xfood.controller.mvc;
 import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
+import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
