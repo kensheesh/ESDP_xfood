@@ -73,7 +73,7 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
 
-    protected Manager getManagersByUuid(String staffId) {
+    public Manager getManagersByUuid(String staffId) {
 		return managerRepository.findByUuid(staffId);
 	}
 	
