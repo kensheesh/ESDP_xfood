@@ -68,7 +68,8 @@
                                                 </a>
                                             </div>
                                             <div class="col">
-                                                <a href="#" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                                <a class="btn rounded-4 w-100 h-100 btn-dodo-light"
+                                                data-bs-toggle="modal" data-bs-target="#tokenModal">
                                                     <i class="bi bi-key fs-5 d-md-none"></i>
                                                     <span class="d-none d-md-inline">
                                                         Токены
@@ -368,6 +369,62 @@
         </div>
     </div>
 
+    <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tokenModal">
+                        Привязать токен доступа
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form id="bearerForm">
+                    <div class="modal-body">
+                        <label for="bearer" class="form-label">Токен</label>
+                        <input type="text" id="bearer" name="bearer" class="form-control" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" id="pushToken" class="btn btn-primary" data-bs-dismiss="modal"
+                                data-bs-target="#tokenModal">
+                            Сохранить токен
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('pushToken').addEventListener('click', async function () {
+            const form = document.getElementById('bearerForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/api/bearer', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Optionally, handle the response here
+                const result = await response.json();
+                console.log(result);
+
+                // Close the modal if needed
+                const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                modal.hide();
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+        });
+    </script>
     <script src="/js/validation.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
