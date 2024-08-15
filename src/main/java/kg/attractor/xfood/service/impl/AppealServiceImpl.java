@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +62,7 @@ public class AppealServiceImpl implements AppealService {
 
     @Override
     public AppealSupervisorReviewDto getAppealById(Long id) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Appeal appeal = appealRepository.findAppealById(id).orElseThrow(() -> new NoSuchElementException("Апелляция с айди " + id + "не найденно"));
         Criteria criteria = appeal.getCheckListsCriteria().getCriteria();
         Pizzeria pizzeria = appeal.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria();
@@ -71,7 +74,7 @@ public class AppealServiceImpl implements AppealService {
                 .comment(appeal.getComment_expert())
                 .files(appeal.getFiles())
                 .status(appeal.getIsAccepted())
-                .localDate(appeal.getCheckListsCriteria().getChecklist().getEndTime())
+                .localDate( appeal.getCheckListsCriteria().getChecklist().getEndTime().format(formatter))
                 .respond(appeal.getComment_supervisor())
                 .checkListsCriteria(CheckListCriteriaSupervisorReviewDto.builder()
                         .criteria(CriteriaSupervisorShowDto.builder()
@@ -123,7 +126,7 @@ public class AppealServiceImpl implements AppealService {
             CheckListsCriteria criteria = appeal.getCheckListsCriteria();
             if (criteria.getMaxValue() == null) {
                 Criteria c = appeal.getCheckListsCriteria().getCriteria();
-                criteria.setValue(criteria.getValue() + c.getCoefficient());
+                criteria.setValue(criteria.getValue() + Math.abs(c.getCoefficient()));
                 criteria.setMaxValue(0);
             } else {
                 criteria.setValue(criteria.getValue() + criteria.getMaxValue());
@@ -155,6 +158,13 @@ public class AppealServiceImpl implements AppealService {
                 .email(" ")
                 .build();
         return  appealRepository.save(appeal).getId();
+    }
+
+    @Override
+    public boolean isAppealed(Long commentId, Long checkListId, Long criteriaId) {
+        CheckListsCriteria criteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkListId);
+        log.info("checkCriteria id "+criteria.getId() +" comment id "+commentId);
+        return appealRepository.existsByComment_IdAndCheckListsCriteria_Id(commentId, criteria.getId());
     }
 
     @Override

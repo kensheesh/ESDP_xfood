@@ -30,7 +30,7 @@ public class AppealSupervisorReviewDto {
     private String linkToExternalSrc;
     private String respond;
     private Boolean status;
-    private LocalDateTime localDate;
+    private String localDate;
     private List<CommentDto> comments;
     private CheckListCriteriaSupervisorReviewDto checkListsCriteria;
     private Set<File> files = new LinkedHashSet<>();

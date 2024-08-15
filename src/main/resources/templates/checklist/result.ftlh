@@ -458,16 +458,29 @@
                 comments.forEach(comment => {
                     const commentElement = document.createElement('div');
                     commentElement.classList.add('list-group', 'list-group-flush')
-                    commentElement.innerHTML =
-                         '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">'+comment.comment+
-                        '<button type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">'+
-                        '<i class="bi bi-hammer"></i></button> </li>';
+                    console.log("appealed "+comment.appealed)
+                    if (comment.appealed === true){
+                        commentElement.innerHTML =
+                            '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">'+comment.comment+'' +
+                            '<button  type="button" class="btn btn-danger">'+
+                            '<i class="bi bi-exclamation-square-fill"></i></button> '+
+                            '</li>';
+                    }else if (comment.appealed ===false) {
+                        commentElement.innerHTML =
+                            '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">'+comment.comment+
+                            '<button id="appealButton-'+comment.commentId+'" type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">'+
+                            '<i class="bi bi-hammer"></i></button> </li>';
+                    }
                     commentsModalBody.appendChild(commentElement);
                     console.log("comment id: " + comment.commentId)
-                    commentElement.addEventListener('click', (ev)=>{
-                        ev.preventDefault();
-                        appealByComment(comment.commentId, criteriaId, checkId);
-                    })
+                    let appealButton = document.getElementById('appealButton-'+comment.commentId);
+                    if (appealButton){
+                        appealButton.addEventListener('click', (ev)=>{
+                            ev.preventDefault();
+                            appealByComment(comment.commentId, criteriaId, checkId);
+                        })
+                    }
+
                 });
 
                 $('#commentsModal').modal('show');
@@ -490,6 +503,9 @@
 
                 let data = await response.json()
                 window.location.href = '/appeals/' + data
+
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
             }
         });
     </script>

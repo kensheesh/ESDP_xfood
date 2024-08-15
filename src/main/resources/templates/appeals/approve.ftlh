@@ -64,7 +64,7 @@
                 <#if  appeal.remark??>
                     <p class="card-text">Нарушение: <br> ${appeal.remark}</p>
                 </#if>
-                <p class="card-text">Комментарий эксперта: </p>
+                <p class="card-text">Комментарий менеджера: </p>
                 <#if appeal.comment??>
                     <div class="alert alert-warning" role="alert">
                         ${appeal.comment}
@@ -98,7 +98,6 @@
                                 </div>
 
                             <#elseif extension == "mp4" || extension == "avi" || extension == "mov">
-
                                 <div class="grid-item video-container">
                                     <a data-fslightbox="gal" href="/api/file/download?path=${filename}">
                                         <video src="/api/file/download?path=${filename}"></video>
