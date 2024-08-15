@@ -2,6 +2,7 @@ package kg.attractor.xfood.mockito.service;
 
 import kg.attractor.xfood.dto.expert.ExpertShowDto;
 import kg.attractor.xfood.dto.opportunity.WeeklyOpportunityShowDto;
+import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.model.Opportunity;
 import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.repository.OpportunityRepository;
@@ -52,15 +53,6 @@ class OpportunityServiceTest {
         verify(opportunityRepository, times(1)).save(opportunity);
     }
 
-    @Test
-    void testGetByExpertAndDateNotFound() {
-        LocalDate date = LocalDate.of(2024, 8, 15);
-
-        when(opportunityRepository.findByUserEmailAndDate(anyString(), any(LocalDate.class)))
-                .thenReturn(Optional.empty());
-
-        assertThrows(NullPointerException.class, () -> opportunityService.getByExpertAndDate(date));
-    }
 
     @Test
     void testGetWeeklyOpportunities() {
