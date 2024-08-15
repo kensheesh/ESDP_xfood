@@ -22,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class LocationServiceImplTest {
+class LocationServiceTest {
 
     @InjectMocks
     private LocationServiceImpl locationService;

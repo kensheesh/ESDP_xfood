@@ -57,7 +57,7 @@ public class RewardServiceImpl implements RewardService {
         return experts;
     }
 
-    private List<CheckListRewardDto> getCheckListReward(String expertEmail, LocalDate startDate, LocalDate endDate, String pizzeriaName) {
+    public List<CheckListRewardDto> getCheckListReward(String expertEmail, LocalDate startDate, LocalDate endDate, String pizzeriaName) {
         LocalDateTime startDateTime = null, endDateTime = null;
         if(startDate != null && endDate != null) {
             startDateTime = startDate.atStartOfDay();

@@ -73,7 +73,7 @@ public class ModelBuilder {
                 .build();
     }
     
-    protected Country buildCountry(CountryDto dto) {
+    public Country buildCountry(CountryDto dto) {
         return Country.builder()
                 .countryCode(dto.getCountryCode())
                 .countryName(dto.getCountryName())

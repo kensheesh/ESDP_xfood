@@ -236,7 +236,7 @@ public class DtoBuilder {
                 .build();
     }
     
-    protected CountryDto buildCountryDto(Country model) {
+    public CountryDto buildCountryDto(Country model) {
         return CountryDto.builder()
                 .id(model.getId())
                 .apiUrl(model.getApiUrl())

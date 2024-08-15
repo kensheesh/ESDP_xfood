@@ -92,7 +92,7 @@ public class OAuthServiceImpl implements OAuthService {
 	}
 	
 	@SneakyThrows
-	private String generateCodeVerifier() {
+    public String generateCodeVerifier() {
 		SecureRandom secureRandom = new SecureRandom();
 		byte[] codeVerifier = new byte[32];
 		secureRandom.nextBytes(codeVerifier);
@@ -100,7 +100,7 @@ public class OAuthServiceImpl implements OAuthService {
 	}
 	
 	@SneakyThrows
-	private String generateCodeChallenge(@NotNull String codeVerifier) {
+    public String generateCodeChallenge(@NotNull String codeVerifier) {
 		byte[] bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);
 		MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 		messageDigest.update(bytes);
