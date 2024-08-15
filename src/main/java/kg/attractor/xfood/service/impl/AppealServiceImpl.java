@@ -62,7 +62,6 @@ public class AppealServiceImpl implements AppealService {
 
     @Override
     public AppealSupervisorReviewDto getAppealById(Long id) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         Appeal appeal = appealRepository.findAppealById(id).orElseThrow(() -> new NoSuchElementException("Апелляция с айди " + id + "не найденно"));
         Criteria criteria = appeal.getCheckListsCriteria().getCriteria();
         Pizzeria pizzeria = appeal.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria();
@@ -74,7 +73,7 @@ public class AppealServiceImpl implements AppealService {
                 .comment(appeal.getComment_expert())
                 .files(appeal.getFiles())
                 .status(appeal.getIsAccepted())
-                .localDate( appeal.getCheckListsCriteria().getChecklist().getEndTime().format(formatter))
+                .localDate( appeal.getCheckListsCriteria().getChecklist().getEndTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .respond(appeal.getComment_supervisor())
                 .checkListsCriteria(CheckListCriteriaSupervisorReviewDto.builder()
                         .criteria(CriteriaSupervisorShowDto.builder()
