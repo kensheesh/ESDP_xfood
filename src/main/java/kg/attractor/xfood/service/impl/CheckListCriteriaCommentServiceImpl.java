@@ -52,7 +52,4 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
     public boolean ifExists(Long id, Long commentId) {
         return criteriaCommentRepository.existsByChecklistCriteria_IdAndComment_Id(id, commentId);
     }
-
-
 }
-

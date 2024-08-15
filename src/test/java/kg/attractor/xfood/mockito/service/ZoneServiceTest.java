@@ -3,7 +3,6 @@ package kg.attractor.xfood.mockito.service;
 import kg.attractor.xfood.dto.ZoneSupervisorShowDto;
 import kg.attractor.xfood.model.Zone;
 import kg.attractor.xfood.repository.ZoneRepository;
-import kg.attractor.xfood.service.ZoneService;
 import kg.attractor.xfood.service.impl.DtoBuilder;
 import kg.attractor.xfood.service.impl.ZoneServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,13 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-public class ZoneServiceTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
+
+class ZoneServiceTest {
 
     @InjectMocks
     private ZoneServiceImpl zoneService;
@@ -67,9 +69,7 @@ public class ZoneServiceTest {
 
         when(zoneRepository.findByName(zoneName)).thenReturn(Optional.empty());
 
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            zoneService.findByName(zoneName);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> zoneService.findByName(zoneName));
 
         assertEquals("Зона с названием " + zoneName + " не найдена", exception.getMessage());
     }

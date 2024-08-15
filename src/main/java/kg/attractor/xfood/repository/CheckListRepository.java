@@ -3,7 +3,6 @@ package kg.attractor.xfood.repository;
 import jakarta.transaction.Transactional;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,13 +10,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CheckListRepository extends JpaRepository<CheckList, Long>, JpaSpecificationExecutor<CheckList> {
+
+    @Query(value = """
+            SELECT c
+            FROM CheckList c
+            WHERE c.expert.email = ?1
+            and CAST(c.status as text) = :#{#status.getStatus()}
+            """)
     List<CheckList> findCheckListByExpertEmailAndStatus(String email, Status status);
+
 
     Optional<CheckList> findByUuidLink(String uuid);
 
@@ -27,7 +33,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
             where c.uuidLink = ?1
             and CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    Optional<CheckList> findByIdAndStatus(String checkListId, Status status);
+    Optional<CheckList> findByUuidAndStatus(String checkListUuid, Status status);
 
     @Query(value = """
             SELECT c
@@ -35,7 +41,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
             where c.id = ?1
             and CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+    Optional<CheckList> findByUuidAndStatus(Long checkListId, Status status);
 
     @Query(value = """
             SELECT c
@@ -96,4 +102,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
 
     @Query("select c from CheckList  c where c.endTime between :startDate and :endDate ")
     List<CheckList> findAllByEndTimeBetween(LocalDate startDate, LocalDate endDate);
+
+    @Query("select count(c) from CheckList c where c.expert.email = ?1 and CAST(c.status as text) = :#{#status.getStatus()}")
+    long countByExpert_EmailAndStatus(String email, Status status);
 }

@@ -11,4 +11,6 @@ public interface CheckTypeFeeService {
     BigDecimal getFeesByCheckTypeId(Long checkTypeId);
 
     void save(CheckTypeFee checkTypeFee);
+
+    CheckTypeFee getCheckTypeFeeByTypeId(Long id);
 }

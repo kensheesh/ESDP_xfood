@@ -37,10 +37,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 event.stopPropagation();
                 form.classList.add('was-validated');
             } else {
-                event.preventDefault(); // Prevent the default form submission
+                event.preventDefault();
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-                console.log(data);
 
                 fetch('/api/user/create', {
                     method: 'POST',

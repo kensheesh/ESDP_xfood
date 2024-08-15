@@ -12,33 +12,75 @@
             <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
                 <#assign userRole = authorizedUser.authorities[0].authority>
                 <div class="card-body">
-                    <div class="row row-cols-1 row-gap-3 h-100">
+                    <div class="row row-cols-1 row-gap-3">
                         <div class="col">
-                            <div class="row row-cols-4 row-cols-md-1 row-gap-2">
+                            <div class="row <#if userRole == "ROLE_EXPERT">rol-cols-4<#else>row-cols-3</#if> row-cols-md-1 row-gap-2">
                                 <div class="col">
-                                    <a href="/expert/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        График
-                                    </a>
+                                    <#if userRole == "ROLE_EXPERT">
+                                        <a href="/my-opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
+                                            <span class="d-none d-md-inline d-lg-none">Возможности</span>
+                                            <span class="d-none d-lg-inline">Карта возможностей</span>
+                                        </a>
+                                    <#else>
+                                        <a href="/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
+                                            <span class="d-none d-md-inline">График</span>
+                                        </a>
+                                    </#if>
                                 </div>
-                                <div class="col">
-                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Проверки
+                                <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
+                                    <div class="col">
+                                        <a href="/opportunities"
+                                           class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
+                                            <span class="d-none d-md-inline">Возможности</span>
+                                        </a>
+                                    </div>
+                                </#if>
+                                <div class="col button-wrapper">
+                                    <a href="/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <span class="d-none d-md-inline">Проверки</span>
+                                        <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
+                                    <#if (checksCount?has_content && checksCount > 0)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">${checksCount}</div>
+                                        </div>
+                                    <#elseif (checksCount?has_content && checksCount > 99)>
+                                        <div class="badge-notification-icon">
+                                            <div class="badge-notification-num">99</div>
+                                        </div>
+                                    </#if>
                                 </div>
                                 <div class="col">
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Аналитика
+                                        <i class="bi bi-bar-chart-fill fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline">Аналитика</span>
                                     </a>
                                 </div>
+                                <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
+                                    <div class="col button-wrapper">
+                                        <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                            <i class="bi bi-flag fs-5 d-md-none"></i>
+                                            <span class="d-none d-md-inline">Апелляции</span>
+                                            <span class="badge-notification-icon">
+                                                <span class="badge-notification-num" id="counter">
+
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </#if>
                                 <div class="col">
                                     <div class="dropdown d-md-none h-100">
-                                        <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-clock"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <section class="times_second"></section>
-                                        </ul>
+                                        <a class="btn btn-dodo-light rounded-4 dropdown-toggle w-100 h-100"
+                                           type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-clock fs-5"></i>
+                                        </a>
+                                        <div class="dropdown-menu border-0 rounded-4 shadow">
+                                            <section class="times_second d-flex flex-column row-gap-2 p-3"></section>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +97,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-xl-9">
+        <div class  ="col-md-8 col-xl-9">
             <h1 class="mb-4">Личный кабинет
                 <#if user.role == "SUPERVISOR">
                     руководителя
@@ -119,5 +161,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
     <script src="/js/profile.js"></script>
-
+    <script src="../js/appealsCount.js">
 </@main.layout>
