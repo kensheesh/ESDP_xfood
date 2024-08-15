@@ -18,7 +18,15 @@ import java.util.Optional;
 
 @Repository
 public interface CheckListRepository extends JpaRepository<CheckList, Long>, JpaSpecificationExecutor<CheckList> {
+
+    @Query(value = """
+            SELECT c
+            FROM CheckList c
+            WHERE c.expert.email = ?1
+            and CAST(c.status as text) = :#{#status.getStatus()}
+            """)
     List<CheckList> findCheckListByExpertEmailAndStatus(String email, Status status);
+
 
     Optional<CheckList> findByUuidLink(String uuid);
 
