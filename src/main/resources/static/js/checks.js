@@ -65,9 +65,8 @@ function displayChecks(checks, status) {
     container.innerHTML = htmlContent;
 }
 
-
+window.onload = () => document.getElementById('inProgressChecks').click();
 document.getElementById("newChecks").onclick = () => getChecks(statuses.NEW);
 document.getElementById("inProgressChecks").onclick = () => getChecks(statuses.IN_PROGRESS);
 document.getElementById("doneChecks").onclick = () => getChecks(statuses.DONE);
 document.getElementById('deletedChecks').onclick = () => getChecks(statuses.DELETED)
-window.onload = () => document.getElementById('inProgressChecks').click();
