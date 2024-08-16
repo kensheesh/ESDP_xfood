@@ -134,7 +134,7 @@ class CriteriaServiceTest {
 
     @Test
     void testGetByDescription_EmptyDescription() {
-        List<CriteriaSupervisorShowDto> result = criteriaService.getByDescription("");
+        List<CriteriaSupervisorShowDto> result = criteriaService.getByDescription("", true);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());

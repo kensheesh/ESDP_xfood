@@ -21,10 +21,15 @@ public class SectionServiceImpl implements SectionService {
     private final DtoBuilder dtoBuilder;
 
     @Override
-    public List<SectionSupervisorShowDto> getSections() {
+    public List<SectionSupervisorShowDto> getSectionsWithoutCritAndWow() {
         return sectionRepository.findAll().stream()
                 .filter(section -> Objects.equals(section.getName(), ""))
                 .map(dtoBuilder::buildSectionDto)
+                .toList();
+    }
+    @Override
+    public List<SectionSupervisorShowDto> getSections() {
+        return sectionRepository.findAll().stream().map(dtoBuilder::buildSectionDto)
                 .toList();
     }
 

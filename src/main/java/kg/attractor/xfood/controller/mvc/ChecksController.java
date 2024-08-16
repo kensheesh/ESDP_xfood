@@ -46,7 +46,7 @@ public class ChecksController {
     @GetMapping("/create")
     public String create(@RequestParam(name = "date") LocalDate date, @RequestParam(name = "managerId") Long managerId, @RequestParam(name = "expertId") Long expertId, Model model) {
         model.addAttribute("zones", zoneService.getZones());
-        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("sections", sectionService.getSectionsWithoutCritAndWow());
         model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId, date));
         model.addAttribute("types", checkTypeService.getTypes());
         model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());

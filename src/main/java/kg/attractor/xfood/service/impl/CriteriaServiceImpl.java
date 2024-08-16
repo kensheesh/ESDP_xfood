@@ -27,10 +27,12 @@ public class CriteriaServiceImpl implements CriteriaService {
 
 
     @Override
-    public List<CriteriaSupervisorShowDto> getByDescription(String description) {
+    public List<CriteriaSupervisorShowDto> getByDescription(String description, boolean shouldInclude) {
         if (description!=null && !description.isEmpty()) {
             List<Criteria> criteria = criteriaRepository.findCriterionByDescriptionContainingIgnoreCase(description);
-            criteria.removeIf(criteria1 -> Objects.equals(criteria1.getSection().getName(), "Критический фактор") || Objects.equals(criteria1.getSection().getName(), "WOW фактор") );
+            if (!shouldInclude) {
+                criteria.removeIf(criteria1 -> Objects.equals(criteria1.getSection().getName(), "Критический фактор") || Objects.equals(criteria1.getSection().getName(), "WOW фактор") );
+            }
             return criteria.stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
 
         }

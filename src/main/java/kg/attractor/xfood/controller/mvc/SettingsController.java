@@ -57,7 +57,7 @@ public class SettingsController {
     @GetMapping("/templates/create")
     public String getTemplatesCreate (Model model) {
         model.addAttribute("zones", zoneService.getZones());
-        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("sections", sectionService.getSectionsWithoutCritAndWow());
         model.addAttribute("templateCreateDto", new TemplateCreateDto());
         return "settings/template_create";
     }
@@ -66,7 +66,7 @@ public class SettingsController {
     public String TemplatesCreate (@Valid TemplateCreateDto templateCreateDto,BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("zones", zoneService.getZones());
-            model.addAttribute("sections", sectionService.getSections());
+            model.addAttribute("sections", sectionService.getSectionsWithoutCritAndWow());
             model.addAttribute("templateCreateDto", templateCreateDto);
             return "settings/template_create";
         }
@@ -79,7 +79,7 @@ public class SettingsController {
     @GetMapping("/templates/{id}")
     public String getTemplateDetail (@PathVariable Long id, Model model) {
         model.addAttribute("zones", zoneService.getZones());
-        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("sections", sectionService.getSectionsWithoutCritAndWow());
         model.addAttribute("template", settingService.getTemplate(id));
         model.addAttribute("templateUpdateDto", new TemplateUpdateDto());
         model.addAttribute("id", id);
@@ -91,7 +91,7 @@ public class SettingsController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("zones", zoneService.getZones());
             model.addAttribute("template", settingService.getTemplate(id));
-            model.addAttribute("sections", sectionService.getSections());
+            model.addAttribute("sections", sectionService.getSectionsWithoutCritAndWow());
             model.addAttribute("templateUpdateDto", templateUpdateDto);
             model.addAttribute("id", id);
             return "settings/template_edit";

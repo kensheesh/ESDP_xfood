@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface CriteriaService {
 
-    List<CriteriaSupervisorShowDto> getByDescription(String description);
+    List<CriteriaSupervisorShowDto> getByDescription(String description, boolean isUsual);
 
     CriteriaSupervisorShowDto getById(Long id);
 

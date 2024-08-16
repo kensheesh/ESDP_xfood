@@ -290,7 +290,7 @@ public class CheckListServiceImpl implements CheckListService {
         if (type == null || type.equals(checkList.getCheckType().getName())){
             List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
             for (CheckListsCriteria criteria : checkListsCriteria) {
-                sum += criteria.getMaxValue();
+                sum += criteria.getMaxValue() == null? 0 : criteria.getMaxValue();
                 criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                         .id(criteria.getCriteria().getId())
                         .maxValue(criteria.getMaxValue())
@@ -303,7 +303,7 @@ public class CheckListServiceImpl implements CheckListService {
         }else{
             List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkTypeService.findByName(type).getId());
             for (CriteriaType criteria : criteriaTypes) {
-                sum += criteria.getMaxValue();
+                sum += criteria.getMaxValue() == null? 0 : criteria.getMaxValue();
                 criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                         .id(criteria.getCriteria().getId())
                         .maxValue(criteria.getMaxValue())
