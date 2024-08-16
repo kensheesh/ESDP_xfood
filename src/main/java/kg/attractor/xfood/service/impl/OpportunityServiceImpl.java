@@ -134,7 +134,7 @@ public class OpportunityServiceImpl implements OpportunityService {
         LocalDate startOfWeekGivenDate = dto.getDate().with(java.time.DayOfWeek.MONDAY);
         int week = (int) ChronoUnit.WEEKS.between(startOfWeekToday, startOfWeekGivenDate);
 
-        if (!settingService.isAvailableToDayOff(getAllByExpert(week))) {
+        if (!settingService.isAvailableToDayOff(getAllByExpert(week)) && dto.getIsDayOff() != null && dto.getIsDayOff()) {
             throw new IllegalArgumentException("You cannot add extra day offs");
         }
 

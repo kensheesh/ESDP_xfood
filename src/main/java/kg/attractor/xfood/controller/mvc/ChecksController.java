@@ -93,6 +93,7 @@ public class ChecksController {
         return "checklist/result";
     }
 
+    @PreAuthorize("hasRole('EXPERT')")
     @GetMapping("{uuid}/fill")
     public String getCheckForFill(@PathVariable String uuid, Model model) {
         Collection<? extends GrantedAuthority> authorities = AuthParams.getAuth().getAuthorities();
@@ -140,7 +141,7 @@ public class ChecksController {
     public String comment(@PathVariable(name = "uuid") String uuid, @PathVariable(name = "criteriaId") Long
             criteriaId, CommentDto commentDto, Model model) {
         checkListService.comment(uuid, criteriaId, commentDto);
-        return "redirect:/checks/" + uuid + "/check";
+        return "redirect:/checks/" + uuid + "/fill";
 
     }
 
