@@ -29,7 +29,10 @@ public class CriteriaServiceImpl implements CriteriaService {
     @Override
     public List<CriteriaSupervisorShowDto> getByDescription(String description) {
         if (description!=null && !description.isEmpty()) {
-            return criteriaRepository.findCriterionByDescriptionContainingIgnoreCase(description).stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+            List<Criteria> criteria = criteriaRepository.findCriterionByDescriptionContainingIgnoreCase(description);
+            criteria.removeIf(criteria1 -> Objects.equals(criteria1.getSection().getName(), "Критический фактор") || Objects.equals(criteria1.getSection().getName(), "WOW фактор") );
+            return criteria.stream().map(dtoBuilder::buildCriteriaSupervisorShowDto).toList();
+
         }
         return new ArrayList<>();
     }
@@ -71,6 +74,8 @@ public class CriteriaServiceImpl implements CriteriaService {
     @Override
     public List<CriteriaSupervisorShowDto> getByCheckType(Long checkTypeId) {
         List <CriteriaType> criterion = criteriaTypeService.findAllByTypeId(checkTypeId);
+        criterion.removeIf(criteriaType -> !Objects.equals(criteriaType.getCriteria().getSection().getName(), ""));
+        log.info(criterion.toString());
         List<CriteriaSupervisorShowDto> dtos = new ArrayList<>();
         for (CriteriaType criteriaType : criterion) {
             CriteriaSupervisorShowDto supervisorShowDto = new CriteriaSupervisorShowDto();
@@ -83,7 +88,6 @@ public class CriteriaServiceImpl implements CriteriaService {
                             .coefficient(criteriaType.getCriteria().getCoefficient())
                             .zone(criteriaType.getCriteria().getZone().getName())
                     .build());
-
         }
         return dtos;
     }
