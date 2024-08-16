@@ -1,11 +1,10 @@
-<#--<#import "spring.ftl" as spring>
 
-<#macro statistics>
+
+
 <#assign known = SPRING_SECURITY_CONTEXT??>
 <#if known>
     <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
-<#else>
-</#if>-->
+</#if>
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,7 +28,7 @@
 </head>
 
 <body>
-<#--<header>
+<header>
     <nav class="navbar navbar-expand fw-medium bg-white border-bottom " id="navbar">
         <div class="container">
             <a class="navbar-brand fw-semibold " href="#">XFOOD</a>
@@ -75,8 +74,8 @@
             </div>
         </div>
     </nav>
-</header>-->
-<main class=" my-4">
+</header>
+<main class="container my-4">
     <form action="/statistics" method="get" id="period">
         <input type="hidden" name="from" id="from" value="">
         <input type="hidden" name="to" id="to" value="">
@@ -270,5 +269,4 @@
 </script>
 </body>
 </html>
-<#--
-</#macro>-->
+
