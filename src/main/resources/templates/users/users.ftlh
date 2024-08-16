@@ -50,7 +50,7 @@
     </style>
 
     <div class="container">
-        <div class="row row-cols-md-3 row-gap-3" >
+        <div class="row row-cols-md-3 row-gap-3">
             <div class="col-md-4 col-xl-3 bg-body sidebar">
                 <div class="row row-cols-1 row-gap-3">
                     <div class="col">
@@ -69,7 +69,7 @@
                                             </div>
                                             <div class="col">
                                                 <a class="btn rounded-4 w-100 h-100 btn-dodo-light"
-                                                data-bs-toggle="modal" data-bs-target="#tokenModal">
+                                                   data-bs-toggle="modal" data-bs-target="#tokenModal">
                                                     <i class="bi bi-key fs-5 d-md-none"></i>
                                                     <span class="d-none d-md-inline">
                                                         Токены
@@ -153,7 +153,8 @@
                             </div>
                         </div>
                         <button class="btn btn-dodo rounded-4" data-bs-toggle="modal" data-bs-target="#addUser">
-                            <i class="bi bi-person-fill-add"></i> Создать <span class="d-none d-sm-inline">пользователя</span>
+                            <i class="bi bi-person-fill-add"></i> Создать <span
+                                    class="d-none d-sm-inline">пользователя</span>
                         </button>
                     </div>
                     <#list users as user>
@@ -167,9 +168,14 @@
                                     <p class="card-text">Активный: <#if user.getEnabled() == true>Да<#else>Нет</#if></p>
                                 </div>
                                 <div class="card-icons">
-                                    <button class="btn-edit" data-user-id="${user.getId()}"><i class="fas fa-edit"></i>
-                                    </button>
-                                    <#if admin != user>
+                                    <#if currentUser.role == "SUPERVISOR" && (user.role == "ADMIN" || user.role == "SUPERVISOR") && currentUser != user>
+                                    <#elseif currentUser.role == "ADMIN" && user.role == "ADMIN">
+                                    <#elseif currentUser == user>
+                                        <button class="btn-edit" data-user-id="${user.getId()}"><i
+                                                    class="fas fa-edit"></i></button>
+                                    <#else>
+                                        <button class="btn-edit" data-user-id="${user.getId()}"><i
+                                                    class="fas fa-edit"></i></button>
                                         <button class="btn-delete" data-user-id="${user.getId()}"><i
                                                     class="fas fa-trash-alt"></i>
                                         </button>
@@ -185,7 +191,9 @@
                         <#if totalPages gt 0>
                             <#if currentPage gt 0>
                                 <li class="page-item">
-                                    <a class="page-link" href="/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}" aria-label="Previous">
+                                    <a class="page-link"
+                                       href="/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}"
+                                       aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                     </a>
@@ -201,13 +209,16 @@
 
                             <#list 0..(totalPages-1) as page>
                                 <li class="page-item <#if page == currentPage>active</#if>">
-                                    <a class="page-link" href="/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
+                                    <a class="page-link"
+                                       href="/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
                                 </li>
                             </#list>
 
                             <#if currentPage lt totalPages - 1>
                                 <li class="page-item">
-                                    <a class="page-link" href="/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}" aria-label="Next">
+                                    <a class="page-link"
+                                       href="/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}"
+                                       aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                     </a>
@@ -334,9 +345,11 @@
                                                         <label class="form-check-label" for="expert">Эксперт</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input type="radio" id="supervisor" name="role" value="supervisor"
+                                                        <input type="radio" id="supervisor" name="role"
+                                                               value="supervisor"
                                                                class="form-check-input" required>
-                                                        <label class="form-check-label" for="supervisor">Руководитель</label>
+                                                        <label class="form-check-label"
+                                                               for="supervisor">Руководитель</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -482,7 +495,7 @@
 
                 const editEnabledField = document.getElementById('editEnabled');
 
-                if (userId === '${admin.id}') {
+                if (userId === '${currentUser.id}') {
                     editEnabledField.disabled = true;
                     editEnabledField.classList.add('d-none');
                 } else {

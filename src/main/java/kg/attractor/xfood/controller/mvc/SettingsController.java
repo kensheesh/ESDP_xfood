@@ -108,12 +108,12 @@ public class SettingsController {
                            @RequestParam(name = "search", defaultValue = "", required = false) String search) {
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
         Page<UserDto> userPage = userService.getAllUsers(role, pageable, search);
-        UserDto admin = userService.getUserDto();
+        UserDto currentUser = userService.getUserDto();
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("totalPages", userPage.getTotalPages());
         model.addAttribute("currentRole", role);
         model.addAttribute("searchWord", search);
-        model.addAttribute("admin", admin);
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentPage", Integer.parseInt(page));
         model.addAttribute("currentSize", Integer.parseInt(size));
         return "users/users";
