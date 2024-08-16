@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -21,7 +22,10 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public List<SectionSupervisorShowDto> getSections() {
-        return sectionRepository.findAll().stream().map(dtoBuilder::buildSectionDto).toList();
+        return sectionRepository.findAll().stream()
+                .filter(section -> Objects.equals(section.getName(), ""))
+                .map(dtoBuilder::buildSectionDto)
+                .toList();
     }
 
     @Override
