@@ -86,13 +86,6 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     @Transactional
     public CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto) {
-        log.info(createDto.getCriteriaMaxValueDtoList().toString());
-        if (createDto.getCriteriaMaxValueDtoList().isEmpty()) {
-            throw new IncorrectDateException("Чек лист не содержит критериев");
-        }
-        if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
-            throw new IncorrectDateException("Время начала не может быть позже время конца смены");
-        }
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         if (checkListRepository.existsByWorkSchedule_IdAndExpert_Id(workSchedule.getId(), createDto.getExpertId())) {
             throw new IncorrectDateException("Проверка на " + createDto.getStartTime() + " - " + createDto.getEndTime() + " и эксперта c айди " + createDto.getExpertId() + "уже создана");
@@ -100,9 +93,6 @@ public class CheckListServiceImpl implements CheckListService {
 
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
-        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())) {
-            throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
-        }
 
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
