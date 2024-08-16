@@ -61,7 +61,7 @@ public class ChecksController {
     public String create(CheckListSupervisorCreateDto createDto) {
         CheckListMiniSupervisorCreateDto checklistDto = checkListService.create(createDto);
         checkListService.bindChecklistWithCriterion(checklistDto);
-        return "redirect:/weekly";
+        return "redirect:/checks";
     }
 
     @GetMapping("{uuid}")
