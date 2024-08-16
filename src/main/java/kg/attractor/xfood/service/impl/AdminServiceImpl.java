@@ -40,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void editUser(UserEditDto userEditDto) {
-        User user = userRepository.findById(userEditDto.getId()).orElseThrow(() -> new UsernameNotFoundException("User is not found by ID: " + id));
+        User user = userRepository.findById(userEditDto.getId()).orElseThrow(() -> new UsernameNotFoundException("User is not found by ID: " + userEditDto.getId()));
         UserDto userDto = userService.getUserDto();
 
         boolean isValidRole = (userDto.getRole().equals(Role.SUPERVISOR) &&
