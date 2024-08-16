@@ -73,7 +73,7 @@
         }
     </style>
 
-    <a href="/expert/checks" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
+    <a href="/checks" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
 
     <#assign countWowFactors = 0>
     <#assign countCriticalFactors = 0>
@@ -345,7 +345,7 @@
 
                     <#if userRole == 'ROLE_SUPERVISOR'>
                         <div class="col-md-auto px-1">
-                            <a href="/checks/${checkList.uuidLink}/update" class="btn btn-light-green w-100"
+                            <a href="/checks/${checkList.uuidLink}/edit" class="btn btn-light-green w-100"
                                role="link">
                                 Редактировать
                             </a>

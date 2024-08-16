@@ -2,7 +2,6 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
-import kg.attractor.xfood.model.CheckList;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
@@ -44,7 +43,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
             try {
                 int maxValue = (c.getMaxValue() != null) ? c.getMaxValue() : 0;
 
-                Long checkListId = checkListService.getModelCheckListById(c.getCheckListId()).getId();
+                Long checkListId = checkListService.getModelCheckListByUuid(c.getCheckListId()).getId();
                 Long criteriaId = criteriaService.getCriteriaById(c.getCriteriaId()).getId();
                 //CheckList checkList = checkListService.getModelCheckListById(checkListId);
                 //checkList.setDuration();
@@ -59,7 +58,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
                     CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
                             .value(c.getValue())
                             .criteria(criteriaService.getCriteriaById(c.getCriteriaId()))
-                            .checklist(checkListService.getModelCheckListById(c.getCheckListId()))
+                            .checklist(checkListService.getModelCheckListByUuid(c.getCheckListId()))
                             .maxValue(maxValue)
                             .build();
 
@@ -84,7 +83,7 @@ public class CheckListCriteriaServiceImpl implements CheckListCriteriaService {
         if (checkListsCriteria == null) {
             CheckListsCriteria criteria = CheckListsCriteria.builder()
                     .maxValue(0)
-                    .checklist(checkListService.getModelCheckListById(saveCriteriaDto.getCheckListId()))
+                    .checklist(checkListService.getModelCheckListByUuid(saveCriteriaDto.getCheckListId()))
                     .criteria(criteriaService.getCriteriaById(saveCriteriaDto.getCriteriaId()))
                     .value(saveCriteriaDto.getValue())
                     .build();

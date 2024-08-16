@@ -17,13 +17,13 @@
                             <div class="row <#if userRole == "ROLE_EXPERT">rol-cols-4<#else>row-cols-3</#if> row-cols-md-1 row-gap-2">
                                 <div class="col">
                                     <#if userRole == "ROLE_EXPERT">
-                                        <a href="/expert/opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <a href="/my-opportunities" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline d-lg-none">Возможности</span>
                                             <span class="d-none d-lg-inline">Карта возможностей</span>
                                         </a>
                                     <#else>
-                                        <a href="/supervisor/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <a href="/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline">График</span>
                                         </a>
@@ -31,7 +31,7 @@
                                 </div>
                                 <#if userRole == "ROLE_SUPERVISOR" || userRole == "ROLE_ADMIN">
                                     <div class="col">
-                                        <a href="/supervisor/opportunities"
+                                        <a href="/opportunities"
                                            class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                             <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
                                             <span class="d-none d-md-inline">Возможности</span>
@@ -39,7 +39,7 @@
                                     </div>
                                 </#if>
                                 <div class="col button-wrapper">
-                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         <span class="d-none d-md-inline">Проверки</span>
                                         <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
@@ -112,9 +112,9 @@
                             <h4 class="card-title">${user.name} ${user.surname}</h4>
                             <p class="card-text">Email: ${user.email}</p>
                             <div class="mt-3" role="group" aria-label="User actions">
-                                <button id="btn-reward" type="button" class="btn btn-dodo rounded-4 w-100 px-5">
-                                    <a href="/reward" class="text-white" style="text-decoration: none" role="button">История вознаграждений</a>
-                                </button>
+                                <a href="/rewards" class="btn btn-dodo rounded-4 w-100 px-5">
+                                    История вознаграждений
+                                </a>
                             </div>
                         </div>
                     </div>

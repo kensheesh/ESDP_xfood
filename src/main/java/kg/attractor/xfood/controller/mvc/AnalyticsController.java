@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('SUPERVISOR','EXPERT','ADMIN')")
 public class AnalyticsController {
-
     private final CheckListService checkListService;
     private final UserService userService;
 
@@ -51,6 +50,4 @@ public class AnalyticsController {
 
         return "analytics/analytics";
     }
-
-
 }

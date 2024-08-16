@@ -3,7 +3,6 @@ package kg.attractor.xfood.controller.mvc;
 import jakarta.mail.MessagingException;
 import kg.attractor.xfood.dto.appeal.AppealSupervisorApproveDto;
 import kg.attractor.xfood.service.AppealService;
-import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,13 +20,12 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("appeals")
 @RequiredArgsConstructor
 public class AppealController {
-
     private final AppealService appealService;
     private final FileService fileService;
 
     @PreAuthorize("hasAnyAuthority('supervisor:read', 'admin:read')")
     @GetMapping
-    public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
+    public String getAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
                                 @RequestParam(name = "expertId", defaultValue = "0") Long expertId,
                                 @RequestParam(name = "pizzeriaId", defaultValue = "0") Long pizzeriaId,
                                 @RequestParam(name = "status", required = false) Boolean status,

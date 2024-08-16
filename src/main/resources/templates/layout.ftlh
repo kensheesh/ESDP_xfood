@@ -45,26 +45,30 @@
                     <ul class="navbar-nav ms-auto">
                         <#if authorizedUser??>
                             <li class="nav-item dropdown" href="#">
-                                <a
-                                        class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
-                                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
+                                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle fs-5 m-0 p-0 "></i>
                                     <span>
-                                    ${authorizedUser.name}
-                                </span>
+                                        ${authorizedUser.name}
+                                    </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
                                     <#if userRole == "ROLE_EXPERT">
-                                        <li><a class="dropdown-item" href="/expert/opportunities">Карта возможностей</a>
+                                        <li>
+                                            <a class="dropdown-item" href="/my-opportunities">Карта возможностей</a>
                                         </li>
                                     <#else>
-                                        <li><a class="dropdown-item" href="/deadlines">Настройки</a></li>
+                                        <li>
+                                            <a class="dropdown-item" href="/deadlines">Настройки</a>
+                                        </li>
                                     </#if>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="/logout">Выход</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="/logout">Выход</a>
+                                    </li>
                                 </ul>
                             </li>
                         </#if>
@@ -78,6 +82,7 @@
         <#nested spring>
     </main>
 
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
             integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
             crossorigin="anonymous"></script>
@@ -87,6 +92,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/i18n/ru.min.js"></script>
+
     </body>
     </html>
 </#macro>

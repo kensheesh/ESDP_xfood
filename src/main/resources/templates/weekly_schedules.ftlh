@@ -20,14 +20,14 @@
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a href="/supervisor/opportunities"
+                                    <a href="/opportunities"
                                        class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
                                         <span class="d-none d-md-inline">Возможности</span>
                                     </a>
                                 </div>
                                 <div class="col button-wrapper">
-                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                    <a href="/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                         <span class="d-none d-md-inline">Проверки</span>
                                         <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
@@ -99,9 +99,9 @@
             </div>
             <nav aria-label="navigation">
                 <ul class="pagination justify-content-center my-3">
-                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder - 1}">Previous</a></li>
+                    <li class="page-item"><a class="page-link text-secondary" href="/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder - 1}">Previous</a></li>
                     <span class="text-secondary pt-2 mx-3">${week.monday} - ${week.sunday}</span>
-                    <li class="page-item"><a class="page-link text-secondary" href="/supervisor/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder + 1}">Next</a></li>
+                    <li class="page-item"><a class="page-link text-secondary" href="/weekly?locId=${locationId}&pizzId=${pizzeriaId}&week=${week.weekOrder + 1}">Next</a></li>
                 </ul>
             </nav>
             <div class="card border-0 shadow-sm rounded-4">
@@ -241,12 +241,12 @@
         function handleSelectChange(selectedValue) {
             locationId = selectedValue;
             localStorage.setItem('locationId', locationId);
-            window.location.href = '/supervisor/weekly?locId=' + locationId
+            window.location.href = '/weekly?locId=' + locationId
         }
 
         function handlePizzeriaClick(pizzeriaId) {
             locationId = localStorage.getItem('locationId');
-            window.location.href = '/supervisor/weekly?locId=' + locationId + '&pizzId=' + pizzeriaId;
+            window.location.href = '/weekly?locId=' + locationId + '&pizzId=' + pizzeriaId;
         }
 
         async function handleWorkDayClick(id, date) {

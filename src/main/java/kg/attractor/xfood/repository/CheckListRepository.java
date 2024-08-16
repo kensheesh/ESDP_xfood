@@ -3,16 +3,13 @@ package kg.attractor.xfood.repository;
 import jakarta.transaction.Transactional;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +33,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
             where c.uuidLink = ?1
             and CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    Optional<CheckList> findByIdAndStatus(String checkListId, Status status);
+    Optional<CheckList> findByUuidAndStatus(String checkListUuid, Status status);
 
     @Query(value = """
             SELECT c
@@ -44,7 +41,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Jpa
             where c.id = ?1
             and CAST(c.status as text) = :#{#status.getStatus()}
             """)
-    Optional<CheckList> findByIdAndStatus(Long checkListId, Status status);
+    Optional<CheckList> findByUuidAndStatus(Long checkListId, Status status);
 
     @Query(value = """
             SELECT c

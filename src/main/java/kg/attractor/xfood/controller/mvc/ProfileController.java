@@ -3,7 +3,6 @@ package kg.attractor.xfood.controller.mvc;
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.service.CheckListService;
-import kg.attractor.xfood.service.CheckTypeService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
