@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<@main.layout ; spting>
+<@main.layout ; spring>
     <style>
         /*body {*/
         /*    font-family: 'Arial', sans-serif;*/

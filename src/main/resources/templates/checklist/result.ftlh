@@ -77,6 +77,12 @@
 
     <#assign countWowFactors = 0>
     <#assign countCriticalFactors = 0>
+    <#assign known = SPRING_SECURITY_CONTEXT??>
+    <#if known>
+        <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
+        <#assign name = user.getUsername()>
+        <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+    </#if>
 
     <#if guest?? && checkList.status == "IN_PROGRESS" || guess?? && checkList.status == "NEW">
         <h1>Данная проверка еще не опубликована</h1>
@@ -107,21 +113,13 @@
                 </thead>
                 <tbody id="mainTableBody">
                 <#list checkList.criteria as criteria>
-                    <#assign
-                    known = SPRING_SECURITY_CONTEXT??
-                    >
-                    <#if known>
-                        <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
-                        <#assign name = user.getUsername()>
-                        <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
 
-                        <#list authorities as authority>
-                            <#if authority.authority == 'ROLE_SUPERVISOR'>
-                                <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
-                            </#if>
-                        </#list>
+                    <#list authorities as authority>
+                        <#if authority.authority == 'ROLE_SUPERVISOR'>
+                            <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
+                        </#if>
+                    </#list>
 
-                    </#if>
                     <tr class="">
                         <#if criteria.maxValue?? && criteria.maxValue gt 0>
                             <td class="text-center">${criteria.zone}</td>
