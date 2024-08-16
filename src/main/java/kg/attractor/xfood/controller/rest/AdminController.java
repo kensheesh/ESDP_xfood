@@ -21,7 +21,6 @@ import java.util.List;
 @RestController("restAdminController")
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     private final AdminService adminService;
     private final UserService userService;
@@ -31,65 +30,77 @@ public class AdminController {
     private final CountryService countryService;
     private final PizzeriaService pizzeriaService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
     @DeleteMapping("/user/{id}")
     public HttpStatus userDelete(@PathVariable Long id) {
         adminService.deleteUser(id);
         return HttpStatus.OK;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(dtoBuilder.buildUserDto(userService.findById(id)));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
     @PutMapping("/user")
     public HttpStatus editUser(@RequestBody UserEditDto userEditDto) {
         adminService.editUser(userEditDto);
         return HttpStatus.OK;
     }
-    
+
     //-->
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("redis-pizzerias")
     public ResponseEntity<?> getPizzeriaFromForeignApi(@RequestParam @NotBlank String name) {
         List<PizzeriasShowDodoIsDto> p = okHttpService.getPizzeriasByMatch(name);
         return ResponseEntity.ok(p);
     }
-    
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("load-pizzerias")
     public HttpStatus addPizzeriasByCountryCodes() {
         okHttpService.rewritePizzeriasToRedis();
         return HttpStatus.OK;
     }
-    
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/pizzerias")
     public ResponseEntity<?> getAllPizzerias() {
         return ResponseEntity.ok(pizzeriaService.getAllPizzerias());
     }
-    
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/pizzerias")
     public HttpStatus addPizzerias(@RequestBody @Valid PizzeriaDto dto) {
         pizzeriaService.add(dto);
         return HttpStatus.OK;
     }
-    
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/pizzerias/edit")
     public HttpStatus editPizzeria(@RequestBody @Valid PizzeriaDto dto) {
         pizzeriaService.edit(dto);
         return HttpStatus.OK;
     }
-    
+
+
     //-->
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/locations")
     public ResponseEntity<?> getLocations() {
         return ResponseEntity.ok(locationService.getAllLocations());
     }
-    
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/locations")
     public HttpStatus addLocation(@RequestBody @Valid LocationDto dto) {
         locationService.add(dto);
         return HttpStatus.OK;
     }
-    
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/locations/edit")
     public HttpStatus updateLocation(@RequestBody @Valid LocationDto dto) {
         locationService.edit(dto);
