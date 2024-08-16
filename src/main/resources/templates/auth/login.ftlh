@@ -35,7 +35,7 @@
 <#--                                        Забыли пароль?-->
 <#--                                    </a>-->
 <#--                                </p>-->
-                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-green rounded-4 btn-lg
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-warning rounded-4 btn-lg
                                 px-5" type="submit">Войти</button>
 
                             </form>
