@@ -37,7 +37,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname}  </h5>
-                                    <p class="card-text">${checklist.workSchedule.startTime} - ${checklist.workSchedule.endTime}</p>
+                                    <p class="card-text">${checklist.workSchedule.date} ${checklist.workSchedule.startTime} - ${checklist.workSchedule.endTime}</p>
                                 </div>
                             </div>
                         </div>

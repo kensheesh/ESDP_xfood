@@ -269,8 +269,9 @@ public class CheckListServiceImpl implements CheckListService {
 
         WorkScheduleSupervisorEditDto workScheduleDto = WorkScheduleSupervisorEditDto.builder()
                 .id(checkList.getWorkSchedule().getId())
-                .startTime(checkList.getWorkSchedule().getStartTime())
-                .endTime(checkList.getWorkSchedule().getEndTime())
+                .date(checkList.getWorkSchedule().getStartTime().toLocalDate().toString())
+                .startTime(checkList.getWorkSchedule().getStartTime().toLocalTime().toString())
+                .endTime(checkList.getWorkSchedule().getEndTime().toLocalTime().toString())
                 .pizzeria(dtoBuilder.buildPizzeriaDto(checkList.getWorkSchedule().getPizzeria()))
                 .manager(dtoBuilder.buildManagerShowDto(checkList.getWorkSchedule().getManager()))
                 .build();
