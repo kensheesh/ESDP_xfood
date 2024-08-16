@@ -321,7 +321,7 @@
                             inputCell = document.createElement('td');
                             inputCell.classList.add('text-center', 'table-success');
 
-                            const inputGroup = await createInputGroup('0', criteria.value, criteria.id);
+                            const inputGroup = await createInputGroup(0, criteria.value, criteria.id);
                             inputCell.appendChild(inputGroup);
                             countWowFactors += 1;
                         }
@@ -426,7 +426,11 @@
                 scoreInput.classList.add('text-center', 'form-control', 'score-input');
                 scoreInput.value = value;
                 scoreInput.id = id;
-                scoreInput.max = max;
+                if(step !== 0) {
+                    scoreInput.max = max;
+                } else {
+                    scoreInput.min = 0;
+                }
 
                 const inputGroupAppend = document.createElement('div');
                 inputGroupAppend.classList.add('input-group-append');
@@ -750,25 +754,6 @@
                 button.addEventListener('click', deleteFactor);
             });
 
-            let a = document.createElement('a');
-            a.href = '/checks/${checkList.uuidLink}';
-
-            document.getElementById('getTemplate').addEventListener('click', async () => {
-                const message = `Дата: ${checkList.managerWorkDate}\n` +
-                    `Пиццерия: ${checkList.pizzeria.name}\n` +
-                    `Менеджер: ${checkList.manager.name} ${checkList.manager.surname}\n` +
-                    `Результат проверки в %: ` + await updatePercentage() + `` +
-                    `\nПоложительная обратная связь: \n` +
-                    `Критический фактор: ` + countCriticalFactors +
-                    `\nWOW фактор: ` + countWowFactors +
-                    `\nПоделитесь результатами проверки с командой - отправьте результаты в общий чат команды\n\n\n` +
-                    a.href;
-
-                await navigator.clipboard.writeText(message);
-
-                alert("Скопировано в буфер обмена!");
-            });
-
             document.getElementById('post').addEventListener('click', fetchToResult);
 
             async function fetchToResult() {
@@ -779,7 +764,7 @@
                         let errorMessage = await response.text();
                         throw new Error(errorMessage);
                     }
-                    await navigator.clipboard.writeText('/checks/${checkList.uuidLink}/result');
+                    await navigator.clipboard.writeText('/checks/${checkList.uuidLink}');
                     console.log("Скопировано в буфер обмена!");
                     window.location.href = '/analytics';
                 } catch (error) {

@@ -71,7 +71,6 @@ public class ChecksController {
         }
         ChecklistShowDto checkList = checkListService.getCheckListByUuid(uuid);
         model.addAttribute("checkList", checkList);
-        boolean isRecent = settingService.isCheckRecent(checkList);
         model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
         return "checklist/result";
     }
