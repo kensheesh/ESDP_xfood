@@ -1,5 +1,6 @@
 package kg.attractor.xfood.controller.mvc;
 
+import kg.attractor.xfood.service.PizzeriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
+    private final PizzeriaService pizzeriaService;
+    
     @GetMapping("pizzerias-management")
     public String getPizzaManagement(Model model) {
         return "pizzerias/pizzeria_management";
     }
+    
+    
 }

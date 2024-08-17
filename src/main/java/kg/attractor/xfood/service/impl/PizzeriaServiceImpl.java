@@ -9,6 +9,8 @@ import kg.attractor.xfood.repository.PizzeriaRepository;
 import kg.attractor.xfood.service.PizzeriaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,7 @@ public class PizzeriaServiceImpl implements PizzeriaService {
 
     @Override
     public List<PizzeriaWeeklyDto> getPizzeriasByLocationId(long locationId) {
-        List<Pizzeria> pizzerias = pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId);
+        List<Pizzeria> pizzerias = pizzeriaRepository.findByLocation_Id(locationId);
         log.info("Размер списка пиццерий: " + pizzerias.size());
         return dtoBuilder.buildPizzeriaWeeklyDtos(pizzerias);
     }
@@ -60,6 +62,13 @@ public class PizzeriaServiceImpl implements PizzeriaService {
         Pizzeria p = modelBuilder.buildPizzeria(dto, locationService.findLocationById(dto.getLocation().getId()));
         pizzeriaRepository.save(p);
     }
+    
+    @Override
+    public Page<PizzeriaDto> getAllPizzeriasPage(Long location_id, Pageable pageable, String search) {
+        if (location_id == -1) return pizzeriaRepository.findBy(pageable).map(dtoBuilder :: buildPizzeriaDto);
+        else return pizzeriaRepository.findByLocation_Id(pageable, location_id).map(dtoBuilder :: buildPizzeriaDto);
+    }
+    
     
     @Override
     public PizzeriaDto getPizzeriaDtoById(Long id) {
