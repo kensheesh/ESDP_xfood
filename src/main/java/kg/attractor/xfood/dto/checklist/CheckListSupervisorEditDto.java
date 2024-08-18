@@ -23,6 +23,7 @@ public class CheckListSupervisorEditDto {
     private String checkType;
     private Long typeId;
     private String id;
+    private Long checkId;
     private WorkScheduleSupervisorEditDto workSchedule;
     List<CriteriaExpertShowDto> criterion;
 

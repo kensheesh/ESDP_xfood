@@ -2,8 +2,10 @@ package kg.attractor.xfood.service.impl;
 
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
+import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.Criteria;
 import kg.attractor.xfood.model.CriteriaType;
+import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.repository.CriteriaRepository;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class CriteriaServiceImpl implements CriteriaService {
     private final SectionService sectionService;
     private final ZoneService zoneService;
     private final CriteriaTypeService criteriaTypeService;
+    private final ChecklistCriteriaRepository checklistCriteriaRepository;
 
 
 
@@ -42,6 +45,33 @@ public class CriteriaServiceImpl implements CriteriaService {
     @Override
     public CriteriaSupervisorShowDto getById(Long id) {
         return dtoBuilder.buildCriteriaSupervisorShowDto(Objects.requireNonNull(criteriaRepository.findById(id).orElse(null)));
+    }
+
+    @Override
+    public CriteriaSupervisorShowDto getByCheckAndCriteria(Long CheckId, Long CriteriaID) {
+           CheckListsCriteria checkListsCriteria = checklistCriteriaRepository.findByCriteria_IdAndAndChecklist_Id(CriteriaID, CheckId).orElse(null);
+           if (checkListsCriteria == null) {
+               Criteria criteria = criteriaRepository.findById(CriteriaID).orElseThrow(()-> new NoSuchElementException("Критерий не найден с айди "+CriteriaID));
+
+               CriteriaSupervisorShowDto c = CriteriaSupervisorShowDto.builder()
+                       .section(criteria.getSection().getName())
+                       .value(1)
+                       .coefficient(criteria.getCoefficient())
+                       .id(criteria.getId())
+                       .description(criteria.getDescription())
+                       .maxValue(1)
+                       .build();
+               return c;
+           }
+           CriteriaSupervisorShowDto c = CriteriaSupervisorShowDto.builder()
+                   .section(checkListsCriteria.getCriteria().getSection().getName())
+                   .value(checkListsCriteria.getValue())
+                   .coefficient(checkListsCriteria.getCriteria().getCoefficient())
+                   .id(checkListsCriteria.getCriteria().getId())
+                   .description(checkListsCriteria.getCriteria().getDescription())
+                   .maxValue(checkListsCriteria.getMaxValue())
+                   .build();
+           return c;
     }
 
     @Override

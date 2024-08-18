@@ -88,7 +88,7 @@
                             <td>${c.zone}</td>
                             <td>${c.description}</td>
                             <input type="hidden" name="criterion[${c.id}].id" value="${c.id}">
-                             <td><input type="number" class="form-control" name="criterion[${c.id}].maxValue" id="value-${c.id}" required min="1" <#if c.section == "Критический фактор">readonly value="${c.coefficient}" <#else> value="${c.maxValue}"</#if> ></td>
+                             <td><input type="number" class="form-control" name="criterion[${c.id}].maxValue" id="value-${c.id}" required  <#if c.section == "Критический фактор"> value="${c.coefficient}"  readonly<#elseif c.section == "WOW фактор">value="${c.coefficient}" readonly <#else> value="${c.maxValue}" min="1" </#if> ></td>
                             <td>
                                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
                                     <i class="bi bi-trash text-secondary fs-4"></i>
@@ -179,7 +179,7 @@
             </form>
         </div>
     </div>
-    <input type="hidden" value="${checklist.totalValue}" id="totalSum" >
+    <input type="hidden" value="${checklist.checkId}" id="checkId">
     <script src="/js/edit.js">
     </script>
 </@main.layout>

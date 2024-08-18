@@ -13,6 +13,7 @@ public interface CriteriaService {
     List<CriteriaSupervisorShowDto> getByDescription(String description, boolean isUsual);
 
     CriteriaSupervisorShowDto getById(Long id);
+    CriteriaSupervisorShowDto getByCheckAndCriteria(Long checkId, Long criteriaId);
 
     Criteria findById(Long id);
 

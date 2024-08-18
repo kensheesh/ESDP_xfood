@@ -45,6 +45,11 @@ public class CriterionController {
         return ResponseEntity.ok(criteriaService.getById(id));
     }
 
+    @GetMapping("/find/{checkId}/{criteriaId}")
+    public ResponseEntity<CriteriaSupervisorShowDto> getById(@PathVariable (name = "checkId") Long checkId, @PathVariable(name = "criteriaId") Long criteriaId) {
+        return ResponseEntity.ok(criteriaService.getByCheckAndCriteria(checkId, criteriaId));
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody @Valid CriteriaSupervisorCreateDto criteria, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
