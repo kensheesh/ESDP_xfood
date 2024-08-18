@@ -302,13 +302,25 @@ document.addEventListener('DOMContentLoaded', () => {
             coefLabel.style.display = 'none';
             zoneLabel.style.display = 'block';
             zoneSelect.style.display = 'block';
-        } else {
+        } else if (value === 'Критический фактор') {
             zoneLabel.style.display = 'none';
             zoneSelect.style.display = 'none';
             coefLabel.style.display = 'block';
             coefficientInput.style.display = 'block';
+            coefficientInput.min = '';
+            coefficientInput.max = -1;
+            coefficientInput.value = -1;
+        } else if (value === 'WOW фактор') {
+            zoneLabel.style.display = 'none';
+            zoneSelect.style.display = 'none';
+            coefLabel.style.display = 'block';
+            coefficientInput.style.display = 'block';
+            coefficientInput.min = 1;
+            coefficientInput.max = '';
+            coefficientInput.value = 1;
         }
     }
+
 
     document.getElementById('create').addEventListener('shown.bs.modal', function () {
         toggleFields(sectionSelect.value);

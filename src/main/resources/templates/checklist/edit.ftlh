@@ -143,7 +143,12 @@
                             <div id="section-err" class="text-danger"></div>
                             <select class="form-select" aria-label="Default select example" name="section" id="sectionSelect" >
                                 <#list sections as s>
-                                    <option value="${s.name}">${s.name}</option>
+                                      <#if s.name == ''>
+                                        <option value="${s.name}" selected>Обычный</option>
+                                          <#else >
+                                              <option value="${s.name}">${s.name}</option>
+                                    </#if>
+
                                 </#list>
                             </select>
                         </div>
@@ -153,7 +158,7 @@
                             <select class="form-select" aria-label="Default select example" name="zone" id="zoneSelect">
                                 <#list zones as z>
                                     <#if z.name == ''>
-                                        <option value="${z.name}" selected>${z.name}</option>
+                                        <option value="${z.name}" selected>Обычная</option>
                                     <#else >
                                         <option value="${z.name}">${z.name}</option>
                                     </#if>
@@ -167,7 +172,7 @@
                         </div>
                         <div class="form-group">
                             <label for="coefficient" id="coef-label">Коэффициент: </label>
-                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" value="1">
+                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" >
                             <div id="coef-err" class="text-danger"></div>
                         </div>
                     </div>
