@@ -75,7 +75,7 @@
                                 <div class="col">
                                     <div class="dropdown d-md-none h-100">
                                         <a class="btn btn-dodo-light rounded-4 dropdown-toggle w-100 h-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                           type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-clock fs-5"></i>
                                         </a>
                                         <div class="dropdown-menu border-0 rounded-4 shadow">
@@ -100,9 +100,9 @@
         <div class="col-md-8 col-xl-9">
             <div class="row row-cols-lg-2 row-cols-1">
                 <div class="col-lg-8">
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="max-height: 58vh; overflow-y: auto;">
                         <table class="table">
-                            <thead>
+                            <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
                             <tr>
                                 <th scope="col">Пиццерия</th>
                                 <th scope="col">Менеджер</th>
@@ -110,10 +110,10 @@
                                     <th scope="col">Эксперт</th>
                                 </#if>
                                 <th scope="col">Дата</th>
-                                <th scope="col">Результат %</th>
+                                <th scope="col">Результат</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="checks-container">
                             <#list checklists as checklist>
                                 <tr class="clickable-row" data-href="/checks/${checklist.uuid}" style="cursor: pointer;">
                                     <td>${checklist.pizzeria.name}</td>
@@ -302,8 +302,8 @@
             });
         });
 
-        jQuery(document).ready(function($) {
-            $(".clickable-row").click(function() {
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
                 window.location = $(this).data("href");
             });
         });
