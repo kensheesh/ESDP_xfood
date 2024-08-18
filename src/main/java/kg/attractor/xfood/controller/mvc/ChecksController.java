@@ -46,7 +46,7 @@ public class ChecksController {
     @GetMapping("/create")
     public String create(@RequestParam(name = "date") LocalDate date, @RequestParam(name = "managerId") Long managerId, @RequestParam(name = "expertId") Long expertId, Model model) {
         model.addAttribute("zones", zoneService.getZones());
-        model.addAttribute("sections", sectionService.getSections());
+        model.addAttribute("sections", sectionService.getSectionsWithoutCritAndWow());
         model.addAttribute("workSchedule", workScheduleService.getWorkSchedule(managerId, date));
         model.addAttribute("types", checkTypeService.getTypes());
         model.addAttribute("criteriaSupervisorCreateDto", new CriteriaSupervisorCreateDto());
@@ -61,7 +61,7 @@ public class ChecksController {
     public String create(CheckListSupervisorCreateDto createDto) {
         CheckListMiniSupervisorCreateDto checklistDto = checkListService.create(createDto);
         checkListService.bindChecklistWithCriterion(checklistDto);
-        return "redirect:/weekly";
+        return "redirect:/checks";
     }
 
     @GetMapping("{uuid}")
@@ -112,6 +112,7 @@ public class ChecksController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @GetMapping ("/{uuid}/edit")
     public String edit (@PathVariable (name="uuid") String uuid,@RequestParam(name = "type", required = false) String type,  Model model) {
             model.addAttribute("zones",zoneService.getZones() );
@@ -123,6 +124,7 @@ public class ChecksController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @PostMapping("/{uuid}/edit")
     public String edit(@PathVariable(name = "uuid") String uuid, CheckListSupervisorEditDto checkList) {
         checkListService.edit(checkList);

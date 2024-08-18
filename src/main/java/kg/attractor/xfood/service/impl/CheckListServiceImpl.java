@@ -86,13 +86,6 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     @Transactional
     public CheckListMiniSupervisorCreateDto create(CheckListSupervisorCreateDto createDto) {
-        log.info(createDto.getCriteriaMaxValueDtoList().toString());
-        if (createDto.getCriteriaMaxValueDtoList().isEmpty()) {
-            throw new IncorrectDateException("Чек лист не содержит критериев");
-        }
-        if (createDto.getStartTime().isAfter(createDto.getEndTime())) {
-            throw new IncorrectDateException("Время начала не может быть позже время конца смены");
-        }
         WorkSchedule workSchedule = workScheduleService.findWorkScheduleByManagerAndDate(createDto.getManagerId(), createDto.getDate());
         if (checkListRepository.existsByWorkSchedule_IdAndExpert_Id(workSchedule.getId(), createDto.getExpertId())) {
             throw new IncorrectDateException("Проверка на " + createDto.getStartTime() + " - " + createDto.getEndTime() + " и эксперта c айди " + createDto.getExpertId() + "уже создана");
@@ -100,9 +93,6 @@ public class CheckListServiceImpl implements CheckListService {
 
         log.info(workSchedule.getStartTime().toString());
         log.info(createDto.getEndTime().toString());
-        if (createDto.getEndTime().isBefore(workSchedule.getStartTime().toLocalTime())) {
-            throw new IncorrectDateException("Время начала смены менеджера не может быть позже времени окончания работы эксперта");
-        }
 
         createDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         createDto.getCriteriaMaxValueDtoList().sort(Comparator.comparing(CriteriaMaxValueDto::getCriteriaId));
@@ -279,18 +269,17 @@ public class CheckListServiceImpl implements CheckListService {
 
         WorkScheduleSupervisorEditDto workScheduleDto = WorkScheduleSupervisorEditDto.builder()
                 .id(checkList.getWorkSchedule().getId())
-                .startTime(checkList.getWorkSchedule().getStartTime())
-                .endTime(checkList.getWorkSchedule().getEndTime())
+                .date(checkList.getWorkSchedule().getStartTime().toLocalDate().toString())
+                .startTime(checkList.getWorkSchedule().getStartTime().toLocalTime().toString())
+                .endTime(checkList.getWorkSchedule().getEndTime().toLocalTime().toString())
                 .pizzeria(dtoBuilder.buildPizzeriaDto(checkList.getWorkSchedule().getPizzeria()))
                 .manager(dtoBuilder.buildManagerShowDto(checkList.getWorkSchedule().getManager()))
                 .build();
 
         List<CriteriaExpertShowDto> criterionWithMaxValue = new ArrayList<>();
-        int sum = 0;
         if (type == null || type.equals(checkList.getCheckType().getName())){
             List<CheckListsCriteria> checkListsCriteria = checkListCriteriaService.findAllByChecklistId(checkList.getId());
             for (CheckListsCriteria criteria : checkListsCriteria) {
-                sum += criteria.getMaxValue();
                 criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                         .id(criteria.getCriteria().getId())
                         .maxValue(criteria.getMaxValue())
@@ -303,7 +292,6 @@ public class CheckListServiceImpl implements CheckListService {
         }else{
             List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkTypeService.findByName(type).getId());
             for (CriteriaType criteria : criteriaTypes) {
-                sum += criteria.getMaxValue();
                 criterionWithMaxValue.add(CriteriaExpertShowDto.builder()
                         .id(criteria.getCriteria().getId())
                         .maxValue(criteria.getMaxValue())
@@ -314,11 +302,12 @@ public class CheckListServiceImpl implements CheckListService {
                         .build());
             }
         }
+
         return CheckListSupervisorEditDto.builder()
+                .checkId(checkList.getId())
                 .id(checkList.getUuidLink())
                 .workSchedule(workScheduleDto)
                 .expert(expert)
-                .totalValue(sum)
                 .checkType(checkList.getCheckType().getName())
                 .criterion(criterionWithMaxValue.stream()
                         .sorted(Comparator.comparing(CriteriaExpertShowDto::getSection)
@@ -329,22 +318,26 @@ public class CheckListServiceImpl implements CheckListService {
     @Transactional
     @Override
     public void edit(CheckListSupervisorEditDto checkListDto) {
-        log.info(checkListDto.toString());
-        CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
-        log.info("list {}", checkListDto.getCriterion().toString());
-        checkListDto.getCriterion().removeIf(criteria -> criteria.getId() == null);
-        checkListCriteriaService.deleteCriterionByChecklist(checkList.getId());
-        for (CriteriaExpertShowDto criteriaMaxValueDto : checkListDto.getCriterion()) {
-            CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
-                    .checklist(checkList)
-                    .criteria(criteriaService.findById(criteriaMaxValueDto.getId()))
-                    .maxValue(criteriaMaxValueDto.getMaxValue())
-                    .value(0)
-                    .build();
-            checkListCriteriaService.save(checkListsCriteria);
-        }
-        checkList.setCheckType(checkTypeService.findByName(checkListDto.getCheckType()));
-        checkListRepository.save(checkList);
+      try {
+          log.info(checkListDto.toString());
+          CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
+          log.info("list {}", checkListDto.getCriterion().toString());
+          checkListDto.getCriterion().removeIf(criteria -> criteria.getId() == null);
+          checkListCriteriaService.deleteCriterionByChecklist(checkList.getId());
+          for (CriteriaExpertShowDto criteriaMaxValueDto : checkListDto.getCriterion()) {
+              CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                      .checklist(checkList)
+                      .criteria(criteriaService.findById(criteriaMaxValueDto.getId()))
+                      .maxValue(criteriaMaxValueDto.getMaxValue())
+                      .value(0)
+                      .build();
+              checkListCriteriaService.save(checkListsCriteria);
+          }
+          checkList.setCheckType(checkTypeService.findByName(checkListDto.getCheckType()));
+          checkListRepository.save(checkList);
+      }catch (Exception e){
+          e.printStackTrace();
+      }
     }
 
     @Override

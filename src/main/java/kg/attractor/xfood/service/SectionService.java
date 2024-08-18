@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SectionService {
     List<SectionSupervisorShowDto> getSections();
-
+    List<SectionSupervisorShowDto> getSectionsWithoutCritAndWow();
     Section findByName(String section);
 }

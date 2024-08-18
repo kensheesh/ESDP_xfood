@@ -37,7 +37,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">${checklist.workSchedule.manager.name} ${checklist.workSchedule.manager.surname}  </h5>
-                                    <p class="card-text">${checklist.workSchedule.startTime} - ${checklist.workSchedule.endTime}</p>
+                                    <p class="card-text">${checklist.workSchedule.date} ${checklist.workSchedule.startTime} - ${checklist.workSchedule.endTime}</p>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                             <td>${c.zone}</td>
                             <td>${c.description}</td>
                             <input type="hidden" name="criterion[${c.id}].id" value="${c.id}">
-                             <td><input type="number" class="form-control" name="criterion[${c.id}].maxValue" id="value-${c.id}" required min="1" <#if c.section == "Критический фактор">readonly value="${c.coefficient}" <#else> value="${c.maxValue}"</#if> ></td>
+                             <td><input type="number" class="form-control" name="criterion[${c.id}].maxValue" id="value-${c.id}" required  <#if c.section == "Критический фактор"> value="${c.coefficient}"  readonly<#elseif c.section == "WOW фактор">value="${c.coefficient}" readonly <#else> value="${c.maxValue}" min="1" </#if> ></td>
                             <td>
                                 <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.id}">
                                     <i class="bi bi-trash text-secondary fs-4"></i>
@@ -143,7 +143,12 @@
                             <div id="section-err" class="text-danger"></div>
                             <select class="form-select" aria-label="Default select example" name="section" id="sectionSelect" >
                                 <#list sections as s>
-                                    <option value="${s.name}">${s.name}</option>
+                                      <#if s.name == ''>
+                                        <option value="${s.name}" selected>Обычный</option>
+                                          <#else >
+                                              <option value="${s.name}">${s.name}</option>
+                                    </#if>
+
                                 </#list>
                             </select>
                         </div>
@@ -153,7 +158,7 @@
                             <select class="form-select" aria-label="Default select example" name="zone" id="zoneSelect">
                                 <#list zones as z>
                                     <#if z.name == ''>
-                                        <option value="${z.name}" selected>${z.name}</option>
+                                        <option value="${z.name}" selected>Обычная</option>
                                     <#else >
                                         <option value="${z.name}">${z.name}</option>
                                     </#if>
@@ -167,7 +172,7 @@
                         </div>
                         <div class="form-group">
                             <label for="coefficient" id="coef-label">Коэффициент: </label>
-                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" value="1">
+                            <input type="number" class="form-control" id="coefficientInput" name="coefficient" >
                             <div id="coef-err" class="text-danger"></div>
                         </div>
                     </div>
@@ -179,7 +184,7 @@
             </form>
         </div>
     </div>
-    <input type="hidden" value="${checklist.totalValue}" id="totalSum" >
+    <input type="hidden" value="${checklist.checkId}" id="checkId">
     <script src="/js/edit.js">
     </script>
 </@main.layout>

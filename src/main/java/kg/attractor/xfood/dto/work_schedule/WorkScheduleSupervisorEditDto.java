@@ -17,6 +17,7 @@ public class WorkScheduleSupervisorEditDto {
     private Long id;
     private ManagerShowDto manager;
     private PizzeriaDto pizzeria;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String date;
+    private String startTime;
+    private String endTime;
 }

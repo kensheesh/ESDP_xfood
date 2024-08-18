@@ -108,9 +108,9 @@
                         <div class="form-group">
                             <label for="category">Раздел:</label>
                             <div id="section-err" class="text-danger"></div>
-                            <select class="form-select" aria-label="Default select example" name="section" id="sectionSelect" >
+                            <select class="form-select" aria-label="Default select example" disabled name="section" id="sectionSelect" >
                                 <#list sections as s>
-                                    <option value="${s.name}">${s.name}</option>
+                                    <option value="${s.name}">Обычный</option>
                                 </#list>
                             </select>
                         </div>
@@ -120,7 +120,7 @@
                             <select class="form-select" aria-label="Default select example" name="zone" id="zoneSelect">
                                 <#list zones as z>
                                     <#if z.name == ''>
-                                        <option value="${z.name}" selected>${z.name}</option>
+                                        <option value="${z.name}" selected>Обычная</option>
                                     <#else >
                                         <option value="${z.name}">${z.name}</option>
                                     </#if>

@@ -44,7 +44,7 @@
                             Пожалуйста, добавьте критерии.
                     </div>
                     <div class="table-responsive" style="max-height: 400px;">
-                        <table class="table table-striped-columns">
+                        <table class="table">
                             <thead class="bg-white" style="position: sticky; top: 0; z-index: 1;">
                             <tr>
                                 <th scope="col">Раздел</th>
@@ -61,7 +61,7 @@
                                     <td>${c.zone}</td>
                                     <td>${c.description}</td>
                                     <input type="hidden" name="criteriaMaxValueDtoList[${c.criteriaId}].criteriaId" value="${c.criteriaId}">
-                                    <td><input type="number" class="form-control" name="criteriaMaxValueDtoList[${c.criteriaId}].maxValue" id="maxValueInput-${c.criteriaId}" required <#if c.section == " ">min="1" </#if>value="${c.maxValue}"></td>
+                                    <td><input type="number" class="form-control" name="criteriaMaxValueDtoList[${c.criteriaId}].maxValue" id="maxValueInput-${c.criteriaId}" required min="1" value="${c.maxValue}"></td>
                                     <td>
                                         <button class="btn btn-link bg-white shadow-sm rounded-4 p-2" type="button" id="deleteCriteria-${c.criteriaId}">
                                             <i class="bi bi-trash text-secondary fs-4"></i>
@@ -120,9 +120,9 @@
                         <div class="form-group">
                             <label for="category">Раздел:</label>
                             <div id="section-err" class="text-danger"></div>
-                            <select class="form-select" aria-label="Default select example" name="section" id="sectionSelect" >
+                            <select class="form-select" aria-label="Default select example" disabled name="section" id="sectionSelect" >
                                 <#list sections as s>
-                                    <option value="${s.name}">${s.name}</option>
+                                    <option value="${s.name}">Обычный</option>
                                 </#list>
                             </select>
                         </div>
@@ -132,7 +132,7 @@
                             <select class="form-select" aria-label="Default select example" name="zone" id="zoneSelect">
                                 <#list zones as z>
                                     <#if z.name == ''>
-                                        <option value="${z.name}" selected>${z.name}</option>
+                                        <option value="${z.name}" selected>Обычная</option>
                                     <#else >
                                         <option value="${z.name}">${z.name}</option>
                                     </#if>
@@ -158,7 +158,6 @@
             </form>
         </div>
     </div>
-
     <script src="/js/edit_template.js">
     </script>
 </@main.layout>

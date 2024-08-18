@@ -32,12 +32,22 @@ public class CriterionController {
 
     @GetMapping("/search")
     public ResponseEntity<List<CriteriaSupervisorShowDto>> getByDescription(@RequestParam(name = "description") String description) {
-        return ResponseEntity.ok(criteriaService.getByDescription(description));
+        return ResponseEntity.ok(criteriaService.getByDescription(description, true));
+    }
+
+    @GetMapping("/search/def")
+    public ResponseEntity<List<CriteriaSupervisorShowDto>> getByDescriptionWithout(@RequestParam(name = "description") String description) {
+        return ResponseEntity.ok(criteriaService.getByDescription(description, false));
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<CriteriaSupervisorShowDto> getById(@PathVariable (name = "id") Long id) {
         return ResponseEntity.ok(criteriaService.getById(id));
+    }
+
+    @GetMapping("/find/{checkId}/{criteriaId}")
+    public ResponseEntity<CriteriaSupervisorShowDto> getById(@PathVariable (name = "checkId") Long checkId, @PathVariable(name = "criteriaId") Long criteriaId) {
+        return ResponseEntity.ok(criteriaService.getByCheckAndCriteria(checkId, criteriaId));
     }
 
     @PostMapping("/create")
