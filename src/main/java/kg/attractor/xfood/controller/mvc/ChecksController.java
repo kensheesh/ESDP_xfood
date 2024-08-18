@@ -112,6 +112,7 @@ public class ChecksController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @GetMapping ("/{uuid}/edit")
     public String edit (@PathVariable (name="uuid") String uuid,@RequestParam(name = "type", required = false) String type,  Model model) {
             model.addAttribute("zones",zoneService.getZones() );
@@ -123,6 +124,7 @@ public class ChecksController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @PostMapping("/{uuid}/edit")
     public String edit(@PathVariable(name = "uuid") String uuid, CheckListSupervisorEditDto checkList) {
         checkListService.edit(checkList);
