@@ -318,22 +318,26 @@ public class CheckListServiceImpl implements CheckListService {
     @Transactional
     @Override
     public void edit(CheckListSupervisorEditDto checkListDto) {
-        log.info(checkListDto.toString());
-        CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
-        log.info("list {}", checkListDto.getCriterion().toString());
-        checkListDto.getCriterion().removeIf(criteria -> criteria.getId() == null);
-        checkListCriteriaService.deleteCriterionByChecklist(checkList.getId());
-        for (CriteriaExpertShowDto criteriaMaxValueDto : checkListDto.getCriterion()) {
-            CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
-                    .checklist(checkList)
-                    .criteria(criteriaService.findById(criteriaMaxValueDto.getId()))
-                    .maxValue(criteriaMaxValueDto.getMaxValue())
-                    .value(0)
-                    .build();
-            checkListCriteriaService.save(checkListsCriteria);
-        }
-        checkList.setCheckType(checkTypeService.findByName(checkListDto.getCheckType()));
-        checkListRepository.save(checkList);
+      try {
+          log.info(checkListDto.toString());
+          CheckList checkList = checkListRepository.findByUuidLink(checkListDto.getId()).orElseThrow(() -> new NotFoundException("Check list not found by uuid: " + checkListDto.getId()));
+          log.info("list {}", checkListDto.getCriterion().toString());
+          checkListDto.getCriterion().removeIf(criteria -> criteria.getId() == null);
+          checkListCriteriaService.deleteCriterionByChecklist(checkList.getId());
+          for (CriteriaExpertShowDto criteriaMaxValueDto : checkListDto.getCriterion()) {
+              CheckListsCriteria checkListsCriteria = CheckListsCriteria.builder()
+                      .checklist(checkList)
+                      .criteria(criteriaService.findById(criteriaMaxValueDto.getId()))
+                      .maxValue(criteriaMaxValueDto.getMaxValue())
+                      .value(0)
+                      .build();
+              checkListCriteriaService.save(checkListsCriteria);
+          }
+          checkList.setCheckType(checkTypeService.findByName(checkListDto.getCheckType()));
+          checkListRepository.save(checkList);
+      }catch (Exception e){
+          e.printStackTrace();
+      }
     }
 
     @Override

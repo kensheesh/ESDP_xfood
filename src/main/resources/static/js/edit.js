@@ -338,10 +338,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let edit = document.getElementById('edit');
     edit.addEventListener("submit", ev => {
-        checkSum(ev);
+        ev.preventDefault()
+        checkSum();
     });
 
-    async function checkSum(ev){
+    async function checkSum(){
         let sum = 0;
         let valueInputs = document.querySelectorAll('[id^="value-"]');
         let idsAfterDash = [];
@@ -359,8 +360,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         console.log("total "+totalSum +" sum "+sum)
         if (sum < totalSum || sum>totalSum){
-            ev.preventDefault();
-            let error = document.getElementById('error').style.display = 'block';
+            document.getElementById('error').style.display = 'block';
+
+        }else {
+            edit.submit();
         }
     }
 
