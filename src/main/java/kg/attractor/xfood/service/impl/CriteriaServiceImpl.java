@@ -107,8 +107,4 @@ public class CriteriaServiceImpl implements CriteriaService {
                 .stream().map(dtoBuilder::buildCriteriaSupervisorShowDto)
                 .toList();
     }
-
-
-
 }
-

@@ -20,13 +20,12 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("appeals")
 @RequiredArgsConstructor
 public class AppealController {
-
     private final AppealService appealService;
     private final FileService fileService;
 
     @PreAuthorize("hasAnyAuthority('supervisor:read', 'admin:read')")
     @GetMapping
-    public String getNewAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
+    public String getAppeals(@RequestParam (name = "p", defaultValue = "1") int page,
                                 @RequestParam(name = "expertId", defaultValue = "0") Long expertId,
                                 @RequestParam(name = "pizzeriaId", defaultValue = "0") Long pizzeriaId,
                                 @RequestParam(name = "status", required = false) Boolean status,
@@ -45,7 +44,7 @@ public class AppealController {
 	    return "appeals/appeal";
     }
 
-    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
 	@GetMapping("{id}/approve")
     public String approveAppeal(@PathVariable Long id, Model model){
         model.addAttribute("appeal", appealService.getAppealById(id));
@@ -53,7 +52,7 @@ public class AppealController {
         return "appeals/approve";
     }
 
-    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
     @PostMapping("/approve")
     public String approveAppeal(AppealSupervisorApproveDto appeal) throws MessagingException, UnsupportedEncodingException {
         appealService.approve(appeal);

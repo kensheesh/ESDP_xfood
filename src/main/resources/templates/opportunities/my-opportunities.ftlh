@@ -12,12 +12,15 @@
                             <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                 <div class="col">
                                     <a href="#" class="btn rounded-4 w-100 h-100 disabled btn-dodo-light">
-                                        График
+                                        <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline d-lg-none">Возможности</span>
+                                        <span class="d-none d-lg-inline">Карта возможностей</span>
                                     </a>
                                 </div>
                                 <div class="col button-wrapper">
-                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Проверки
+                                    <a href="/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        <span class="d-none d-md-inline">Проверки</span>
+                                        <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
                                     </a>
                                     <#if (checksCount?has_content && checksCount > 0)>
                                         <div class="badge-notification-icon">
@@ -31,18 +34,19 @@
                                 </div>
                                 <div class="col">
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        Аналитика
+                                        <i class="bi bi-bar-chart-fill fs-5 d-md-none"></i>
+                                        <span class="d-none d-md-inline">Аналитика</span>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <div class="dropdown d-md-none h-100">
-                                        <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-clock"></i>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <section class="times_second"></section>
-                                        </ul>
+                                        <a class="btn btn-dodo-light rounded-4 dropdown-toggle w-100 h-100"
+                                           type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-clock fs-5"></i>
+                                        </a>
+                                        <div class="dropdown-menu border-0 rounded-4 shadow">
+                                            <section class="times_second d-flex flex-column row-gap-2 p-3"></section>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -51,9 +55,7 @@
                             <div class="card rounded-4 border-0 shadow-sm">
                                 <div class="card-body">
                                     <section class="d-flex flex-column row-gap-2 text-center times">
-
                                     </section>
-
                                 </div>
                             </div>
                         </div>
@@ -64,13 +66,27 @@
         <div class="col-md-8 col-xl-9">
             <div class="card border-0 rounded-4 shadow-sm">
                 <div class="card-body">
+                    <nav aria-label="navigation">
+                        <ul class="pagination justify-content-center mb-3 mt-1">
+                            <li class="page-item"><a class="page-link text-secondary"
+                                                     href="/my-opportunities?w=${week - 1}">Previous</a></li>
+                            <#assign mondayStr = "${monday}">
+                            <#assign sundayStr = "${monday.plusDays(6)}">
+                            <#assign formattedMonday = mondayStr?date("yyyy-MM-dd")?string("dd.MM.yyyy")>
+                            <#assign formattedSunday = sundayStr?date("yyyy-MM-dd")?string("dd.MM.yyyy")>
+                            <span class="text-secondary pt-2 mx-3">${formattedMonday} - ${formattedSunday}</span>
+                            <li class="page-item"><a class="page-link text-secondary"
+                                                     href="/my-opportunities?w=${week + 1}">Next</a></li>
+                        </ul>
+                    </nav>
+
                     <div class="table-responsive">
                         <table class="table text-center table-bordered align-middle">
                             <thead>
                             <tr>
                                 <th scope="col">
                                     <div class="text-body-secondary" style="font-size: 12px;">${monday}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal" id="${monday}">
                                         Пн
                                     </button>
@@ -78,7 +94,7 @@
                                 <th scope="col">
                                     <div class="text-body-secondary"
                                          style="font-size: 12px;">${monday.plusDays(1)}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal"
                                             id="${monday.plusDays(1)}">
                                         Вт
@@ -87,7 +103,7 @@
                                 <th scope="col">
                                     <div class="text-body-secondary"
                                          style="font-size: 12px;">${monday.plusDays(2)}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal"
                                             id="${monday.plusDays(2)}">
                                         Ср
@@ -96,7 +112,7 @@
                                 <th scope="col">
                                     <div class="text-body-secondary"
                                          style="font-size: 12px;">${monday.plusDays(3)}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal"
                                             id="${monday.plusDays(3)}">
                                         Чт
@@ -104,7 +120,7 @@
                                 </th>
                                 <th scope="col">
                                     <div class="text-body-secondary" style="font-size: 12px">${monday.plusDays(4)}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal"
                                             id="${monday.plusDays(4)}">
                                         Пт
@@ -113,7 +129,7 @@
                                 <th scope="col">
                                     <div class="text-body-secondary"
                                          style="font-size: 12px;">${monday.plusDays(5)}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal"
                                             id="${monday.plusDays(5)}">
                                         Сб
@@ -122,7 +138,7 @@
                                 <th scope="col">
                                     <div class="text-body-secondary"
                                          style="font-size: 12px;">${monday.plusDays(6)}</div>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn"
+                                    <button type="button" class="btn btn-danger btn-sm rounded-4 modal-btn switchable"
                                             data-bs-toggle="modal" data-bs-target="#workShiftModal"
                                             id="${monday.plusDays(6)}">
                                         Вс
@@ -430,103 +446,111 @@
         </div>
     </div>
 
-    <div class="modal fade" id="workShiftModal" tabindex="-1" aria-labelledby="workShiftModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content rounded-4" method="POST" action="/expert/opportunities/change">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-6" id="workShiftModalLabel"></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert rounded-4 alert-danger alert-dismissible fade show" role="alert">
-                        Смены не могут пересекаться
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-
-                    <div id="workShifts" class="row row-cols-1 row-gap-3">
-
-                    </div>
-                    <div class="form-check ms-1 mt-3">
-                        <input class="form-check-input" type="checkbox" value="true" name="isDayOff" id="day-off">
-                        <label class="form-check-label" for="day-off">
-                            Выходной
-                        </label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
-                    <button id="saveOpportunity" type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
-                </div>
-            </form>
-        </div>
-    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
     <script src="/js/clock.js"></script>
 
-    <script>
-        window.lastInput = -1;
-        let modal = document.getElementById('workShiftModal')
-        let dayOffBtn = document.getElementById('day-off')
-        let inputs = document.getElementById('workShifts')
-        dayOffBtn.addEventListener('change', onChecked)
-        modal.addEventListener('show.bs.modal', onShowModal)
+    <#if isAvailableToChange>
+        <div class="modal fade" id="workShiftModal" tabindex="-1" aria-labelledby="workShiftModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <form class="modal-content rounded-4" method="POST" action="/my-opportunities/change">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-6" id="workShiftModalLabel"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert rounded-4 alert-danger alert-dismissible fade show" role="alert">
+                            Смены не могут пересекаться
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
 
-        async function onShowModal(event) {
-            let dateString = event.relatedTarget.id;
-            inputs.innerHTML = `
+                        <div id="workShifts" class="row row-cols-1 row-gap-3">
+
+                        </div>
+                        <div class="form-check ms-1 mt-3">
+                            <input class="form-check-input" <#if isAvailableToDayOff == false>disabled</#if>
+                                   type="checkbox" value="true" name="isDayOff" id="day-off">
+                            <label class="form-check-label" for="day-off">
+                                Выходной
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a type="button" class="btn btn-link text-decoration-none link-secondary"
+                           data-bs-dismiss="modal">Отмена</a>
+                        <button id="saveOpportunity" type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            window.onload = async () => {
+                window.lastInput = -1;
+                let modal = document.getElementById('workShiftModal')
+                let dayOffBtn = document.getElementById('day-off')
+                let inputs = document.getElementById('workShifts')
+                <#if isAvailableToDayOff>
+                dayOffBtn.addEventListener('change', onChecked)
+                </#if>
+                modal.addEventListener('show.bs.modal', onShowModal)
+
+                async function onShowModal(event) {
+                    let dateString = event.relatedTarget.id;
+                    inputs.innerHTML = `
                 <div class="col">
                     <button type="button" id="add-shift-btn" class="btn btn-light rounded-4" onclick="addInput()">Добавить период</button>
                 </div>
             `;
 
-            let opportunityId = document.getElementById('opportunity-id')
-            let opportunityDate = document.getElementById('opportunity-date')
+                    let opportunityId = document.getElementById('opportunity-id')
+                    let opportunityDate = document.getElementById('opportunity-date')
 
-            if (opportunityDate) {
-                opportunityDate.remove()
-            }
+                    if (opportunityDate) {
+                        opportunityDate.remove()
+                    }
 
-            if (opportunityId) {
-                opportunityId.remove()
-            }
+                    if (opportunityId) {
+                        opportunityId.remove()
+                    }
 
-            let dateInputHtml = document.createElement('input')
-            dateInputHtml.type = 'hidden'
-            dateInputHtml.name = 'date'
-            dateInputHtml.id = 'opportunity-date'
-            dateInputHtml.value = dateString;
+                    let dateInputHtml = document.createElement('input')
+                    dateInputHtml.type = 'hidden'
+                    dateInputHtml.name = 'date'
+                    dateInputHtml.id = 'opportunity-date'
+                    dateInputHtml.value = dateString;
 
-            inputs.parentElement.appendChild(dateInputHtml);
+                    inputs.parentElement.appendChild(dateInputHtml);
 
-            let workShiftsModalLabel = document.getElementById('workShiftModalLabel')
-            workShiftsModalLabel.innerText = 'Выберите время, когда Вы можете работать ' + dateString
+                    let workShiftsModalLabel = document.getElementById('workShiftModalLabel')
+                    workShiftsModalLabel.innerText = 'Выберите время, когда Вы предпочитаете работать ' + dateString
+                    console.log('innertext = ' + workShiftsModalLabel.innerText)
 
-            let addShiftBtn = document.getElementById('add-shift-btn')
-            // addShiftBtn.addEventListener('click', addInput)
+                    let addShiftBtn = document.getElementById('add-shift-btn')
+                    addShiftBtn.addEventListener('click', addInput)
 
-            try {
-                let request = await fetch('/api/opportunities?d=' + event.relatedTarget.id)
-                if (request.ok) {
-                    let opportunity = await request.json();
-                    console.log(opportunity)
+                    try {
+                        let request = await fetch('/api/opportunities?d=' + event.relatedTarget.id)
+                        if (request.ok) {
+                            let opportunity = await request.json();
+                            console.log(opportunity)
 
-                    let opportunityIdHtml = document.createElement('input')
-                    opportunityIdHtml.type = 'hidden';
-                    opportunityIdHtml.name = 'id';
-                    opportunityIdHtml.value = opportunity.id;
-                    opportunityIdHtml.id = 'opportunity-id';
-                    inputs.parentElement.appendChild(opportunityIdHtml)
+                            let opportunityIdHtml = document.createElement('input')
+                            opportunityIdHtml.type = 'hidden';
+                            opportunityIdHtml.name = 'id';
+                            opportunityIdHtml.value = opportunity.id;
+                            opportunityIdHtml.id = 'opportunity-id';
+                            inputs.parentElement.appendChild(opportunityIdHtml)
 
-                    if (opportunity.isDayOff === false || opportunity.isDayOff == null) {
-                        for (let i = 0; i < opportunity.shifts.length; i++) {
-                            let startTimeParts = opportunity.shifts[i].startTime.split(":")
-                            let endTimeParts = opportunity.shifts[i].endTime.split(":")
+                            if (opportunity.isDayOff === false || opportunity.isDayOff == null) {
+                                for (let i = 0; i < opportunity.shifts.length; i++) {
+                                    let startTimeParts = opportunity.shifts[i].startTime.split(":")
+                                    let endTimeParts = opportunity.shifts[i].endTime.split(":")
 
-                            let input = document.createElement('div')
-                            input.classList.add('row', 'row-cols-2', 'col')
+                                    let input = document.createElement('div')
+                                    input.classList.add('row', 'row-cols-2', 'col')
 
-                            input.innerHTML = `<div class="col-auto">
+                                    input.innerHTML = `<div class="col-auto">
                             <input type="hidden" name="shifts[` + i + `].id" value="` + opportunity.shifts[i].id + `">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
@@ -553,47 +577,48 @@
                             <button type="button" class="btn btn-dodo-light rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
                         </div>`;
 
-                            let addShiftBtn = document.getElementById('add-shift-btn')
-                            inputs.insertBefore(input, addShiftBtn.parentElement)
+                                    let addShiftBtn = document.getElementById('add-shift-btn')
+                                    inputs.insertBefore(input, addShiftBtn.parentElement)
 
-                            window.lastInput = i;
+                                    window.lastInput = i;
+                                }
+                            } else {
+                                dayOffBtn.checked = true;
+                                onChecked();
+                            }
+
+                        } else {
+                            throw new Error();
                         }
-                    } else {
-                        dayOffBtn.checked = true;
-                        onChecked();
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+
+                <#if isAvailableToDayOff>
+                function onChecked() {
+                    if (dayOffBtn.checked == true) {
+                        inputs.innerHTML = ''
                     }
 
-                } else {
-                    throw new Error();
+                    if (dayOffBtn.checked == false) {
+                        let addShiftBtn = document.createElement('div')
+                        addShiftBtn.classList.add('col')
+                        addShiftBtn.innerHTML = '<button class="btn btn-light rounded-4" id="add-shift-btn">Добавить период</button>'
+
+                        inputs.appendChild(addShiftBtn)
+                        addShiftBtn.addEventListener('click', addInput)
+                    }
                 }
-            } catch (e) {
-                console.log(e);
-            }
-        }
+                </#if>
 
-        function onChecked() {
-            if (dayOffBtn.checked == true) {
-                inputs.innerHTML = ''
-            }
+                function addInput() {
 
-            if (dayOffBtn.checked == false) {
-                let addShiftBtn = document.createElement('div')
-                addShiftBtn.classList.add('col')
-                addShiftBtn.innerHTML = '<button class="btn btn-light rounded-4" id="add-shift-btn">Добавить период</button>'
-
-                inputs.appendChild(addShiftBtn)
-                addShiftBtn.addEventListener('click', addInput)
-            }
-
-        }
-
-        function addInput() {
-
-            if (inputs.childElementCount < 7) {
-                let input = document.createElement('div')
-                input.classList.add('row', 'row-cols-2')
-                window.lastInput++;
-                input.innerHTML = `<div class="col-auto">
+                    if (inputs.childElementCount < 7) {
+                        let input = document.createElement('div')
+                        input.classList.add('row', 'row-cols-2')
+                        window.lastInput++;
+                        input.innerHTML = `<div class="col-auto">
                             <div class="input-group">
                                 <input class="form-control rounded-start-4 w-0 " style="max-width: 65px;"
                                     type="number" min="0" max="23" name="shifts[` + window.lastInput + `].startTimeHour"
@@ -619,68 +644,80 @@
                             <button type="button" class="btn btn-dodo-light rounded-4" onclick="deleteInput(event)"><i class="bi bi-trash3-fill"></i></button>
                         </div>`;
 
-                let addShiftBtn = document.getElementById('add-shift-btn')
-                inputs.insertBefore(input, addShiftBtn.parentElement)
-            }
-        }
-
-        function deleteInput(event) {
-            let btn = event.currentTarget;
-            btn.parentElement.parentElement.remove();
-            window.lastInput--;
-        }
-
-        function validate(event) {
-            let inputName = event.target.name;
-            let indexStr = inputName.match(/\[(.*?)\]/)[1];
-            let index = Number(indexStr);
-
-            let startTimeHour = document.getElementsByName('shifts[' + index + '].startTimeHour')[0];
-            let startTimeMinute = document.getElementsByName('shifts[' + index + '].startTimeMinute')[0];
-            let endTimeHour = document.getElementsByName('shifts[' + index + '].endTimeHour')[0];
-            let endTimeMinute = document.getElementsByName('shifts[' + index + '].endTimeMinute')[0];
-
-            let startHour = parseInt(startTimeHour.value);
-            let startMinute = parseInt(startTimeMinute.value);
-
-            startTimeHour.setAttribute('min', '0');
-            startTimeHour.setAttribute('max', '23');
-
-            if (startHour === 23) {
-                startTimeMinute.setAttribute('max', '58');
-            } else {
-                startTimeMinute.setAttribute('max', '59');
-            }
-            startTimeMinute.setAttribute('min', '0');
-
-            if (!isNaN(startHour) && !isNaN(startMinute)) {
-                if (startMinute === 59) {
-                    endTimeHour.setAttribute('min', startHour + 1);
-                    endTimeMinute.setAttribute('min', '0');
-                } else {
-                    endTimeHour.setAttribute('min', startHour);
-                    endTimeMinute.setAttribute('min', startMinute + 1);
+                        let addShiftBtn = document.getElementById('add-shift-btn')
+                        inputs.insertBefore(input, addShiftBtn.parentElement)
+                    }
                 }
 
-                endTimeHour.setAttribute('max', '23');
-                endTimeMinute.setAttribute('max', '59');
-            }
+                function deleteInput(event) {
+                    let btn = event.currentTarget;
+                    btn.parentElement.parentElement.remove();
+                    window.lastInput--;
+                }
 
-            // Проверка, чтобы min не превышал max
-            let endMinHour = parseInt(endTimeHour.getAttribute('min'));
-            let endMaxHour = parseInt(endTimeHour.getAttribute('max'));
-            if (endMinHour > endMaxHour) {
-                endTimeHour.setAttribute('min', '0');
-                endTimeHour.setAttribute('max', '23');
-            }
+                function validate(event) {
+                    let inputName = event.target.name;
+                    let indexStr = inputName.match(/\[(.*?)\]/)[1];
+                    let index = Number(indexStr);
 
-            let endMinMinute = parseInt(endTimeMinute.getAttribute('min'));
-            let endMaxMinute = parseInt(endTimeMinute.getAttribute('max'));
-            if (endMinMinute > endMaxMinute) {
-                endTimeMinute.setAttribute('min', '0');
-                endTimeMinute.setAttribute('max', '59');
-            }
-        }
+                    let startTimeHour = document.getElementsByName('shifts[' + index + '].startTimeHour')[0];
+                    let startTimeMinute = document.getElementsByName('shifts[' + index + '].startTimeMinute')[0];
+                    let endTimeHour = document.getElementsByName('shifts[' + index + '].endTimeHour')[0];
+                    let endTimeMinute = document.getElementsByName('shifts[' + index + '].endTimeMinute')[0];
 
-    </script>
+                    let startHour = parseInt(startTimeHour.value);
+                    let startMinute = parseInt(startTimeMinute.value);
+
+                    startTimeHour.setAttribute('min', '0');
+                    startTimeHour.setAttribute('max', '23');
+
+                    if (startHour === 23) {
+                        startTimeMinute.setAttribute('max', '58');
+                    } else {
+                        startTimeMinute.setAttribute('max', '59');
+                    }
+                    startTimeMinute.setAttribute('min', '0');
+
+                    if (!isNaN(startHour) && !isNaN(startMinute)) {
+                        if (startMinute === 59) {
+                            endTimeHour.setAttribute('min', startHour + 1);
+                            endTimeMinute.setAttribute('min', '0');
+                        } else {
+                            endTimeHour.setAttribute('min', startHour);
+                            endTimeMinute.setAttribute('min', startMinute + 1);
+                        }
+
+                        endTimeHour.setAttribute('max', '23');
+                        endTimeMinute.setAttribute('max', '59');
+                    }
+
+                    // Проверка, чтобы min не превышал max
+                    let endMinHour = parseInt(endTimeHour.getAttribute('min'));
+                    let endMaxHour = parseInt(endTimeHour.getAttribute('max'));
+                    if (endMinHour > endMaxHour) {
+                        endTimeHour.setAttribute('min', '0');
+                        endTimeHour.setAttribute('max', '23');
+                    }
+
+                    let endMinMinute = parseInt(endTimeMinute.getAttribute('min'));
+                    let endMaxMinute = parseInt(endTimeMinute.getAttribute('max'));
+                    if (endMinMinute > endMaxMinute) {
+                        endTimeMinute.setAttribute('min', '0');
+                        endTimeMinute.setAttribute('max', '59');
+                    }
+                }
+            }
+        </script>
+    <#else>
+        <script>
+            window.onload = () => {
+                let switchableButtons = document.getElementsByClassName('switchable')
+
+                for (let btn of switchableButtons) {
+                    btn.classList.add('disabled')
+                }
+            }
+        </script>
+    </#if>
+
 </@main.layout>
