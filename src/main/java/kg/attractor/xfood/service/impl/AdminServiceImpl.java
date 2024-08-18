@@ -33,7 +33,6 @@ public class AdminServiceImpl implements AdminService {
         if (isValidRole) {
             throw new IllegalArgumentException("У вас недостаточно прав для выполнение данной функции! Ваша роль: " + userDto.getRole().toString());
         }
-
         user.setEnabled(false);
         userRepository.save(user);
     }
@@ -56,6 +55,5 @@ public class AdminServiceImpl implements AdminService {
         user.setSurname(userEditDto.getSurname());
         user.setEnabled(userEditDto.getEnabled());
         userRepository.save(user);
-
     }
 }
