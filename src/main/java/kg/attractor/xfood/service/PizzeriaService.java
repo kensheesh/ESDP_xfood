@@ -14,6 +14,8 @@ public interface PizzeriaService {
 	
 	List<PizzeriaDto> getAllPizzerias();
 
+    List<PizzeriaDto> getAllPizzeriasSortedByName();
+
     List<PizzeriaShowDto> getPizzeriasByPartOfName(String searchQuery);
 	
 	void add(PizzeriaDto dto);

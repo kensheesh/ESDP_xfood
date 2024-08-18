@@ -40,6 +40,14 @@ public class PizzeriaServiceImpl implements PizzeriaService {
     }
 
     @Override
+    public List<PizzeriaDto> getAllPizzeriasSortedByName() {
+        return pizzeriaRepository.findAllByOrderByNameAsc()
+                .stream()
+                .map(dtoBuilder::buildPizzeriaDto)
+                .toList();
+    }
+
+    @Override
     public List<PizzeriaShowDto> getPizzeriasByPartOfName(String query) {
         if (query == null || query.isEmpty()) {
             List<Pizzeria> list = pizzeriaRepository.findAll();

@@ -48,7 +48,7 @@ public class OpportunityController {
         return "redirect:/my-opportunities";
     }
 
-    @GetMapping("/opportunities")
+    @GetMapping("/opportunities")   
     public String getOpportunityMap (
             @RequestParam(name = "week", defaultValue = "0") long week,
             @RequestParam(name = "search", defaultValue = "") String search,
@@ -56,7 +56,7 @@ public class OpportunityController {
 
         model.addAttribute("week", workScheduleService.getWeekInfo(week));
         model.addAttribute("opportunities", opportunityService.getWeeklyOpportunities(week, search));
-        model.addAttribute("pizzerias", pizzeriaService.getAllPizzerias());
+        model.addAttribute("pizzerias", pizzeriaService.getAllPizzeriasSortedByName());
         model.addAttribute("managers", managerService.getAllManagers());
 
         return "weekly_opportunities";

@@ -5,6 +5,7 @@ import kg.attractor.xfood.model.Pizzeria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -14,4 +15,6 @@ public interface PizzeriaRepository extends JpaRepository<Pizzeria, Long> {
 	Pizzeria findByUuidEqualsIgnoreCase(String uuid);
 
     List<PizzeriaShowDto> findByNameContainingIgnoreCase(String query);
+
+    Collection<Pizzeria> findAllByOrderByNameAsc();
 }
