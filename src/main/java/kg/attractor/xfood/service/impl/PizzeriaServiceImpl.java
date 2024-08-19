@@ -59,7 +59,7 @@ public class PizzeriaServiceImpl implements PizzeriaService {
     @Modifying
     @Override
     public void edit(PizzeriaDto dto) {
-        Pizzeria p = modelBuilder.buildPizzeria(dto, locationService.findLocationById(dto.getLocation().getId()));
+        Pizzeria p = modelBuilder.buildPizzeria(dto, locationService.findLocationById(dto.getLocationId()));
         pizzeriaRepository.save(p);
     }
     
