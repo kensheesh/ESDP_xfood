@@ -5,7 +5,6 @@
         <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
     </#if>
 
-
     <style>
         .user-info {
             flex-grow: 1;
@@ -85,9 +84,17 @@
                                                 </a>
                                             </div>
                                             <div class="col">
-                                                <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
+                                                <a href="/users" class="btn rounded-4 w-100 h-100 btn-dodo-light">
                                                     <span class="d-none d-md-inline">
                                                         Пользователи
+                                                    </span>
+                                                    <i class="bi bi-people d-md-none fs-5"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col">
+                                                <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
+                                                    <span class="d-none d-md-inline">
+                                                        Пицерии
                                                     </span>
                                                     <i class="bi bi-people d-md-none fs-5"></i>
                                                 </a>
@@ -106,8 +113,8 @@
                                 <form action="" method="GET">
                                     <div class="mb-3">
                                         <label for="location-select" class="form-label">Тип пользователя</label>
-                                        <select class="form-select" id="location-select-1" name="role">
-                                            <option value="default">Все</option>
+                                        <select class="form-select" id="editLocation" name="location_id">
+                                            <option value="-1">Все</option>
                                         </select>
                                     </div>
                                     <div class="input-group mb-3">
@@ -124,6 +131,13 @@
             </div>
 
             <div class="card-container col-xl-9 col-md-8" id="pizzeria-list">
+                <div class="d-flex flex-row gap-2 mb-3 flex-wrap">
+                    <button class="btn btn-dodo rounded-4" data-bs-toggle="modal" data-bs-target="#selectLocationModal">
+                        <i class="bi bi-file-earmark-plus-fill"></i> Создать <span
+                                class="d-none d-sm-inline">пиццерию</span>
+                    </button>
+                </div>
+
                 <#if pizzerias?size == 0>
                     <div class="alert alert-warning" role="alert">
                         Ничего не найдено.
@@ -139,8 +153,12 @@
                                 </div>
 
                                 <div class="card-icons">
-                                    <button class="btn-edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-delete"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="btn-edit" data-pizzeria-id="${pizzeria.getId()}"><i
+                                                class="fas fa-edit"></i></button>
+
+                                    <button class="btn-delete" data-pizzeria-id="${pizzeria.getId()}"><i
+                                                class="fas fa-trash-alt"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -199,45 +217,31 @@
         </div>
     </div>
 
-    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editPizzeria" tabindex="-1" aria-labelledby="editPizzeriaLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editUserModalLabel">Редактировать пользователя</h5>
+                    <h5 class="modal-title" id="editPizzeriaLabel">Редактировать пиццерии</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editUserForm">
+                    <form id="editLocationForm">
+                        <input type="text" hidden="hidden" id="pizzId" >
                         <div class="mb-3">
-                            <label for="editName" class="form-label">Имя</label>
+                            <label for="editName" class="form-label">Названике</label>
                             <input type="text" class="form-control" id="editName" name="name">
                         </div>
                         <div class="mb-3">
-                            <label for="editSurname" class="form-label">Фамилия</label>
-                            <input type="text" class="form-control" id="editSurname" name="surname">
+                            <label for="editUUID" class="form-label">UUID</label>
+                            <input type="text" class="form-control" id="editUUID" name="uuid">
                         </div>
                         <div class="mb-3">
-                            <label for="editRole" class="form-label">Роль</label>
-                            <select class="form-select" id="editRole" name="role">
+                            <label for="editLocation-2" class="form-label">Регион</label>
+                            <select class="form-select" id="editLocation-2" name="location_id">
 
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="editEmail" class="form-label">Почта</label>
-                            <input type="email" disabled class="form-control" id="editEmail" name="email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editPhoneNumber" class="form-label">Телеграм</label>
-                            <input type="text" disabled class="form-control" id="editPhoneNumber" name="tgLink">
-                        </div>
-                        <div class="mb-3" id="edit-user-enabled">
-                            <label for="editEnabled" class="form-label">Активный</label>
-                            <select class="form-select" id="editEnabled" name="enabled">
-                                <option value="true">Да</option>
-                                <option value="false">Нет</option>
-                            </select>
-                        </div>
-                        <input type="hidden" id="editUserId">
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                             <button type="submit" class="btn btn-primary" id="saveChanges">Сохранить изменения</button>
@@ -248,6 +252,134 @@
         </div>
     </div>
 
+    <!-- Modal for Location Selection -->
+    <div class="modal fade" id="selectLocationModal" tabindex="-1" aria-labelledby="selectLocationLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectLocationLabel">Выберите локацию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="locations"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="continue-to-pizzerias">Продолжить</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modal for Pizzeria Selection -->
+    <div class="modal fade modal-xl" id="selectPizzeriaModal" tabindex="-1" aria-labelledby="selectPizzeriaLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectPizzeriaLabel">Выберите пиццерию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row mb-4">
+                            <div class="col-md-9">
+                                <input class="form-control" type="search" placeholder="Введите ключивые слова"
+                                       aria-label="searchPizzeria" id="pizzeria-search-input">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-outline-success" id="find-pizzeria" type="button">Найти</button>
+                            </div>
+                        </div>
+                        <div id="search-results"></div>
+                        <nav aria-label="Page navigation">
+                            <ul id="pagination" class="pagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success w-100" id="load-pizzerias" type="button">Перезагрузить
+                        пиццерии из "ДодоИС"
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/pizzeriaManagement.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const locationSelect = document.getElementById('editLocation');
+            const editPizzeria = new bootstrap.Modal(document.getElementById('editPizzeria'));
+
+            async function getLocations(select, currentLocation) {
+                const response = await fetch('/api/admin/locations');
+                const data = await response.json();
+                data.forEach(function (l) {
+                    let option = document.createElement('option');
+                    option.value = l.id;
+                    option.textContent = l.name;
+                    if (currentLocation === l.id) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            }
+
+            await getLocations(locationSelect, '${currentLocation}');
+
+            document.addEventListener('click', async (event) => {
+                if (event.target.closest('.btn-delete')) {
+                    const btnDelete = event.target.closest('.btn-delete');
+                    const pId = btnDelete.getAttribute('data-pizzeria-id');
+                    // await deletePizzeria(userId);
+                }
+
+                if (event.target.closest('.btn-edit')) {
+                    editPizzeria.show()
+                    const btnEdit = event.target.closest('.btn-edit');
+                    const pId = btnEdit.getAttribute('data-pizzeria-id');
+                    await edit(pId);
+                }
+            });
+
+            async function edit(pId) {
+                const response = await fetch('/api/admin/pizzerias/' + pId);
+                const p = await response.json();
+
+                document.getElementById('pizzId').value = p.id;
+                document.getElementById('editName').value = p.name;
+                document.getElementById('editUUID').value = p.uuid;
+                await getLocations(document.getElementById('editLocation-2'), p.location.id);
+                editPizzeria.show();
+            }
+
+            document.getElementById('editLocationForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const pId = document.getElementById('pizzId').value;
+                const PizzeriaDto = {
+                    id: pId,
+                    name: document.getElementById('editName').value,
+                    uuid: document.getElementById('editUUID').value,
+                    locationId: document.getElementById('editLocation-2').value,
+                };
+
+                await fetch('/api/admin/pizzerias/edit', {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(PizzeriaDto)
+                });
+                editPizzeria.hide();
+                location.reload();
+            });
+
+        });
+
+
+    </script>
 
 </@main.layout>
