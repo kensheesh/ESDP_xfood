@@ -157,7 +157,7 @@ public class SettingServiceImpl implements SettingService {
         checkTypeFeeService.save(checkTypeFee);
         List<CriteriaType> criteriaTypes = criteriaTypeService.findAllByTypeId(checkType.getId());
         for(CriteriaType criteriaType : criteriaTypes){
-            checkTypeService.delete(criteriaType);
+            checkTypeService.deleteCriteriaType(criteriaType);
         }
         templateUpdateDto.getCriteriaMaxValueDtoList().removeIf(criteriaMaxValueDto -> criteriaMaxValueDto.getCriteriaId() == null);
         for(CriteriaMaxValueDto criteriaMaxValueDto : templateUpdateDto.getCriteriaMaxValueDtoList()){

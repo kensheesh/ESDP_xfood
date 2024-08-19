@@ -1,7 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+import org.springframework.transaction.annotation.Transactional;
 import kg.attractor.xfood.AuthParams;
 import kg.attractor.xfood.dto.opportunity.DailyOpportunityShowDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityCreateDto;
@@ -9,22 +8,16 @@ import kg.attractor.xfood.dto.opportunity.OpportunityDto;
 import kg.attractor.xfood.dto.opportunity.OpportunityShowDto;
 import kg.attractor.xfood.dto.opportunity.WeeklyOpportunityShowDto;
 import kg.attractor.xfood.dto.shift.ShiftCreateDto;
-import kg.attractor.xfood.dto.workSchedule.DailyWorkScheduleShowDto;
-import kg.attractor.xfood.dto.workSchedule.WeeklyScheduleShowDto;
 import kg.attractor.xfood.exception.NotFoundException;
 import kg.attractor.xfood.exception.ShiftIntersectionException;
-import kg.attractor.xfood.model.Manager;
 import kg.attractor.xfood.model.Opportunity;
 import kg.attractor.xfood.model.Shift;
 import kg.attractor.xfood.model.User;
-import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
 import kg.attractor.xfood.service.SettingService;
-import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;

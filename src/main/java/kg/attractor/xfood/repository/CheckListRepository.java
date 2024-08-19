@@ -1,6 +1,6 @@
 package kg.attractor.xfood.repository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 import org.springframework.data.jpa.repository.JpaRepository;

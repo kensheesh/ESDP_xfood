@@ -156,9 +156,9 @@ class CheckTypeServiceTest {
     }
 
     @Test
-    void testDelete() {
+    void testDeleteCriteriaType() {
         CriteriaType criteriaType = new CriteriaType();
-        checkTypeService.delete(criteriaType);
+        checkTypeService.deleteCriteriaType(criteriaType);
         verify(criteriaTypeRepository, times(1)).delete(criteriaType);
     }
 
