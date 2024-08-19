@@ -17,7 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
 @RestController("restAdminController")
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
@@ -30,7 +30,6 @@ public class AdminController {
     private final CountryService countryService;
     private final PizzeriaService pizzeriaService;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
     @DeleteMapping("/user/{id}")
     public HttpStatus userDelete(@PathVariable Long id) {
         adminService.deleteUser(id);
@@ -70,6 +69,11 @@ public class AdminController {
     public ResponseEntity<?> getAllPizzerias() {
         return ResponseEntity.ok(pizzeriaService.getAllPizzerias());
     }
+    
+    @GetMapping("/pizzerias/{id}")
+    public ResponseEntity<?> getPizzeria(@PathVariable @NotBlank String id) {
+        return ResponseEntity.ok(pizzeriaService.getPizzeriaDtoById(Long.parseLong(id.trim())));
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/pizzerias")
@@ -78,13 +82,11 @@ public class AdminController {
         return HttpStatus.OK;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/pizzerias/edit")
+    @PutMapping("/pizzerias/edit")
     public HttpStatus editPizzeria(@RequestBody @Valid PizzeriaDto dto) {
         pizzeriaService.edit(dto);
         return HttpStatus.OK;
     }
-
 
     //-->
     @PreAuthorize("hasRole('ADMIN')")
