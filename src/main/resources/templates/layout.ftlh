@@ -52,7 +52,7 @@
                                         ${authorizedUser.name}
                                     </span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
+                                <ul class="dropdown-menu dropdown-menu-end shadow rounded-bottom-4 border-0">
                                     <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
                                     <#if userRole == "ROLE_EXPERT">
                                         <li>

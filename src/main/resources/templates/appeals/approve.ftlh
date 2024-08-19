@@ -9,7 +9,7 @@
 </style>
 <@main.layout>
     <div class="container">
-        <div class="card">
+        <div class="card border-0 rounded-4 shadow-sm">
             <div class="card-body">
                 <#if appeal.status??>
                     <#if appeal.status == true>
@@ -78,7 +78,7 @@
                 </#if>
             </div>
         </div>
-        <div class="card my-3">
+        <div class="card my-3 border-0 rounded-4 shadow-sm">
             <div class="card-body">
                 <h3>Файлы:</h3>
 
@@ -110,7 +110,7 @@
         </div>
         <#if !appeal.status??>
             <form action="/appeals/approve" method="post" id="appealForm">
-                <div class="card my-3">
+                <div class="card my-3 border-0 rounded-4 shadow-sm">
                     <div class="card-body">
                         <input type="hidden" name="appealId" value="${appeal.id}">
                         <div class="form-group my-2">

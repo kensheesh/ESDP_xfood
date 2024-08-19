@@ -81,7 +81,7 @@
     <#if known>
         <#assign user = SPRING_SECURITY_CONTEXT.authentication.principal>
         <#assign name = user.getUsername()>
-        <#assign authorities = SPRING_SECURITY_CONTEXT.authentication.authorities>
+        <#assign userRole = SPRING_SECURITY_CONTEXT.authentication.authorities[0]>
     </#if>
 
     <#if guest?? && checkList.status == "IN_PROGRESS" || guess?? && checkList.status == "NEW">
@@ -114,11 +114,11 @@
                 <tbody id="mainTableBody">
                 <#list checkList.criteria as criteria>
 
-                    <#list authorities as authority>
-                        <#if authority.authority == 'ROLE_SUPERVISOR'>
+                    <#if userRole??>
+                        <#if userRole == 'ROLE_SUPERVISOR'>
                             <button class="appeals" data-criteria-id="${criteria.id}" hidden="hidden"></button>
                         </#if>
-                    </#list>
+                    </#if>
 
                     <tr class="">
                         <#if criteria.maxValue?? && criteria.maxValue gt 0>
@@ -138,7 +138,7 @@
                                 <#if guest??>
                                     <div class="d-flex justify-content-end align-items-center">
                                         <#if isRecent == true>
-                                            <button class="btn btn-warning btn-sm appeal-button"
+                                            <button class="btn btn-dodo-light rounded-4 btn-sm appeal-button"
                                                     data-criteria-id="${criteria.id}">Подать апелляцию
                                             </button>
                                         </#if>
@@ -214,7 +214,7 @@
         <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel"
              aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content rounded-4">
                     <div class="modal-header">
                         <h5 class="modal-title" id="commentsModalLabel">Комментарии</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -231,8 +231,6 @@
         <input type="hidden" id="checkId" value="${checkList.id}">
 
         <#if known>
-            <#assign userRole = authorities[0].authority>
-
             <#if checkList.isDeleted>
                 <#if userRole == "ROLE_ADMIN">
                     <div class="text-end mb-5 mt-2">
@@ -245,7 +243,7 @@
                     <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel"
                          aria-hidden="true">
                         <div class="modal-dialog">
-                            <div class="modal-content">
+                            <div class="modal-content rounded-4">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="restoreModalLabel">Восстановление проверки</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -281,7 +279,7 @@
                             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <div class="modal-content">
+                                    <div class="modal-content rounded-4">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -316,7 +314,7 @@
                             <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
                                  aria-hidden="true">
                                 <div class="modal-dialog">
-                                    <div class="modal-content">
+                                    <div class="modal-content rounded-4">
                                         <div class="modal-header">
                                             <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление проверки</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"

@@ -29,7 +29,7 @@ async function getChecks(status) {
     }
 }
 
-function displayChecks(checks, status) {
+function displayChecks(checks) {
     const container = document.getElementById('checks-container');
     let htmlContent = '';
 
@@ -42,7 +42,7 @@ function displayChecks(checks, status) {
         let url = `/checks/${c.uuid}`;
 
         htmlContent += `
-           <a href=${url} class="text-decoration-none d-block col">
+           <a href=${url} class="text-decoration-none d-inline-block col" style="min-width: 530px;">
                 <div class="card border-0 rounded-4 bg-primary-subtle">
                     <div class="card-body">
                         <div class="row row-cols-4">
@@ -65,8 +65,7 @@ function displayChecks(checks, status) {
     container.innerHTML = htmlContent;
 }
 
-window.onload = () => document.getElementById('inProgressChecks').click();
+
 document.getElementById("newChecks").onclick = () => getChecks(statuses.NEW);
 document.getElementById("inProgressChecks").onclick = () => getChecks(statuses.IN_PROGRESS);
 document.getElementById("doneChecks").onclick = () => getChecks(statuses.DONE);
-document.getElementById('deletedChecks').onclick = () => getChecks(statuses.DELETED)

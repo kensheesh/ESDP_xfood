@@ -54,27 +54,29 @@
             <div class="text-end">
                 <a href="/templates/create" class="btn btn-secondary">+ Добавить шаблон</a>
             </div>
-            <#list templates as template>
-                <div class="card my-2 text-decoration-none border border-secondary">
-                    <div class="card-body py-1 mb-0">
-                        <span><b>${template.name?capitalize}</b></span>
-                        <div class="row">
-                            <span class="col-3">Кол. критериев: <b>${template.numsOfCriteria}</b></span>
-                            <span class="col-3">Макс. балл: <b>${template.totalValue}</b></span>
-                            <span class="col-3">Вознаграждение: <b>${template.fee}₽</b></span>
-                            <div class="btn btn-secondary col-1 ms-auto" data-id="${template.id}" onclick="handleEditClick(this)"><i class="bi bi-pencil-fill"></i></div>
-                            <div class="btn btn-warning col-1 ms-auto text-white" id="delete_btn" data-id="${template.id}" onclick="handleDeleteClick(this)"><i class="bi bi-trash-fill"></i></div>
+            <div class="overflow-x-auto">
+                <#list templates as template>
+                    <div class="card my-2 text-decoration-none border-0 shadow-sm">
+                        <div class="card-body py-1 mb-0" >
+                            <span><b>${template.name?capitalize}</b></span>
+                            <div class="row" style="min-width: 500px;">
+                                <span class="col-3">Кол. критериев: <b>${template.numsOfCriteria}</b></span>
+                                <span class="col-3">Макс. балл: <b>${template.totalValue}</b></span>
+                                <span class="col-3">Вознаграждение: <b>${template.fee}₽</b></span>
+                                <div class="btn btn-secondary col-1 ms-auto d-flex align-items-center justify-content-center" data-id="${template.id}" onclick="handleEditClick(this)"><i class="bi bi-pencil-fill"></i></div>
+                                <div class="btn btn-warning col-1 ms-auto text-white d-flex align-items-center justify-content-center" id="delete_btn" data-id="${template.id}" onclick="handleDeleteClick(this)"><i class="bi bi-trash-fill"></i></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </#list>
+                </#list>
+            </div>
         </div>
     </div>
 
     <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModal"
          aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="tokenModal">
                         Привязать токен доступа
@@ -88,8 +90,8 @@
                         <input type="text" id="bearer" name="bearer" class="form-control" required>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="submit" id="pushToken" class="btn btn-primary" data-bs-dismiss="modal"
+                    <div class="modal-footer border-0">
+                        <button type="submit" id="pushToken" class="btn btn-dodo rounded-4" data-bs-dismiss="modal"
                                 data-bs-target="#tokenModal">
                             Сохранить токен
                         </button>

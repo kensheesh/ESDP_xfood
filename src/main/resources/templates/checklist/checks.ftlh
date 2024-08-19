@@ -104,7 +104,7 @@
                     <div class="row row-cols-1 row-gap-3">
                         <div class="col">
                             <div class="row row-gap-2">
-                                <div class="col-auto ps-3 pe-1">
+                                <div class="col-auto ps-1 ps-lg-3 pe-1">
                                     <button id="newChecks" type="button" class="btn btn-light-green rounded-4">Новые</button>
                                 </div>
                                 <div class="col-auto px-1">
@@ -121,7 +121,7 @@
                             </div>
                         </div>
 
-                        <div class="col">
+                        <div class="col overflow-x-auto">
                             <div id="checks-container" class="row row-cols-1 row-gap-2 mt-2 overflow-y-auto align-content-start" style="height: 58vh;">
                             </div>
                         </div>
@@ -141,8 +141,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
     <script src="/js/clock.js"></script>
-    <script src="../js/checks.js"></script>
-    <script src="../js/appealsCount.js"></script>
+    <script src="/js/checks.js"></script>
+    <#if userRole != "ROLE_EXPERT">
+        <script src="../js/appealsCount.js"></script>
+        <script>
+            document.getElementById("deletedChecks").onclick = () => getChecks(statuses.DELETED);
+        </script>
+    </#if>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.btn').forEach(button => {
@@ -153,6 +158,7 @@
                     });
                 });
             });
+            document.getElementById('inProgressChecks').click(); console.log('done!')
         });
     </script>
 </@main.layout>

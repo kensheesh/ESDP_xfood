@@ -206,7 +206,7 @@
     <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModal"
          aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="tokenModal">
                         Привязать токен доступа
@@ -220,8 +220,8 @@
                         <input type="text" id="bearer" name="bearer" class="form-control" required>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="submit" id="pushToken" class="btn btn-primary" data-bs-dismiss="modal"
+                    <div class="modal-footer border-0">
+                        <button type="submit" id="pushToken" class="btn btn-dodo rounded-4" data-bs-dismiss="modal"
                                 data-bs-target="#tokenModal">
                             Сохранить токен
                         </button>

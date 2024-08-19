@@ -140,7 +140,7 @@
                         <div class="modal fade" id="wowFactorModal" tabindex="-1" aria-labelledby="wowFactorModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content rounded-4">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="wowFactorModalLabel">Добавить WOW-фактор</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -166,7 +166,7 @@
                              aria-labelledby="critwowFactorModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content rounded-4">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="wowFactorModalLabel">Добавить критический
                                             фактор</h5>
@@ -209,7 +209,7 @@
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                              aria-hidden="true">
                             <div class="modal-dialog">
-                                <div class="modal-content">
+                                <div class="modal-content rounded-4">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Вы уверены, что хотите
                                             опубликовать?</h5>
@@ -217,10 +217,10 @@
                                                 aria-label="Закрыть"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Не хочу
+                                        <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Не хочу
                                             публиковать
                                         </button>
-                                        <button type="button" id="post" class="btn btn-primary">Уверен!</button>
+                                        <button type="button" id="post" class="btn btn-dodo-light">Уверен!</button>
                                     </div>
                                 </div>
                             </div>

@@ -219,7 +219,7 @@
 
     <div class="modal fade" id="editPizzeria" tabindex="-1" aria-labelledby="editPizzeriaLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editPizzeriaLabel">Редактировать пиццерии</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -256,7 +256,7 @@
     <div class="modal fade" id="selectLocationModal" tabindex="-1" aria-labelledby="selectLocationLabel"
          aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="selectLocationLabel">Выберите локацию</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -276,7 +276,7 @@
     <div class="modal fade modal-xl" id="selectPizzeriaModal" tabindex="-1" aria-labelledby="selectPizzeriaLabel"
          aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="selectPizzeriaLabel">Выберите пиццерию</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
