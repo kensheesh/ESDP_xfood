@@ -164,7 +164,7 @@
                     <h1 class="modal-title fs-6" id="workShiftModalLabel">Выберите данные для назначения проверки</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form class="my-1 mx-2 p-1" method="POST" action="/opportunities">
+                <form class="modal-body" method="POST" action="/opportunities">
                     <div class="mb-3">
                         <label for="category" class="form-label ps-1 mt-2">Пиццерия</label>
 <#--                        //ToDo Доделать живой поиск-->
@@ -213,11 +213,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
-                        <button id="saveOpportunity" type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
-                    </div>
                 </form>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Отмена</a>
+                    <button id="saveOpportunity" type="submit" class="btn btn-dodo rounded-4">Сохранить</button>
+                </div>
             </div>
         </div>
     </div>

@@ -113,7 +113,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="text-center mt-3">
+                                <div class="text-center text-md-start mt-3">
                                     <button type="submit" class="btn btn-primary">Применить фильтр</button>
                                 </div>
                             </form>
@@ -122,7 +122,7 @@
                         <div class="col">
                             <div class="row row-cols-1 row-gap-2 mt-2 align-items-start overflow-y-scroll"
                                  style="height: 55vh">
-                                <div id="appeals" class="row row-cols-1 row-gap-2">
+                                <div id="appeals" class="row row-cols-1 row-gap-2   overflow-x-auto" style="min-width: 400px;">
                                     <#list appeals.content as appeal>
                                         <a href="/appeals/${appeal.id}/approve"
                                            class="col text-decoration-none d-block">

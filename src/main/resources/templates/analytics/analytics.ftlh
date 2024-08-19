@@ -128,13 +128,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="d-flex flex-row gap-2 mt-3 justify-content-center d-lg-none">
+                    <div class="d-flex flex-row gap-2 mt-3 justify-content-center d-lg-none flex-wrap">
                         <div class="dropdown">
                             <button class="btn btn btn-light rounded-4 dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-funnel"></i> Фильтр
                             </button>
-                            <div class="dropdown-menu">
+                            <div class="dropdown-menu shadow rounded-4 border-0">
                                 <div class="py-3 px-3 text-center">
                                     <form action="/analytics" method="GET">
                                         <h6>Фильтры</h6>
@@ -166,16 +166,16 @@
                                             <input type="date" name="endDate" id="date-to" class="form-control"
                                                    value="<#if currentEndDate??>${currentEndDate}</#if>">
                                         </div>
-                                        <button class="btn btn-outline-success rounded-4" type="submit">Применить
+                                        <button class="btn btn-outline-success rounded-4 mt-3" type="submit">Применить
                                         </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <a href="/export/excel?pizzeria=${currentPizzeria}&manager=${currentManager}&expert=${currentExpert}&startDate=<#if currentStartDate??>${currentStartDate}</#if>&endDate=<#if currentEndDate??>${currentEndDate}</#if>"
-                           class="btn btn-green rounded-4">Скачать <i class="bi bi-file-arrow-down"></i></a>
+                           class="btn btn-green rounded-4 col-auto">Скачать <i class="bi bi-file-arrow-down"></i></a>
                         <a href="/statistics"
-                           class="btn btn-green rounded-4">Статистика</a>
+                           class="btn btn-light-green rounded-4 col-auto">Статистика</a>
                     </div>
                 </div>
                 <div class="col-lg-4 d-none d-lg-inline text-center">
@@ -220,7 +220,7 @@
                        class="btn btn-green mt-3 rounded-4">Скачать Excel</a>
 
                     <a href="/statistics"
-                       class="btn btn-green mt-3 rounded-4">Статистика</a>
+                       class="btn btn-light-green mt-3 rounded-4">Статистика</a>
                 </div>
             </div>
         </div>

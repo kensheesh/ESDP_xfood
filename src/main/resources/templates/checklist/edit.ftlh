@@ -109,7 +109,7 @@
     <!-- Modal -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-body">
                     <div class="search-bar">
                         <div class="input-group my-4">
@@ -132,7 +132,7 @@
     <div class="modal fade" id="create" tabindex="-1" aria-labelledby="create" aria-hidden="true">
         <div class="modal-dialog">
             <form action="/criterion/create" method="post"  id="form">
-                <div class="modal-content">
+                <div class="modal-content rounded-4">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Создание критерия</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

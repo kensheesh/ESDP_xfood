@@ -14,7 +14,7 @@ body {
         z-index: 10;
     }
     body {
-        margin-bottom: 140px;
+        margin-bottom: 345px;
     }
 }
 
@@ -130,7 +130,7 @@ body {
     position: absolute;
     display:block;
     top: -8px;
-    right: 0px;
+    right: 0;
     height: 27px;
     width: 27px;
     border-radius: 50%;

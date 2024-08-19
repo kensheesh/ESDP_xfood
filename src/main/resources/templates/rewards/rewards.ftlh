@@ -14,63 +14,76 @@
         </#list>
     </#if>
 
-    <div class="row">
-        <div class="card col-lg-8">
-            <div class="card-body">
-                <h3>Вознаграждение</h3>
-                <div class="d-flex flex-wrap mb-3">
-                    <div class="p-2 text-white me-2 reward-info">Количество проверок: <span
-                                id="countChecks">${countChecks}</span></div>
-                    <div class="p-2 text-white reward-info">Сумма вознаграждения: <span
-                                id="sumRewards">${sumRewards}</span>
-                        Р
+    <a href="/profile" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
+
+    <div class="row row-gap-2">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <h3>Вознаграждение</h3>
+                    <div class="d-flex flex-wrap mb-3 row-gap-2">
+                        <div class="p-2 text-white me-2 reward-info">Количество проверок: <span
+                                    id="countChecks">${countChecks}</span></div>
+                        <div class="p-2 text-white reward-info">Сумма вознаграждения: <span
+                                    id="sumRewards">${sumRewards}</span>
+                            Р
+                        </div>
                     </div>
-                </div>
-
-                <table id="rewardTable" class="table mt-3 table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Пиццерия</th>
-                        <#if experts??>
-                            <th>Эксперт</th>
-                        </#if>
-                        <th>Вознаграждение</th>
-                        <th>Чек лист</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <#if expert??>
-                        <#list expert.getCheckListRewards() as reward>
+<#--                    <div class="table-responsive">-->
+                        <table id="rewardTable" class="table mt-3 responsive table-striped table-hover" style="width: 100%">
+                            <thead>
                             <tr>
-                                <td>${reward.getEndDate()}</td>
-                                <td>${reward.getPizzeriaName()}</td>
-                                <td>${reward.getSumRewards()} Р</td>
-                                <td><a href="/checks/${reward.checklistUUID}/result">Перейти</a></td>
+                                <th>Дата</th>
+                                <th>Пиццерия</th>
+                                <#if experts??>
+                                    <th>Эксперт</th>
+                                </#if>
+                                <th>Вознаграждение</th>
+                                <th>Чек лист</th>
                             </tr>
-                        </#list>
-                    </#if>
-                    <#if experts??>
-                        <#list experts as expert>
-                            <#list expert.getCheckListRewards() as reward>
-                                <tr>
-                                    <td>${reward.getEndDate()}</td>
-                                    <td>${reward.getPizzeriaName()}</td>
-                                    <td>${reward.getExpertName()}</td>
-                                    <td>${reward.getSumRewards()} Р</td>
-                                    <td><a href="/checks/${reward.checklistUUID}/result">Перейти</a></td>
-                                </tr>
-                            </#list>
-                        </#list>
-                    </#if>
-                    </tbody>
-                </table>
-
+                            </thead>
+                            <tbody>
+                            <#if expert??>
+                                <#list expert.getCheckListRewards() as reward>
+                                    <tr>
+                                        <td>${reward.getEndDate()}</td>
+                                        <td>${reward.getPizzeriaName()}</td>
+                                        <td>${reward.getSumRewards()} Р</td>
+                                        <td><a href="/checks/${reward.checklistUUID}/result"
+                                               class="text-decoration-none">
+                                                Перейти
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </#list>
+                            </#if>
+                            <#if experts??>
+                                <#list experts as expert>
+                                    <#list expert.getCheckListRewards() as reward>
+                                        <tr>
+                                            <td>${reward.getEndDate()}</td>
+                                            <td>${reward.getPizzeriaName()}</td>
+                                            <td>${reward.getExpertName()}</td>
+                                            <td>${reward.getSumRewards()} Р</td>
+                                            <td>
+                                                <a href="/checks/${reward.checklistUUID}/result"
+                                                   class="text-decoration-none">
+                                                    Перейти
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </#list>
+                                </#list>
+                            </#if>
+                            </tbody>
+                        </table>
+<#--                    </div>-->
+                </div>
             </div>
         </div>
 
         <div class="col-lg-4">
-            <div class="card">
+            <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body">
                     <h6>Фильтры</h6>
                     <form action="/rewards" method="GET">
@@ -100,7 +113,7 @@
                                    class="form-control"
                                    id="date-to" name="endDate">
                         </div>
-                        <button class="btn btn-outline-success w-100" id="buttonFilter" type="submit">Применить</button>
+                        <button class="btn btn-green w-100" id="buttonFilter" type="submit">Применить</button>
                     </form>
                 </div>
             </div>
@@ -197,6 +210,7 @@
                 pageLength: 5,
                 searching: false,
                 pagingType: "numbers",
+                responsive: true,
                 drawCallback: function (settings) {
                     updateStatistics();
                 }

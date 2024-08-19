@@ -101,6 +101,8 @@
             <h1 class="mb-4">Личный кабинет
                 <#if user.role == "SUPERVISOR">
                     руководителя
+                <#elseif user.role == "ADMIN">
+                    администратора
                 <#else>
                     эксперта
                 </#if>

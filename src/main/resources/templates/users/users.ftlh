@@ -240,7 +240,7 @@
 
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editUserModalLabel">Редактировать пользователя</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -277,11 +277,15 @@
                             </select>
                         </div>
                         <input type="hidden" id="editUserId">
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                            <button type="submit" class="btn btn-primary" id="saveChanges">Сохранить изменения</button>
-                        </div>
+
                     </form>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-link link-secondary text-decoration-none rounded-4"
+                            data-bs-dismiss="modal">
+                        Закрыть
+                    </button>
+                    <button type="submit" class="btn btn-dodo-light rounded-4" id="saveChanges">Сохранить изменения</button>
                 </div>
             </div>
         </div>
@@ -310,9 +314,14 @@
 
                         <div class="mb-4">
                             <label class="form-label" for="tgLink">Ccылка на телеграм</label>
-                            <input type="text" id="tgLink" name="tgLink" class="form-control" required
-                                   pattern="^t\.me/.*"
-                                   placeholder="Пожалуйста, введите ссылку на телеграм, начиная с t.me/."/>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    t.me/
+                                </div>
+                                <input type="text" id="tgLink" name="tgLink" class="form-control" required
+                                       pattern="^t\.me/.*"
+                                       placeholder="Имя пользователя без @"/>
+                            </div>
                         </div>
 
                         <div class="mb-4">
@@ -325,7 +334,7 @@
                             <label for="password" class="form-label">Пароль</label>
                             <input type="password" id="password" name="password" class="form-control" required
                                    pattern="^(?=.*\d)(?=.*[a-zA-Z]).{8,}$"
-                                   placeholder="Пароль должен быть не менее 8 символов, содержать цифры и буквы."/>
+                                   placeholder="Не менее 8 симв., цифры и буквы."/>
                         </div>
 
                         <#if authorizedUser??>
@@ -385,7 +394,7 @@
     <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModal"
          aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="tokenModal">
                         Привязать токен доступа
@@ -399,8 +408,8 @@
                         <input type="text" id="bearer" name="bearer" class="form-control" required>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="submit" id="pushToken" class="btn btn-primary" data-bs-dismiss="modal"
+                    <div class="modal-footer border-0">
+                        <button type="submit" id="pushToken" class="btn btn-dodo rounded-4" data-bs-dismiss="modal"
                                 data-bs-target="#tokenModal">
                             Сохранить токен
                         </button>

@@ -1,9 +1,8 @@
-
-
-
 <#assign known = SPRING_SECURITY_CONTEXT??>
 <#if known>
     <#assign authorizedUser = SPRING_SECURITY_CONTEXT.authentication>
+    <#assign userRole = authorizedUser.authorities[0].authority>
+<#else>
 </#if>
 <!doctype html>
 <html lang="en">
@@ -29,7 +28,7 @@
 
 <body>
 <header>
-    <nav class="navbar navbar-expand fw-medium bg-white border-bottom " id="navbar">
+    <nav class="navbar navbar-expand fw-medium bg-body border-bottom " id="navbar">
         <div class="container">
             <a class="navbar-brand fw-semibold " href="#">XFOOD</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -41,32 +40,30 @@
                 <ul class="navbar-nav ms-auto">
                     <#if authorizedUser??>
                         <li class="nav-item dropdown" href="#">
-                            <a
-                                    class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
-                                    href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle d-flex flex-row flex-nowrap column-gap-2 align-items-center py-1"
+                               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person-circle fs-5 m-0 p-0 "></i>
                                 <span>
-                                    ${authorizedUser.name}
-                                </span>
+                                        ${authorizedUser.name}
+                                    </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="/profile">Мой профиль</a></li>
-                                <li><a class="dropdown-item" href="#">Карта возможностей</a></li>
-                                <#if authorizedUser.authorities?? && authorizedUser.authorities[0].authority??>
-                                    <#if authorizedUser.authorities[0].authority == "ROLE_ADMIN" ||
-                                    authorizedUser.authorities[0].authority == "ROLE_SUPERVISOR">
-                                        <li>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#addUser">
-                                                Создать пользователя
-                                            </button>
-                                        </li>
-                                    </#if>
+                                <#if userRole == "ROLE_EXPERT">
+                                    <li>
+                                        <a class="dropdown-item" href="/my-opportunities">Карта возможностей</a>
+                                    </li>
+                                <#else>
+                                    <li>
+                                        <a class="dropdown-item" href="/deadlines">Настройки</a>
+                                    </li>
                                 </#if>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="/logout">Выход</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="/logout">Выход</a>
+                                </li>
                             </ul>
                         </li>
                     </#if>
@@ -76,6 +73,8 @@
     </nav>
 </header>
 <main class="container my-4">
+    <a href="/analytics" class="btn btn-light btn-sm my-2 px-3"><i class="bi bi-arrow-90deg-left"></i></a>
+
     <form action="/statistics" method="get" id="period">
         <input type="hidden" name="from" id="from" value="">
         <input type="hidden" name="to" id="to" value="">
@@ -83,65 +82,69 @@
             <i class="bi bi-calendar-fill text-dodo"></i>
             <span></span> <i class="fa fa-caret-down"></i>
         </div>
-        <button type="submit" id="date-range-button" class="m-3 btn btn-dodo">применить</button>
+        <button type="submit" id="date-range-button" class="mx-3 mt-2 mb-1 btn btn-dodo" >Применить</button>
     </form>
     <#if from?? && to??>
         <#assign size = (statistics.days?size) + 3>
         <#assign size1 = (statistics.days?size) + 4>
 
-        <table id="myTable" class="table table-bordered">
-            <thead class="fs-6">
-            <tr>
-                <th>Менеджер</th>
-                <th>Эксперт</th>
-                <th>Пиццерия</th>
-                <th>Тип</th>
-                <#if statistics.days??>
-                    <#list statistics.days as d>
-                        <th colspan="fs-6">${d.day}</th>
-                    </#list>
-                </#if>
-                <th>Среднее за менеджера и эксперта</th>
-                <th>Среднее за пиццерию</th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list statistics.tables as table>
-                <#list table.rows as row>
-                    <tr>
-                        <td>${row.manager.name} ${row.manager.surname}</td>
-                        <td>${row.expert.name} ${row.expert.surname}</td>
-                        <td>${row.pizzeria.name}</td>
-                        <td>${row.type}</td>
+        <div class="table-responsive">
+            <table id="myTable" class="table table-bordered">
+                <thead class="fs-6">
+                <tr>
+                    <th>Менеджер</th>
+                    <th>Эксперт</th>
+                    <th>Пиццерия</th>
+                    <th>Тип</th>
+                    <#if statistics.days??>
                         <#list statistics.days as d>
-                            <#assign cellFound = false>
-                            <#list row.cells as cell>
-                                <#if d.day == cell.date>
-                                    <td>${cell.points}</td>
-                                    <#assign cellFound = true>
-                                    <#break >
+                            <th colspan="fs-6">${d.day}</th>
+                        </#list>
+                    </#if>
+                    <th>Среднее за менеджера и эксперта</th>
+                    <th>Среднее за пиццерию</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list statistics.tables as table>
+                    <#list table.rows as row>
+                        <tr>
+                            <td>${row.manager.name} ${row.manager.surname}</td>
+                            <td>${row.expert.name} ${row.expert.surname}</td>
+                            <td>${row.pizzeria.name}</td>
+                            <td>${row.type}</td>
+                            <#list statistics.days as d>
+                                <#assign cellFound = false>
+                                <#list row.cells as cell>
+                                    <#if d.day == cell.date>
+                                        <td>${cell.points}</td>
+                                        <#assign cellFound = true>
+                                        <#break >
+                                    </#if>
+                                </#list>
+                                <#if !cellFound>
+                                    <td> </td>
                                 </#if>
                             </#list>
-                            <#if !cellFound>
-                                <td> </td>
-                            </#if>
-                        </#list>
-                        <td>${row.averageByRow}</td>
-                        <td class="average-by-pizzeria">${table.averageByTable}</td>
-                    </tr>
+                            <td>${row.averageByRow}</td>
+                            <td class="average-by-pizzeria">${table.averageByTable}</td>
+                        </tr>
+                    </#list>
                 </#list>
-            </#list>
-            </tbody>
+                </tbody>
 
-            <tfoot>
-            <tr>
-                <th colspan="${size}" style="text-align:right">Общий средний балл по всем пиццериям:</th>
-                <th style="text-align:right" colspan="${size1}">${statistics.average}</th>
-            </tr>
-            </tfoot>
-        </table>
+                <tfoot>
+                <tr>
+                    <th colspan="${size}" style="text-align:right">Общий средний балл по всем пиццериям:</th>
+                    <th style="text-align:right" colspan="${size1}">${statistics.average}</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
     <#else>
-        Выберите период для отображения статистики
+        <span class="mx-md-3 my-2">
+            Выберите период для отображения статистики
+        </span>
     </#if>
 </main>
 <script src="/js/statistics.js"></script>
@@ -205,7 +208,7 @@
                                     search: 'applied',
                                 }},
                             text: 'Экспорт в Excel',
-                            className: 'btn btn-secondary ms-3'
+                            className: 'btn btn-secondary ms-1'
                         }
                     ]
                 }

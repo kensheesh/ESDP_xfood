@@ -73,7 +73,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-10 offset-md-1">
-                <div class="card">
+                <div class="card border-0 rounded-4 shadow-sm">
                     <div class="card-header text-white">
                         Подать апелляцию
                     </div>
@@ -132,7 +132,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-warning text-white">Отправить</button>
+                            <button type="submit" class="btn btn-dodo-light">Отправить</button>
                         </form>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
 
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="successModalLabel">Успех</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
