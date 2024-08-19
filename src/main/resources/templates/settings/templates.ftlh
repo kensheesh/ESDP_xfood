@@ -100,6 +100,24 @@
         </div>
     </div>
 
+    <div class="modal fade" id="deleteTemplateModal" tabindex="-1" aria-labelledby="deleteTemplateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteTemplateModalLabel">Удаление шаблона</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить шаблон?
+                </div>
+                <form class="modal-footer" method="post" id="deleteTemplateForm">
+                    <button type="button" class="btn btn-link text-decoration-none link-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.getElementById('pushToken').addEventListener('click', async function () {
             const form = document.getElementById('bearerForm');
@@ -119,7 +137,7 @@
                 const result = await response.json();
                 console.log(result);
 
-                // Close the modal if needed
+                // Close the modal if needed 21
                 const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
                 modal.hide();
             } catch (error) {
@@ -136,7 +154,10 @@
 
         function handleDeleteClick(element) {
             const selectedValue = element.getAttribute('data-id');
-            window.location.href = '#' + selectedValue;
+            const form = document.getElementById('deleteTemplateForm')
+            let modal = new bootstrap.Modal('#deleteTemplateModal');
+            modal.show();
+            form.action = "/templates/" + selectedValue + "/delete";
         }
     </script>
 
