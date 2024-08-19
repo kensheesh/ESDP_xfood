@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllExperts() {
         return userRepository.findByRole(Role.EXPERT.toString())
                 .stream()
+                .filter(e -> e.getEnabled().equals(true))
                 .map(dtoBuilder::buildUserDto)
                 .toList();
     }

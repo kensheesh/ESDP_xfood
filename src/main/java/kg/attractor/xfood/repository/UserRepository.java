@@ -23,6 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
             """
                     SELECT u from User u
                     where CAST(u.role as text) = ?1
+                    and u.enabled=true
                     """
     )
     List<User> findByRole(String role);
