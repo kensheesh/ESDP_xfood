@@ -13,7 +13,7 @@ public interface UserService {
     
     UserDto getUserDto();
 
-    List<UserDto> getAllExperts();
+    List<UserDto> getAllExpertsDtos();
 
     List<ExpertShowDto> fetchAllExperts();
 

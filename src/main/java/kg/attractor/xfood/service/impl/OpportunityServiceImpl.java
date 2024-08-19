@@ -209,10 +209,17 @@ public class OpportunityServiceImpl implements OpportunityService {
 
         Set<User> uniqueExperts = new HashSet<>();
         opportunitiesOfWeek.forEach(e -> uniqueExperts.add(e.getUser()));
+        List<User> sortedUniqueExperts = new ArrayList<>(uniqueExperts);
+        sortedUniqueExperts.sort(Comparator.comparing(User::getSurname));
+
+        List<User> restExperts = userService.getAllExperts();
+        restExperts.removeAll(uniqueExperts);
+        restExperts.sort(Comparator.comparing(User::getSurname));
 
         List<WeeklyOpportunityShowDto> weeklyDtos = new ArrayList<>();
 
-        uniqueExperts.forEach(e -> weeklyDtos.add(createWeeklyOpportunity(e, chosenMonday)));
+        sortedUniqueExperts.forEach(e -> weeklyDtos.add(createWeeklyOpportunity(e, chosenMonday)));
+        restExperts.forEach(e -> weeklyDtos.add(createWeeklyOpportunity(e, chosenMonday)));
 
         return weeklyDtos;
     }

@@ -32,7 +32,7 @@ public class ExpertController {
     //?
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllExperts() {
-        List<UserDto> users = userService.getAllExperts();
+        List<UserDto> users = userService.getAllExpertsDtos();
         return ResponseEntity.ok(users);
     }
 

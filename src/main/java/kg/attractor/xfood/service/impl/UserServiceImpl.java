@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDto> getAllExperts() {
+    public List<UserDto> getAllExpertsDtos() {
         return userRepository.findByRole(Role.EXPERT.toString())
                 .stream()
                 .filter(e -> e.getEnabled().equals(true))
@@ -75,9 +75,13 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
+    public List<User> getAllExperts() {
+        return userRepository.findByRole(Role.EXPERT.toString());
+    }
+
     @Override
     public List<ExpertShowDto> fetchAllExperts() {
-        List<UserDto> users = getAllExperts();
+        List<UserDto> users = getAllExpertsDtos();
         List<ExpertShowDto> expertDtos = users.stream()
                 .map(user -> dtoBuilder.buildExpertShowDto(user))
                 .collect(Collectors.toList());

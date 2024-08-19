@@ -189,7 +189,7 @@ class UserServiceTest {
             when(dtoBuilder.buildUserDto(users.get(i))).thenReturn(userDtoList.get(i));
         }
 
-        List<UserDto> result = userService.getAllExperts();
+        List<UserDto> result = userService.getAllExpertsDtos();
         assertEquals(userDtoList.size(), result.size());
         assertEquals(userDtoList, result);
     }
@@ -198,7 +198,7 @@ class UserServiceTest {
     void testGetAllExpertsEmptyList() {
         when(userRepository.findByRole(Role.EXPERT.toString())).thenReturn(Collections.emptyList());
 
-        List<UserDto> result = userService.getAllExperts();
+        List<UserDto> result = userService.getAllExpertsDtos();
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
