@@ -1,20 +1,18 @@
 package kg.attractor.xfood.controller.mvc;
 
 import jakarta.validation.Valid;
+import kg.attractor.xfood.dto.pizzeria.PizzeriaDto;
 import kg.attractor.xfood.dto.settings.DeadlinesDto;
 import kg.attractor.xfood.dto.settings.TemplateCreateDto;
 import kg.attractor.xfood.dto.settings.TemplateUpdateDto;
 import kg.attractor.xfood.dto.user.UserDto;
-import kg.attractor.xfood.service.CheckTypeService;
-import kg.attractor.xfood.service.SectionService;
-import kg.attractor.xfood.service.SettingService;
-import kg.attractor.xfood.service.ZoneService;
-import kg.attractor.xfood.service.impl.UserServiceImpl;
+import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,13 +22,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping()
+@PreAuthorize("hasAnyRole('ADMIN','SUPERVISOR')")
 public class SettingsController {
     public final SettingService settingService;
     private final CheckTypeService checkTypeService;
     private final ZoneService zoneService;
     private final SectionService sectionService;
-    private final UserServiceImpl userService;
-
+    private final UserService userService;
+    private final PizzeriaService pizzeriaService;
+    
+    
     @GetMapping("/deadlines")
     public String getDeadlines(Model model) {
         model.addAttribute("oppDeadlineSetting", settingService.getOpportunityDeadline());
@@ -117,5 +118,26 @@ public class SettingsController {
         model.addAttribute("currentPage", Integer.parseInt(page));
         model.addAttribute("currentSize", Integer.parseInt(size));
         return "users/users";
+    }
+    
+    @GetMapping("pizzerias")
+    public String getUsers(Model model,
+                           @RequestParam(name = "location_id", defaultValue = "-1", required = false) Long location_id,
+                           @RequestParam(name = "page", defaultValue = "0") Integer page,
+                           @RequestParam(name = "size", defaultValue = "6") Integer size,
+                           @RequestParam(name = "search", defaultValue = "", required = false) String search) {
+        
+        Pageable pageable = PageRequest.of(page, size);
+        
+        Page<PizzeriaDto> pPage = pizzeriaService.getAllPizzeriasPage(location_id, pageable, search);
+        
+        model.addAttribute("pizzerias", pPage.getContent());
+        model.addAttribute("totalPages", pPage.getTotalPages());
+        model.addAttribute("searchWord", search);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("currentLocation", location_id);
+        
+        model.addAttribute("currentSize", size);
+        return "pizzerias/pizzerias";
     }
 }

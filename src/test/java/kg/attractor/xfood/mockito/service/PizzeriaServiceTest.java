@@ -41,7 +41,7 @@ class PizzeriaServiceTest {
     @Test
     void testGetPizzeriasByLocationIdEmptyList() {
         long locationId = 1L;
-        when(pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId)).thenReturn(Collections.emptyList());
+        when(pizzeriaRepository.findByLocation_Id(locationId)).thenReturn(Collections.emptyList());
 
         List<PizzeriaWeeklyDto> result = pizzeriaService.getPizzeriasByLocationId(locationId);
 
@@ -66,14 +66,14 @@ class PizzeriaServiceTest {
         Pizzeria pizzeria = new Pizzeria();
         List<Pizzeria> pizzerias = Collections.singletonList(pizzeria);
 
-        when(pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId)).thenReturn(pizzerias);
+        when(pizzeriaRepository.findByLocation_Id(locationId)).thenReturn(pizzerias);
         when(dtoBuilder.buildPizzeriaWeeklyDtos(pizzerias)).thenReturn(Collections.singletonList(new PizzeriaWeeklyDto()));
 
         List<PizzeriaWeeklyDto> result = pizzeriaService.getPizzeriasByLocationId(locationId);
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        verify(pizzeriaRepository).findByLocation_IdOrderByNameAsc(locationId);
+        verify(pizzeriaRepository).findByLocation_Id(locationId);
         verify(dtoBuilder).buildPizzeriaWeeklyDtos(pizzerias);
     }
 
@@ -126,7 +126,7 @@ class PizzeriaServiceTest {
     void testPerformanceForGetPizzeriasByLocationId() {
         long locationId = 1L;
         List<Pizzeria> pizzerias = Collections.nCopies(1000, new Pizzeria());
-        when(pizzeriaRepository.findByLocation_IdOrderByNameAsc(locationId)).thenReturn(pizzerias);
+        when(pizzeriaRepository.findByLocation_Id(locationId)).thenReturn(pizzerias);
 
         long startTime = System.currentTimeMillis();
         pizzeriaService.getPizzeriasByLocationId(locationId);
