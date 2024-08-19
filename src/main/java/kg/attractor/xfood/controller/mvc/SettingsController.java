@@ -119,6 +119,13 @@ public class SettingsController {
         model.addAttribute("currentSize", Integer.parseInt(size));
         return "users/users";
     }
+
+    @PostMapping("/templates/{id}/delete")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
+    public String deleteTemplate(@PathVariable Long id) {
+        checkTypeService.deleteCheckType(id);
+        return "redirect:/templates";
+    }
     
     @GetMapping("pizzerias")
     public String getUsers(Model model,

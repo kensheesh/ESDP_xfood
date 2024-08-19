@@ -1,7 +1,7 @@
 package kg.attractor.xfood.repository;
 
 import io.lettuce.core.dynamic.annotation.Param;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import kg.attractor.xfood.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

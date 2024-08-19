@@ -1,5 +1,6 @@
 package kg.attractor.xfood.service.impl;
 
+import org.springframework.transaction.annotation.Transactional;
 import kg.attractor.xfood.dto.CheckTypeShowDto;
 import kg.attractor.xfood.dto.checktype.CheckTypeSupervisorViewDto;
 import kg.attractor.xfood.model.CheckType;
@@ -23,6 +24,7 @@ public class CheckTypeServiceImpl implements CheckTypeService {
     private final CriteriaTypeRepository criteriaTypeRepository;
     private final CheckTypeFeeServiceImpl checkTypeFeeService;
     private final DtoBuilder dtoBuilder;
+
     @Override
     public List<CheckTypeSupervisorViewDto> getTypes() {
         return checkTypeRepository.findAll().stream().map(dtoBuilder::buildCheckTypeShowDto).toList();
@@ -68,9 +70,15 @@ public class CheckTypeServiceImpl implements CheckTypeService {
     }
 
     @Override
-    public void delete(CriteriaType criteriaType) {
+    public void deleteCriteriaType(CriteriaType criteriaType) {
         criteriaTypeRepository.delete(criteriaType);
         log.info("Deleted checkType: " + criteriaType);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCheckType(Long id) {
+        checkTypeRepository.deleteById(id);
     }
 
     public int getTotalMaxValueByTypeId(Long typeId) {

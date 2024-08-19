@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      author: Danis
+      id: Add column 'deleted' to table 'check_types'
+      changes:
+        - addColumn:
+            tableName: check_types
+            columns:
+              - column:
+                  name: deleted
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

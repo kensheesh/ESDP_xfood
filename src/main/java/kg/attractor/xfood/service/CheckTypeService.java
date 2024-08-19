@@ -15,5 +15,6 @@ public interface CheckTypeService {
     CheckType findByName(String type);
     void save(CheckType checkType);
     boolean existsByName(String value);
-    void delete(CriteriaType criteriaType);
+    void deleteCriteriaType(CriteriaType criteriaType);
+    void deleteCheckType(Long id);
 }
