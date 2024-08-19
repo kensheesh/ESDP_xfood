@@ -89,9 +89,6 @@ public class DtoBuilder {
     }
 
     public ChecklistShowDto buildChecklistShowDto(CheckList model) {
-        return buildChecklistShowDto(model, Boolean.FALSE);
-    }
-    public ChecklistShowDto buildChecklistShowDto(CheckList model, Boolean isDeleted) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         List<CriteriaExpertShowDto> criteriaDtos = new ArrayList<>();
@@ -128,6 +125,40 @@ public class DtoBuilder {
                 .managerWorkDate(model.getWorkSchedule().getStartTime().format(dateTimeFormatter))
                 .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(timeFormatter))
                 .managerWorkEndTime(model.getWorkSchedule().getEndTime().format(timeFormatter))
+                .criteria(sortedCriteriaDtos)
+                .build();
+    }
+    public ChecklistShowDto buildChecklistShowDto(CheckList model, Boolean isDeleted) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        List<CriteriaExpertShowDto> criteriaDtos = new ArrayList<>();
+        for(var checklistCriteria : model.getCheckListsCriteria()) {
+            CriteriaExpertShowDto criteriaExpertShowDto = buildCriteriaShowDto(checklistCriteria);
+            List<Appeal> appeals = appealRepository.findByCheckListsCriteria(checklistCriteria);
+            for(var appeal : appeals) {
+                if(appeal != null && appeal.getIsAccepted() == null) {
+                    criteriaExpertShowDto.setIsAccepted(true);
+                }
+            }
+            criteriaDtos.add(criteriaExpertShowDto);
+        }
+
+        List<CriteriaExpertShowDto> sortedCriteriaDtos = criteriaDtos.stream()
+                .sorted(Comparator.comparing(CriteriaExpertShowDto::getZone))
+                .sorted(Comparator.comparing(CriteriaExpertShowDto::getSection))
+                .collect(toList());
+
+        ManagerShowDto managerDto = buildManagerShowDto(model.getWorkSchedule().getManager());
+        PizzeriaDto pizzeriaDto = buildPizzeriaDto(model.getWorkSchedule().getPizzeria());
+
+        return ChecklistShowDto.builder()
+                .uuidLink(model.getUuidLink())
+                .id(model.getId())
+                .pizzeria(pizzeriaDto)
+                .manager(managerDto)
+                .status(model.getStatus())
+                .endTime(model.getEndTime())
+                .managerWorkStartTime(model.getWorkSchedule().getStartTime().format(formatter))
+                .managerWorkEndTime(model.getWorkSchedule().getEndTime().format(formatter))
                 .criteria(sortedCriteriaDtos)
                 .isDeleted(isDeleted)
                 .build();
@@ -212,7 +243,7 @@ public class DtoBuilder {
                 .build();
     }
     
-    public CountryDto buildCountryDto(Country model) {
+    protected CountryDto buildCountryDto(Country model) {
         return CountryDto.builder()
                 .id(model.getId())
                 .apiUrl(model.getApiUrl())

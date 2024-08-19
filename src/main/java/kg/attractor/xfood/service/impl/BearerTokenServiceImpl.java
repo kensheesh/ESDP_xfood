@@ -36,16 +36,4 @@ public class BearerTokenServiceImpl implements BearerTokenService {
 						.build()
 		));
 	}
-	
-	@Override
-	public void setBearer(String username, String bearer, Long lifeTime) {
-		bearerTokenRepository
-				.saveAndFlush(
-						BearerToken.builder()
-								.token(bearer)
-								.user(userService.getByEmail(username))
-								.expirySeconds(lifeTime)
-								.build()
-				);
-	}
 }

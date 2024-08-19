@@ -64,7 +64,7 @@ public class ModelBuilder {
                 .build();
     }
     
-    public Location buildLocation(LocationDto dto) {
+    protected Location buildLocation(LocationDto dto) {
         return Location.builder()
                 .id(dto.getId())
                 .name(dto.getName())
@@ -73,7 +73,7 @@ public class ModelBuilder {
                 .build();
     }
     
-    public Country buildCountry(CountryDto dto) {
+    protected Country buildCountry(CountryDto dto) {
         return Country.builder()
                 .countryCode(dto.getCountryCode())
                 .countryName(dto.getCountryName())

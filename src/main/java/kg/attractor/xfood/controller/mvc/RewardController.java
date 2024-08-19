@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 
 @Controller
-@RequestMapping("rewards")
+@RequestMapping("reward")
 @RequiredArgsConstructor
 public class RewardController {
+
     private final RewardService rewardService;
     @Lazy
     private final UserService userService;

@@ -73,7 +73,7 @@
             <div class="card">
                 <div class="card-body">
                     <h6>Фильтры</h6>
-                    <form action="/rewards" method="GET">
+                    <form action="/reward" method="GET">
                         <#if experts??>
                             <div class="mb-3">
                                 <label for="pizzeria-select" class="form-label">Пиццерия</label>

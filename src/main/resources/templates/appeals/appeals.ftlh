@@ -3,56 +3,48 @@
 <@main.layout>
     <div class="row row-cols-md-2 row-gap-3">
         <div class="col-md-4 col-xl-3 bg-body sidebar">
-            <div class="card rounded-4 mb-2 mb-sm-0 border-0 shadow-sm">
+            <div class="card rounded-4 mb-2 mb-sm-0 h-100 border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="row row-cols-1 row-gap-3">
+                    <div class="row row-cols-1 row-gap-3 h-100">
                         <div class="col">
-                            <div class="row row-cols-3 row-cols-md-1 row-gap-2">
+                            <div class="row row-cols-5 row-cols-md-1 row-gap-2">
                                 <div class="col">
-                                        <a href="/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                            <i class="bi bi-calendar2-range fs-5 d-md-none"></i>
-                                            <span class="d-none d-md-inline">График</span>
-                                        </a>
-                                </div>
-                                <div class="col">
-                                    <a href="/opportunities"
-                                       class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        <i class="bi bi-calendar2-week fs-5 d-md-none"></i>
-                                        <span class="d-none d-md-inline">Возможности</span>
+                                    <a href="/supervisor/weekly" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        График
                                     </a>
                                 </div>
-                                <div class="col button-wrapper">
-                                    <a href="/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        <span class="d-none d-md-inline">Проверки</span>
-                                        <i class="bi bi-clipboard-check fs-5 d-md-none"></i>
+                                <div class="col">
+                                    <a href="/expert/checks" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                        Проверки
                                     </a>
                                 </div>
                                 <div class="col">
                                     <a href="/analytics" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        <i class="bi bi-bar-chart-fill fs-5 d-md-none"></i>
-                                        <span class="d-none d-md-inline">Аналитика</span>
+                                        Аналитика
                                     </a>
                                 </div>
-                                <div class="col button-wrapper">
-                                    <a href="/appeals" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                        <i class="bi bi-flag fs-5 d-md-none"></i>
-                                        <span class="d-none d-md-inline">Апелляции</span>
-                                        <span class="badge-notification-icon">
-                                            <span class="badge-notification-num" id="counter">
+                                <div class="col">
+                                    <a href="#"
+                                       class="btn rounded-4 w-100 h-100 btn-dodo-light position-relative disabled">
+                                        Апелляции
+                                        <span class="position-absolute top-0
+                                                 start-100 translate-middle badge rounded-pill bg-dodo">
+                                            <span id="counter">
 
                                             </span>
+                                            <span class="visually-hidden">Апелляции</span>
                                         </span>
                                     </a>
                                 </div>
                                 <div class="col">
                                     <div class="dropdown d-md-none h-100">
-                                        <a class="btn btn-dodo-light rounded-4 dropdown-toggle w-100 h-100"
-                                           type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-clock fs-5"></i>
-                                        </a>
-                                        <div class="dropdown-menu border-0 rounded-4 shadow">
-                                            <section class="times_second d-flex flex-column row-gap-2 p-3"></section>
-                                        </div>
+                                        <button class="btn btn-light rounded-4 dropdown-toggle w-100 h-100"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-clock"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <section class="times_second"></section>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -190,14 +182,14 @@
     <script src="../js/appeals.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            // document.querySelectorAll('.btn').forEach(button => {
-            //     button.addEventListener('click', function () {
-            //         document.querySelectorAll('.btn').forEach(btn => {
-            //             btn.style.backgroundColor = (btn === this) ? '#28A745' : '';
-            //             btn.style.color = (btn === this) ? '#fff' : '';
-            //         });
-            //     });
-            // });
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    document.querySelectorAll('.btn').forEach(btn => {
+                        btn.style.backgroundColor = (btn === this) ? '#28A745' : '';
+                        btn.style.color = (btn === this) ? '#fff' : '';
+                    });
+                });
+            });
 
             let pizzeriaSelect = document.getElementById('pizzeria-select');
             let expertSelect = document.getElementById('expert-select');

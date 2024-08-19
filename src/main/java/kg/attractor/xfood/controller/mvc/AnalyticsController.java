@@ -1,7 +1,5 @@
 package kg.attractor.xfood.controller.mvc;
 
-import kg.attractor.xfood.AuthParams;
-import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.service.CheckListService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +17,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('SUPERVISOR','EXPERT','ADMIN')")
 public class AnalyticsController {
+
     private final CheckListService checkListService;
     private final UserService userService;
 
@@ -44,10 +43,9 @@ public class AnalyticsController {
         model.addAttribute("currentEndDate", LocalDate.now());
         model.addAttribute("currentStartDate", startDate);
         model.addAttribute("currentEndDate", endDate);
-        if (AuthParams.getPrincipal().getAuthorities().contains(Role.EXPERT)) {
-            model.addAttribute("checksCount", checkListService.getAmountOfNewChecks());
-        }
 
         return "analytics/analytics";
     }
+
+
 }

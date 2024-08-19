@@ -1,6 +1,6 @@
 <#import "../layout.ftlh" as main>
 <@main.layout>
-    <form action="/checks/${checklist.id}/edit" method="post" id="edit">
+    <form action="/checks/${checklist.id}/update" method="post" id="edit">
         <div class="container mt-4">
             <div class="alert alert-danger" role="alert" style="display: none;" id="error">
                 Сумма баллов не соответствует требумой сумме!
@@ -27,7 +27,7 @@
                             </a>
                             <ul class="dropdown-menu">
                             <#list types as tp>
-                                    <li><a class="dropdown-item" href="/checks/${checklist.id}/edit?type=${tp.name}">${tp.name}</a></li>
+                                    <li><a class="dropdown-item" href="/checks/${checklist.id}/update?type=${tp.name}">${tp.name}</a></li>
                             </#list>
                             </ul>
                         </div>

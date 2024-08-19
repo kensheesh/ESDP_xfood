@@ -35,11 +35,9 @@ function displayChecks(checks, status) {
 
     checks.forEach(c => {
         console.log("uuid = "+c.uuid)
-        // let url = (c.status === statuses.IN_PROGRESS)
-        //     ? `/checks/${c.uuid}/fill`
-        //     : `/checks/${c.uuid}`;
-
-        let url = `/checks/${c.uuid}`;
+        let url = (c.status === statuses.IN_PROGRESS)
+            ? `/checks/${c.uuid}/fill`
+            : `/checks/${c.uuid}`;
 
         htmlContent += `
            <a href=${url} class="text-decoration-none d-block col">
@@ -65,8 +63,9 @@ function displayChecks(checks, status) {
     container.innerHTML = htmlContent;
 }
 
-window.onload = () => document.getElementById('inProgressChecks').click();
+
 document.getElementById("newChecks").onclick = () => getChecks(statuses.NEW);
 document.getElementById("inProgressChecks").onclick = () => getChecks(statuses.IN_PROGRESS);
 document.getElementById("doneChecks").onclick = () => getChecks(statuses.DONE);
 document.getElementById('deletedChecks').onclick = () => getChecks(statuses.DELETED)
+window.onload = () => document.getElementById('inProgressChecks').click();

@@ -40,10 +40,7 @@ public class CheckTypeServiceImpl implements CheckTypeService {
         types.forEach(e -> dtos.add(CheckTypeShowDto.builder()
                 .id(e.getId())
                 .name(e.getName())
-                .numsOfCriteria(e.getCriteriaTypes().stream()
-                                .filter(criteriaType -> criteriaType.getCriteria().getSection() != null)
-                                .filter(criteriaType -> criteriaType.getCriteria().getSection().getId().equals(3L))
-                                .count())
+                .numsOfCriteria(e.getCriteriaTypes().size())
                 .totalValue(getTotalMaxValueByTypeId(e.getId()))
                 .fee(checkTypeFeeService.getEnabledFeeByCheckTypeId(e.getId()))
                 .build()));
@@ -74,7 +71,7 @@ public class CheckTypeServiceImpl implements CheckTypeService {
     }
 
     public int getTotalMaxValueByTypeId(Long typeId) {
-        List<CriteriaType> criterias = criteriaTypeRepository.findByType_IdAndCriteria_Section_IdOrderByType_NameAsc(typeId, 3L);
+        List<CriteriaType> criterias = criteriaTypeRepository.findByType_Id(typeId);
         return criterias.stream()
                 .mapToInt(CriteriaType::getMaxValue)
                 .sum();

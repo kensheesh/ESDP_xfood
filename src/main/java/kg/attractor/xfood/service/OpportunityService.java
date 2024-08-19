@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public interface OpportunityService {
-    Map<String, OpportunityDto> getAllByExpert(int week);
+    Map<String, OpportunityDto> getAllByExpert();
 
     List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date);
 

@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
 
-class CriteriaTypeServiceTest {
+public class CriteriaTypeServiceTest {
     @InjectMocks
     private CriteriaTypeServiceImpl criteriaTypeService;
 

@@ -52,7 +52,7 @@ public class User implements UserDetails {
 
     @NotNull
     @Column(name = "enabled", nullable = false)
-    private Boolean enabled;
+    private Boolean enabled = true;
 
     @Enumerated(EnumType.STRING)
     private Role role;

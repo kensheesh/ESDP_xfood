@@ -21,7 +21,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AppealServiceTest {
+public class AppealServiceTest {
 
     @Mock
     private AppealRepository appealRepository;
@@ -44,7 +44,7 @@ class AppealServiceTest {
                 .email("original@email.test")
                 .linkToExternalSrc("testLink")
                 .tgLinkMessage("testLinkMessage")
-                .fullName("fullName")
+                .fullName("fullname")
                 .isAccepted(false)
                 .checkListsCriteria(new CheckListsCriteria())
                 .build();
@@ -56,7 +56,7 @@ class AppealServiceTest {
                 .email("updated@email.test")
                 .linkToExternalSrc("testLink")
                 .tgLinkMessage("testLinkMessage")
-                .fullName("fullName")
+                .fullName("fullname")
                 .files(new MultipartFile[0])
                 .build();
 
@@ -67,7 +67,9 @@ class AppealServiceTest {
     void updateTestWhenIdIsNotFound() {
         when(appealRepository.findById(2L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(AppealNotFoundException.class, () -> appealService.update(createAppealDto, 2L));
+        Exception exception = assertThrows(AppealNotFoundException.class, () -> {
+            appealService.update(createAppealDto, 2L);
+        });
 
         String expectedMessage = "Аппеляция не найдена";
         String actualMessage = exception.getMessage();
@@ -85,14 +87,5 @@ class AppealServiceTest {
 
         verify(appealRepository, times(1)).save(any(Appeal.class));
         verify(fileService, times(1)).saveFiles(anyList(), eq(appeal.getId()));
-    }
-
-    @Test
-    void getAmountOfNewAppealsTest() {
-        when(appealRepository.countAllByIsAcceptedNull()).thenReturn(5);
-
-        Integer result = appealService.getAmountOfNewAppeals();
-
-        assertEquals(5, result);
     }
 }

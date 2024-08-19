@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class CheckTypeShowDto {
     private Long id;
     private String name;
-    private Long numsOfCriteria;
+    private Integer numsOfCriteria;
     private Integer totalValue;
     private BigDecimal fee;
 }

@@ -1,16 +1,27 @@
+FROM maven:3.6.3-openjdk-17-slim AS build
 
-# Используем базовый образ Maven с JDK 17
-FROM maven:3.8.5-openjdk-17
+WORKDIR /app
 
-# Устанавливаем рабочую директорию
-WORKDIR /ESDP_xfood
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Копируем все файлы в рабочую директорию
+COPY src ./src
 
-COPY . .
+RUN mvn clean package -Dmaven.test.skip=true
 
-# Собираем проект Maven и пропускаем тесты
-RUN mvn clean install
+FROM openjdk:17-jdk
 
-# Определяем команду для запуска приложения
-CMD ["mvn", "spring-boot:run"]
+VOLUME /data
+VOLUME /var/log/app
+
+EXPOSE 5051
+
+WORKDIR /app
+
+ENV SPRING_PROFILES_ACTIVE=prod
+
+COPY --from=build /app/target/xfood-1.0.0-SNAPSHOT.jar app.jar
+
+COPY ../xfood_drafts/feature/add_modal_types%5D/ESDP_xfood/.env /app/.env
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

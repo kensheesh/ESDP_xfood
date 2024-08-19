@@ -3,21 +3,23 @@ package kg.attractor.xfood.service;
 import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.*;
 import kg.attractor.xfood.dto.comment.CommentDto;
+import kg.attractor.xfood.dto.statistics.DayDto;
 import kg.attractor.xfood.dto.statistics.StatisticsDto;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.model.CheckList;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface CheckListService {
 
-    ChecklistShowDto getCheckListByUuid(String id);
+    ChecklistShowDto getCheckListById(String id);
 
-    CheckList getModelCheckListByUuid(String id);
+    CheckList getModelCheckListById(String id);
     
-    CheckList getModelCheckListByUuid(Long id);
+    CheckList getModelCheckListById(Long id);
 
     void save(CheckList checkList);
 

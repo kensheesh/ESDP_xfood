@@ -3,15 +3,18 @@ package kg.attractor.xfood.mockito.service;
 import kg.attractor.xfood.dto.SectionSupervisorShowDto;
 import kg.attractor.xfood.model.Section;
 import kg.attractor.xfood.repository.SectionRepository;
+import kg.attractor.xfood.service.SectionService;
 import kg.attractor.xfood.service.impl.DtoBuilder;
 import kg.attractor.xfood.service.impl.SectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -20,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class SectionServiceTest {
+public class SectionServiceTest {
     @InjectMocks
     private SectionServiceImpl sectionService;
 
@@ -40,7 +43,7 @@ class SectionServiceTest {
         Section section = new Section();
         List<Section> sections = List.of(section);
         SectionSupervisorShowDto dto = new SectionSupervisorShowDto();
-        List<SectionSupervisorShowDto> dtoList = List.of(dto);
+        List<SectionSupervisorShowDto> dtos = List.of(dto);
 
         when(sectionRepository.findAll()).thenReturn(sections);
         when(dtoBuilder.buildSectionDto(any(Section.class))).thenReturn(dto);
@@ -48,7 +51,7 @@ class SectionServiceTest {
         List<SectionSupervisorShowDto> found = sectionService.getSections();
 
         assertNotNull(found);
-        assertEquals(dtoList.size(), found.size());
+        assertEquals(dtos.size(), found.size());
     }
 
     @Test
@@ -67,6 +70,6 @@ class SectionServiceTest {
     void testFindByName_ThrowsNoSuchElementException() {
         String name = "name";
         NoSuchElementException exception = Assertions.assertThrows(NoSuchElementException.class, () -> sectionService.findByName(name));
-        assertEquals("Раздел с именем " + name + " не найден", exception.getMessage());
+        assertEquals("Раздел с именем "+name+" не найден", exception.getMessage());
     }
 }

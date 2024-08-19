@@ -31,12 +31,11 @@ public class SecurityConfig {
 			"/DataTables/**",
 			"/js/validation.js",
 			"/css/layout.css",
-			"/api/appeal/**",
+			"/appeal/**",
 			"/checks/**",
 			"/api/oauth/**",
 			"/api/checklist/criteria/percentage/**",
 			"/api/checks/points/**",
-			"/appeals/**",
 			"/"
 			
 	};
@@ -50,7 +49,7 @@ public class SecurityConfig {
 				.formLogin(form -> form
 						.loginPage("/auth/login")
 						.loginProcessingUrl("/auth/login")
-						.defaultSuccessUrl("/checks")
+						.defaultSuccessUrl("/expert/checks")
 						.failureUrl("/auth/login?error=true")
 						.permitAll())
 				.logout(logout -> logout

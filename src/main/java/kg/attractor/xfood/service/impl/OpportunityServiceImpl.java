@@ -20,7 +20,6 @@ import kg.attractor.xfood.model.User;
 import kg.attractor.xfood.model.WorkSchedule;
 import kg.attractor.xfood.repository.OpportunityRepository;
 import kg.attractor.xfood.service.OpportunityService;
-import kg.attractor.xfood.service.SettingService;
 import kg.attractor.xfood.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
@@ -45,7 +43,6 @@ public class OpportunityServiceImpl implements OpportunityService {
 
     private final UserServiceImpl userService;
     private final ShiftServiceImpl shiftService;
-    private final SettingService settingService;
 
     @Override
     public List<OpportunityShowDto> getOppotunitiesByDate(LocalDate date) {
@@ -87,12 +84,12 @@ public class OpportunityServiceImpl implements OpportunityService {
     }
 
     @Override
-    public Map<String, OpportunityDto> getAllByExpert(int week) {
+    public Map<String, OpportunityDto> getAllByExpert() {
         String expertEmail = AuthParams.getPrincipal().getUsername();
 
         int dayOfWeek = LocalDateTime.now().getDayOfWeek().getValue();
-        LocalDate monday = LocalDate.now().plusWeeks(week).minusDays(dayOfWeek - 1);
-        LocalDate sunday = LocalDate.now().plusWeeks(week).plusDays(7 - dayOfWeek);
+        LocalDate monday = LocalDate.now().minusDays(dayOfWeek - 1);
+        LocalDate sunday = LocalDate.now().plusDays(7 - dayOfWeek);
 
         List<Opportunity> models = opportunityRepository.findAllByUserEmailAndDateBetween(expertEmail, monday, sunday);
 
@@ -124,20 +121,6 @@ public class OpportunityServiceImpl implements OpportunityService {
     @Override
     @Transactional
     public void changeExpertOpportunity(OpportunityCreateDto dto) {
-        int dayOfWeek = dto.getDate().getDayOfWeek().getValue();
-        if (!settingService.isAvailableToChange(dto.getDate().minusDays(dayOfWeek - 1))) {
-            throw new IllegalArgumentException("You cannot change shifts of this week!");
-        }
-//        To get the week number relative to the current week
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeekToday = today.with(java.time.DayOfWeek.MONDAY);
-        LocalDate startOfWeekGivenDate = dto.getDate().with(java.time.DayOfWeek.MONDAY);
-        int week = (int) ChronoUnit.WEEKS.between(startOfWeekToday, startOfWeekGivenDate);
-
-        if (!settingService.isAvailableToDayOff(getAllByExpert(week)) && dto.getIsDayOff() != null && dto.getIsDayOff()) {
-            throw new IllegalArgumentException("You cannot add extra day offs");
-        }
-
         User expert = userService.getByEmail(AuthParams.getAuth().getName());
 
         Opportunity newOpportunity = Opportunity.builder()

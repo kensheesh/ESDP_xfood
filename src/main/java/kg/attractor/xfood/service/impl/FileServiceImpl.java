@@ -61,7 +61,7 @@ public class FileServiceImpl implements FileService {
 		return fileUtil.getFIle(path);
 	}
 	
-	public List<MultipartFile> validateAppealFiles(List<MultipartFile> files) {
+	private List<MultipartFile> validateAppealFiles(List<MultipartFile> files) {
 		final int MAX_IMAGE_SIZE = 3 * 1024 * 1024;
 		final int MAX_VIDEO_SIZE = 25 * 1024 * 1024;
 		final int MAX_PHOTO_COUNT = 5;
@@ -99,7 +99,7 @@ public class FileServiceImpl implements FileService {
 		return validFiles;
 	}
 	
-	public String generateFileName(Appeal appeal, String iterator) {
+	private String generateFileName(Appeal appeal, String iterator) {
 		/* (fileName) -> CheckListId_PizzeriaName_CriteriaId_SenderEmail_iterator */
 		CheckList checkList = appeal.getCheckListsCriteria().getChecklist();
 		String checkListId = checkList.getId().toString();

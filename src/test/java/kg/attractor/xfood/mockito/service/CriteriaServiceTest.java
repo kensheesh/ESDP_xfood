@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class CriteriaServiceTest {
+public class CriteriaServiceTest {
     @InjectMocks
     private CriteriaServiceImpl criteriaService;
 
@@ -34,10 +34,10 @@ class CriteriaServiceTest {
     private SectionService sectionService;
     @Mock
     private ZoneService zoneService;
-    @Mock
-    private Criteria criteriaTest;
+
     @Mock
     private DtoBuilder dtoBuilder;
+    private Criteria criteriaTest;
 
     @BeforeEach
     void setUp() {
@@ -71,7 +71,7 @@ class CriteriaServiceTest {
     }
 
     @Test
-    void testGetById() {
+    void testGetById(){
         CriteriaSupervisorShowDto criteriaSupervisorShowDto = CriteriaSupervisorShowDto.builder().id(1L).build();
         Criteria criteria = Criteria.builder().id(1L).build();
 
@@ -85,7 +85,7 @@ class CriteriaServiceTest {
     }
 
     @Test
-    void testCreate() {
+    void testCreate(){
         CriteriaSupervisorCreateDto createDto = CriteriaSupervisorCreateDto.builder()
                 .coefficient(1)
                 .description("Description")
@@ -106,6 +106,64 @@ class CriteriaServiceTest {
         assertEquals(criteria.getDescription(), createDto.getDescription());
     }
 
+
+
+//    @Test
+//    void testGetByCheckTypeAndPizzeria(){
+//        Criteria criteria = Criteria.builder()
+//                .id(1L)
+//                .description("Description")
+//                .zone(Zone.builder().id(1L).name("Zone").build())
+//                .section(Section.builder().id(1L).name("Section").build())
+//                .coefficient(1)
+//                .build();
+//        CriteriaSupervisorShowDto dto =CriteriaSupervisorShowDto.builder().id(1L).build(); ;
+//        List<CriteriaSupervisorShowDto> criteriaSupervisorShowDtos = List.of(dto);
+////        when(criteriaRepository.findCriteriaByCriteriaTypeAndCriteriaPizzeria(1L, 1L)).thenReturn(List.of(criteria));
+//        when(criteriaRepository.findCriteriaByCriteriaType(1L)).thenReturn(List.of(criteria));
+//        when(dtoBuilder.buildCriteriaSupervisorShowDto(criteria)).thenReturn(dto);
+//
+//        List <CriteriaSupervisorShowDto> criterion = criteriaService.getByCheckTypeAndPizzeria(1L, 1L);
+//        assertNotNull(criterion);
+//        assertEquals(criterion, criteriaSupervisorShowDtos);
+//    }
+
+//    @Test
+//    void testGetByCheckTypeAndPizzeria_CriteriaNotFoundForPizzeriaButFoundForCheckType() {
+//        Criteria criteria = Criteria.builder()
+//                .id(1L)
+//                .description("Description")
+//                .zone(Zone.builder().id(1L).name("Zone").build())
+//                .section(Section.builder().id(1L).name("Section").build())
+//                .coefficient(1)
+//                .build();
+//        CriteriaSupervisorShowDto dto = CriteriaSupervisorShowDto.builder().id(1L).build();
+//        List<CriteriaSupervisorShowDto> criteriaSupervisorShowDtos = List.of(dto);
+//
+//
+////        when(criteriaRepository.findCriteriaByCriteriaTypeAndCriteriaPizzeria(1L, 1L)).thenReturn(Collections.emptyList());
+//        when(criteriaRepository.findCriteriaByCriteriaType(1L)).thenReturn(List.of(criteria));
+//        when(dtoBuilder.buildCriteriaSupervisorShowDto(criteria)).thenReturn(dto);
+//
+//        List<CriteriaSupervisorShowDto> criterion = criteriaService.getByCheckTypeAndPizzeria(1L, 1L);
+//
+//        assertNotNull(criterion);
+//        assertEquals(criterion, criteriaSupervisorShowDtos);
+//
+//    }
+
+//    @Test
+//    void testGetByCheckTypeAndPizzeria_CriteriaNotFound() {
+//        when(criteriaRepository.findCriteriaByCriteriaTypeAndCriteriaPizzeria(1L, 1L)).thenReturn(Collections.emptyList());
+//        when(criteriaRepository.findCriteriaByCriteriaType(1L)).thenReturn(Collections.emptyList());
+//
+//        List<CriteriaSupervisorShowDto> criterion = criteriaService.getByCheckTypeAndPizzeria(1L, 1L);
+//
+//        assertNotNull(criterion);
+//        assertTrue(criterion.isEmpty());
+//
+//    }
+
     @Test
     void getCriteriaByIdWhenIdExists() {
         when(criteriaRepository.findById(criteriaTest.getId())).thenReturn(Optional.of(criteriaTest));
@@ -122,7 +180,9 @@ class CriteriaServiceTest {
     void getCriteriaByIdWhenIdDoesNotExist() {
         when(criteriaRepository.findById(2L)).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(NoSuchElementException.class, () ->  criteriaService.getCriteriaById(2L));
+        Exception exception = assertThrows(NoSuchElementException.class, () -> {
+            criteriaService.getCriteriaById(2L);
+        });
 
         String expectedMessage = "Критерия с ID: 2 не найдена!";
         String actualMessage = exception.getMessage();
@@ -130,90 +190,5 @@ class CriteriaServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
 
         verify(criteriaRepository, times(1)).findById(2L);
-    }
-
-    @Test
-    void testGetByDescription_EmptyDescription() {
-        List<CriteriaSupervisorShowDto> result = criteriaService.getByDescription("");
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-
-        verify(criteriaRepository, never()).findCriterionByDescriptionContainingIgnoreCase(anyString());
-    }
-
-
-    @Test
-    void testGetById_NotFound() {
-        Long id = 1L;
-        when(criteriaRepository.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(NullPointerException.class, () -> criteriaService.getById(id));
-
-        verify(criteriaRepository, times(1)).findById(id);
-    }
-
-    @Test
-    void testFindById() {
-        Long id = 1L;
-        Criteria criteria = new Criteria();
-        criteria.setId(id);
-
-        when(criteriaRepository.findById(id)).thenReturn(Optional.of(criteria));
-
-        Criteria result = criteriaService.findById(id);
-
-        assertNotNull(result);
-        assertEquals(id, result.getId());
-
-        verify(criteriaRepository, times(1)).findById(id);
-    }
-
-    @Test
-    void testFindById_NotFound() {
-        Long id = 1L;
-        when(criteriaRepository.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(NoSuchElementException.class, () -> criteriaService.findById(id));
-
-        verify(criteriaRepository, times(1)).findById(id);
-    }
-
-    @Test
-    void testGetWowCriteria() {
-        Criteria criteria = new Criteria();
-        List<Criteria> criteriaList = List.of(criteria);
-
-        CriteriaSupervisorShowDto dto = new CriteriaSupervisorShowDto();
-        when(criteriaRepository.findCriteriaWhereSectionWow()).thenReturn(criteriaList);
-        when(dtoBuilder.buildCriteriaSupervisorShowDto(criteria)).thenReturn(dto);
-
-        List<CriteriaSupervisorShowDto> result = criteriaService.getWowCriteria();
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(dto, result.get(0));
-
-        verify(criteriaRepository, times(1)).findCriteriaWhereSectionWow();
-        verify(dtoBuilder, times(1)).buildCriteriaSupervisorShowDto(criteria);
-    }
-
-    @Test
-    void testGetCriteriaCriteria() {
-        Criteria criteria = new Criteria();
-        List<Criteria> criteriaList = List.of(criteria);
-
-        CriteriaSupervisorShowDto dto = new CriteriaSupervisorShowDto();
-        when(criteriaRepository.findCriteriaWhereSectionCrit()).thenReturn(criteriaList);
-        when(dtoBuilder.buildCriteriaSupervisorShowDto(criteria)).thenReturn(dto);
-
-        List<CriteriaSupervisorShowDto> result = criteriaService.getCritCriteria();
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(dto, result.get(0));
-
-        verify(criteriaRepository, times(1)).findCriteriaWhereSectionCrit();
-        verify(dtoBuilder, times(1)).buildCriteriaSupervisorShowDto(criteria);
     }
 }

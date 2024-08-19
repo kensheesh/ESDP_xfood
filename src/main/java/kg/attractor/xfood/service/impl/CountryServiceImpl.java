@@ -36,7 +36,7 @@ public class CountryServiceImpl implements CountryService {
 				.toList();
 	}
 	
-	public List<String> getDistinctCountryCodes() {
+	protected List<String> getDistinctCountryCodes() {
 		return countryRepository.findDistinctCountryCodes()
 				.stream()
 				.map(Country :: getCountryCode)

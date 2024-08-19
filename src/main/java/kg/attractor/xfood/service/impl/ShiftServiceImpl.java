@@ -21,19 +21,19 @@ public class ShiftServiceImpl implements ShiftService {
         return shifts;
     }
 
-    public void deleteAllByIds(List<Long> ids) {
+    void deleteAllByIds (List<Long> ids) {
         shiftRepository.deleteAllById(ids);
     }
 
-    public void deleteAllByOpportunityId(Long id) {
+    void deleteAllByOpportunityId(Long id) {
         shiftRepository.deleteAllByOpportunityId (id);
     }
 
-    public void saveAll(List<Shift> filteredShifts) {
+    void saveAll(List<Shift> filteredShifts) {
         shiftRepository.saveAll(filteredShifts);
     }
 
-    public List<Long> getAllByOpportunityId(Long id) {
+    List<Long> getAllByOpportunityId(Long id) {
         return shiftRepository.findAllIdsByOpportunityId(id);
     }
 }

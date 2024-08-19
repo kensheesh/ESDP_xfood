@@ -10,4 +10,5 @@ public interface SectionService {
     List<SectionSupervisorShowDto> getSections();
 
     Section findByName(String section);
+
 }

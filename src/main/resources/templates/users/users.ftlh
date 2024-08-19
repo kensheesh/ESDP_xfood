@@ -50,46 +50,34 @@
     </style>
 
     <div class="container">
-        <div class="row row-cols-md-3 row-gap-3">
+        <div class="row row-cols-md-3 row-gap-3" >
             <div class="col-md-4 col-xl-3 bg-body sidebar">
                 <div class="row row-cols-1 row-gap-3">
                     <div class="col">
                         <div class="card rounded-4 mb-2 mb-sm-0 shadow-sm border-0">
                             <div class="card-body">
                                 <div class="row row-cols-1 row-gap-3 h-100">
+                                    <#assign userRole = authorizedUser.authorities[0].authority>
                                     <div class="col">
                                         <div class="row row-cols-4 row-cols-md-1 row-gap-2">
                                             <div class="col">
                                                 <a href="/deadlines" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                                    <i class="bi bi-hourglass-split fs-5 d-md-none"></i>
-                                                    <span class="d-none d-md-inline">
-                                                        Дедлайны
-                                                    </span>
+                                                    Дедлайны
                                                 </a>
                                             </div>
                                             <div class="col">
-                                                <a class="btn rounded-4 w-100 h-100 btn-dodo-light"
-                                                   data-bs-toggle="modal" data-bs-target="#tokenModal">
-                                                    <i class="bi bi-key fs-5 d-md-none"></i>
-                                                    <span class="d-none d-md-inline">
-                                                        Токены
-                                                    </span>
+                                                <a href="#" class="btn rounded-4 w-100 h-100 btn-dodo-light">
+                                                    Токены
                                                 </a>
                                             </div>
                                             <div class="col">
                                                 <a href="/templates" class="btn rounded-4 w-100 h-100 btn-dodo-light">
-                                                    <i class="bi bi-clipboard-plus fs-5 d-md-none"></i>
-                                                    <span class="d-none d-md-inline">
-                                                        Шаблоны
-                                                    </span>
+                                                    Шаблоны
                                                 </a>
                                             </div>
                                             <div class="col">
                                                 <a href="#" class="btn disabled rounded-4 w-100 h-100 btn-dodo-light">
-                                                    <span class="d-none d-md-inline">
-                                                        Пользователи
-                                                    </span>
-                                                    <i class="bi bi-people d-md-none fs-5"></i>
+                                                    Пользователи
                                                 </a>
                                             </div>
                                         </div>
@@ -102,7 +90,7 @@
                         <div class="card d-none d-md-block border-0 shadow-sm rounded-4 ">
                             <div class="card-body">
                                 <h6>Фильтры</h6>
-                                <form action="" method="GET">
+                                <form action="/admin/users" method="GET">
                                     <div class="mb-3">
                                         <label for="role-select" class="form-label">Тип пользователя</label>
                                         <select class="form-select" id="role-select-1" name="role">
@@ -136,7 +124,7 @@
                             </button>
                             <div class="dropdown-menu p-3 rounded-4 shadow border-0 w-100">
                                 <h6>Фильтры</h6>
-                                <form action="/users" method="GET">
+                                <form action="/admin/users" method="GET">
                                     <div class="mb-3">
                                         <label for="role-select" class="form-label">Тип пользователя</label>
                                         <select class="form-select" id="role-select-2" name="role">
@@ -153,8 +141,7 @@
                             </div>
                         </div>
                         <button class="btn btn-dodo rounded-4" data-bs-toggle="modal" data-bs-target="#addUser">
-                            <i class="bi bi-person-fill-add"></i> Создать <span
-                                    class="d-none d-sm-inline">пользователя</span>
+                            <i class="bi bi-person-fill-add"></i> Создать <span class="d-none d-sm-inline">пользователя</span>
                         </button>
                     </div>
                     <#list users as user>
@@ -168,14 +155,9 @@
                                     <p class="card-text">Активный: <#if user.getEnabled() == true>Да<#else>Нет</#if></p>
                                 </div>
                                 <div class="card-icons">
-                                    <#if currentUser.role == "SUPERVISOR" && (user.role == "ADMIN" || user.role == "SUPERVISOR") && currentUser != user>
-                                    <#elseif currentUser.role == "ADMIN" && user.role == "ADMIN">
-                                    <#elseif currentUser == user>
-                                        <button class="btn-edit" data-user-id="${user.getId()}"><i
-                                                    class="fas fa-edit"></i></button>
-                                    <#else>
-                                        <button class="btn-edit" data-user-id="${user.getId()}"><i
-                                                    class="fas fa-edit"></i></button>
+                                    <button class="btn-edit" data-user-id="${user.getId()}"><i class="fas fa-edit"></i>
+                                    </button>
+                                    <#if admin != user>
                                         <button class="btn-delete" data-user-id="${user.getId()}"><i
                                                     class="fas fa-trash-alt"></i>
                                         </button>
@@ -191,9 +173,7 @@
                         <#if totalPages gt 0>
                             <#if currentPage gt 0>
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}"
-                                       aria-label="Previous">
+                                    <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage-1}&size=${currentSize}&search=${searchWord}" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                     </a>
@@ -209,16 +189,13 @@
 
                             <#list 0..(totalPages-1) as page>
                                 <li class="page-item <#if page == currentPage>active</#if>">
-                                    <a class="page-link"
-                                       href="/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
+                                    <a class="page-link" href="/admin/users?role=${currentRole}&page=${page}&size=${currentSize}&search=${searchWord}">${page + 1}</a>
                                 </li>
                             </#list>
 
                             <#if currentPage lt totalPages - 1>
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}"
-                                       aria-label="Next">
+                                    <a class="page-link" href="/admin/users?role=${currentRole}&page=${currentPage+1}&size=${currentSize}&search=${searchWord}" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                     </a>
@@ -345,11 +322,9 @@
                                                         <label class="form-check-label" for="expert">Эксперт</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input type="radio" id="supervisor" name="role"
-                                                               value="supervisor"
+                                                        <input type="radio" id="supervisor" name="role" value="supervisor"
                                                                class="form-check-input" required>
-                                                        <label class="form-check-label"
-                                                               for="supervisor">Руководитель</label>
+                                                        <label class="form-check-label" for="supervisor">Руководитель</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -382,62 +357,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="tokenModal" tabindex="-1" aria-labelledby="tokenModal"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tokenModal">
-                        Привязать токен доступа
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
-                <form id="bearerForm">
-                    <div class="modal-body">
-                        <label for="bearer" class="form-label">Токен</label>
-                        <input type="text" id="bearer" name="bearer" class="form-control" required>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" id="pushToken" class="btn btn-primary" data-bs-dismiss="modal"
-                                data-bs-target="#tokenModal">
-                            Сохранить токен
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('pushToken').addEventListener('click', async function () {
-            const form = document.getElementById('bearerForm');
-            const formData = new FormData(form);
-
-            try {
-                const response = await fetch('/api/bearer', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                // Optionally, handle the response here
-                const result = await response.json();
-                console.log(result);
-
-                // Close the modal if needed
-                const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                modal.hide();
-            } catch (error) {
-                console.error('There was a problem with the fetch operation:', error);
-            }
-        });
-    </script>
     <script src="/js/validation.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -495,7 +414,7 @@
 
                 const editEnabledField = document.getElementById('editEnabled');
 
-                if (userId === '${currentUser.id}') {
+                if (userId === '${admin.id}') {
                     editEnabledField.disabled = true;
                     editEnabledField.classList.add('d-none');
                 } else {

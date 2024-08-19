@@ -22,6 +22,8 @@ import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
 import kg.attractor.xfood.repository.UserRepository;
 import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.specification.ChecklistSpecification;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -114,17 +118,17 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public ChecklistShowDto getCheckListByUuid(String uuid) {
+    public ChecklistShowDto getCheckListById(String id) {
         for (var authority : AuthParams.getAuth().getAuthorities()) {
-            if (!authority.getAuthority().equals("ROLE_EXPERT") && !authority.getAuthority().equals("ROLE_ANONYMOUS")) {
-                Optional<CheckList> deletedCheckList = findDeletedCheckList(uuid);
+            if (!authority.getAuthority().equals("ROLE_EXPERT") && authority.getAuthority() != null) {
+                Optional<CheckList> deletedCheckList = findDeletedCheckList(id);
                 if (deletedCheckList.isPresent()) {
                     return dtoBuilder.buildChecklistShowDto(deletedCheckList.get(), Boolean.TRUE);
                 }
             }
         }
 
-        CheckList checkList = getModelCheckListByUuid(uuid);
+        CheckList checkList = getModelCheckListById(id);
         return dtoBuilder.buildChecklistShowDto(checkList);
     }
 
@@ -133,13 +137,13 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public CheckList getModelCheckListByUuid(String uuid) {
-        return checkListRepository.findByUuidLink(uuid).orElseThrow(() -> new NoSuchElementException("Can't find checklist by uuid " + uuid));
+    public CheckList getModelCheckListById(String id) {
+        return checkListRepository.findByUuidLink(id).orElseThrow(() -> new NoSuchElementException("Can't find checklist by uuid " + id));
     }
 
     @Override
-    public CheckList getModelCheckListByUuid(Long uuid) {
-        return checkListRepository.findById(uuid).orElseThrow(() -> new NoSuchElementException("Can't find checklist by ID " + uuid));
+    public CheckList getModelCheckListById(Long id) {
+        return checkListRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Can't find checklist by ID " + id));
     }
 
     @Override
@@ -157,12 +161,12 @@ public class CheckListServiceImpl implements CheckListService {
 
 
     @Override
-    public CheckListResultDto getResult(String checkListUuid) {
-        CheckList checkList = getModelCheckListByUuid(checkListUuid);
+    public CheckListResultDto getResult(String checkListId) {
+        CheckList checkList = getModelCheckListById(checkListId);
 
         if (checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
             return dtoBuilder.buildCheckListResultDto(
-                    checkListRepository.findByUuidAndStatus(checkListUuid, checkList.getStatus())
+                    checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
                             .orElseThrow(() -> new NotFoundException("Check list not found"))
             );
         }
@@ -171,12 +175,12 @@ public class CheckListServiceImpl implements CheckListService {
     }
 
     @Override
-    public CheckListResultDto getResult(Long checkListUuid) {
-        CheckList checkList = getModelCheckListByUuid(checkListUuid);
+    public CheckListResultDto getResult(Long checkListId) {
+        CheckList checkList = getModelCheckListById(checkListId);
 
         if (checkList.getStatus().equals(Status.DONE) || checkList.getStatus().equals(Status.IN_PROGRESS)) {
             return dtoBuilder.buildCheckListResultDto(
-                    checkListRepository.findByUuidAndStatus(checkListUuid, checkList.getStatus())
+                    checkListRepository.findByIdAndStatus(checkListId, checkList.getStatus())
                             .orElseThrow(() -> new NotFoundException("Check list not found"))
             );
         }
@@ -261,7 +265,7 @@ public class CheckListServiceImpl implements CheckListService {
 
     @Override
     public CheckList updateCheckStatusCheckList(String id) {
-        CheckList checkList = getModelCheckListByUuid(id);
+        CheckList checkList = getModelCheckListById(id);
         if (checkList.getStatus().equals(Status.DONE)) {
             throw new IllegalArgumentException("Данный чеклист уже опубликован");
         }

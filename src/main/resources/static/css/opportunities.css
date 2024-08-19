@@ -9,3 +9,27 @@ td {
 .modal-btn {
     min-width: 90px;
 }
+
+.badge-notification-icon {
+    position: absolute;
+    display:block;
+    top: -8px;
+    right: 0px;
+    height: 27px;
+    width: 27px;
+    border-radius: 50%;
+    background: red;
+}
+
+.badge-notification-num {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 27px;
+    width: 27px;
+    color: white;
+}
+
+.button-wrapper {
+    position: relative;
+    display: inline-block;
+}
