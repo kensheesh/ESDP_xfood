@@ -7,8 +7,6 @@ import kg.attractor.xfood.dto.checklist.CheckListSupervisorEditDto;
 import kg.attractor.xfood.dto.checklist.ChecklistShowDto;
 import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorCreateDto;
-import kg.attractor.xfood.dto.user.UserDto;
-import kg.attractor.xfood.enums.Role;
 import kg.attractor.xfood.enums.Status;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +26,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/checks")
-public class CheckListController {
+public class ChecksController {
     private final CheckListService checkListService;
     private final CheckTypeService checkTypeService;
     private final CriteriaService criteriaService;
