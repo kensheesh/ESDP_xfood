@@ -37,7 +37,8 @@ public class SecurityConfig {
 			"/api/checklist/criteria/percentage/**",
 			"/api/checks/points/**",
 			"/appeals/**",
-			"/"
+			"/",
+			"/api/comments/**"
 			
 	};
 	

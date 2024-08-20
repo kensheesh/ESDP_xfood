@@ -267,9 +267,10 @@
 
                 let response = await fetch('/api/checklist/criteria/${checkList.uuidLink}')
                 let data = await response.json()
+                console.log(data)
                 for (const criteria of data) {
                     const row = document.createElement('tr');
-
+                    console.log("maxValue = " + criteria.maxValue)
                     if (criteria.maxValue && criteria.maxValue > 0) {
                         const zoneCell = createTableCell('td', 'text-center', criteria.zone);
                         const descriptionCell = createTableCell('td', '', criteria.description);
@@ -301,8 +302,9 @@
                         maxSum += criteria.maxValue;
                     } else {
                         let sectionCell, descriptionCell, inputCell, maxValueCell;
-
+                        console.log("else")
                         if (criteria.section === 'Критический фактор') {
+                            console.log("Крит")
                             sectionCell = createTableCell('td', 'text-center table-danger', criteria.section);
                             descriptionCell = createTableCell('td', 'table-danger', criteria.description);
                             maxValueCell = createTableCell('td', 'table-danger', '')
@@ -316,6 +318,7 @@
                             inputCell.appendChild(inputGroup);
                             countCriticalFactors += 1;
                         } else if (criteria.section === 'WOW фактор') {
+                            console.log("wow")
                             sectionCell = createTableCell('td', 'text-center table-success', criteria.section);
                             descriptionCell = createTableCell('td', 'table-success', criteria.description);
                             maxValueCell = createTableCell('td', 'table-success', '')
@@ -347,9 +350,11 @@
             }
 
             async function createInputGroup(step, value, id, isWowFact) {
+                let checkId = document.getElementById('checkId').value;
+                let commentByCriteria = await getCommentsByCriteria(checkId, id);
+                let commentsButton = document.createElement('button');
+                let commentsList = '';
                 if(!isWowFact){
-                    let checkId = document.getElementById('checkId').value;
-                    let commentByCriteria = await getCommentsByCriteria(checkId, id);
                     let shouldShowButton = false;
                     function updateCommentsButtonVisibility() {
                         let commentQuantity = Math.abs(value / step);
@@ -364,7 +369,7 @@
                             commentButton.style.display = 'none';
                         }
                     }
-                    let commentsList = '';
+
                     if (Array.isArray(commentByCriteria) && commentByCriteria.length > 0) {
                         commentsList = commentByCriteria.map(comment =>
                             '<ul class="list-group">' +
@@ -381,31 +386,6 @@
                             '</li>' +
                             '</ul>'
                         ).join('');
-
-
-                } else {
-                    commentsList = '<p>Комментариев нет</p>';
-                }
-                let commentsModal = document.createElement('div');
-                commentsModal.classList.add('modal', 'fade');
-                commentsModal.id = 'commentsModal-' + id;
-                commentsModal.setAttribute('tabindex', '-1');
-                commentsModal.setAttribute('aria-labelledby', 'commentsModal-' + id);
-                commentsModal.setAttribute('aria-hidden', 'true');
-                commentsModal.innerHTML =
-                    '<div class="modal-dialog">' +
-                    '<div class="modal-content">' +
-                    '<div class="modal-header">' +
-                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Комментарии</h1>' +
-                    '</div>' +
-                    '<div class="modal-body">' +
-                    commentsList +
-                    '</div>' +
-                    '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>';
 
                     } else {
                         commentsList = '<p>Комментариев нет</p>';
@@ -431,30 +411,25 @@
                         '</div>'+
                         '</div>';
 
-                document.body.appendChild(commentsModal);
-                if (commentByCriteria.length > 0) {
-                    addListenersToDeleteButtons(commentByCriteria);
-                }
-                const inputGroup = document.createElement('div');
-                inputGroup.classList.add('input-group');
-                let uuid = document.getElementById('uuid').value;
-                let max = -step;
-                const scoreInput = document.createElement('input');
-                scoreInput.type = 'number';
-                scoreInput.step = step;
-                scoreInput.classList.add('text-center', 'form-control', 'score-input');
-                scoreInput.value = value;
-                scoreInput.id = id;
-                if(step !== 0) {
+                    document.body.appendChild(commentsModal);
+                    if (commentByCriteria.length >0){
+                        addListenersToDeleteButtons(commentByCriteria);
+                    }
+                    const inputGroup = document.createElement('div');
+                    inputGroup.classList.add('input-group');
+                    let uuid = document.getElementById('uuid').value;
+                    let max = -step;
+                    const scoreInput = document.createElement('input');
+                    scoreInput.type = 'number';
+                    scoreInput.step = step;
+                    scoreInput.classList.add('text-center', 'form-control', 'score-input');
+                    scoreInput.value = value;
+                    scoreInput.id = id;
                     scoreInput.max = max;
-                } else {
-                    scoreInput.min = 0;
-                }
 
                     const inputGroupAppend = document.createElement('div');
                     inputGroupAppend.classList.add('input-group-append');
 
-                    let commentsButton = document.createElement('button');
                     commentsButton.classList.add('btn', 'btn-success');
                     commentsButton.setAttribute('data-bs-toggle', 'modal');
                     commentsButton.setAttribute('data-bs-target', '#commentsModal-' + id);
@@ -517,81 +492,34 @@
                         '</div>';
 
                     document.body.appendChild(modal);
-
-                    $('#select-' + id).select2({
-                        placeholder: 'Выберите комментарий',
-                        width: '100%',
-                        language: 'ru',
-                        dropdownParent: $('#commentModal-' + id)
-                    });
-
-                    document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
-                        let select = document.getElementById('select-' + id);
-                        let textarea = document.getElementById('textarea' + id);
-                        if (!select) {
-                            const form = this.querySelector('form');
-                            writeButton.style.display = "block";
-
-                            if (textarea) {
-                                textarea.remove();
-                            }
-                            form.insertAdjacentHTML('afterbegin', commentsHtml);
-                            $('#select-' + id).select2({
-                                placeholder: 'Выберите комментарий',
-                                width: '100%',
-                                language: 'ru',
-                                dropdownParent: $('#commentModal-' + id)
-                            });
-                        }
-                    });
-
-                    let writeButton = document.getElementById('writeButton' + id);
-                    console.log(writeButton);
-                    writeButton.addEventListener('click', () => {
-                        let select = document.getElementById('select-' + id);
-                        console.log(select);
-                        if (select) {
-
-                            $('#select-' + id).select2('destroy');
-                            select.remove();
-                            writeButton.style.display = "none";
-                            let modalBody = document.getElementById('modalBody' + id);
-                            let inputBox = document.createElement('div');
-                            inputBox.id = 'inputBox' + id;
-                            inputBox.classList.add('input-group', 'mb-3');
-                            let input = document.createElement('textarea');
-                            input.name = 'comment';
-                            input.id = 'textarea' + id;
-                            input.rows = 3;
-                            input.classList.add('form-control');
-                            input.required = true;
-                            inputBox.appendChild(input);
-                            modalBody.appendChild(inputBox);
-                        }
-                    });
-
-                    scoreInput.addEventListener('input', async () => {
-                        value = scoreInput.value;
-                        commentByCriteria = await getCommentsByCriteria(checkId, id);
-                        updateCommentsButtonVisibility();
-                    });
-
-                // inputGroupAppend.appendChild(commentButton);
-                //
-                // inputGroupAppend.appendChild(commentsButton)
-                // inputGroupAppend.appendChild(deleteButton);
-                inputGroup.appendChild(scoreInput);
-                inputGroup.appendChild(commentButton)
-                inputGroup.appendChild(commentsButton)
-                inputGroup.appendChild(deleteButton)
-                // inputGroup.appendChild(inputGroupAppend);
-                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-
-                    return inputGroup;
-
+                } else {
+                    commentsList = '<p>Комментариев нет</p>';
                 }
+                let commentsModal = document.createElement('div');
+                commentsModal.classList.add('modal', 'fade');
+                commentsModal.id = 'commentsModal-' + id;
+                commentsModal.setAttribute('tabindex', '-1');
+                commentsModal.setAttribute('aria-labelledby', 'commentsModal-' + id);
+                commentsModal.setAttribute('aria-hidden', 'true');
+                commentsModal.innerHTML =
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Комментарии</h1>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+                    commentsList +
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
 
+                document.body.appendChild(commentsModal);
+                if (commentByCriteria.length > 0) {
+                    addListenersToDeleteButtons(commentByCriteria);
+                }
                 const inputGroup = document.createElement('div');
                 inputGroup.classList.add('input-group');
                 let uuid = document.getElementById('uuid').value;
@@ -602,7 +530,11 @@
                 scoreInput.classList.add('text-center', 'form-control', 'score-input');
                 scoreInput.value = value;
                 scoreInput.id = id;
-                scoreInput.max = max;
+                if(step !== 0) {
+                    scoreInput.max = max;
+                } else {
+                    scoreInput.min = 0;
+                }
 
                 const inputGroupAppend = document.createElement('div');
                 inputGroupAppend.classList.add('input-group-append');
@@ -617,8 +549,157 @@
                 inputGroup.appendChild(scoreInput);
                 inputGroup.appendChild(inputGroupAppend);
 
+                let comments = await getComments();
+                console.log(comments);
+
+                const commentButton = document.createElement('button');
+                commentButton.classList.add('btn', 'btn-success');
+                commentButton.setAttribute('data-bs-toggle', 'modal');
+                commentButton.setAttribute('data-bs-target', '#commentModal-' + id);
+                commentButton.innerHTML = `<i class="bi bi-pencil-square"></i>`;
+
+                let commentsHtml = '';
+                if (Array.isArray(comments) && comments.length > 0) {
+                    commentsHtml =
+                        '<select class="form-select select2" placeholder="Выберите комментарий" name="commentId" aria-label="Выберите комментарий" id="select-' + id + '">' +
+                        comments.map(comment =>
+                            '<option value="' + comment.commentId + '">' + comment.comment + '</option>'
+                        ).join('') +
+                        '</select>';
+                } else {
+                    commentsHtml = '<p>  </p>';
+                }
+                console.log(commentsHtml);
+                const modal = document.createElement('div');
+                modal.classList.add('modal', 'fade');
+                modal.id = 'commentModal-' + id;
+                modal.setAttribute('tabindex', '-1');
+                modal.setAttribute('aria-labelledby', 'commentModal-' + id);
+                modal.setAttribute('aria-hidden', 'true');
+                modal.innerHTML =
+                    '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                    '<h1 class="modal-title fs-5" id="exampleModalLabel">Добавьте пояснение за снятый балл</h1>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>' +
+                    '</div>' +
+                    '<form action="/checks/' + uuid + '/' + id + '" method="post">' +
+                    '<div class="modal-body" id="modalBody' + id + '">' +
+                    commentsHtml +
+                    '<button type="button" class="btn btn-white border shadow-sm my-2" id="writeButton' + id + '">' +
+                    'Написать другой комментарий' +
+                    '</button>' +
+                    '</div>' +
+                    '<div class="modal-footer">' +
+                    '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>' +
+                    '<button type="submit" class="btn btn-dodo">Сохранить</button>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>' +
+                    '</div>';
+
+                document.body.appendChild(modal);
+
+                $('#select-' + id).select2({
+                    placeholder: 'Выберите комментарий',
+                    width: '100%',
+                    language: 'ru',
+                    dropdownParent: $('#commentModal-' + id)
+                });
+
+                document.getElementById('commentModal-' + id).addEventListener('shown.bs.modal', function (event) {
+                    let select = document.getElementById('select-' + id);
+                    let textarea = document.getElementById('textarea' + id);
+                    if (!select) {
+                        const form = this.querySelector('form');
+                        writeButton.style.display = "block";
+
+                        if (textarea) {
+                            textarea.remove();
+                        }
+                        form.insertAdjacentHTML('afterbegin', commentsHtml);
+                        $('#select-' + id).select2({
+                            placeholder: 'Выберите комментарий',
+                            width: '100%',
+                            language: 'ru',
+                            dropdownParent: $('#commentModal-' + id)
+                        });
+                    }
+                });
+
+                let writeButton = document.getElementById('writeButton' + id);
+                console.log(writeButton);
+                writeButton.addEventListener('click', () => {
+                    let select = document.getElementById('select-' + id);
+                    console.log(select);
+                    if (select) {
+
+                        $('#select-' + id).select2('destroy');
+                        select.remove();
+                        writeButton.style.display = "none";
+                        let modalBody = document.getElementById('modalBody' + id);
+                        let inputBox = document.createElement('div');
+                        inputBox.id = 'inputBox' + id;
+                        inputBox.classList.add('input-group', 'mb-3');
+                        let input = document.createElement('textarea');
+                        input.name = 'comment';
+                        input.id = 'textarea' + id;
+                        input.rows = 3;
+                        input.classList.add('form-control');
+                        input.required = true;
+                        inputBox.appendChild(input);
+                        modalBody.appendChild(inputBox);
+                    }
+                });
+
+                scoreInput.addEventListener('input', async () => {
+                    value = scoreInput.value;
+                    await getCommentsByCriteria(checkId, id);
+                    updateCommentsButtonVisibility();
+                });
+
+                // inputGroupAppend.appendChild(commentButton);
+                //
+                // inputGroupAppend.appendChild(commentsButton)
+                // inputGroupAppend.appendChild(deleteButton);
+                inputGroup.appendChild(scoreInput);
+                inputGroup.appendChild(commentButton)
+                inputGroup.appendChild(commentsButton)
+                inputGroup.appendChild(deleteButton)
+                // inputGroup.appendChild(inputGroupAppend);
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
                 return inputGroup;
             }
+
+            //     const inputGroup = document.createElement('div');
+            //     inputGroup.classList.add('input-group');
+            //     let uuid = document.getElementById('uuid').value;
+            //     let max = -step;
+            //     const scoreInput = document.createElement('input');
+            //     scoreInput.type = 'number';
+            //     scoreInput.step = step;
+            //     scoreInput.classList.add('text-center', 'form-control', 'score-input');
+            //     scoreInput.value = value;
+            //     scoreInput.id = id;
+            //     scoreInput.max = max;
+            //
+            //     const inputGroupAppend = document.createElement('div');
+            //     inputGroupAppend.classList.add('input-group-append');
+            //
+            //     const deleteButton = document.createElement('button');
+            //     deleteButton.classList.add('delete-factor', 'btn', 'btn-outline-danger');
+            //     deleteButton.dataset.id = id;
+            //     deleteButton.textContent = '×';
+            //     deleteButton.addEventListener('click', deleteFactor);
+            //
+            //     inputGroupAppend.appendChild(deleteButton);
+            //     inputGroup.appendChild(scoreInput);
+            //     inputGroup.appendChild(inputGroupAppend);
+            //
+            //     return inputGroup;
+            // });
 
 
             async function showCriticalFactors() {
@@ -666,7 +747,7 @@
                 }
             }
 
-            async function checkCritComments(){
+            async function checkCritComments() {
                 let elements = document.querySelectorAll('[id^="crit-"]');
                 let criteriaIds = [];
                 elements.forEach(element => {
@@ -693,7 +774,9 @@
                 }
 
             }
+
             checkCritComments();
+
             async function getCriteriaById(id) {
                 let response = await fetch("/api/checklist/criteria/"+${checkList.id}+"/" + id);
                 if (response.ok) {

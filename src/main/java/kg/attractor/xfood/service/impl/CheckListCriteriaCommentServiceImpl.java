@@ -3,7 +3,6 @@ package kg.attractor.xfood.service.impl;
 import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.CheckListsCriteriaComment;
-import kg.attractor.xfood.model.Comment;
 import kg.attractor.xfood.repository.ChecklistCriteriaCommentRepository;
 import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaCommentService;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
