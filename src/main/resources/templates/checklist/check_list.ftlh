@@ -663,8 +663,12 @@
                 // inputGroupAppend.appendChild(commentsButton)
                 // inputGroupAppend.appendChild(deleteButton);
                 inputGroup.appendChild(scoreInput);
-                inputGroup.appendChild(commentButton)
-                inputGroup.appendChild(commentsButton)
+
+                if (!isWowFact) {
+                    inputGroup.appendChild(commentButton)
+                    inputGroup.appendChild(commentsButton)
+                }
+
                 inputGroup.appendChild(deleteButton)
                 // inputGroup.appendChild(inputGroupAppend);
                 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
