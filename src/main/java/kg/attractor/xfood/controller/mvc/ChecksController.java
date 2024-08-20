@@ -57,6 +57,7 @@ public class ChecksController {
     }
 
     // ROLE: SUPERVISOR
+    @PreAuthorize("hasAnyRole('SUPERVISOR','ADMIN')")
     @PostMapping("/create")
     public String create(CheckListSupervisorCreateDto createDto) {
         CheckListMiniSupervisorCreateDto checklistDto = checkListService.create(createDto);
@@ -71,24 +72,8 @@ public class ChecksController {
         }
         ChecklistShowDto checkList = checkListService.getCheckListByUuid(uuid);
         model.addAttribute("checkList", checkList);
+        boolean isRecent = settingService.isCheckRecent(checkList);
         model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
-        return "checklist/result";
-    }
-    //ToDo объединить контроллеры под url=/checks/{uuid}
-    @GetMapping ("/{uuid}/result")
-    public String getResult (@PathVariable (name = "uuid") String checkListUuid, Model model, Authentication auth) {
-        ChecklistShowDto checkList = checkListService.getCheckListByUuid(checkListUuid);
-        if(auth == null) {
-            model.addAttribute("guest", true);
-        }
-        if(checkList.getStatus().equals(Status.DONE)) {
-            model.addAttribute("checkList", checkList);
-            model.addAttribute("isRecent", settingService.isCheckRecent(checkList));
-        } else {
-            model.addAttribute("error",
-                    "Данный чеклист еще не опубликован или такого чеклиста не существует!");
-        }
-
         return "checklist/result";
     }
 
@@ -140,7 +125,7 @@ public class ChecksController {
 
     @PostMapping("/{uuid}/{criteriaId}")
     public String comment(@PathVariable(name = "uuid") String uuid, @PathVariable(name = "criteriaId") Long
-            criteriaId, CommentDto commentDto, Model model) {
+            criteriaId, CommentDto commentDto) {
         checkListService.comment(uuid, criteriaId, commentDto);
         return "redirect:/checks/" + uuid + "/fill";
 

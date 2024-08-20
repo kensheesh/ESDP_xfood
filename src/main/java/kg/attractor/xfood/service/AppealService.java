@@ -23,4 +23,8 @@ public interface AppealService {
     void approve(AppealSupervisorApproveDto appeal) throws MessagingException, UnsupportedEncodingException;
 
     List<AppealDto> getAcceptedAppeals(Long checklistId, Long criteriaId);
+
+    Long createByComment(DataAppealDto data);
+
+    boolean isAppealed(Long commentId, Long checklistId, Long criteriaId);
 }

@@ -6,6 +6,7 @@ import kg.attractor.xfood.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CommentController {
     }
 
     @GetMapping("/{checkId}/{criteriaId}")
+//    @PreAuthorize("hasRole('IS_AUTHENTICATED_ANONYMOUSLY')")
     ResponseEntity<List<CommentDto>> getCommentsOfCriteria(@PathVariable Long checkId , @PathVariable Long criteriaId) {
         return ResponseEntity.ok(checkListCriteriaCommentService.getAllByCheckListAndCriteria(checkId, criteriaId));
     }

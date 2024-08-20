@@ -19,5 +19,6 @@ public class AppealDto {
     private String pizzeriaName;
     private String checklistUuid;
     private String date;
+    private String remark;
 
 }

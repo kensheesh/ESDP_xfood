@@ -2,6 +2,7 @@ package kg.attractor.xfood.controller.rest;
 
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaDto;
 import kg.attractor.xfood.dto.criteria.CriteriaExpertShowDto;
+import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.dto.criteria.SaveCriteriaDto;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import kg.attractor.xfood.service.CheckListService;
@@ -58,5 +59,10 @@ public class CheckListCriteriaController {
     public String saveCriteriaForCheckList(@RequestBody List<SaveCriteriaDto> saveCriteriaDto) {
         checkListCriteriaService.save(saveCriteriaDto);
         return "redirect:";
+    }
+
+    @GetMapping("{checkId}/{criteriaId}")
+    public ResponseEntity<CriteriaSupervisorShowDto> getCheckListCriteria(@PathVariable(name = "checkId") Long checkId, @PathVariable Long criteriaId) {
+        return ResponseEntity.ok(checkListCriteriaService.getByCheckIdAndCriteriaId(checkId, criteriaId));
     }
 }

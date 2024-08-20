@@ -14,4 +14,5 @@ public interface ChecklistCriteriaCommentRepository extends JpaRepository<CheckL
     Optional<CheckListsCriteriaComment> findFirstByChecklistCriteria_IdAndComment_Id(Long checklistCriteriaId, Long commentId);
 
     boolean existsByChecklistCriteria_IdAndComment_Id(Long checklistCriteriaId, Long commentId);
+    boolean existsByChecklistCriteria_Id(Long checklistCriteriaId);
 }

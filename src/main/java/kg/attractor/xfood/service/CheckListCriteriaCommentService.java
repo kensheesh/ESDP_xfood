@@ -2,6 +2,7 @@ package kg.attractor.xfood.service;
 
 import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.model.CheckListsCriteriaComment;
+import kg.attractor.xfood.model.Comment;
 
 import java.util.List;
 

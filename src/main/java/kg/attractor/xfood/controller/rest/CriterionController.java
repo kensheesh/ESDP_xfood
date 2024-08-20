@@ -61,12 +61,14 @@ public class CriterionController {
 
     @GetMapping("/critical")
     public ResponseEntity<List<CriteriaSupervisorShowDto>> getCriticalFactors() {
-        return ResponseEntity.ok(criteriaService.getCritCriteria());
+        var factors = criteriaService.getCritCriteria();
+        return ResponseEntity.ok(factors);
     }
 
     @GetMapping("/wow")
     public ResponseEntity<List<CriteriaSupervisorShowDto>> getWowFactors() {
-        return ResponseEntity.ok(criteriaService.getWowCriteria());
+        var factors = criteriaService.getWowCriteria();
+        return ResponseEntity.ok(factors);
     }
     
     

@@ -4,6 +4,7 @@ import kg.attractor.xfood.dto.comment.CommentDto;
 import kg.attractor.xfood.model.CheckListsCriteria;
 import kg.attractor.xfood.model.CheckListsCriteriaComment;
 import kg.attractor.xfood.repository.ChecklistCriteriaCommentRepository;
+import kg.attractor.xfood.service.AppealService;
 import kg.attractor.xfood.service.CheckListCriteriaCommentService;
 import kg.attractor.xfood.service.CheckListCriteriaService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCommentService {
     private final ChecklistCriteriaCommentRepository criteriaCommentRepository;
     private final CheckListCriteriaService criteriaService;
+    private final AppealService appealService;
 
     @Override
     public void save(CheckListsCriteriaComment commentCriteria) {
@@ -36,6 +37,7 @@ public class CheckListCriteriaCommentServiceImpl implements CheckListCriteriaCom
                             .checkCritCommId(comment.getId())
                             .commentId(comment.getComment().getId())
                             .comment(comment.getComment().getComment())
+                            .appealed(appealService.isAppealed(comment.getComment().getId(), checkId, criteriaId))
                     .build());
         }
         log.info("comments {}", commentDtos);

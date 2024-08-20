@@ -95,6 +95,12 @@
                                 <label for="text" class="form-label">Критерий</label>
                                 <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.criteriaDescription}</textarea>
                             </div>
+                            <#if appeal.remark??>
+                                <div class="mb-3">
+                                    <label for="criterion" class="form-label">Нарушение</label>
+                                    <textarea class="form-control textarea-criteria" name="text" id="text" rows="3" disabled required>${appeal.remark}</textarea>
+                                </div>
+                            </#if>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="email" id="email" required>
@@ -139,7 +145,7 @@
             </div>
         </div>
     </div>
-
+    <input type="hidden" id="uuid" value="${appeal.checklistUuid}">
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content rounded-4">

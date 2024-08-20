@@ -29,4 +29,6 @@ public interface AppealRepository extends JpaRepository<Appeal, Long>, JpaSpecif
             "and a.checkListsCriteria.checklist.id = :checklistId " +
             "and a.isAccepted = true")
     List<Appeal> findAcceptedAppeals(Long checklistId, Long criteriaId);
+
+    boolean existsByComment_IdAndCheckListsCriteria_Id(long commentId, long checklistId);
 }

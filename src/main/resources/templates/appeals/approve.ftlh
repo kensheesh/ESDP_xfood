@@ -1,5 +1,5 @@
 <#import "../layout.ftlh" as main>
-<link rel="stylesheet" href="/css/profile.css">
+<link rel="stylesheet" href="/css/profile.css" xmlns="http://www.w3.org/1999/html">
 <link rel="stylesheet" href="/css/appeal_approve.css">
 <style>
     .rounded-border {
@@ -29,7 +29,6 @@
                         </div>
                     </#if>
                 </#if>
-
 
                 <h5 class="card-title">${appeal.checkListsCriteria.pizzeria}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">
@@ -62,7 +61,10 @@
                     </tr>
                     </tbody>
                 </table>
-                <p class="card-text">Комментарий эксперта: </p>
+                <#if  appeal.remark??>
+                    <p class="card-text">Нарушение: <br> ${appeal.remark}</p>
+                </#if>
+                <p class="card-text">Комментарий менеджера: </p>
                 <#if appeal.comment??>
                     <div class="alert alert-warning" role="alert">
                         ${appeal.comment}
@@ -96,7 +98,6 @@
                                 </div>
 
                             <#elseif extension == "mp4" || extension == "avi" || extension == "mov">
-
                                 <div class="grid-item video-container">
                                     <a data-fslightbox="gal" href="/api/file/download?path=${filename}">
                                         <video src="/api/file/download?path=${filename}"></video>
