@@ -22,9 +22,13 @@ import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.dto.workSchedule.WeekDto;
 import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.AppealRepository;
+import kg.attractor.xfood.repository.ChecklistCriteriaCommentRepository;
 import kg.attractor.xfood.repository.ChecklistCriteriaRepository;
+import kg.attractor.xfood.service.CheckListCriteriaCommentService;
 import kg.attractor.xfood.service.CheckTypeFeeService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -41,6 +45,7 @@ public class DtoBuilder {
     private final ChecklistCriteriaRepository checkListsCriteriaRepository;
     private final AppealRepository appealRepository;
     private final CheckTypeFeeService checkTypeFeeService;
+    private final ChecklistCriteriaCommentRepository checkListCriteriaCommentService;
 
 
     public ChecklistMiniExpertShowDto buildChecklistDto(CheckList model) {
@@ -98,6 +103,8 @@ public class DtoBuilder {
                     criteriaExpertShowDto.setIsAccepted(true);
                 }
             }
+
+            criteriaExpertShowDto.setHasComments(checkListCriteriaCommentService.existsByChecklistCriteria_Id(checklistCriteria.getId()));
             criteriaDtos.add(criteriaExpertShowDto);
         }
 
@@ -377,7 +384,7 @@ public class DtoBuilder {
     public AppealDto buildAppealDto(Appeal model) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
                 .withZone(ZoneId.systemDefault());
-        return AppealDto.builder()
+        AppealDto appealDto = AppealDto.builder()
                 .linkToExternalSrc(model.getLinkToExternalSrc())
                 .tgLinkMessage(model.getTgLinkMessage())
                 .fullName(model.getFullName())
@@ -391,6 +398,10 @@ public class DtoBuilder {
                 .id(model.getId())
                 .email(model.getEmail())
                 .build();
+         if (model.getComment() != null){
+             appealDto.setRemark(model.getComment().getComment());
+         }
+         return appealDto;
     }
 
 	public AppealListDto buildAppealsListDto (Appeal model) {

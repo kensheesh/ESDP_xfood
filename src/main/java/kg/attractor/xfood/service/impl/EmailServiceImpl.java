@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
         CheckListsCriteria checkListsCriteria = appeal.getCheckListsCriteria();
         CheckList checkList = checkListRepository.findByCheckListsCriteriaId(checkListsCriteria.getId());
 
-        helper.setFrom(EMAIL_FROM, "ДОДО ПИЦЦА");
+        helper.setFrom(EMAIL_FROM, "XFOOD");
         helper.setTo(appeal.getEmail());
 
 
@@ -54,16 +54,14 @@ public class EmailServiceImpl implements EmailService {
         } else {
             decision = "Отклонена";
         }
-
-//        String date = checkList.getOpportunity().getDate().toString();
+        String comment = appeal.getComment() != null ? "Нарушение: "+appeal.getComment().getComment() : " ";
         String manager = appeal.getFullName();
 
         String subject = "Решение по апелляции";
         String content = "<p>Дата проверки: " + "<br>"
                 + "Менеджер: " + manager + "<br>"
                 + "Критерий: " + appeal.getCheckListsCriteria().getValue() + " " + appeal.getCheckListsCriteria().getCriteria().getDescription() + "<br>"
-//                + "Апелляция: " + appeal.getComment() + "</p>"
-
+                + comment
                 + "<p>Решение по апелляции: " + decision + "<br>"
                 + "Комментарий: " + supervisorsMessage + " </p>"
                 + "<br>"

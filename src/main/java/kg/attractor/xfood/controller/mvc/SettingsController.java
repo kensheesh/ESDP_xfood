@@ -9,6 +9,7 @@ import kg.attractor.xfood.dto.user.UserDto;
 import kg.attractor.xfood.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,8 +31,8 @@ public class SettingsController {
     private final SectionService sectionService;
     private final UserService userService;
     private final PizzeriaService pizzeriaService;
-    
-    
+
+
     @GetMapping("/deadlines")
     public String getDeadlines(Model model) {
         model.addAttribute("oppDeadlineSetting", settingService.getOpportunityDeadline());
@@ -126,24 +127,24 @@ public class SettingsController {
         checkTypeService.deleteCheckType(id);
         return "redirect:/templates";
     }
-    
+
     @GetMapping("pizzerias")
     public String getUsers(Model model,
                            @RequestParam(name = "location_id", defaultValue = "-1", required = false) Long location_id,
                            @RequestParam(name = "page", defaultValue = "0") Integer page,
                            @RequestParam(name = "size", defaultValue = "6") Integer size,
                            @RequestParam(name = "search", defaultValue = "", required = false) String search) {
-        
+
         Pageable pageable = PageRequest.of(page, size);
-        
+
         Page<PizzeriaDto> pPage = pizzeriaService.getAllPizzeriasPage(location_id, pageable, search);
-        
+
         model.addAttribute("pizzerias", pPage.getContent());
         model.addAttribute("totalPages", pPage.getTotalPages());
         model.addAttribute("searchWord", search);
         model.addAttribute("currentPage", page);
         model.addAttribute("currentLocation", location_id);
-        
+
         model.addAttribute("currentSize", size);
         return "pizzerias/pizzerias";
     }

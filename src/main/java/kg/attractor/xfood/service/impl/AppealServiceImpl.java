@@ -5,10 +5,7 @@ import kg.attractor.xfood.dto.appeal.*;
 import kg.attractor.xfood.dto.checklist_criteria.CheckListCriteriaSupervisorReviewDto;
 import kg.attractor.xfood.dto.criteria.CriteriaSupervisorShowDto;
 import kg.attractor.xfood.exception.AppealNotFoundException;
-import kg.attractor.xfood.model.Appeal;
-import kg.attractor.xfood.model.CheckListsCriteria;
-import kg.attractor.xfood.model.Criteria;
-import kg.attractor.xfood.model.Pizzeria;
+import kg.attractor.xfood.model.*;
 import kg.attractor.xfood.repository.AppealRepository;
 import kg.attractor.xfood.service.*;
 import kg.attractor.xfood.specification.AppealSpecification;
@@ -24,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +36,7 @@ public class AppealServiceImpl implements AppealService {
     private static final Logger log = LoggerFactory.getLogger(AppealServiceImpl.class);
     private final CheckListCriteriaServiceImpl checkListCriteriaServiceImpl;
     private final CheckListCriteriaService checkListCriteriaService;
-    private final CheckListCriteriaCommentService commentService;
+    private final CommentService commentService;
     private final AppealRepository appealRepository;
     private final EmailService emailService;
     private final FileService fileService;
@@ -66,8 +65,7 @@ public class AppealServiceImpl implements AppealService {
         Appeal appeal = appealRepository.findAppealById(id).orElseThrow(() -> new NoSuchElementException("Апелляция с айди " + id + "не найденно"));
         Criteria criteria = appeal.getCheckListsCriteria().getCriteria();
         Pizzeria pizzeria = appeal.getCheckListsCriteria().getChecklist().getWorkSchedule().getPizzeria();
-        //  List<CheckListsCriteriaComment> commentList = commentService.findAllByCriteriaIdAndCheckListId(criteria.getId(), appeal.getCheckListsCriteria().getChecklist().getId());
-        return AppealSupervisorReviewDto.builder()
+        AppealSupervisorReviewDto appealSupervisorReviewDto =  AppealSupervisorReviewDto.builder()
                 .checkListUuid(appeal.getCheckListsCriteria().getChecklist().getUuidLink())
                 .id(appeal.getId())
                 .email(appeal.getEmail())
@@ -75,7 +73,7 @@ public class AppealServiceImpl implements AppealService {
                 .comment(appeal.getComment_expert())
                 .files(appeal.getFiles())
                 .status(appeal.getIsAccepted())
-                .localDate(appeal.getCheckListsCriteria().getChecklist().getEndTime())
+                .localDate( appeal.getCheckListsCriteria().getChecklist().getEndTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .respond(appeal.getComment_supervisor())
                 .checkListsCriteria(CheckListCriteriaSupervisorReviewDto.builder()
                         .criteria(CriteriaSupervisorShowDto.builder()
@@ -90,6 +88,10 @@ public class AppealServiceImpl implements AppealService {
                         .pizzeria(pizzeria.getName())
                         .build())
                 .build();
+        if (appeal.getComment() != null) {
+            appealSupervisorReviewDto.setRemark(appeal.getComment().getComment());
+        }
+        return appealSupervisorReviewDto;
     }
 
     @Override
@@ -123,7 +125,7 @@ public class AppealServiceImpl implements AppealService {
             CheckListsCriteria criteria = appeal.getCheckListsCriteria();
             if (criteria.getMaxValue() == null) {
                 Criteria c = appeal.getCheckListsCriteria().getCriteria();
-                criteria.setValue(criteria.getValue() + c.getCoefficient());
+                criteria.setValue(criteria.getValue() + Math.abs(c.getCoefficient()));
                 criteria.setMaxValue(0);
             } else {
                 criteria.setValue(criteria.getValue() + criteria.getMaxValue());
@@ -142,6 +144,26 @@ public class AppealServiceImpl implements AppealService {
             dtoList.add(dtoBuilder.buildAppealDto(a));
         });
         return dtoList;
+    }
+
+    @Override
+    public Long createByComment(DataAppealDto data) {
+        Comment comment = commentService.findById(data.getCommentId());
+        CheckListsCriteria criteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(data.getCriteriaId(), data.getCheckListId());
+        Appeal appeal = Appeal.builder()
+                .checkListsCriteria(criteria)
+                .comment(comment)
+                .fullName(" ")
+                .email(" ")
+                .build();
+        return  appealRepository.save(appeal).getId();
+    }
+
+    @Override
+    public boolean isAppealed(Long commentId, Long checkListId, Long criteriaId) {
+        CheckListsCriteria criteria = checkListCriteriaService.findByCriteriaIdAndChecklistId(criteriaId, checkListId);
+        log.info("checkCriteria id "+criteria.getId() +" comment id "+commentId);
+        return appealRepository.existsByComment_IdAndCheckListsCriteria_Id(commentId, criteria.getId());
     }
 
     @Override

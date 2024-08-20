@@ -28,6 +28,11 @@ public class AppealController {
         return ResponseEntity.ok(appealService.create(data));
     }
 
+    @PostMapping("/comment")
+    public ResponseEntity<Long> createAppealByComment(@RequestBody DataAppealDto data) {
+        return ResponseEntity.ok(appealService.createByComment(data));
+    }
+
     @PostMapping(value = "{id}", consumes = "multipart/form-data")
     public ResponseEntity<Object> updateAppeal(@PathVariable Long id, @ModelAttribute @Valid CreateAppealDto createAppealDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

@@ -162,19 +162,24 @@
                                 </td>
                                 <td class="text-center table-danger">
                                     <#if guest??>
-                                        <div class="d-flex justify-content-end align-items-center">
-                                            <#if isRecent == true>
-                                                <button class="btn btn-warning btn-sm appeal-button"
-                                                        data-criteria-id="${criteria.id}">Подать апелляцию
-                                                </button>
-                                                <button class="btn btn-info btn-sm comments-button"
-                                                        data-criteria-id="${criteria.id}">Комментарии
-                                                </button>
-                                            </#if>
-                                            <#if criteria.isAccepted?? && true>
-                                                <span class="appeal-submitted">!</span>
-                                            </#if>
-                                        </div>
+                                        <#if isRecent == true>
+                                            <div class="d-flex justify-content-end align-items-center">
+                                                <#if criteria.hasComments == false>
+                                                    <button class="btn btn-warning btn-sm appeal-button"
+                                                            data-criteria-id="${criteria.id}">Подать апелляцию
+                                                    </button>
+
+                                                    <#if criteria.isAccepted?? && true>
+                                                        <span class="appeal-submitted">!</span>
+                                                    </#if>
+                                                <#else >
+                                                    <button class="btn btn-info btn-sm comments-button"
+                                                            data-criteria-id="${criteria.id}">Комментарии
+                                                    </button>
+                                                </#if>
+
+                                            </div>
+                                        </#if>
                                     </#if>
                                 </td>
                                 <#assign countCriticalFactors = countCriticalFactors + 1>
@@ -510,22 +515,64 @@
                 let checkId = document.getElementById('checkId').value;
                 let response = await fetch('/api/comments/' + checkId + '/' + criteriaId);
                 let data = await response.json();
-                displayComments(data);
+                displayComments(data, checkId, criteriaId);
             }
 
 
-            function displayComments(comments) {
-
+            function displayComments(comments, checkId, criteriaId) {
                 const commentsModalBody = document.getElementById('commentsModalBody');
                 commentsModalBody.innerHTML = '';
 
                 comments.forEach(comment => {
-                    const commentElement = document.createElement('p');
-                    commentElement.textContent = comment.comment;
+                    const commentElement = document.createElement('div');
+                    commentElement.classList.add('list-group', 'list-group-flush')
+                    console.log("appealed "+comment.appealed)
+                    if (comment.appealed === true){
+                        commentElement.innerHTML =
+                            '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">'+comment.comment+'' +
+                            '<button  type="button" class="btn btn-danger">'+
+                            '<i class="bi bi-exclamation-square-fill"></i></button> '+
+                            '</li>';
+                    }else if (comment.appealed ===false) {
+                        commentElement.innerHTML =
+                            '<li class="list-group-item my-2 d-flex justify-content-between align-items-center">'+comment.comment+
+                            '<button id="appealButton-'+comment.commentId+'" type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Подать апелляцию">'+
+                            '<i class="bi bi-hammer"></i></button> </li>';
+                    }
                     commentsModalBody.appendChild(commentElement);
-                });
+                    console.log("comment id: " + comment.commentId)
+                    let appealButton = document.getElementById('appealButton-'+comment.commentId);
+                    if (appealButton){
+                        appealButton.addEventListener('click', (ev)=>{
+                            ev.preventDefault();
+                            appealByComment(comment.commentId, criteriaId, checkId);
+                        })
+                    }
 
+                });
                 $('#commentsModal').modal('show');
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            }
+
+            async function appealByComment(commentId, criteriaId, checkId){
+                let object = {
+                    commentId: commentId,
+                    criteriaId: criteriaId,
+                    checkListId: checkId,
+                }
+                console.log("object "+object)
+                let response = await fetch('/api/appeal/comment', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                })
+
+                let data = await response.json()
+                window.location.href = '/appeals/' + data
+
             }
 
             let a = document.createElement('a');

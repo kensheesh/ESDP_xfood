@@ -42,6 +42,10 @@ public class Appeal {
 	
 	@Column(name = "is_accepted")
 	private Boolean isAccepted;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "comment_id")
+	private Comment comment;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "check_lists_criteria_id")

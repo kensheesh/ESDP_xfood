@@ -16,7 +16,7 @@ public class CommentDto {
     @NotNull
     @NotBlank
     private String comment;
-
     private Long commentId;
     private Long checkCritCommId;
+    private boolean appealed;
 }
