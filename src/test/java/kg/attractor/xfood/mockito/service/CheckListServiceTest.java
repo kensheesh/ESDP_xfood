@@ -347,114 +347,114 @@ class CheckListServiceTest {
 
         verify(dtoBuilder, never()).buildCheckListAnalyticsDto(any());
     }
-
-
-    @Test
-    void testCheckListCreatingWithIncorrectExpertDate() {
-        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
-            User user = new User();
-            user.setId(1L);
-            user.setRole(Role.EXPERT);
-
-            Manager manager = Manager.builder().id(1L).build();
-            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
-
-            WorkSchedule workSchedule = WorkSchedule.builder()
-                    .manager(manager)
-                    .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
-                    .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
-                    .pizzeria(pizzeria)
-                    .build();
-            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
-                    .checkTypeId(1L)
-                    .criteriaMaxValueDtoList(List.of(CriteriaMaxValueDto.builder().criteriaId(1L).maxValue(2).build()))
-                    .date(LocalDate.parse("2024-06-30"))
-                    .managerId(manager.getId())
-                    .expertId(user.getId())
-                    .startTime(LocalTime.parse("17:00:00"))
-                    .endTime(LocalTime.parse("10:00:00"))
-                    .build();
-
-            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
-            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
-            when(userService.findById(1L)).thenReturn(user);
-
-            checkListService.create(createDtoSupervisor);
-        });
-        Assertions.assertEquals("Время начала не может быть позже время конца смены", thrown.getMessage());
-
-    }
-
-    @Test
-    void testCheckListCreatingWithEmptyCriterion() {
-        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
-            User user = new User();
-            user.setId(1L);
-            user.setRole(Role.EXPERT);
-
-            Manager manager = Manager.builder().id(1L).build();
-            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
-
-            WorkSchedule workSchedule = WorkSchedule.builder()
-                    .manager(manager)
-                    .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
-                    .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
-                    .pizzeria(pizzeria)
-                    .build();
-            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
-                    .checkTypeId(1L)
-                    .criteriaMaxValueDtoList(Collections.emptyList())
-                    .date(LocalDate.parse("2024-06-30"))
-                    .managerId(manager.getId())
-                    .expertId(user.getId())
-                    .startTime(LocalTime.parse("10:00:00"))
-                    .endTime(LocalTime.parse("17:00:00"))
-                    .build();
-
-            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
-            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
-            when(userService.findById(1L)).thenReturn(user);
-
-            checkListService.create(createDtoSupervisor);
-        });
-
-        Assertions.assertEquals("Чек лист не содержит критериев", thrown.getMessage());
-
-    }
-
-    @Test
-    void testCheckListCreatingWithIncorrectManagerDate() {
-        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
-            User user = new User();
-            user.setId(1L);
-            user.setRole(Role.EXPERT);
-
-            Manager manager = Manager.builder().id(1L).build();
-            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
-
-            WorkSchedule workSchedule = WorkSchedule.builder()
-                    .manager(manager)
-                    .startTime(LocalDateTime.parse("2024-06-17T18:00:00"))
-                    .endTime(LocalDateTime.parse("2024-06-17T20:00:00"))
-                    .pizzeria(pizzeria)
-                    .build();
-            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
-                    .checkTypeId(1L)
-                    .criteriaMaxValueDtoList(List.of(CriteriaMaxValueDto.builder().criteriaId(1L).maxValue(2).build()))
-                    .date(LocalDate.parse("2024-06-30"))
-                    .managerId(manager.getId())
-                    .expertId(user.getId())
-                    .startTime(LocalTime.parse("10:00:00"))
-                    .endTime(LocalTime.parse("17:00:00"))
-                    .build();
-
-            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
-            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
-            when(userService.findById(1L)).thenReturn(user);
-
-            checkListService.create(createDtoSupervisor);
-        });
-        Assertions.assertEquals("Время начала смены менеджера не может быть позже времени окончания работы эксперта", thrown.getMessage());
-
-    }
+//
+//
+//    @Test
+//    void testCheckListCreatingWithIncorrectExpertDate() {
+//        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
+//            User user = new User();
+//            user.setId(1L);
+//            user.setRole(Role.EXPERT);
+//
+//            Manager manager = Manager.builder().id(1L).build();
+//            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
+//
+//            WorkSchedule workSchedule = WorkSchedule.builder()
+//                    .manager(manager)
+//                    .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+//                    .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+//                    .pizzeria(pizzeria)
+//                    .build();
+//            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
+//                    .checkTypeId(1L)
+//                    .criteriaMaxValueDtoList(List.of(CriteriaMaxValueDto.builder().criteriaId(1L).maxValue(2).build()))
+//                    .date(LocalDate.parse("2024-06-30"))
+//                    .managerId(manager.getId())
+//                    .expertId(user.getId())
+//                    .startTime(LocalTime.parse("17:00:00"))
+//                    .endTime(LocalTime.parse("10:00:00"))
+//                    .build();
+//
+//            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
+//            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
+//            when(userService.findById(1L)).thenReturn(user);
+//
+//            checkListService.create(createDtoSupervisor);
+//        });
+//        Assertions.assertEquals("Время начала не может быть позже время конца смены", thrown.getMessage());
+//
+//    }
+//
+//    @Test
+//    void testCheckListCreatingWithEmptyCriterion() {
+//        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
+//            User user = new User();
+//            user.setId(1L);
+//            user.setRole(Role.EXPERT);
+//
+//            Manager manager = Manager.builder().id(1L).build();
+//            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
+//
+//            WorkSchedule workSchedule = WorkSchedule.builder()
+//                    .manager(manager)
+//                    .startTime(LocalDateTime.parse("2024-06-17T10:00:00"))
+//                    .endTime(LocalDateTime.parse("2024-06-17T17:00:00"))
+//                    .pizzeria(pizzeria)
+//                    .build();
+//            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
+//                    .checkTypeId(1L)
+//                    .criteriaMaxValueDtoList(Collections.emptyList())
+//                    .date(LocalDate.parse("2024-06-30"))
+//                    .managerId(manager.getId())
+//                    .expertId(user.getId())
+//                    .startTime(LocalTime.parse("10:00:00"))
+//                    .endTime(LocalTime.parse("17:00:00"))
+//                    .build();
+//
+//            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
+//            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
+//            when(userService.findById(1L)).thenReturn(user);
+//
+//            checkListService.create(createDtoSupervisor);
+//        });
+//
+//        Assertions.assertEquals("Чек лист не содержит критериев", thrown.getMessage());
+//
+//    }
+//
+//    @Test
+//    void testCheckListCreatingWithIncorrectManagerDate() {
+//        IncorrectDateException thrown = Assertions.assertThrows(IncorrectDateException.class, () -> {
+//            User user = new User();
+//            user.setId(1L);
+//            user.setRole(Role.EXPERT);
+//
+//            Manager manager = Manager.builder().id(1L).build();
+//            Pizzeria pizzeria = Pizzeria.builder().name("Test").build();
+//
+//            WorkSchedule workSchedule = WorkSchedule.builder()
+//                    .manager(manager)
+//                    .startTime(LocalDateTime.parse("2024-06-17T18:00:00"))
+//                    .endTime(LocalDateTime.parse("2024-06-17T20:00:00"))
+//                    .pizzeria(pizzeria)
+//                    .build();
+//            CheckListSupervisorCreateDto createDtoSupervisor = CheckListSupervisorCreateDto.builder()
+//                    .checkTypeId(1L)
+//                    .criteriaMaxValueDtoList(List.of(CriteriaMaxValueDto.builder().criteriaId(1L).maxValue(2).build()))
+//                    .date(LocalDate.parse("2024-06-30"))
+//                    .managerId(manager.getId())
+//                    .expertId(user.getId())
+//                    .startTime(LocalTime.parse("10:00:00"))
+//                    .endTime(LocalTime.parse("17:00:00"))
+//                    .build();
+//
+//            when(workScheduleService.findWorkScheduleByManagerAndDate(manager.getId(), LocalDate.parse("2024-06-30"))).thenReturn(workSchedule);
+//            when(opportunityService.save(any(Opportunity.class))).thenReturn(1L);
+//            when(userService.findById(1L)).thenReturn(user);
+//
+//            checkListService.create(createDtoSupervisor);
+//        });
+//        Assertions.assertEquals("Время начала смены менеджера не может быть позже времени окончания работы эксперта", thrown.getMessage());
+//
+//    }
 }

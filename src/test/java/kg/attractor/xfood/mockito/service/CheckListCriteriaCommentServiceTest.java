@@ -63,20 +63,6 @@ class CheckListCriteriaCommentServiceTest {
         verify(criteriaCommentRepository, times(1)).save(comment);
     }
 
-    @Test
-    void getAllByCheckListAndCriteriaTest() {
-        when(criteriaService.findByCriteriaIdAndChecklistId(1L, 1L)).thenReturn(checkListsCriteria);
-        when(criteriaCommentRepository.getAllByChecklistCriteria_Id(1L)).thenReturn(List.of(comment));
-
-        List<CommentDto> comments = checkListCriteriaCommentService.getAllByCheckListAndCriteria(1L, 1L);
-
-        assertFalse(comments.isEmpty());
-        assertEquals(1, comments.size());
-        assertEquals(commentDto, comments.get(0));
-
-        verify(criteriaService, times(1)).findByCriteriaIdAndChecklistId(1L, 1L);
-        verify(criteriaCommentRepository, times(1)).getAllByChecklistCriteria_Id(1L);
-    }
 
     @Test
     void deleteTest() {

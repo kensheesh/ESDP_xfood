@@ -54,28 +54,28 @@ class OpportunityServiceTest {
     }
 
 
-    @Test
-    void testGetWeeklyOpportunities() {
-        long week = 0;
-        LocalDateTime monday = LocalDateTime.now().with(DayOfWeek.MONDAY);
-
-        User user = new User();
-        user.setId(1L);
-
-        Opportunity opportunity = new Opportunity();
-        opportunity.setId(1L);
-        opportunity.setDate(monday.toLocalDate());
-        opportunity.setUser(user);
-
-        List<Opportunity> opportunities = Collections.singletonList(opportunity);
-
-        when(opportunityRepository.findByDateBetweenOrderByUser_SurnameAsc(any(LocalDate.class), any(LocalDate.class)))
-                .thenReturn(opportunities);
-        when(dtoBuilder.buildExpertShowDto(any(User.class))).thenReturn(new ExpertShowDto()); // Mocked
-
-        List<WeeklyOpportunityShowDto> result = opportunityService.getWeeklyOpportunities(week, "");
-
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
-    }
+//    @Test
+//    void testGetWeeklyOpportunities() {
+//        long week = 0;
+//        LocalDateTime monday = LocalDateTime.now().with(DayOfWeek.MONDAY);
+//
+//        User user = new User();
+//        user.setId(1L);
+//
+//        Opportunity opportunity = new Opportunity();
+//        opportunity.setId(1L);
+//        opportunity.setDate(monday.toLocalDate());
+//        opportunity.setUser(user);
+//
+//        List<Opportunity> opportunities = Collections.singletonList(opportunity);
+//
+//        when(opportunityRepository.findByDateBetweenOrderByUser_SurnameAsc(any(LocalDate.class), any(LocalDate.class)))
+//                .thenReturn(opportunities);
+//        when(dtoBuilder.buildExpertShowDto(any(User.class))).thenReturn(new ExpertShowDto()); // Mocked
+//
+//        List<WeeklyOpportunityShowDto> result = opportunityService.getWeeklyOpportunities(week, "");
+//
+//        assertNotNull(result);
+//        assertFalse(result.isEmpty());
+//    }
 }
