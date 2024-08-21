@@ -40,6 +40,7 @@
 
                             </form>
 
+
 <#--                            <div>-->
 <#--                                <p class="mb-0"><@spring.message 'login.noAccount'/>? <a href="/register" class="text-primary-50-->
 <#--                                 text-decoration-none fw-bold"><@spring.message 'login.register'/></a>-->
